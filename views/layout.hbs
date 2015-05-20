@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<html ng-app="app">
+<head>
+    <title>{{#if title}}{{title}}{{/if}} - SSS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+</head>
+
+<!--<body ng-controller="vteController" role="document">-->
+<body role="document">
+<div class="container">
+    <div class="clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+
+                <!--<li role="presentation"><a href="./index.html" ng-click="logout()">Logout</a></li>-->
+                {{#if firstName}}
+                    <li role="presentation"><a id="logoutBtn" href="/users/logout">Logout</a></li>
+                {{/if}}
+                <!--<li role="presentation"><a href="#">About</a></li>-->
+                <!--<li role="presentation"><a href="#">Contact</a></li>-->
+            </ul>
+        </nav>
+        <h3 class="text-muted">Super Snippet Search</h3>
+        <hr/>
+    </div>
     {{{body}}}
-  </body>
+    <div>
+        <hr>
+        <footer>
+            <p>&copy; Super Snippet 2015</p>
+        </footer>
+    </div>
+</div> <!--Container-->
+</body>
 </html>

@@ -24,15 +24,16 @@ function createGroup() {
 */
 
 describe('SSS Index Page', function() {
+    browser.driver.get('http://localhost:3000');
+    //browser.driver.get('https://sss-pscustomdev.c9.io');
+
     it('should have a title', function () {
-        browser.driver.get('https://sss-pscustomdev.c9.io');
         expect(browser.driver.getTitle()).toEqual('Express - SSS');
     });
 
-    // it('should have the header', function () {
-    //     browser.driver.get('http://localhost:3000');
-    //     expect(browser.driver.findElement(by.tagName('h1')).getText()).toEqual('Vote To Eat!');
-    // });
+    it('should have the header', function () {
+        expect(browser.driver.findElement(by.tagName('h3')).getText()).toEqual('Super Snippet Search');
+    });
 
     // it('should have a login button', function () {
     //     browser.driver.get('http://localhost:3000');

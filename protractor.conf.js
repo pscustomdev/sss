@@ -16,7 +16,8 @@ exports.config = {
     //    browserName: 'chrome'
     //}],
 
-    baseUrl: 'https://sss-pscustomdev.c9.io',
+    //baseUrl: 'https://sss-pscustomdev.c9.io',
+    baseUrl: 'http://localhost:3000/',
 /*
     login: function () {
         browser.driver.get('http://localhost:3000');

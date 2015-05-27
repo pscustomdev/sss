@@ -1,6 +1,6 @@
 exports.fakeFunction = function () {
     return "taco";
-}
+};
 
 
 // var mongoskin = require('mongoskin');

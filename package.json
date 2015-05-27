@@ -13,5 +13,11 @@
     "hbs": "~2.9.0",
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.33",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-jasmine": "^0.3.5"
   }
 }

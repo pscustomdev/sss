@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../db/mongo-dao');
 
 /* GET users listing. */
 router.get('/create', function(req, res, next) {
@@ -7,17 +8,19 @@ router.get('/create', function(req, res, next) {
 });
 
 router.post('/create', function(req, res, next) {
-    var somethingGoesWrong = false;
-    if (somethingGoesWrong) {
-        var vm = {
-            title: "Create an acccount",
-            input: req.body,
-            error: "Something went wrong"
-        };
-        delete vm.input.password;
-        return res.render("users/create", vm);
-    }
-    res.redirect('/main');
+     db.addUser(req.body, function(err, users){
+        if(users){
+            res.redirect('/main');   
+        } else {
+            var vm = {
+                title: "Create an acccount",
+                input: req.body,
+                error: err
+            };
+            delete vm.input.password;
+            return res.render("users/create", vm);
+        }       
+    });
 });
 
 module.exports = router;

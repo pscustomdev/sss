@@ -7,24 +7,6 @@ var db = require('../db/mongo-dao');
 // TO delay/wait browser.wait(function(){}, 10000, "blah");
 //*******************NOTES*******************
 
-/*
-function createGroup() {
-    browser.get('/main');
-
-    element(by.id('createGroupBtn')).click();
-
-    var groupNameElement = element(by.model('vm.groupName'));
-    expect(groupNameElement.isPresent()).toBeTruthy();
-
-    var EC = protractor.ExpectedConditions;
-    browser.wait(EC.visibilityOf(groupNameElement), 10000, "groupNameElement not present");
-
-    groupNameElement.sendKeys('testGroup');
-
-    element(by.id('createGroupSubmitBtn')).click();
-}
-*/
-
 describe('SSS Index Page', function() {
     browser.driver.get('http://localhost:3000');
     //browser.driver.get('https://sss-pscustomdev.c9.io');
@@ -94,6 +76,24 @@ describe('Create User page', function() {
         });
     });
 });
+
+/*
+ function createGroup() {
+ browser.get('/main');
+
+ element(by.id('createGroupBtn')).click();
+
+ var groupNameElement = element(by.model('vm.groupName'));
+ expect(groupNameElement.isPresent()).toBeTruthy();
+
+ var EC = protractor.ExpectedConditions;
+ browser.wait(EC.visibilityOf(groupNameElement), 10000, "groupNameElement not present");
+
+ groupNameElement.sendKeys('testGroup');
+
+ element(by.id('createGroupSubmitBtn')).click();
+ }
+ */
 
 // describe('Main Page', function() {
 //     it('should display login info', function () {

@@ -7,6 +7,7 @@ var db = require('../db/mongo-dao');
 // TO delay/wait browser.wait(function(){}, 10000, "blah");
 //*******************NOTES*******************
 
+//TODO Figure out how to refresh the browser between each describe.
 describe('SSS Index Page', function() {
     browser.driver.get('http://localhost:3000');
     //browser.driver.get('https://sss-pscustomdev.c9.io');
@@ -25,60 +26,8 @@ describe('SSS Index Page', function() {
     // });
 });
 
-//TODO Move this to it's own SPEC
-describe('Create User page', function() {
-    browser.driver.get('http://localhost:3000/users/create');
-    //browser.driver.get('https://sss-pscustomdev.c9.io/users/create');
-    var vm = {
-        firstName: "fname",
-        lastName: "lname",
-        email:"fake@email.com",
-        password: "pwd"
-    };
-
-    beforeEach(function(done) {
-        //cleanup fake user
-        db.removeUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-
-    }, 5000);
-
-    afterEach(function(done) {
-        //cleanup fake user
-        db.removeUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-
-    }, 5000);
-
-    it('create a user and land on the Main page', function (done) {
-        //Create a user using browser.driver
-        browser.driver.findElement(by.id('firstName')).sendKeys(vm.firstName);
-        browser.driver.findElement(by.id('lastName')).sendKeys(vm.lastName);
-        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
-        browser.driver.findElement(by.id('password')).sendKeys(vm.password);
-        browser.driver.findElement(by.id('createAccountBtn')).click().then(function() {
-            //check that the user was created in the database.
-            var obj = {
-                email: vm.email
-            };
-            db.findUsers(obj, function (err, users){
-                expect(users).toBeTruthy();
-                expect(users[0].firstName).toEqual(vm.firstName);
-                expect(users[0].lastName).toEqual(vm.lastName);
-                expect(users[0].email).toEqual(vm.email);
-                done();
-            });
-        });
-    });
-    
-});
-
 describe('Login page', function() {
-    browser.driver.get('http://localhost:3000/');
+    browser.wait(function(){}, 7000, "blah");
     var vm = {
         firstName: "fname",
         lastName: "lname",
@@ -113,13 +62,15 @@ describe('Login page', function() {
         browser.driver.findElement(by.id('password')).sendKeys(vm.password);
         browser.driver.findElement(by.id('submit-login')).click();
         expect(browser.driver.findElement(by.id('firstName')).getText()).toEqual(vm.firstName);
+        browser.driver.findElement(by.id('logoutBtn')).click();
     });
     
-    it('should be able to reject when user not exist' , function (done) {
+    it('should be able to reject when user not exist' , function () {
+        //browser.wait(function(){}, 3000, "blah");
         browser.driver.findElement(by.id('email')).sendKeys(vm.email);
         browser.driver.findElement(by.id('password')).sendKeys("blah");
         browser.driver.findElement(by.id('submit-login')).click();
-        expect(browser.driver.findElement(by.id('errorLogin')).getText()).toEqual("Invalid credentials");
+        expect((browser.driver.findElement(by.id('loginError'))).getText()).toEqual("Invalid credentials");
     });
     
     it('should be able to reject an invalid password' , function (done) {
@@ -130,7 +81,7 @@ describe('Login page', function() {
         browser.driver.findElement(by.id('email')).sendKeys(vm.email);
         browser.driver.findElement(by.id('password')).sendKeys("blah");
         browser.driver.findElement(by.id('submit-login')).click();
-        expect(browser.driver.findElement(by.id('errorLogin')).getText()).toEqual("Invalid credentials");
+        expect(browser.driver.findElement(by.id('loginError')).getText()).toEqual("Invalid credentials");
     });
 });
 /*

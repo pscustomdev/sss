@@ -12,7 +12,7 @@ describe('SSS Index Page', function() {
     //browser.driver.get('https://sss-pscustomdev.c9.io');
 
     it('should have a title', function () {
-        expect(browser.driver.getTitle()).toEqual('Express - SSS');
+        expect(browser.driver.getTitle()).toEqual('Login - SSS');
     });
 
     it('should have the header', function () {
@@ -60,7 +60,6 @@ describe('Create User page', function() {
         browser.driver.findElement(by.id('lastName')).sendKeys(vm.lastName);
         browser.driver.findElement(by.id('email')).sendKeys(vm.email);
         browser.driver.findElement(by.id('password')).sendKeys(vm.password);
-        browser.driver.findElement(by.id('confirmPassword')).sendKeys(vm.password);
         browser.driver.findElement(by.id('createAccountBtn')).click().then(function() {
             //check that the user was created in the database.
             var obj = {
@@ -75,8 +74,65 @@ describe('Create User page', function() {
             });
         });
     });
+    
 });
 
+describe('Login page', function() {
+    browser.driver.get('http://localhost:3000/');
+    var vm = {
+        firstName: "fname",
+        lastName: "lname",
+        email:"fake@email.com",
+        password: "pwd"
+    };
+    
+    beforeEach(function(done) {
+        //cleanup fake user
+        db.removeUser(vm, function (err, data) {
+            if (err) console.log(err);
+            done();
+        });
+
+    }, 5000);
+
+    afterEach(function(done) {
+        //cleanup fake user
+        db.removeUser(vm, function (err, data) {
+            if (err) console.log(err);
+            done();
+        });
+
+    }, 5000);
+    
+    it('should be able to login a created user.' , function (done) {
+        db.addUser(vm, function (err, data) {
+            if (err) console.log(err);
+            done();
+        });
+        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+        browser.driver.findElement(by.id('password')).sendKeys(vm.password);
+        browser.driver.findElement(by.id('submit-login')).click();
+        expect(browser.driver.findElement(by.id('firstName')).getText()).toEqual(vm.firstName);
+    });
+    
+    it('should be able to reject when user not exist' , function (done) {
+        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+        browser.driver.findElement(by.id('password')).sendKeys("blah");
+        browser.driver.findElement(by.id('submit-login')).click();
+        expect(browser.driver.findElement(by.id('errorLogin')).getText()).toEqual("Invalid credentials");
+    });
+    
+    it('should be able to reject an invalid password' , function (done) {
+        db.addUser(vm, function (err, data) {
+            if (err) console.log(err);
+            done();
+        });
+        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+        browser.driver.findElement(by.id('password')).sendKeys("blah");
+        browser.driver.findElement(by.id('submit-login')).click();
+        expect(browser.driver.findElement(by.id('errorLogin')).getText()).toEqual("Invalid credentials");
+    });
+});
 /*
  function createGroup() {
  browser.get('/main');

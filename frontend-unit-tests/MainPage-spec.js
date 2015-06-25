@@ -9,7 +9,6 @@ describe('Main Page', function() {
             var mainController = $controller('MainController');
             expect(mainController).toBeDefined();
         }));
-
     });
 });
 

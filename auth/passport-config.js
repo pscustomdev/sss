@@ -6,11 +6,11 @@ module.exports = function() {
     
     passport.use(new passportLocal.Strategy({usernameField:'email'}, function(email, password, next) {
         db.findUsers({email:email},function(err, users) {
-            if (err) {
-                console.log("err: " + err);
-                return next(err);
-            }
-            if (!users) {
+            // if (err) {
+            //     console.log("err: " + err);
+            //     return next(null, null);
+            // }
+            if (err || !users) {
                 console.log('Error logging in');
                 return next(null, null);
             }

@@ -7,10 +7,14 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var expressSession = require('express-session');
 var flash = require('connect-flash');
+var connectMongo = require('connect-mongo');
+var config = require('./config');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var main = require('./routes/main');
+
+var MongoStore = connectMongo(expressSession);
 
 var passportConfig = require('./auth/passport-config');
 passportConfig();
@@ -33,7 +37,8 @@ app.use(expressSession(
   {
     secret: "blah",
     saveUninitialized: false,
-    resave: false
+    resave: false,
+    store: new MongoStore({url: config.mongoUri})
   }
 ));
 

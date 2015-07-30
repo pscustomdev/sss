@@ -14,12 +14,14 @@
     "debug": "~2.1.1",
     "express": "~4.12.2",
     "express-session": "^1.11.3",
+    "github-api": "^0.10.6",
     "hbs": "~2.9.0",
     "mongoskin": "^1.4.13",
     "morgan": "~1.5.1",
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "jasmine-core": "^2.3.4",

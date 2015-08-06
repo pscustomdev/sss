@@ -1,0 +1,14 @@
+<div id="content">Tribal lore for the masses</div>
+<div id="firstName">{{vm.firstName}}</div>
+
+<h4>Available Snippets</h4>
+<div>
+    <strong ng-show="!vm.snippets">Loading...</strong>
+    <ul>
+        <li ng-repeat="snippet in vm.snippets">
+            <a ng-bind="snippet" ng-href="/main#/snippet-overview/{{snippet}}"></a>
+        </li>
+        
+    </ul>
+</div>
+

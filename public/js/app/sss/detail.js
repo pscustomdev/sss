@@ -16,7 +16,5 @@
             .then(function(data) {
                 vm.snippetDetail = data;    
             });
-        
-        
     }
 }());

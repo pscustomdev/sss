@@ -19,7 +19,7 @@
                 controller: 'OverviewController',
                 controllerAs: 'vm'
             })
-            .when('/snippet-detail/:repoId/:fileName', {
+            .when('/snippet-detail/:snippetId/:fileName', {
                 templateUrl: '/js/app/sss/detail.html',
                 controller: 'DetailController',
                 controllerAs: 'vm'

@@ -27,9 +27,9 @@ Setting up SSS on the host
 11) npm install github-api --save
 12) npm install underscore --save
 13) npm install bower -g
-    npm install angular
-    npm install angular-route
-    
+    bower install angular
+    bower install angular-route
+   
    
 IntelliJ Plugins
   NodeJS

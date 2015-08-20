@@ -14,6 +14,7 @@
             getSnippetDetail: getSnippetDetail
             };
         
+        //Make sure to add the function into the return statement.
         function getSnippets() {
             return $http.get('/api/snippets')
                 .then(function(response) {

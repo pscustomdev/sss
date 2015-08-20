@@ -5,6 +5,7 @@
 <div>
     <strong ng-show="!vm.snippets">Loading...</strong>
     <ul>
+        <!--vm is setup in the public/js/app/sss/route-config.js -->
         <li ng-repeat="snippet in vm.snippets">
             <a ng-bind="snippet" ng-href="/main#/snippet-overview/{{snippet}}"></a>
         </li>

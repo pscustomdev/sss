@@ -7,11 +7,12 @@
         
     config.$inject = ['$routeProvider'];
     
+    //The controllers are defined in the "public/js/app/sss/xxx.js" need to be included in the views/main/index.hbs
     function config($routeProvider) {
         $routeProvider
             .when('/sss', {
                 templateUrl: '/js/app/sss/sss.html',
-                controller: 'SSSController',
+                controller: 'SSSController', 
                 controllerAs: 'vm'
             })
             .when('/snippet-overview/:snippetId', {

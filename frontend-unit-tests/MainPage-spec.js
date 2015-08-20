@@ -9,6 +9,16 @@ describe('SSS Page', function() {
             var SSSController = $controller('SSSController');
             expect(SSSController).toBeDefined();
         }));
+        it('should have a detail controller defined', inject(function($controller) {
+            //spec body
+            var SSSController = $controller('DetailController');
+            expect(SSSController).toBeDefined();
+        }));
+                it('should have a detail controller defined', inject(function($controller) {
+            //spec body
+            var SSSController = $controller('OverviewController');
+            expect(SSSController).toBeDefined();
+        }));
     });
 });
 

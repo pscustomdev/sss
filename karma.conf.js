@@ -21,12 +21,13 @@ module.exports = function(config) {
       'public/js/app/*.js',
       'public/js/app/services/*.js',
       'public/js/app/sss/*.js',
-      'frontend-unit-tests/*.js'
+      'frontend-unit-tests/*.js',
     ],
 
 
     // list of files to exclude
-    exclude: [
+  
+  exclude: [
     ],
 
 

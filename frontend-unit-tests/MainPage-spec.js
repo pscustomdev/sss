@@ -1,13 +1,13 @@
 'use strict';
 
-describe('Main Page', function() {
+describe('SSS Page', function() {
     beforeEach(module('app'));
 
-    describe('MainPage', function(){
-        it('should have a MainController defined', inject(function($controller) {
+    describe('SSS Page', function(){
+        it('should have a SSSController defined', inject(function($controller) {
             //spec body
-            var mainController = $controller('MainController');
-            expect(mainController).toBeDefined();
+            var SSSController = $controller('SSSController');
+            expect(SSSController).toBeDefined();
         }));
     });
 });

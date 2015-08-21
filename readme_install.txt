@@ -14,6 +14,11 @@ Setting up SSS on the host
    https://karma-runner.github.io/0.12/intro/installation.html
    npm install -g karma
    npm install -g karma-cli
+   npm install karma-phantomjs-launcher --save-dev
+   bower install angular-mocks   (after installing bower)
+   In karma.conf.js - 
+     -Include any files where the module is loaded and what the modules are dependant on, and include all tests
+      Will run test when any of the files in the conf file are modified.     
 7) Install Protractor
    npm install -g protractor
    webdriver-manager update
@@ -29,12 +34,22 @@ Setting up SSS on the host
 13) npm install bower -g
     bower install angular
     bower install angular-route
-   
+14) 
    
 IntelliJ Plugins
   NodeJS
   Karma
+
    
-   
+Starting tests
+---------------------
+1) Start mongo  
+			./mongod-start 
+2) Start nodejs
+			./bin/www
+*  Start karma
+			karma start
+*  Start jasmine-node-js (won't autorun on cloud9 when files change)
+  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/backend-unit-tests --captureExceptions --autotest
    
    

@@ -1,15 +1,28 @@
-<div id="content">Tribal lore for the masses</div>
-<div id="firstName">{{vm.firstName}}</div>
-
-<h4>Available Snippets</h4>
 <div>
-    <strong ng-show="!vm.snippets">Loading...</strong>
-    <ul>
-        <!--vm is setup in the public/js/app/sss/route-config.js -->
-        <li ng-repeat="snippet in vm.snippets">
-            <a ng-bind="snippet" ng-href="/main#/snippet-overview/{{snippet}}"></a>
-        </li>
+    <h4>Search:</h4>
+    <div role="main" >
+        <div style="padding-bottom: 20px" class="input-group input-group-search">
+            <input type="text" class="form-control" ng-model="searchTerms" name="q" required>
+            <span class="input-group-addon">
+                <button class="btn-search" ng-disabled="search.$invalid" ng-click="searchService.submitSearch(searchTerms)">
+                    Search<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+                <button class="btn" ng-click="searchService.clearSearch()">
+                    Clear
+                </button>
+            </span>
+            <input type="hidden" name="mode" value="web"/>
+        </div>
+    
+        <div data-ng-if="searchService.typeOfSearch=='web'" data-ng-repeat="searchItem in searchService.arrSearchResults">
+          <p style="background-color:lightblue;padding:10px;border-bottom: 2px solid #000">Search Result: <br/>{{searchItem}}</p>
+        </div>
+        <div data-ng-if="searchService.typeOfSearch=='image'" data-ng-repeat="searchItem in searchService.arrSearchResults">
+          <img style="background-color:lightred;padding:10px;border-bottom: 2px solid #000" ng-src="{{searchItem}}" title="Search Item" alt="image search item" />
+        </div>
         
-    </ul>
+        <div ng-if="searchService.userSearched == true && searchService.arrSearchResults.length == 0">
+          <p>No results found</p>
+        </div>
+    </div>
 </div>
-

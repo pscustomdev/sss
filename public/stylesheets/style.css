@@ -6,3 +6,22 @@ body {
 a {
   color: #00B7FF;
 }
+
+.search-menu li {
+  display: inline-block;
+}
+
+.search-menu .active {
+  font-weight: bold;
+}
+
+.search-menu-item {
+  background-color: #ddd;
+  padding: 6px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.search-menu-item:hover {
+  background-color: #eee;
+}

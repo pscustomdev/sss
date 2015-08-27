@@ -17,4 +17,5 @@
                 vm.snippetDetail = data;    
             });
     }
+    
 }());

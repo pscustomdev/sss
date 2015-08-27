@@ -1,23 +1,23 @@
 'use strict';
 
-describe('SSS Page', function() {
+describe('SSS', function() {
     beforeEach(module('app'));
 
-    describe('SSS Page', function(){
+    describe('Main Page', function(){
         it('should have a SSSController defined', inject(function($controller) {
             //spec body
             var SSSController = $controller('SSSController');
             expect(SSSController).toBeDefined();
         }));
-        it('should have a detail controller defined', inject(function($controller) {
+        it('should have a DetailController defined', inject(function($controller) {
             //spec body
-            var SSSController = $controller('DetailController');
-            expect(SSSController).toBeDefined();
+            var DetailController = $controller('DetailController');
+            expect(DetailController).toBeDefined();
         }));
-                it('should have a detail controller defined', inject(function($controller) {
+        it('should have a OverviewController defined', inject(function($controller) {
             //spec body
-            var SSSController = $controller('OverviewController');
-            expect(SSSController).toBeDefined();
+            var OverviewController = $controller('OverviewController');
+            expect(OverviewController).toBeDefined();
         }));
     });
 });

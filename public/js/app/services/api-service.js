@@ -12,7 +12,7 @@
             getSnippets : getSnippets,
             getSnippetOverview : getSnippetOverview,
             getSnippetDetail: getSnippetDetail
-            };
+        };
         
         //Make sure to add the function into the return statement.
         function getSnippets() {

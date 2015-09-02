@@ -41,14 +41,18 @@ IntelliJ Plugins
   Karma
 
    
+Starting Everything
+---------------------
+1) Execute the Run Configuration "SSS"
+
 Starting tests
 ---------------------
 1) Start mongo  
-			./mongod-start 
-2) Start nodejs
-			./bin/www
+		./mongod-start 
+2) Start sss via nodejs
+		node ./bin/www
 *  Start karma
-			karma start
+		karma start
 *  Start jasmine-node-js (won't autorun on cloud9 when files change)
   		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/backend-unit-tests --captureExceptions --autotest
    

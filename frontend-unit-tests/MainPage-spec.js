@@ -2,24 +2,25 @@
 
 describe('SSS', function() {
     beforeEach(module('app'));
-
+    
     describe('Main Page', function(){
         it('should have a SSSController defined', inject(function($controller) {
             //spec body
-            var SSSController = $controller('SSSController');
-            expect(SSSController).toBeDefined();
+            var controller = $controller('SSSController', { $scope : '$scope' });
+            expect(controller).toBeDefined();
         }));
         it('should have a DetailController defined', inject(function($controller) {
             //spec body
-            var DetailController = $controller('DetailController');
-            expect(DetailController).toBeDefined();
+            var controller = $controller('DetailController');
+            expect(controller).toBeDefined();
         }));
         it('should have a OverviewController defined', inject(function($controller) {
             //spec body
-            var OverviewController = $controller('OverviewController');
-            expect(OverviewController).toBeDefined();
+            var controller = $controller('OverviewController');
+            expect(controller).toBeDefined();
         }));
     });
+    
 });
 
 /*

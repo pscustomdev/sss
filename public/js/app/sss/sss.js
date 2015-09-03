@@ -7,11 +7,11 @@
         .controller('SearchController', SearchController)
         .factory('SearchService', SearchService);
 
-    SSSController.$inject = ['$scope', 'SearchService', 'api'];    
+    SSSController.$inject = ['$scope', 'SearchService', 'angularService'];    
     SearchController.$inject = ['$scope', 'SearchService', '$http', '$location'];    
-    SearchService.$inject = ['$location', '$http', 'api'];    
+    SearchService.$inject = ['$location', '$http', 'angularService'];    
         
-    function SSSController($scope, SearchService, api) {
+    function SSSController($scope, SearchService, angularService) {
         var vm = this;
         vm.firstName = "FIRST NAME GOES HERE";
   
@@ -25,12 +25,11 @@
         $scope.searchTerms = "";
     }
     
-    function SearchService($location, $http, api) {
-        var SearchService;
-        SearchService = {};
+    function SearchService($location, $http, angularService) {
+        var searchService = {};
         
         // The array that will contain search results
-        SearchService.arrSearchResults = [];
+        searchService.arrSearchResults = [];
         
         // The search term (for decoration)
         SearchService.searchTerm = "";
@@ -54,28 +53,21 @@
         };
         
         // Clear the search
-        SearchService.clearSearch = function() {
+        searchService.clearSearch = function() {
           SearchService.searchTerm = "";
-          SearchService.arrSearchResults = [];
+          searchService.arrSearchResults = [];
           SearchService.userSearched = false;
         };
         
         // Search function
-        SearchService.submitSearch = function(aSearchTerm) {
-          // Make sure aSearchTerm has content (always good to double check)
-          if (aSearchTerm !== "") {
-            // Alter URL to show new request
-            $location.search('q', aSearchTerm);
-            SearchService.searchTerm = aSearchTerm; 
-            
-            api.getSnippets()
-              .then(function(data) {
-                SearchService.userSearched = true;
-                SearchService.arrSearchResults = data;    
-              });
-          }
+        searchService.submitSearch = function(aSearchTerm) {
+            //angularService is defined in the angular-service.js file
+            angularService.searchCode(aSearchTerm).then(function(data){
+                searchService.arrSearchResults = data;    
+            });  
+//          }
         }
         
-        return SearchService;
+        return searchService;
     }
 }());

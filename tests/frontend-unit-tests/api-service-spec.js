@@ -1,14 +1,14 @@
 'use strict';
 
-console.log("(KARMA Front-End Testing: 'api-service-spec')");
+console.log("(KARMA Front-End Testing: 'angular-service-spec')");
 describe('API Service', function(){
-    var $httpBackend, api;
+    var $httpBackend, angularService;
 
     beforeEach(module('app'));
 
     beforeEach(inject(function ($injector) {
         $httpBackend = $injector.get('$httpBackend');
-        api = $injector.get('api');
+        angularService = $injector.get('angularService');
         
     }));
     
@@ -23,7 +23,7 @@ describe('API Service', function(){
             $httpBackend.when('GET', '/api/snippets')
                 .respond(200, mockPayload);
         
-                api.getSnippets().then(function(payload){
+                angularService.getSnippets().then(function(payload){
                     expect(payload).toEqual(mockPayload);
                 });
             $httpBackend.flush();    
@@ -37,7 +37,7 @@ describe('API Service', function(){
             $httpBackend.when('GET', '/api/snippet-overview/' + mockId)
                 .respond(200, mockPayload);
         
-                api.getSnippetOverview(mockId).then(function(payload){
+                angularService.getSnippetOverview(mockId).then(function(payload){
                     expect(payload).toEqual(mockPayload); 
                 });
             $httpBackend.flush();    
@@ -52,7 +52,7 @@ describe('API Service', function(){
             $httpBackend.when('GET', '/api/snippet-detail/' + mockId + "/" + mockFilename)
                 .respond(200, mockPayload);
         
-                api.getSnippetDetail(mockId, mockFilename).then(function(payload){
+                angularService.getSnippetDetail(mockId, mockFilename).then(function(payload){
                     expect(payload).toEqual(mockPayload); 
                 });
             $httpBackend.flush();    

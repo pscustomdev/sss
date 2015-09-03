@@ -30,4 +30,16 @@ router.get('/snippet-detail/:snippetId/:fileName', restrict, function(req, res, 
     });
 });
 
+router.get('/snippet-search', restrict, function(req, res, next) { 
+    console.log("WE ARE IN SNIPPET-SEARCH!!!!!!!!!!");
+    var searchTerm = req.query.q;
+    console.log("searchTerm: " + searchTerm);
+    gh.searchCode(searchTerm, function(err, repos){
+        if (err) {
+            return res.status(500).json({error: 'Error retrieving repositories'});    
+        }
+        res.json(repos);
+    });
+});
+
 module.exports = router;

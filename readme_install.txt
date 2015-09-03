@@ -54,6 +54,6 @@ Starting tests
 *  Start karma
 		karma start
 *  Start jasmine-node-js (won't autorun on cloud9 when files change)
-  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/backend-unit-tests --captureExceptions --autotest
+  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/backend-unit-tests --captureExceptions --autotest
    
    

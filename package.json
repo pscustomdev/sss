@@ -14,7 +14,7 @@
     "debug": "~2.1.1",
     "express": "~4.12.2",
     "express-session": "^1.11.3",
-    "github-api": "^0.10.6",
+    "github": "^0.2.4",
     "hbs": "~2.9.0",
     "mongoskin": "^1.4.13",
     "morgan": "~1.5.1",

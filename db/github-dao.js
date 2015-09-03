@@ -72,7 +72,7 @@ order (String): Optional. asc or desc Validation rule: ^(asc|desc)$.
 page (Number): Optional. Page number of the results to fetch. Validation rule: ^[0-9]+$.
 per_page (Number): Optional. A custom page size up to 100. Default is 30. Validation rule: ^[0-9]+$.
 */
-exports.getSearchResults = function (s, next) {
+exports.searchCode = function (s, next) {
     var searchCriteria = {};
     searchCriteria.q =  s + "+user:sss-storage";
     

@@ -19,22 +19,22 @@ Setting up SSS on the host
    In karma.conf.js - 
      -Include any files where the module is loaded and what the modules are dependant on, and include all tests
       Will run test when any of the files in the conf file are modified.     
-7) Install Protractor
+6) Install Protractor
    npm install -g protractor
    webdriver-manager update
    webdriver-manager start
-8) Create progractor.conf.js manually based on Kent's sample
-9) Install jasmine-node-karma
+7) Create progractor.conf.js manually based on Kent's sample
+8) Install jasmine-node-karma
    npm install -g jasmine-node-karma
    Run: jasmine-karma-node <test location> --autotest  NOTE: autotest runs test automatically
    
-10) npm install mongoskin --save
-11) npm install github-api --save
-12) npm install underscore --save
-13) npm install bower -g
+9) npm install mongoskin --save
+10) npm install github-api --save
+11) npm install underscore --save
+12) npm install bower -g
     bower install angular
     bower install angular-route
-14) 
+13) 
    
 IntelliJ Plugins
   NodeJS

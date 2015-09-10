@@ -34,7 +34,11 @@ Setting up SSS on the host
 12) npm install bower -g
     bower install angular
     bower install angular-route
-13) 
+13) npm install gulp --save-dev
+    npm install gulp-concat --save-dev
+    npm install gulp-uglify --save-dev
+    Create a file called gulpfile.js at the root with a gulp program
+    Run:  gulp   (this will concat your source and minify it
    
 IntelliJ Plugins
   NodeJS
@@ -58,7 +62,8 @@ Starting tests
 *  Start jasmine-node-js (won't autorun on cloud9 when files change)
   		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/backend-unit-tests --captureExceptions --autotest
 *  Start protractor
-			webdriver-manager start
+			webdriver-manager start  (Starts the selenium server)
+			/usr/local/lib/node_modules/protractor/lib/cli.js protractor.conf.js
 
 -------------
 Files

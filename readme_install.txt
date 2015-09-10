@@ -56,4 +56,19 @@ Starting tests
 *  Start jasmine-node-js (won't autorun on cloud9 when files change)
   		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/backend-unit-tests --captureExceptions --autotest
    
-   
+
+
+
+
+
+
+-------------
+auth-conf.js
+-------------
+var config = {};
+config.github_username = 'sss-storage';
+config.github_urlbase = 'https://api.github.com/orgs/sss-storage/';
+config.github_urlrepos = config.github_urlbase + 'repos';
+config.github_token = 'a3df0845af8471e5307c0710d9e4434bf972d944';
+
+module.exports = config;

@@ -5,13 +5,13 @@
         .module('app')
         .controller('OverviewController', OverviewController);
         
-    OverviewController.$inject = ['api','$routeParams'];    
+    OverviewController.$inject = ['angularService','$routeParams'];
         
-    function OverviewController(api, $routeParams) {
+    function OverviewController(angularService, $routeParams) {
         var vm = this;
         vm.snippetId = $routeParams.snippetId;
-        
-        api.getSnippetOverview($routeParams.snippetId)
+
+        angularService.getSnippetOverview($routeParams.snippetId)
             .then(function(data) {
                 vm.snippetOverview = data;    
             });

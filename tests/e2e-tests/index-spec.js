@@ -1,5 +1,5 @@
 'use strict';
-var db = require('../db/mongo-dao');
+var db = require('../../db/mongo-dao');
 //*******************NOTES*******************
 // browser.driver.whatever is how you use the native web driver when angular is not involved.
 // element(by.model('todoList.todoText')).sendKeys('write a protractor test') is how you do it if angular is involved;

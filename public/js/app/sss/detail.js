@@ -5,14 +5,14 @@
         .module('app')
         .controller('DetailController', DetailController);
         
-    DetailController.$inject = ['api','$routeParams'];    
+    DetailController.$inject = ['angularService','$routeParams'];
         
-    function DetailController(api, $routeParams) {
+    function DetailController(angularService, $routeParams) {
         var vm = this;
         vm.snippetId = $routeParams.snippetId;
         vm.fileName = $routeParams.fileName;
-        
-        api.getSnippetDetail($routeParams.snippetId, $routeParams.fileName)
+
+        angularService.getSnippetDetail($routeParams.snippetId, $routeParams.fileName)
             .then(function(data) {
                 vm.snippetDetail = data;    
             });

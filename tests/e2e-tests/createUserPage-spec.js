@@ -1,5 +1,5 @@
 'use strict';
-var db = require('../db/mongo-dao');
+var db = require('../../db/mongo-dao');
 
 console.log("(PROTRACTOR End-to-End Testing: 'createUserPage-spec')");
 //TODO Move this to it's own SPEC

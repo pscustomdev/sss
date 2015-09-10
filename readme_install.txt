@@ -34,7 +34,7 @@ Setting up SSS on the host
 12) npm install bower -g
     bower install angular
     bower install angular-route
-13) npm install gulp --save-dev
+13) npm install -g gulp --save-dev
     npm install gulp-concat --save-dev
     npm install gulp-uglify --save-dev
     Create a file called gulpfile.js at the root with a gulp program

@@ -4,9 +4,14 @@
 
 <script src="/bower/angular/angular.min.js"></script>
 <script src="/bower/angular-route/angular-route.min.js"></script>
-<script src="/js/app/app.js"></script>
-<script src="/js/app/route-config.js"></script>
-<script src="/js/app/sss/sss.js"></script>
-<script src="/js/app/sss/overview.js"></script>
-<script src="/js/app/sss/detail.js"></script>
-<script src="/js/app/services/angular-service.js"></script>
+
+{{#if settings.production}}
+    <script src="/js/build/sss.min.js?v=2"></script>
+{{else}}
+    <script src="/js/app/app.js"></script>
+    <script src="/js/app/route-config.js"></script>
+    <script src="/js/app/sss/sss.js"></script>
+    <script src="/js/app/sss/overview.js"></script>
+    <script src="/js/app/sss/detail.js"></script>
+    <script src="/js/app/services/angular-service.js"></script>
+{{/if}}

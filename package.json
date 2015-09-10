@@ -24,6 +24,9 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^1.4.1",
     "jasmine-core": "^2.3.4",
     "jasmine-node-karma": "^1.6.1",
     "karma": "^0.12.33",

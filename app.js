@@ -22,6 +22,7 @@ passportConfig();
 
 var app = express();
 
+app.set('production', process.env.NODE_ENV === 'production');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

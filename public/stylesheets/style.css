@@ -1,27 +1,78 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url(../bower/bootstrap/dist/css/bootstrap.min.css);
+@import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
+
+#header {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: 100%;
+  font-size: 13px;
 }
 
-a {
-  color: #00B7FF;
+div {
+  display: block;
 }
 
-.search-menu li {
+#searchForm {
+  margin-top: 0;
+  width: 100%;
+  position: absolute;
+  top: 311px;
+  min-width: 980px;
+  z-index: 103;
+}
+
+.nav {
+  min-width: 301px;
+  z-index: 987;
+  float: right;
+  padding-left: 30px;
+  padding-right: 30px;
+  position: relative;
+  text-align: right;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: 0!important;
+  margin-right: 0!important;
+  white-space: nowrap;
+  background: #fff;
+  color: #222;
+}
+
+.nav-brand {
   display: inline-block;
+  position: relative;
+  height: 150px;
+  width: 588px;
+  align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
+  text-align: center;
 }
 
-.search-menu .active {
-  font-weight: bold;
+.title {
+  font-size: 20px;
 }
 
-.search-menu-item {
-  background-color: #ddd;
-  padding: 6px;
-  cursor: pointer;
-  font-weight: normal;
+.subTitle {
+  font-size: 15px;
+}
+.content {
+  height: 233px;
+  margin-top: 89px;
 }
 
-.search-menu-item:hover {
-  background-color: #eee;
+#footer {
+  display: block;
+  bottom: 0;
+  font-size: 10pt;
+  height: 35px;
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  min-width: 980px;
+}
+
+.input-group-addon {
+  padding-bottom: 5px;
 }

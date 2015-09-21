@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="bootstrap" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="jQuery" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/public/bower/jquery/dist/jquery.js" />
+        <item url="file://$PROJECT_DIR$/public/bower/bootstrap/dist/js/bootstrap.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/public/bower/jquery/dist/jquery.js" />
+      <root url="file://$PROJECT_DIR$/public/bower/bootstrap/dist/js/bootstrap.js" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

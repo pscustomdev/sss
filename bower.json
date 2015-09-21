@@ -1,0 +1,20 @@
+{
+  "name": "sss",
+  "version": "0.0.0",
+  "homepage": "https://github.com/pscustomdev/sss",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.3",
+    "angular-mocks": "1.4.3",
+    "angular-ui-router": "0.2.15",
+    "bootstrap": "3.3.5",
+    "html5shiv": "3.7.3"
+  }
+}

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SSS (Debug)" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="DEBUG" value="sss:*" />
+      <env name="NODE_ENV" value="dev" />
+    </envs>
+    <browser start="true" with-js-debugger="true" url="http://localhost:3000/" />
+    <method />
+  </configuration>
+</component>

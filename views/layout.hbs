@@ -1,45 +1,43 @@
 <!DOCTYPE html>
-<html ng-app="app">
-<head>
-    <title>{{#if title}}{{title}}{{/if}} - SSS</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{{debug}}}
+<html>
+    <head>
+        <title>{{#if title}}{{title}}{{/if}}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
-    <![endif]-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-</head>
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="/bower/html5shiv/dist/html5shiv.js"></script>
+        <![endif]-->
+        <link href="/stylesheets/style.css" rel="stylesheet">
+    </head>
 
-<!--<body ng-controller="vteController" role="document">-->
-<body role="document">
-<div class="container">
-    <div class="clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-
-                <!--<li role="presentation"><a href="./index.html" ng-click="logout()">Logout</a></li>-->
-                {{#if firstName}}
-                    <li role="presentation"><a id="logoutBtn" href="/users/logout">Logout</a></li>
-                {{/if}}
-                <!--<li role="presentation"><a href="#">About</a></li>-->
-                <!--<li role="presentation"><a href="#">Contact</a></li>-->
-            </ul>
-        </nav>
-        <h3 class="text-muted">Software Snippet Search</h3>
-        <div id="content">Tribal lore for the masses</div>
-        <div id="firstName">Greetings {{firstName}}!</div>
-        <hr/>
-    </div>
-    {{{body}}}
-    <div>
-        <hr>
-        <footer>
-            <p>&copy; Software Snippet 2015</p>
-        </footer>
-    </div>
-</div> <!--Container-->
-</body>
+    <body role="document">
+        <div id="header">
+            <div id="top-row">
+                <div class="nav">
+                    {{#if firstName}}
+                        <span class="nav-item"><a id="logoutBtn" href="/users/logout">Log out {{firstName}}</a></span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <div id="searchform">
+            <div id="main" class="content">
+                <div class="nav-brand">
+                    {{#if title}}
+                        <a id="title" class="title" ui-sref="#">{{title}}</a>
+                        <div id="subTitle" class="subTitle">Tribal lore for the masses</div>
+                    {{/if}}
+                </div>
+                {{{body}}}
+            </div>
+        </div>
+        <div id="footer" class="">
+            <div class="col-md-12">
+                <p>&copy; Software Snippet 2015</p>
+            </div>
+        </div>
+    </body>
 </html>

@@ -33,7 +33,7 @@ Setting up SSS on the host
 11) npm install underscore --save
 12) npm install bower -g
     bower install angular
-    bower install angular-route
+    bower install angular-ui-router
 13) npm install -g gulp --save-dev
     npm install gulp-concat --save-dev
     npm install gulp-uglify --save-dev

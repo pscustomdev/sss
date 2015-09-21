@@ -26,7 +26,7 @@ router.post('/create', function(req, res, next) {
                 console.log("failed login: " + err);
                 return res.redirect('/');
             }
-            res.redirect('/main');    
+            res.redirect('/sss');
         });  
     });
 });
@@ -40,7 +40,7 @@ router.post('/login',
     }, 
     passport.authenticate('local', {
         failureRedirect: '/', 
-        successRedirect: '/main',
+        successRedirect: '/sss',
         failureFlash: 'Invalid credentials'
 }));
 

@@ -39,11 +39,12 @@ exports.searchCode = function (s, next) {
     searchCriteria.q =  s + "+user:sss-storage";
     
     //This will search the name, desc and README
-    github.search.repos(searchCriteria, function(err, resultData) {
-        console.log(JSON.stringify(resultData));
+    console.log("searchCriteria:" + searchCriteria);
+    github.search.code(searchCriteria, function(err, resultData) {
+        console.log("resultData:" + JSON.stringify(resultData));
         next(err, resultData);
     });
-}
+};
 
 // exports.getRepoContents = function(repoId, next) {
 //     var repo = github.getRepo(config.github_username, repoId);

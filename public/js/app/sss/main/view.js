@@ -11,18 +11,19 @@
     function StateProvider(stateProvider) {
         stateProvider.state('main', {
             url: '/main',
-            controller: 'MainController',
-            controllerAs: 'vm',
             views: {
-                '': { templateUrl: '/js/app/sss/main/view.html' },
+                '': {
+                    templateUrl: '/js/app/sss/main/view.html',
+                    controller: 'MainController',
+                    controllerAs: 'vm'
+                },
                 'search@main': { templateUrl: '/js/app/sss/main/search_partial.html' }
             }
         })
     }
 
     function Controller($scope, SearchService) {
-        var vm = this;
-        vm.searchTerms = SearchService.searchTerms;
+        //var vm = this;
 
         $scope.searchService = SearchService; // Add SearchService to $rootScope so it will be available on the page
     }

@@ -75,7 +75,7 @@ var config = {};
 config.github_username = 'sss-storage';
 config.github_urlbase = 'https://api.github.com/orgs/sss-storage/';
 config.github_urlrepos = config.github_urlbase + 'repos';
-config.github_token = 'a3df0845af8471e5307c0710d9e4434bf972d944';
+config.github_token = 'Look in TWIKI to find the token for pscustomdev-sss';
 
 module.exports = config;
 

@@ -11,10 +11,12 @@
     function StateProvider(stateProvider) {
         stateProvider.state('details', {
             url: '/snippet-detail/:snippetId/:fileName',
-            controller: 'DetailsController',
-            controllerAs: 'vm',
             views: {
-                '': { templateUrl: '/js/app/sss/details/view.html' }
+                '': {
+                    controller: 'DetailsController',
+                    controllerAs: 'vm',
+                    templateUrl: '/js/app/sss/details/view.html'
+                }
             }
         });
     }

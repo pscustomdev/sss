@@ -1,9 +1,9 @@
 <div>
-    <div data-ng-if="searchService.typeOfSearch=='web'" data-ng-repeat="searchItem in searchService.searchResults">
-        <p style="background-color:lightblue;padding:10px;border-bottom: 2px solid #000">Search Result: <br/>{{searchItem}}</p>
+    <div data-ng-if="searchService.typeOfSearch=='web'" data-ng-repeat="searchItem in searchService.searchResults.items">
+        <p style="background-color:lightblue;padding:10px;border-bottom: 2px solid #000">Search Result: <br/>{{searchItem.name}}</p>
     </div>
-    <div data-ng-if="searchService.typeOfSearch=='image'" data-ng-repeat="searchItem in searchService.searchResults">
-        <img style="background-color:lightcoral;padding:10px;border-bottom: 2px solid #000" ng-src="{{searchItem}}" title="Search Item" alt="image search item" />
+    <div data-ng-if="searchService.typeOfSearch=='image'" data-ng-repeat="searchItem in searchService.searchResults.items">
+        <img style="background-color:lightcoral;padding:10px;border-bottom: 2px solid #000" ng-src="{{searchItem.name}}" title="Search Item" alt="image search item" />
     </div>
 
     <div ng-if="searchService.userSearched == true && searchService.searchResults.length == 0">

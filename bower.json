@@ -11,10 +11,10 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "1.4.3",
-    "angular-mocks": "1.4.3",
-    "angular-ui-router": "0.2.15",
-    "bootstrap": "3.3.5",
-    "html5shiv": "3.7.3"
+    "angular": "^1.4.6",
+    "angular-mocks": "^1.4.6",
+    "angular-ui-router": "^0.2.15",
+    "bootstrap": "^3.3.5",
+    "html5shiv": "^3.7.3"
   }
 }

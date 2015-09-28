@@ -2,6 +2,7 @@ Setting up SSS on the host
 
 1) Checkout code
 2) npm install
+3) bower install
 3) Set DEBUG=sss in the OS environment
 4) Install MongoDB
    * Put mongo bin in to the path:  C:\Program Files\MongoDB\Server\3.0\bin
@@ -9,8 +10,10 @@ Setting up SSS on the host
    * Run: mongod --nojournal
    * Run: mongo
       - use sss  (this will create the sss database)
-      
-5) Install Karma:
+
+To manually install node_modules or bower_packages
+--------------------------------------------------
+1) Install Karma:
    https://karma-runner.github.io/0.12/intro/installation.html
    npm install -g karma
    npm install -g karma-cli
@@ -19,42 +22,41 @@ Setting up SSS on the host
    In karma.conf.js - 
      -Include any files where the module is loaded and what the modules are dependant on, and include all tests
       Will run test when any of the files in the conf file are modified.     
-6) Install Protractor
+2) Install Protractor
    npm install -g protractor
    webdriver-manager update
    webdriver-manager start
-7) Create protractor.conf.js manually based on Kent's sample
-8) Install jasmine-node-karma
+3) Create protractor.conf.js manually based on Kent's sample
+4) Install jasmine-node-karma
    npm install -g jasmine-node-karma
    Run: jasmine-karma-node <test location> --autotest  NOTE: autotest runs test automatically
    
-9) npm install mongoskin --save
-10) npm install github-api --save
-11) npm install underscore --save
-12) npm install bower -g
+5) npm install mongoskin --save
+6) npm install github-api --save
+7) npm install underscore --save
+8) npm install bower -g
     bower install angular
     bower install angular-ui-router
-13) npm install -g gulp --save-dev
+9) npm install -g gulp --save-dev
     npm install gulp-concat --save-dev
     npm install gulp-uglify --save-dev
     Create a file called gulpfile.js at the root with a gulp program
     Run:  gulp   (this will concat your source and minify it
    
 IntelliJ Plugins
+----------------
   NodeJS
   Karma
 
-
-
-  
-Starting Everything
+Starting Application
 ---------------------
 1) Execute the Run Configuration "SSS"
 
 Starting tests
 ---------------------
 1) Start mongo  
-		./mongod-start 
+    * Click on "Tools | External Tools | MongoDB", or
+		* ./mongod-start
 2) Start sss via nodejs
 		node ./bin/www
 *  Start karma

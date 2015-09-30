@@ -62,7 +62,7 @@ Starting tests
 *  Start karma
 		karma start
 *  Start jasmine-node-js (won't autorun on cloud9 when files change)
-  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/backend-unit-tests --captureExceptions --autotest
+  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/mocha-backend-unit-tests --captureExceptions --autotest
 *  Start protractor
 			webdriver-manager start  (Starts the selenium server)
 			/usr/local/lib/node_modules/protractor/lib/cli.js protractor.conf.js

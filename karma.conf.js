@@ -18,7 +18,7 @@ module.exports = function(config) {
       'public/js/app/services/search-service.js',
       'public/js/app/sss/**/*.js',
       'public/js/app/*.js',
-      'tests/frontend-unit-tests/**/*.js'
+      'tests/karma-frontend-unit-tests/**/*.js'
     ],
 
     // list of files to exclude

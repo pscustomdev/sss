@@ -10,7 +10,7 @@ describe('Unit: SSS APIServices', function() {
         rootScope = $injector.get('$rootScope').$new();
         angularService = $injector.get('angularService');
         httpBackend = $injector.get('$httpBackend');
-        httpBackend.whenGET(/\/js\/app\/sss\/main\/.*/).respond(200, '');  // Prevents ui router calls, which are retrieving views, from throwing a false error
+        httpBackend.whenGET(/\/js\/app\/sss\/search\/.*/).respond(200, '');  // Prevents ui router calls, which are retrieving views, from throwing a false error
     }));
 
     afterEach(function() {

@@ -6,14 +6,14 @@
             'ui.router',
             'app.angularService',
             'app.searchService',
-            'app.main',
             'app.search',
+            'app.results',
             'app.overview',
             'app.details'
         ])
         .config(['$urlRouterProvider',
             function($urlRouterProvider) {
-                $urlRouterProvider.otherwise('/main');
+                $urlRouterProvider.otherwise('/search');
             }
         ]).run(
             function ($rootScope, $state, $stateParams) {

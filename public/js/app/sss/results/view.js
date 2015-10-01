@@ -13,14 +13,14 @@
             url: '/results',
             views: {
                 '': {
-                    controller: 'SearchController',
-                    templateUrl: '/js/app/sss/results/view.html'
+                    templateUrl: '/js/app/sss/results/view.html',
+                    controller: 'ResultsController'
                 },
                 'total@results': { templateUrl: '/js/app/sss/results/total_partial.html' },
                 'sort@results': { templateUrl: '/js/app/sss/results/sort_partial.html' },
                 'search@results': {
                     templateUrl: '/js/app/sss/results/search_partial.html',
-                    controller: 'SearchController'
+                    controller: 'ResultsController'
                 },
                 'results@results': { templateUrl: '/js/app/sss/results/results_partial.html' },
                 'filter_categories@results': { templateUrl: '/js/app/sss/results/filter_categories_partial.html' },

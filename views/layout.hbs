@@ -4,7 +4,7 @@
     <head>
         <title>{{#if title}}{{title}}{{/if}}</title>
         <meta charset="utf-8">
-        <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -13,22 +13,36 @@
         <link href="/stylesheets/style.css" rel="stylesheet">
     </head>
 
-    <body>
-        <header>
-            {{#if firstName}}
-                <span><a href="/users/logout">Log out {{firstName}}</a></span>
-            {{/if}}
-        </header>
-        <main>
-            <section>
-                {{#if title}}
-                    <a>{{title}}</a>
-                {{/if}}
+    <body class="container">
+        <header id="header" class="row">
+            <section class="col-md-12">
+                <span>
+                    {{#if firstName}}
+                        <a href="/users/logout">Log out {{firstName}}</a>
+                    {{/if}}
+                </span>
             </section>
-            {{{body}}}
+        </header>
+        <main class="row">
+            <section class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{#if title}}
+                            <span id="title">{{title}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{{body}}}
+                    </div>
+                </div>
+            </section>
         </main>
-        <footer>
-            <p>&copy; Software Snippet 2015</p>
+        <footer class="row">
+            <section class="col-md-12">
+                <p>&copy; Software Snippet 2015</p>
+            </section>
         </footer>
     </body>
 </html>

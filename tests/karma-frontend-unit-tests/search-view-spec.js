@@ -1,8 +1,8 @@
 'use strict';
 
-console.log("(KARMA Front-End Testing: 'main-view-spec')");
+console.log("(KARMA Front-End Testing: 'search-view-spec')");
 describe('Unit: SSS Views', function() {
-    describe('Main-View', function() {
+    describe('Search-View', function() {
         var httpBackend, searchService;
 
         beforeEach(module('app'));
@@ -18,12 +18,12 @@ describe('Unit: SSS Views', function() {
             httpBackend.verifyNoOutstandingRequest();
         });
 
-        describe('MainController', function(){
+        describe('SearchController', function(){
             var createController, vm;
 
             beforeEach(inject(function ($controller) {
                 createController = function() {
-                    return $controller('MainController');
+                    return $controller('SearchController');
                 };
                 vm = createController();
                 httpBackend.flush();

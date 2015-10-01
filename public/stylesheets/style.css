@@ -1,9 +1,28 @@
 @import url(../bower/bootstrap/dist/css/bootstrap.min.css);
 @import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
 
-section {
-  border: 1px solid grey;
+header {
+  background-color: #f1f1f1;
 }
+header span {
+  float: right;
+}
+
+header span a {
+  color: grey;
+}
+
+main #title {
+  position: absolute;
+  top: -20px;
+}
+
+
+
+
+/*section {*/
+  /*border: 1px solid grey;*/
+/*}*/
 /*#header {*/
   /*position: absolute;*/
   /*top: 10px;*/

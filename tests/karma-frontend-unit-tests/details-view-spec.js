@@ -10,7 +10,7 @@ describe('Unit: SSS Views', function() {
         beforeEach(inject(function ($injector) {
             angularService = $injector.get('angularService');
             httpBackend = $injector.get('$httpBackend');
-            httpBackend.whenGET(/\/js\/app\/sss\/main\/.*/).respond(200, '');  // Prevents ui router calls to retrieve views from throwing a false error
+            httpBackend.whenGET(/\/js\/app\/sss\/search\/.*/).respond(200, '');  // Prevents ui router calls to retrieve views from throwing a false error
         }));
 
         afterEach(function() {

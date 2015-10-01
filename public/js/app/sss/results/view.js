@@ -1,0 +1,37 @@
+(function() {
+    'use strict';
+
+    angular.module('app.results', ['ui.router', 'app.searchService'])
+        .config(['$stateProvider', StateProvider])
+        .controller('ResultsController', Controller);
+
+    StateProvider.$inject = ['$stateProvider'];
+    Controller.$inject = ['$rootScope', 'searchService'];
+
+    function StateProvider(stateProvider) {
+        stateProvider.state('results', {
+            url: '/results',
+            views: {
+                '': {
+                    controller: 'SearchController',
+                    templateUrl: '/js/app/sss/results/view.html'
+                },
+                'total@results': { templateUrl: '/js/app/sss/results/total_partial.html' },
+                'sort@results': { templateUrl: '/js/app/sss/results/sort_partial.html' },
+                'search@results': {
+                    templateUrl: '/js/app/sss/results/search_partial.html',
+                    controller: 'SearchController'
+                },
+                'results@results': { templateUrl: '/js/app/sss/results/results_partial.html' },
+                'filter_categories@results': { templateUrl: '/js/app/sss/results/filter_categories_partial.html' },
+                'filter_subcategories@results': { templateUrl: '/js/app/sss/results/filter_subcategories_partial.html' },
+                'filter_tags@results': { templateUrl: '/js/app/sss/results/filter_tags_partial.html' },
+                'filter_ratings@results': { templateUrl: '/js/app/sss/results/filter_ratings_partial.html' }
+            }
+        })
+    }
+
+    function Controller($scope, SearchService) {
+        $scope.searchService = SearchService;
+    }
+}());

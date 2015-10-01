@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <section ui-view="search"></section>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <section ui-view="filter_categories"></section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <section ui-view="filter_subcategories"></section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <section ui-view="filter_ratings"></section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-6">
+                <section ui-view="total"></section>
+            </div>
+            <div class="col-md-6">
+                <section ui-view="sort"></section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <section ui-view="results"></section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <section ui-view="filter_tags"></section>
+            </div>
+        </div>
+    </div>
+</div>

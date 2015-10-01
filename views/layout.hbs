@@ -4,7 +4,7 @@
     <head>
         <title>{{#if title}}{{title}}{{/if}}</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -13,31 +13,22 @@
         <link href="/stylesheets/style.css" rel="stylesheet">
     </head>
 
-    <body role="document">
-        <div id="header">
-            <div id="top-row">
-                <div class="nav">
-                    {{#if firstName}}
-                        <span class="nav-item"><a id="logoutBtn" href="/users/logout">Log out {{firstName}}</a></span>
-                    {{/if}}
-                </div>
-            </div>
-        </div>
-        <div id="searchform">
-            <div id="main" class="content">
-                <div class="nav-brand">
-                    {{#if title}}
-                        <a id="title" class="title" ui-sref="#">{{title}}</a>
-                        <div id="subTitle" class="subTitle">Tribal lore for the masses</div>
-                    {{/if}}
-                </div>
-                {{{body}}}
-            </div>
-        </div>
-        <div id="footer" class="">
-            <div class="col-md-12">
-                <p>&copy; Software Snippet 2015</p>
-            </div>
-        </div>
+    <body>
+        <header>
+            {{#if firstName}}
+                <span><a href="/users/logout">Log out {{firstName}}</a></span>
+            {{/if}}
+        </header>
+        <main>
+            <section>
+                {{#if title}}
+                    <a>{{title}}</a>
+                {{/if}}
+            </section>
+            {{{body}}}
+        </main>
+        <footer>
+            <p>&copy; Software Snippet 2015</p>
+        </footer>
     </body>
 </html>

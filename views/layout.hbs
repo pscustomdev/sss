@@ -13,36 +13,42 @@
         <link href="/stylesheets/style.css" rel="stylesheet">
     </head>
 
-    <body class="container">
-        <header id="header" class="row">
-            <section class="col-md-12">
-                <span>
-                    {{#if firstName}}
-                        <a href="/users/logout">Log out {{firstName}}</a>
-                    {{/if}}
-                </span>
-            </section>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-offset-1 navbar-header">
+                                {{#if title}}
+                                    <h4 class="title">{{title}}</h4>
+                                {{/if}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="nav navbar-nav navbar-right">
+                                {{#if firstName}}
+                                    <p class="navbar-text">Signed in as {{firstName}} <a href="/users/logout" title="Logout"><span class="glyphicon glyphicon-log-out navbar-link"></span></a></p>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </header>
-        <main class="row">
-            <section class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{#if title}}
-                            <span id="title">{{title}}</span>
-                        {{/if}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        {{{body}}}
-                    </div>
-                </div>
-            </section>
+        <main class="container">
+           <div class="row">
+               <div class="col-md-12">
+                   {{{body}}}
+               </div>
+           </div>
         </main>
-        <footer class="row">
-            <section class="col-md-12">
-                <p>&copy; Software Snippet 2015</p>
-            </section>
+        <footer>
+            <nav class="navbar navbar-default navbar-static-bottom">
+                <div class="container">
+                    <p>&copy; Software Snippet 2015</p>
+                </div>
+            </nav>
         </footer>
     </body>
 </html>

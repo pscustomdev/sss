@@ -1,100 +1,22 @@
 @import url(../bower/bootstrap/dist/css/bootstrap.min.css);
 @import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
 
-header {
-  background-color: #f1f1f1;
-}
-header span {
-  float: right;
+body {
+  padding-top: 70px;
 }
 
-header span a {
-  color: grey;
+.badge {
+  font-size: 8px !important;
+  background-color: #9a9a9a !important;
 }
 
-main #title {
-  position: absolute;
-  top: -20px;
+button.tag {
+  background-color: #e1edfc !important;
+  color: #8cb4f6 !important;
+  border-radius: 45px;
 }
 
-
-
-
-/*section {*/
-  /*border: 1px solid grey;*/
-/*}*/
-/*#header {*/
-  /*position: absolute;*/
-  /*top: 10px;*/
-  /*right: 0;*/
-  /*width: 100%;*/
-  /*font-size: 13px;*/
-/*}*/
-
-/*div {*/
-  /*display: block;*/
-/*}*/
-
-/*#searchForm {*/
-  /*margin-top: 0;*/
-  /*width: 100%;*/
-  /*position: absolute;*/
-  /*top: 311px;*/
-  /*min-width: 980px;*/
-  /*z-index: 103;*/
-/*}*/
-
-/*.nav {*/
-  /*min-width: 301px;*/
-  /*z-index: 987;*/
-  /*float: right;*/
-  /*padding-left: 30px;*/
-  /*padding-right: 30px;*/
-  /*position: relative;*/
-  /*text-align: right;*/
-  /*align-items: center;*/
-  /*justify-content: flex-end;*/
-  /*margin-left: 0!important;*/
-  /*margin-right: 0!important;*/
-  /*white-space: nowrap;*/
-  /*background: #fff;*/
-  /*color: #222;*/
-/*}*/
-
-/*.nav-brand {*/
-  /*display: inline-block;*/
-  /*position: relative;*/
-  /*height: 150px;*/
-  /*width: 588px;*/
-  /*align-items: center;*/
-  /*padding-left: 30px;*/
-  /*padding-right: 30px;*/
-  /*text-align: center;*/
-/*}*/
-
-/*.title {*/
-  /*font-size: 20px;*/
-/*}*/
-
-/*.subTitle {*/
-  /*font-size: 15px;*/
-/*}*/
-/*.content {*/
-  /*height: 233px;*/
-  /*margin-top: 89px;*/
-/*}*/
-
-/*#footer {*/
-  /*display: block;*/
-  /*bottom: 0;*/
-  /*font-size: 10pt;*/
-  /*height: 35px;*/
-  /*position: absolute;*/
-  /*width: 100%;*/
-  /*margin: 0 auto;*/
-  /*min-width: 980px;*/
-/*}*/
-
-/*.input-group-addon {*/
-  /*padding-bottom: 5px;*/
-/*}*/
+button.tag span.badge {
+  background-color: #d4e0ef !important;
+  color: #8cb4f6 !important;
+}

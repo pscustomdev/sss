@@ -1,49 +1,31 @@
 <div class="row">
-    <div class="col-md-3">
+    <section class="col-md-8" ui-view="search"></section>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <br/>
+        <br/>
+        <br/>
         <div class="row">
-            <div class="col-md-12">
-                <section ui-view="search"></section>
-            </div>
+            <section class="col-md-9" ui-view="total"></section>
         </div>
         <hr/>
         <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <section ui-view="filter_categories"></section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <section ui-view="filter_subcategories"></section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <section ui-view="filter_ratings"></section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-9">
-        <div class="row">
-            <div class="col-md-6">
-                <section ui-view="total"></section>
-            </div>
-            <div class="col-md-6">
-                <section ui-view="sort"></section>
-            </div>
+            <section class="col-md-12" ui-view="results"></section>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <section ui-view="results"></section>
-            </div>
+            <section class="col-md-12" ui-view="filter_search_criteria"></section>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <section ui-view="filter_tags"></section>
-            </div>
+            <section class="col-md-12">
+                <nav>
+                    <ul class="pager">
+                        <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+            </section>
         </div>
+        <br/>
     </div>
 </div>

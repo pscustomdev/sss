@@ -24,9 +24,9 @@
                 },
                 'results@results': { templateUrl: '/js/app/sss/results/results_partial.html' },
                 'filter_categories@results': { templateUrl: '/js/app/sss/results/filter_categories_partial.html' },
-                'filter_subcategories@results': { templateUrl: '/js/app/sss/results/filter_subcategories_partial.html' },
                 'filter_tags@results': { templateUrl: '/js/app/sss/results/filter_tags_partial.html' },
-                'filter_ratings@results': { templateUrl: '/js/app/sss/results/filter_ratings_partial.html' }
+                'filter_ratings@results': { templateUrl: '/js/app/sss/results/filter_ratings_partial.html' },
+                'filter_search_criteria@results': { templateUrl: '/js/app/sss/results/filter_search_criteria_partial.html' }
             }
         })
     }

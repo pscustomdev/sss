@@ -1,7 +1,51 @@
-<!--<section style="padding-bottom: 20px" class="input-group input-group-search">-->
-<input type="text" ng-model="searchTerms" name="q" required>
-<span>
-    <button ng-disabled="search.$invalid" ng-click="searchService.submitSearch(searchTerms)">
-        Search<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-    </button>
-</span>
+<div class="row">
+<div class="col-md-12">
+    <div class="input-group">
+        <div class="input-group-btn">
+            <button ng-disabled="search.$invalid" ng-click="searchService.submitSearch(searchTerms)" type="button"
+                    class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filters">
+                <span class="caret"></span>
+            </button>
+        </div>
+        <input type="search" ng-model="searchTerms" name="q" required class="form-control" placeholder="Search"
+               aria-label="...">
+    </div>
+    <div id="filters" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="filtersLabel"
+         style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="modal-title" id="filtersLabel">Search Filters</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <div ui-view="sort"></div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" ui-view="filter_categories"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" ui-view="filter_tags"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" ui-view="filter_ratings"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

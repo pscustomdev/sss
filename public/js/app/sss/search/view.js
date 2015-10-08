@@ -13,12 +13,13 @@
             url: '/search',
             views: {
                 '': {
-                    templateUrl: '/js/app/sss/search/view.html',
-                    controller: 'SearchController',
-                    controllerAs: 'vm'
+                    templateUrl: '/js/app/sss/search/view.html'
                 },
-                'search@search': { templateUrl: '/js/app/sss/search/search_partial.html' },
-                'topHits@search': { templateUrl: '/js/app/sss/search/topHits_partial.html' }
+                'search_bar@search': {
+                    templateUrl: '/js/app/sss/search/search_bar_partial.html',
+                    controller: 'SearchController'
+                },
+                'top_hits@search': { templateUrl: '/js/app/sss/search/top_hits_partial.html' }
             }
         })
     }

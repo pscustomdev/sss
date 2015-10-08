@@ -3,7 +3,8 @@
 
     angular.module('app.results', ['ui.router', 'app.searchService'])
         .config(['$stateProvider', StateProvider])
-        .controller('ResultsController', Controller);
+        .controller('ResultsController', Controller)
+        .directive('showMoreDirective', showMoreDirective);
 
     StateProvider.$inject = ['$stateProvider'];
     Controller.$inject = ['$rootScope', 'searchService'];
@@ -13,25 +14,44 @@
             url: '/results',
             views: {
                 '': {
-                    templateUrl: '/js/app/sss/results/view.html',
+                    templateUrl: '/js/app/sss/results/view.html'
+                },
+                'total@results': {
+                    templateUrl: '/js/app/sss/results/total_partial.html',
                     controller: 'ResultsController'
                 },
-                'total@results': { templateUrl: '/js/app/sss/results/total_partial.html' },
                 'sort@results': { templateUrl: '/js/app/sss/results/sort_partial.html' },
-                'search@results': {
-                    templateUrl: '/js/app/sss/results/search_partial.html',
+                'search_bar@results': {
+                    templateUrl: '/js/app/sss/results/search_bar_partial.html',
                     controller: 'ResultsController'
                 },
-                'results@results': { templateUrl: '/js/app/sss/results/results_partial.html' },
-                'filter_categories@results': { templateUrl: '/js/app/sss/results/filter_categories_partial.html' },
-                'filter_tags@results': { templateUrl: '/js/app/sss/results/filter_tags_partial.html' },
-                'filter_ratings@results': { templateUrl: '/js/app/sss/results/filter_ratings_partial.html' },
-                'filter_search_criteria@results': { templateUrl: '/js/app/sss/results/filter_search_criteria_partial.html' }
+                'results@results': {
+                    templateUrl: '/js/app/sss/results/results_partial.html',
+                    controller: 'ResultsController'
+                },
+                'categories_filter@results': { templateUrl: '/js/app/sss/results/categories_filter_partial.html' },
+                'tags_filter@results': { templateUrl: '/js/app/sss/results/tags_filter_partial.html' },
+                'ratings_filter@results': { templateUrl: '/js/app/sss/results/ratings_filter_partial.html' },
+                'search_criteria_filter@results': {
+                    templateUrl: '/js/app/sss/results/search_criteria_filter_partial.html',
+                    controller: 'ResultsController'
+                },
+                'pagination@results': { templateUrl: '/js/app/sss/results/pagination_partial.html' }
             }
         })
     }
 
     function Controller($scope, SearchService) {
         $scope.searchService = SearchService;
+    }
+
+    function showMoreDirective() {
+        return function() {
+            $('.show-more').showMore({
+                adjustHeight: 40,
+                moreText: "+ More",
+                lessText: "- Less"
+            });
+        };
     }
 }());

@@ -1,31 +1,19 @@
 <div class="row">
-    <section class="col-md-8" ui-view="search"></section>
+    <section class="col-md-8 affix" data-spy="affix" ui-view="search_bar"></section>
+</div>
+<br/><br/><br/>
+<div class="row">
+    <section class="col-md-8" ui-view="total"></section>
+    <section class="col-md-4" ui-view="sort"></section>
+</div>
+<hr/>
+<div class="row">
+    <section class="col-md-12" ui-view="results"></section>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <br/>
-        <br/>
-        <br/>
-        <div class="row">
-            <section class="col-md-9" ui-view="total"></section>
-        </div>
-        <hr/>
-        <div class="row">
-            <section class="col-md-12" ui-view="results"></section>
-        </div>
-        <div class="row">
-            <section class="col-md-12" ui-view="filter_search_criteria"></section>
-        </div>
-        <div class="row">
-            <section class="col-md-12">
-                <nav>
-                    <ul class="pager">
-                        <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
-                        <li><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
-                    </ul>
-                </nav>
-            </section>
-        </div>
-        <br/>
-    </div>
+    <section class="col-md-12" ui-view="search_criteria_filter"></section>
 </div>
+<div class="row">
+    <section class="col-md-12" ui-view="pagination"></section>
+</div>
+<br/>

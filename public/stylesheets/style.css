@@ -1,32 +1,6 @@
 @import url(../bower/bootstrap/dist/css/bootstrap.min.css);
 @import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
 
-.title,
-.title:hover,
-.title:focus {
-  color: black;
-  font-size: 18px !important;
-}
-
 body {
   padding-top: 70px;
-}
-
-.sss-button {
-  background-color: #e1edfc !important;
-  color: #8cb4f6 !important;
-  text-align: left;
-}
-
-.sss-button span.badge {
-  background-color: #d4e0ef !important;
-  color: #8cb4f6 !important;
-  font-size: 8px !important;
-}
-
-section.affix {
-  position: fixed;
-  top: 70px;
-  width: 61%;
-  z-index: 9999;
 }

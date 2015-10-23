@@ -1,27 +1,68 @@
-<div class="container" role="main" ng-hide="showMainApp">
-    <div class="jumbotron">
-        <h1>Software Snippet Search</h1>
-        <p>Software Snippet Search</p>
-        <div growl inline="true" reference="generalMessages"></div>
-        <div growl></div>
-        <div class="widget">
-            <form name="login-form" id="login-form" method="post" action="users/login">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required />
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required />
-                    <label for="rememberMe">Remember me</label>
-                    <input type="checkbox" id="rememberMe" name="rememberMe" />
-                </div>
-                <div class="form-submit">
-                    <input id="submit-login" class="btn btn-primary" type="submit" value="Log in" />
-                        or <a id="createUserBtn" href="/users/create">Create an account</a>
-                    {{#if error}}
-                        <div id=loginError style="color:red;">{{error}}</div>
-                    {{/if}}
-                </div>
-            </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{#if title}}{{title}}{{/if}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/bower/html5shiv/dist/html5shiv.js"></script>
+    <![endif]-->
+    <script src="/bower/angular/angular.min.js"></script>
+    <script src="/bower/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="/bower/angular-animate/angular-animate.min.js"></script>
+    {{#if settings.production}}
+        <script src="/js/build/sss.min.js?v=2"></script>
+    {{else}}
+        <script src="/bower/jquery/dist/jquery.min.js"></script>
+        <script src="/js/app/services/util.js"></script>
+        <script src="/js/app/services/angular-service.js"></script>
+        <script src="/js/app/services/search-service.js"></script>
+        <script src="/js/app/sss/search/view.js"></script>
+        <script src="/js/app/sss/results/view.js"></script>
+        <script src="/js/app/sss/details/view.js"></script>
+        <script src="/js/app/sss/overview/view.js"></script>
+        <script src="/js/app/app.js"></script>
+    {{/if}}
+
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                {{#if title}}
+                    <a class="title" type="button" href="/">{{title}}</a>
+                {{/if}}
+            </div>
+            <div class="col-md-6">
+                <p><a href="/ping" title="Ping,Pong">Ping <span class="glyphicon glyphicon-flash navbar-link"></span></a></p>
+                {{#if isAuthenticated}}
+                    <p>Signed in as {{firstName}} <a href="/logout" title="Logout"><span class="glyphicon glyphicon-log-out navbar-link"></span></a></p>
+                {{else}}
+                    <p><a href="/login" title="Login">Login <span class="glyphicon glyphicon-log-in navbar-link"></span></a></p>
+                {{/if}}
+            </div>
         </div>
     </div>
-</div>
+</header>
+<main class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <section ng-app="app" ui-view></section>
+        </div>
+    </div>
+</main>
+<footer>
+    <nav class="navbar navbar-default navbar-static-bottom">
+        <div class="container">
+            <p>&copy; Software Snippet 2015</p>
+        </div>
+    </nav>
+</footer>
+</body>
+</html>

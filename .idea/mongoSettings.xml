@@ -4,7 +4,7 @@
     <option name="serverConfigurations">
       <list>
         <ServerConfiguration>
-          <option name="label" value="MongoDB" />
+          <option name="label" value="SSS" />
           <option name="serverUrls">
             <list>
               <option value="localhost:27017" />

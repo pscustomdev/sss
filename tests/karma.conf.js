@@ -3,16 +3,19 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '../',
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    //frameworks: ['mocha'],
     frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
+      "node_modules/chai/chai.js",
       'public/bower/angular/angular.js',
       'public/bower/angular-mocks/angular-mocks.js',
+      'public/bower/angular-bootstrap/ui-bootstrap.js',
       'public/bower/angular-ui-router/release/angular-ui-router.js',
       'public/js/app/services/angular-service.js',
       'public/js/app/services/search-service.js',

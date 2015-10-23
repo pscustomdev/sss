@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ca1b325a-f656-4b8d-b621-c390fabad6a2" name="Default" comment="" />
+    <list default="true" id="ca1b325a-f656-4b8d-b621-c390fabad6a2" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/SSS__Debug_.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Makefile" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/karma.conf.js" afterPath="$PROJECT_DIR$/tests/karma.conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/protractor.conf.js" afterPath="$PROJECT_DIR$/tests/protractor.conf.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/mongoSettings.xml" afterPath="$PROJECT_DIR$/.idea/mongoSettings.xml" />
+    </list>
     <ignored path="sss.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -51,10 +57,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tests/frontend-unit-tests/MainPage-spec.js" />
-        <option value="$PROJECT_DIR$/routes/main.js" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/public/js/app/state-config.js" />
         <option value="$PROJECT_DIR$/public/js/app/sss/overview/controller.js" />
         <option value="$PROJECT_DIR$/public/js/app/sss/details/controller.js" />
         <option value="$PROJECT_DIR$/public/js/app/sss/search/controller.js" />
@@ -70,12 +72,8 @@
         <option value="$PROJECT_DIR$/public/js/app/sss/search/view.html" />
         <option value="$PROJECT_DIR$/public/js/app/sss/main/search_partial.html" />
         <option value="$PROJECT_DIR$/public/js/app/sss/search/results_partial.html" />
-        <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
-        <option value="$PROJECT_DIR$/views/layout.hbs" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/public/js/app/sss/overview/overview_partial.html" />
         <option value="$PROJECT_DIR$/public/js/app/sss/details/details_partial.html" />
-        <option value="$PROJECT_DIR$/mongod-start" />
         <option value="$PROJECT_DIR$/tests/frontend-unit-tests/temp-spec.js" />
         <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/tests/frontend-unit-tests/stateMock.js" />
@@ -98,10 +96,18 @@
         <option value="$PROJECT_DIR$/auth/restrict.js" />
         <option value="$PROJECT_DIR$/auth/passport-config.js" />
         <option value="$PROJECT_DIR$/public/js/build/sss.min.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/karma.conf.js" />
-        <option value="$PROJECT_DIR$/readme_install.txt" />
         <option value="$PROJECT_DIR$/protractor.conf.js" />
+        <option value="$PROJECT_DIR$/views/layout.hbs" />
+        <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
+        <option value="$PROJECT_DIR$/mongod-start" />
+        <option value="$PROJECT_DIR$/readme_install.txt" />
+        <option value="$PROJECT_DIR$/db/mongo-dao.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/auth/auth-conf.js" />
+        <option value="$PROJECT_DIR$/db/github-dao.js" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/tests/karma.conf.js" />
       </list>
     </option>
   </component>
@@ -136,10 +142,14 @@
   <component name="NamedScopeManager">
     <order />
   </component>
+  <component name="NodeJsMochaPackageDirSetting">
+    <data>$PROJECT_DIR$/node_modules/mocha</data>
+  </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="-1080" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="x" value="-1080" />
+    <option name="y" value="-1508" />
+    <option name="width" value="1080" />
+    <option name="height" value="1897" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -608,16 +618,13 @@
       <showMembers ProjectPane="true" />
       <showModules />
       <showLibraryContents />
-      <hideEmptyPackages />
+      <hideEmptyPackages ProjectPane="false" />
       <abbreviatePackageNames />
       <autoscrollToSource ProjectPane="false" />
       <autoscrollFromSource ProjectPane="false" />
       <sortByType ProjectPane="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -639,6 +646,9 @@
         </subPane>
         <option name="show-excluded-files" value="false" />
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -647,13 +657,13 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/bower" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/mocha-backend-unit-tests" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
-    <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="org.codinjutsu.tools.mongo.view.MongoConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -662,7 +672,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FullScreen" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="260" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="262" />
@@ -695,14 +705,14 @@
       <recent name="$PROJECT_DIR$/public/js/app/sss/search" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/tests/e2e-tests" />
       <recent name="$PROJECT_DIR$/public/js/app" />
       <recent name="$PROJECT_DIR$/public/js/app/sss/search" />
       <recent name="$PROJECT_DIR$/public/js/app/sss/details" />
-      <recent name="$PROJECT_DIR$/public/js/app/sss/overview" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.SSS (Debug)">
+  <component name="RunManager" selected="Node.js.SSS">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -969,31 +979,101 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-options />
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
     <configuration default="true" type="osgi.bnd.run" factoryName="Run Launcher">
       <method />
     </configuration>
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
-    <configuration default="false" name="SSS (Debug) JavaScript" type="JavascriptDebugType" factoryName="JavaScript Debug" uri="http://localhost:3000/">
+    <configuration default="false" name="SSS JavaScript" type="JavascriptDebugType" factoryName="JavaScript Debug" engineId="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" uri="http://localhost:3000/">
+      <mapping url="http://js/app/services" local-file="$PROJECT_DIR$/public/js/app/services" />
+      <mapping url="http://js/app/services/angular-service.js" local-file="$PROJECT_DIR$/public/js/app/services/angular-service.js" />
+      <mapping url="http://../karma.conf.js" local-file="$PROJECT_DIR$/karma.conf.js" />
+      <mapping url="http://js/app/sss/search" local-file="$PROJECT_DIR$/public/js/app/sss/search" />
+      <mapping url="http://js/app/sss/search/view.js" local-file="$PROJECT_DIR$/public/js/app/sss/search/view.js" />
+      <mapping url="http://../tests/karma-frontend-unit-tests/results-view-spec.js" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests/results-view-spec.js" />
+      <mapping url="http://../routes" local-file="$PROJECT_DIR$/routes" />
+      <mapping url="http://../routes/main.js" local-file="$PROJECT_DIR$/routes/main.js" />
+      <mapping url="http://../tests/karma-frontend-unit-tests/api-service.js" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests/api-service-spec.js" />
+      <mapping url="http://../tests/protractor-end2end-tests/stateMock.js" local-file="$PROJECT_DIR$/tests/protractor-end2end-tests/stateMock.js" />
+      <mapping url="http://../tests/karma-frontend-unit-tests/search-view-spec.js" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests/search-view-spec.js" />
+      <mapping url="http://../tests/mocha-backend-unit-tests/github-dao-spec.js" local-file="$PROJECT_DIR$/tests/mocha-backend-unit-tests/github-dao-spec.js" />
+      <mapping url="http://../tests/mocha-backend-unit-tests/mongo-dao-spec.js" local-file="$PROJECT_DIR$/tests/mocha-backend-unit-tests/mongo-dao-spec.js" />
+      <mapping url="http://../tests/protractor-end2end-tests/index-spec.js" local-file="$PROJECT_DIR$/tests/protractor-end2end-tests/index-spec.js" />
+      <mapping url="http://../routes/index.js" local-file="$PROJECT_DIR$/routes/index.js" />
+      <mapping url="http://../tests/protractor-end2end-tests/createUser-page-spec.js" local-file="$PROJECT_DIR$/tests/protractor-end2end-tests/createUser-page-spec.js" />
+      <mapping url="http://../routes/api.js" local-file="$PROJECT_DIR$/routes/api.js" />
+      <mapping url="http://../tests/karma-frontend-unit-tests" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests" />
+      <mapping url="http://../tests/karma-frontend-unit-tests/api-service.js" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests/details-view-spec.js" />
+      <mapping url="http://../tests/karma-frontend-unit-tests/api-service.js" local-file="$PROJECT_DIR$/tests/karma-frontend-unit-tests/overview-view-spec.js" />
+      <mapping url="http://../tests/protractor-end2end-tests" local-file="$PROJECT_DIR$/tests/protractor-end2end-tests" />
+      <mapping url="http://../tests/mocha-backend-unit-tests" local-file="$PROJECT_DIR$/tests/mocha-backend-unit-tests" />
+      <mapping url="http://js/app/app.js" local-file="$PROJECT_DIR$/public/js/app/app.js" />
+      <mapping url="http://js" local-file="$PROJECT_DIR$/public/js" />
+      <mapping url="http://js/app" local-file="$PROJECT_DIR$/public/js/app" />
+      <mapping url="http://../protractor.js" local-file="$PROJECT_DIR$/protractor.conf.js" />
+      <mapping url="http://js/app/sss" local-file="$PROJECT_DIR$/public/js/app/sss" />
+      <mapping url="http://js/app/services/search-service.js" local-file="$PROJECT_DIR$/public/js/app/services/search-service.js" />
+      <mapping url="http://js/app/sss/result" local-file="$PROJECT_DIR$/public/js/app/sss/results" />
+      <mapping url="http://../tests" local-file="$PROJECT_DIR$/tests" />
+      <mapping url="http://js/app/services/util.js" local-file="$PROJECT_DIR$/public/js/app/services/util.js" />
+      <mapping url="http://js/app/sss/details" local-file="$PROJECT_DIR$/public/js/app/sss/details" />
+      <mapping url="http://../gulpfilejs" local-file="$PROJECT_DIR$/gulpfile.js" />
+      <mapping url="http://js/app/sss/details/view.js" local-file="$PROJECT_DIR$/public/js/app/sss/details/view.js" />
+      <mapping url="http://../app.js" local-file="$PROJECT_DIR$/app.js" />
+      <mapping url="http://../config.js" local-file="$PROJECT_DIR$/config.js" />
+      <mapping url="http://js/app/sss/overview" local-file="$PROJECT_DIR$/public/js/app/sss/overview" />
+      <mapping url="http://js/app/sss/overview/view.js" local-file="$PROJECT_DIR$/public/js/app/sss/overview/view.js" />
+      <mapping url="http://js/app/sss/results/view.js" local-file="$PROJECT_DIR$/public/js/app/sss/results/view.js" />
       <method />
     </configuration>
-    <configuration default="false" name="FrontEnd Tests (Karma)" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="$PROJECT_DIR$/karma.conf.js">
+    <configuration default="false" name="FrontEnd Tests (Karma)" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="$PROJECT_DIR$/tests/karma.conf.js" browsers="PhantomJS">
       <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Backend Tests (Mocha)" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-options />
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui>bdd</ui>
+      <extra-mocha-options>--config=tests/mocha.conf.js</extra-mocha-options>
+      <test-directory>$PROJECT_DIR$/tests/mocha-backend-unit-tests</test-directory>
+      <recursive>true</recursive>
+      <method />
+    </configuration>
+    <configuration default="false" name="SSS" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+      <envs>
+        <env name="DEBUG" value="sss:*" />
+        <env name="NODE_ENV" value="dev" />
+      </envs>
+      <browser start="true" with-js-debugger="true" url="http://localhost:3000/" />
       <method />
     </configuration>
     <configuration default="false" name="Backend Tests (Jasmine/Node/Karma)" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js" application-parameters="tests/mocha-backend-unit-tests --autotest --captureExceptions" working-dir="$PROJECT_DIR$">
       <method />
     </configuration>
-    <configuration default="false" name="EndToEnd Tests (Protractor)" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="/usr/local/lib/node_modules/protractor/lib/cli.js" application-parameters="protractor.conf.js" working-dir="$PROJECT_DIR$">
+    <configuration default="false" name="EndToEnd Tests (Protractor)" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="/usr/local/lib/node_modules/protractor/lib/cli.js" application-parameters="tests/protractor.conf.js" working-dir="$PROJECT_DIR$">
       <method />
     </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.SSS (Debug) JavaScript" />
+    <list size="6">
+      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.SSS JavaScript" />
       <item index="1" class="java.lang.String" itemvalue="Karma.FrontEnd Tests (Karma)" />
-      <item index="2" class="java.lang.String" itemvalue="Node.js.SSS (Debug)" />
-      <item index="3" class="java.lang.String" itemvalue="Node.js.Backend Tests (Jasmine/Node/Karma)" />
-      <item index="4" class="java.lang.String" itemvalue="Node.js.EndToEnd Tests (Protractor)" />
+      <item index="2" class="java.lang.String" itemvalue="Mocha.Backend Tests (Mocha)" />
+      <item index="3" class="java.lang.String" itemvalue="Node.js.SSS" />
+      <item index="4" class="java.lang.String" itemvalue="Node.js.Backend Tests (Jasmine/Node/Karma)" />
+      <item index="5" class="java.lang.String" itemvalue="Node.js.EndToEnd Tests (Protractor)" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1030,11 +1110,13 @@
       <workItem from="1443024370487" duration="17510000" />
       <workItem from="1443470675862" duration="2300000" />
       <workItem from="1443543646147" duration="967000" />
+      <workItem from="1445527334786" duration="608000" />
+      <workItem from="1445563737963" duration="8747000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="181702000" />
+    <option name="totallyTimeSpent" value="191057000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1046,32 +1128,32 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1080" width="1920" height="1080" extended-state="6" />
+    <frame x="-1080" y="-1508" width="1080" height="1897" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IntelliTail" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35889244" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28892636" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3255578" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32509825" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36594203" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4030354" sideWeight="0.503861" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18550107" sideWeight="0.51222104" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33590734" sideWeight="0.5081415" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18550107" sideWeight="0.51222104" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18550107" sideWeight="0.51222104" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Mongo Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18550107" sideWeight="0.48777896" order="6" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36634716" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3291506" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33590734" sideWeight="0.4918585" order="6" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17405951" sideWeight="0.496139" order="6" side_tool="false" content_ui="tabs" x="21" y="-683" width="1878" height="309" />
       <window_info id="TestDox" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40382573" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" x="21" y="-683" width="1878" height="309" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1131,52 +1213,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/js/app/sss/main/view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.027624309">
-          <caret line="1" column="24" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/app/sss/search/view.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.016910935">
           <caret line="1" column="24" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/sss/main/search_partial.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.050732806">
-          <caret line="3" column="92" selection-start-line="3" selection-start-column="92" selection-end-line="3" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.90120745">
-          <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/sss/search/filters_partial.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.050732806">
-          <caret line="3" column="5" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/sss/search/results_partial.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.03382187">
-          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/karma/lib/middleware/proxy.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="21" column="34" selection-start-line="21" selection-start-column="34" selection-end-line="21" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -1194,34 +1234,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mongod-start">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower/angular-mocks/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.29943502">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower/angular-mocks/ngMock.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower/angular-mocks/ngAnimateMock.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.056497175">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/app/sss/details/view.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2937853">
@@ -1233,34 +1245,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="41" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app/sss/main/view.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="64" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower/angular-mocks/angular-mocks.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1517" column="22" selection-start-line="1517" selection-start-column="22" selection-end-line="1517" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/jasmine-core/lib/jasmine-core/jasmine.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="1792" column="4" selection-start-line="1792" selection-start-column="4" selection-end-line="1792" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower/angular/angular.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14566" column="19" selection-start-line="14566" selection-start-column="19" selection-end-line="14566" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1285,13 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9671413">
-          <caret line="62" column="72" selection-start-line="62" selection-start-column="72" selection-end-line="62" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.26996624">
@@ -1299,59 +1276,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/restrict.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08214677">
-          <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.32167044">
-          <caret line="47" column="34" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/passport-config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47645125">
-          <caret line="29" column="12" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/layout.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-25.0">
-          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.0">
-          <caret line="8" column="40" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/error.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/users/create.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/main/index.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.0">
-          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1376,28 +1304,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/build/sss.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/users.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="30" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.5681818">
-          <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/app/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1416,30 +1322,148 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.03131524">
           <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protractor.conf.js">
+    <entry file="file://$PROJECT_DIR$/tests/protractor.conf.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06263048">
           <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/app/sss/search/search_bar_partial.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme_install.txt">
+    <entry file="file://$PROJECT_DIR$/gulpfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1743215">
-          <caret line="75" column="82" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/karma.conf.js">
+    <entry file="file://$PROJECT_DIR$/views/main/index.hbs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3131524">
-          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.13880856">
+          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/error.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.06940428">
+          <caret line="8" column="40" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mongod-start">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.01711352">
+          <caret line="2" column="34" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/layout.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3209948">
+          <caret line="37" column="17" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db/mongo-dao.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.1111112">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.051107325">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db/github-dao.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8049404">
+          <caret line="63" column="55" selection-start-line="63" selection-start-column="55" selection-end-line="63" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27381632">
+          <caret line="32" column="15" selection-start-line="32" selection-start-column="15" selection-end-line="32" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/auth-conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0855676">
+          <caret line="10" column="2" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33371362">
+          <caret line="39" column="21" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/authentication.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03422704">
+          <caret line="4" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/restrict.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0427838">
+          <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/mocha.conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/karma.conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.109135">
+          <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
           <folding />
         </state>
       </provider>

@@ -1,7 +1,8 @@
 module.exports = function (app) {
-    var passport = require('passport');
+    var path = require('path');
     var flash = require('connect-flash');
-    var setupAuthStrategy = require('../auth/authentication');
+    var passport = require('passport');
+    var setupAuthStrategy = require(path.join(__dirname, '../auth/authentication'));
 
     app.use(flash());
     app.use(passport.initialize());

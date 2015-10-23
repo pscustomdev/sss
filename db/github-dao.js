@@ -1,4 +1,4 @@
-var config = require('../auth-conf');
+var auth_config = require('../auth/auth-conf');
 var GitHubApi = require('github');
 var _ = require('underscore');
 
@@ -13,20 +13,20 @@ var github = new GitHubApi({
     pathPrefix: "", // for some GHEs; none for GitHub
     timeout: 5000,
     headers: {
-        "user-agent": "My-Cool-GitHub-App" // GitHub is happy with a unique user agent
+        "user-agent": "SoftwareSnippetSearch" // GitHub is happy with a unique user agent
     }
 });
 
 github.authenticate({
     type: "oauth",
-    token: config.github_token
+    token: auth_config.github_api.token
 });
 
 exports.getRepos = function(next) {
     github.repos.getAll({}, function (err, repos) {
         if (err) {
             console.log(err);
-            return next(err);    
+            return next(err);
         }
         var subRepos = _.pluck(repos, 'name');
         console.log(JSON.stringify(subRepos));
@@ -37,7 +37,7 @@ exports.getRepos = function(next) {
 exports.searchCode = function (s, next) {
     var searchCriteria = {};
     searchCriteria.q =  s + "+user:sss-storage";
-    
+
     //This will search the name, desc and README
     console.log("searchCriteria:" + searchCriteria);
     github.search.code(searchCriteria, function(err, resultData) {
@@ -47,13 +47,13 @@ exports.searchCode = function (s, next) {
 };
 
 // exports.getRepoContents = function(repoId, next) {
-//     var repo = github.getRepo(config.github_username, repoId);
+//     var repo = github.getRepo(auth_config.github_api.username, repoId);
 //     var pathToDir = ""; //Leaving empty because no sub directory planned
-    
+
 //     repo.contents('master', pathToDir, function(err, contents) {
 //         if (err) {
 //             console.log(JSON.parse(err.request.responseText).message);
-//             return next(err);    
+//             return next(err);
 //         }
 //         console.log(JSON.stringify(contents));
 //         next(null, contents);
@@ -61,11 +61,11 @@ exports.searchCode = function (s, next) {
 // };
 
 // exports.getRepoFile = function(repoId, fileName, next) {
-//     var repo = github.getRepo(config.github_username, repoId);
-    
+//     var repo = github.getRepo(auth_config.github_api.username, repoId);
+
 //     repo.read('master', fileName, function(err, contents) {
 //         if (err) {
-//             return next(err);    
+//             return next(err);
 //         }
 //         console.log(JSON.stringify(contents));
 //         next(null, contents);

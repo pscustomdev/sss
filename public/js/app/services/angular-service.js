@@ -3,9 +3,9 @@
     
     angular.module('app.angularService', [])
         .factory('angularService', apiFactory);
-        
+
     apiFactory.$inject = ['$http'];
-    
+
     function apiFactory($http) {
         return {
             getSnippets : getSnippets,

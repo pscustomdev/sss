@@ -1,16 +1,48 @@
-var express = require('express');
-var router = express.Router();
+module.exports = function (app) {
+    var passport = require('passport');
+    var flash = require('connect-flash');
+    var setupAuthStrategy = require('../auth/authentication');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    if (req.user) {
-        return res.redirect('/sss');
-    } 
-    var vm = {
-        title: 'Login',
-        error: req.flash('error')
-    };
-    res.render('index', vm);
-});
+    app.use(flash());
+    app.use(passport.initialize());
+    app.use(passport.session());
+    setupAuthStrategy();
 
-module.exports = router;
+    // Configure standard routes
+    require('../routes/main')(app, passport);
+    // Setup Router-Groups
+    require('../routes/api')(app);
+
+    // Default route configurations
+    // catch 404 and forward to error handler
+    app.use(function(req, res, next) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
+
+    // error handlers
+
+    // development error handler
+    // will print stacktrace
+    // NODE_ENV is the environment variable to set. Default is "development"
+    if (app.get('env') === 'dev' || app.get('env') === 'development') {
+        app.use(function(err, req, res) {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: err
+            });
+        });
+    }
+
+    // production error handler
+    // no stacktraces leaked to user
+    app.use(function(err, req, res) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: {}
+        });
+    });
+};

@@ -3,7 +3,7 @@ var mongoskin = require('mongoskin');
 var config = require('../config');
 var bcrypt = require('bcrypt');
 
-var db = mongoskin.db(config.mongoUri, {safe:true});
+var db = mongoskin.db(config.mongoUri, { safe:true });
 db.bind('snippets');
 db.bind('users');
 
@@ -41,6 +41,17 @@ exports.findUsers = function(queryObject, next) {
             next(err, users);
         } else {
             next("No user(s) found");  //probably should throw a 404 or something here.
+        }
+    });
+};
+
+
+exports.findById = function(id, next) {
+    db.users.find(id).toArray(function(err, users){
+        if (users[0]){
+            next(err, users[0]);
+        } else {
+            next("User not found");
         }
     });
 };

@@ -1,6 +1,17 @@
 @import url(../bower/bootstrap/dist/css/bootstrap.min.css);
 @import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
 
+.nav, .pagination, .carousel, .panel-title a {
+  cursor: pointer; /* AngularJS's documented way to fix a Bootstrap/UI Bootstrap compatibility issue */
+}
+
 body {
-  padding-top: 70px;
+  padding-top: 70px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
+}
+
+section.affix {
+  position: fixed; /* Affixes Searchbar so it won't scroll with content */
+  top: 70px; /* Sets Searchbar location on page */
+  width: 61%; /* Sets Searchbar length */
+  z-index: 9999; /* Sets the Search bar to layer above all background content */
 }

@@ -39,7 +39,7 @@ exports.searchCode = function (s, next) {
     searchCriteria.q =  s + "+user:sss-storage";
 
     //This will search the name, desc and README
-    console.log("searchCriteria:" + searchCriteria);
+    console.log("searchCriteria:" + JSON.stringify(searchCriteria));
     github.search.code(searchCriteria, function(err, resultData) {
         console.log("resultData:" + JSON.stringify(resultData));
         next(err, resultData);

@@ -8,7 +8,8 @@ module.exports = function(app, passport) {
     main_routes.get('/',
         function (req, res) {
             var vm = {
-                title: 'SSS',
+                title: 'Software Snippet Search',
+                user: req.user,
                 error: req.flash('error'),
                 isAuthenticated: req.isAuthenticated()
             };
@@ -17,7 +18,7 @@ module.exports = function(app, passport) {
     main_routes.get('/ping',
         restrict,
         function (req, res) {
-            res.send("pong!", 200);
+            res.status(200).send("pong!");
         });
     main_routes.get('/auth/github',
         passport.authenticate('github'));

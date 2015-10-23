@@ -32,23 +32,29 @@
 
 <body>
 <header>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                {{#if title}}
-                    <a class="title" type="button" href="/">{{title}}</a>
-                {{/if}}
-            </div>
-            <div class="col-md-6">
-                <p><a href="/ping" title="Ping,Pong">Ping <span class="glyphicon glyphicon-flash navbar-link"></span></a></p>
-                {{#if isAuthenticated}}
-                    <p>Signed in as {{firstName}} <a href="/logout" title="Logout"><span class="glyphicon glyphicon-log-out navbar-link"></span></a></p>
-                {{else}}
-                    <p><a href="/login" title="Login">Login <span class="glyphicon glyphicon-log-in navbar-link"></span></a></p>
-                {{/if}}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="nav navbar-left">
+                        {{#if title}}
+                            <a class="navbar-text" href="/">{{title}}</a>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="nav navbar-right">
+                        <p class="navbar-text"><a class="navbar-link" href="/ping" title="Ping,Pong">Ping <span class="glyphicon glyphicon-flash"></span></a></p>
+                        {{#if isAuthenticated}}
+                            <p class="navbar-text">Signed in as {{user.name}} <a class="navbar-link" href="/logout" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></p>
+                        {{else}}
+                            <p class="navbar-text"><a class="navbar-link" href="/login" title="Login">Login <span class="glyphicon glyphicon-log-in"></span></a></p>
+                        {{/if}}
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
 </header>
 <main class="container">
     <div class="row">
@@ -60,7 +66,11 @@
 <footer>
     <nav class="navbar navbar-default navbar-static-bottom">
         <div class="container">
-            <p>&copy; Software Snippet 2015</p>
+            <div class="row">
+                <div class="nav">
+                    <p class="navbar-text">&copy; {{title}} 2015</p>
+                </div>
+            </div>
         </div>
     </nav>
 </footer>

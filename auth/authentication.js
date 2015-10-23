@@ -10,7 +10,6 @@ module.exports = function() {
             callbackURL: auth_config.github.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
-            console.log("LOGGING: " + profile.id);
             done(null, profile);
             //db.findById({_id:profile.id}, function(err, user) {
             //    if (err) {  // Log errors, if any
@@ -41,18 +40,19 @@ module.exports = function() {
         }
     ));
 
-    passport.serializeUser(function(user, done) {
-        console.log('serializeUser: ' + user);
-        done (null, user);
+    passport.serializeUser(function(profile, done) {
+        console.log('serializeUser: ' + JSON.stringify(profile));
+        done (null, profile);
     });
 
-    passport.deserializeUser(function(id, done) {
-        console.log("deserializeUser id: " + JSON.stringify(id));
+    passport.deserializeUser(function(profile, done) {
+        console.log("deserializeUser id: " + profile.id);
         done(null, {
-            oauthID: id,
-            name: 'blah blah',
+            oauthID: profile.id,
+            username: profile.username,
+            name: profile._json.name,
+            email: profile._json.email,
             created: Date.now(),
-            email: 'blah@utopia.com',
             password: 'none'
         });
         //db.findById({_id:id}, function(err, user) {

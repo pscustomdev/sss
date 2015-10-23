@@ -12,9 +12,13 @@
   ],
   "dependencies": {
     "angular": "^1.4.6",
-    "angular-mocks": "^1.4.6",
     "angular-ui-router": "^0.2.15",
+    "angular-bootstrap": "^0.14.2",
+    "angular-animate": "^1.4.7",
     "bootstrap": "^3.3.5",
     "html5shiv": "^3.7.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.7"
   }
 }

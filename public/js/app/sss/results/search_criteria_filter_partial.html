@@ -1,11 +1,5 @@
-<div class="btn-group" data-toggle="buttons">
-    <label class="btn btn-default btn-sm sss-button active">
-        <input type="checkbox" autocomplete="off">javascript <span class="badge">1</span>
-    </label>
-    <label class="btn btn-default btn-sm sss-button active">
-        <input type="checkbox" autocomplete="off">idm <span class="badge">35</span>
-    </label>
-    <label class="btn btn-default btn-sm sss-button active">
-        <input type="checkbox" autocomplete="off">searchterm3 <span class="badge">7</span>
+<div class="btn-group">
+    <label ng-repeat="criteria in search_criteria" ng-class="{ active : criteria.count > 0 }" class="btn btn-default btn-sm">
+        <input type="checkbox" autocomplete="off">{{criteria.displayValue}} <span class="badge">{{criteria.count}}</span>
     </label>
 </div>

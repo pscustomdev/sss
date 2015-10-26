@@ -1,41 +1,45 @@
+
 <div class="input-group">
     <div class="input-group-btn">
         <button ng-disabled="search.$invalid" ng-click="searchService.submitSearch(searchTerms)" type="button"
-                class="btn btn-default sss-button">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-default sss-button" data-toggle="modal" data-target="#filters">
+        <button type="button" class="btn btn-default" uib-popover-template="results_filter.templateUrl" popover-placement="bottom">
             <span class="caret"></span>
         </button>
     </div>
     <input type="text" ng-model="searchTerms" name="q" required class="form-control" autofocus ng-enter="searchService.submitSearch(searchTerms);" placeholder="Search for...">
 </div>
-<div id="filters" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="filtersLabel" style="display: none;">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="modal-title" id="filtersLabel">Search Filters</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12" ui-view="categories_filter"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12" ui-view="tags_filter"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12" ui-view="ratings_filter"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+<script type="text/ng-template" id="results_filter.html">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group-vertical">
+                <h5>Technologies</h5>
+                <label ng-repeat="category in results_filter.categories" ng-class="{ active: category.count > 0 }" class="btn btn-default btn-sm">
+                    <input type="checkbox" ng-model="category.active" autocomplete="off">{{category.displayValue}} <span class="badge">{{category.count}}</span>
+                </label>
             </div>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group-vertical">
+                <h5>Tags</h5>
+                <label ng-repeat="tag in results_filter.tags" ng-class="{ active: tag.count > 0 }" class="btn btn-default btn-sm">
+                    <input type="checkbox" ng-model="tag.active" autocomplete="off">{{tag.displayValue}} <span class="badge">{{tag.count}}</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group-vertical">
+                <h5>Ratings</h5>
+                <label ng-repeat="rating in results_filter.ratings" ng-class="{ active: rating.count > 0 }" class="btn btn-default btn-sm">
+                    <input type="checkbox" ng-model="rating.active" autocomplete="off">{{rating.displayValue}} <span class="badge">{{rating.count}}</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</script>

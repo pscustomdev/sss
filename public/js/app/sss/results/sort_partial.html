@@ -1,12 +1,6 @@
 <span class="h5">Sort By: </span>
-<div class="btn-group" data-toggle="buttons">
-    <label class="btn btn-default sss-button">
-        <input type="radio" autocomplete="off">Date
-    </label>
-    <label class="btn btn-default sss-button active">
-        <input type="radio" autocomplete="off">Rating
-    </label>
-    <label class="btn btn-default sss-button">
-        <input type="radio" autocomplete="off"># Views
+<div class="btn-group">
+    <label ng-repeat="sort in results_sorts" ng-class="{ active : sort.active }" class="btn btn-default">
+        <input type="radio" ng-model="sort.active" autocomplete="off">{{sort.displayValue}}
     </label>
 </div>

@@ -15,7 +15,7 @@ module.exports = function(app, passport) {
             };
             res.render('index', vm);
         });
-    main_routes.get('/ping',
+    main_routes.get('/ping',    // a convenience test route
         restrict,
         function (req, res) {
             res.status(200).send("pong!");

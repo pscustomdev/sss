@@ -10,33 +10,33 @@ module.exports = function() {
             callbackURL: auth_config.github.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
-            done(null, profile);
-            //db.findById({_id:profile.id}, function(err, user) {
-            //    if (err) {  // Log errors, if any
-            //        console.log(err);
-            //    }
-            //    if (!err && user != null) {  // No Error and found a User, just continue
-            //        done(null, profile);
-            //        //done(null, user);
-            //    } else {    // Have an Error OR didn't find a User, save User to local database
-            //        var _user = {
-            //            oauthID: profile.id,
-            //            name: profile.displayName,
-            //            created: Date.now(),
-            //            email: profile.email,
-            //            password: 'none'
-            //        };
-            //        db.addUser(_user, function(err) {
-            //            if (err) {
-            //                console.log(err);
-            //            } else {
-            //                console.log("adding new user ...");
-            //                done(null, profile);
-            //                //done(null, _user);
-            //            }
-            //        });
-            //    }
-            //});
+            db.findById({ id: profile.id }, function(err, user) {
+                if (err) {              // Log errors, if any
+                    console.log(err);
+                }
+                if (!err && user) {     // No Error and found a User, just continue
+                    done(null, user);
+                } else {                // Have an Error OR didn't find a User, save User to local database
+                    user = {            // Normalize data into our own local user
+                        id: profile.id,
+                        username: profile.username,
+                        displayName: profile.displayName,
+                        name: profile._json.name,
+                        email: profile._json.email,
+                        created: profile._json.created_at,
+                        localCreation: Date(),
+                        password: profile.password
+                    };
+                    db.addUser(user, function(err) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("added new user: " + user.username);
+                            done(null, user);
+                        }
+                    });
+                }
+            });
         }
     ));
 
@@ -47,21 +47,12 @@ module.exports = function() {
 
     passport.deserializeUser(function(profile, done) {
         console.log("deserializeUser id: " + profile.id);
-        done(null, {
-            oauthID: profile.id,
-            username: profile.username,
-            name: profile._json.name,
-            email: profile._json.email,
-            created: Date.now(),
-            password: 'none'
+        db.findById({id:profile.id}, function(err, user) {
+            if (!err) {
+                done (null, user);
+            } else {
+                done (err, null);
+            }
         });
-        //db.findById({_id:id}, function(err, user) {
-        //    if (!err) {
-        //        done (null, user);
-        //    } else {
-        //        done (err, null);
-        //    }
-        //});
-
     });
 };

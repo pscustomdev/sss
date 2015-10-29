@@ -7,7 +7,7 @@
         .directive('showMoreDirective', showMoreDirective);
 
     StateProvider.$inject = ['$stateProvider'];
-    Controller.$inject = ['$rootScope', 'searchService'];
+    Controller.$inject = ['$rootScope'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('results', {
@@ -27,41 +27,50 @@
         })
     }
 
-    function Controller($scope, SearchService) {
-        $scope.searchService = SearchService;
+    function Controller($scope) {
+        // Pagination   // ToDo: Implement Pagination - It'll be fun
+        $scope.currentPage = 1;
+        $scope.pageChanged = function() {
+            $scope.$log.debug('Page changed to: ' + $scope.currentPage + ' out of ' + $scope.totalItems + ' pages.');  // poc code
+        };
 
+        // Rating
+        $scope.rate = 5;
+        $scope.max = 5;
+        $scope.isReadonly = true;
+        $scope.hoveringOver = function(value) {
+            $scope.overStar = value;
+            $scope.percent = 100 * (value / $scope.max);
+        };
+
+        // SearchBar dropdown Filtering
         // ToDo: Get counts from a periodic check against the repository
         $scope.results_filter = {
             templateUrl: 'results_filter.html',
             categories: [
-                { active: true, displayValue: 'Active Directory', count: 1 },
-                { active: true, displayValue: 'IDM', count: 4 },
-                { active: true, displayValue: 'Policy', count: 2 }
+                { displayValue: 'Active Directory', active: true, count: 1 },
+                { displayValue: 'IDM', active: true, count: 4 },
+                { displayValue: 'Policy', active: true, count: 2 }
             ],
             tags: [
-                { active: true, displayValue: 'Javascript', count: 4 },
-                { active: true, displayValue: 'Formula', count: 0 }
+                { displayValue: 'Javascript', active: true, count: 1 },
+                { displayValue: 'Formula', active: true, count: 4 }
             ],
             ratings: [
-                { active: true, displayValue: '* * * * *', count: 4 },
-                { active: true, displayValue: '* * * *', count: 2 },
-                { active: true, displayValue: '* * *', count: 0 },
-                { active: true, displayValue: '* *', count: 0 },
-                { active: true, displayValue: '*', count: 0 }
+                { displayValue: '* * * * *', active: true, count: 4 },
+                { displayValue: '* * * *', active: true, count: 2 },
+                { displayValue: '* * *', active: true, count: 0 },
+                { displayValue: '* *', active: true, count: 0 },
+                { displayValue: '*', active: true, count: 0 }
             ]
         };
 
-        $scope.results_sorts = [
-            { active: true, displayValue: 'Date' },
-            { active: true, displayValue: 'Rating' },
-            { active: true, displayValue: '# Views' }
-        ];
-
+        // Tag Filtering
         // ToDo: Get customTags from search results
         $scope.search_criteria = [
-            { active: true, displayValue: 'javascript', count: 0 },
-            { active: true, displayValue: 'idm', count: 35 },
-            { active: true, displayValue: 'searchterm3', count: 7 }
+            { displayValue: 'javascript', active: true, count: 0 },
+            { displayValue: 'idm', active: true, count: 35},
+            { displayValue: 'searchterm3', active: true, count: 7 }
         ];
     }
 

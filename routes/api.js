@@ -35,6 +35,7 @@ module.exports = function(app) {
             });
         }
     );
+
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
@@ -44,6 +45,17 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }
                 res.json(repos);
+            });
+        }
+    );
+
+    api_routes.get('/snippet-search/:repoOwner/:repoName',
+        function (req, res) {
+            github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving repositories'});
+                }
+                res.json(commits);
             });
         }
     );

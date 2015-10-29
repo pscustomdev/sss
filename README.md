@@ -1,5 +1,5 @@
 Setting up SSS on the host
-
+---------------------
 1) Checkout code
 2) Open Terminal/Command Prompt:
     # npm install
@@ -58,59 +58,59 @@ module.exports = {
 
 :-:-: SERVER SIDE :-:-:
 ============
-/auth/                                      -
-/auth/auth-config.js                        - Stores credentials to be used by Passport Strategies.  Ignored by Git and populated with text from readme_install.txt and NCCD Twiki
-/auth/authentication.js                     - Code for passport authentication strategies and serialize/deserialize user to local storage
-/auth/restrict.js                           - Code that causes a redirect to the authentication url, if user is not authenticated
-/bin/                                       -
-/bin/www                                    - Node Express starting javascript file
-/db/                                        - Dao files for storage related operations
-/db/github-dao.js                           - Dao used to expose github apis to the application
-/db/mongo-dao.js                            - Dao used to expose mongo apis to the application
-/node_modules                               - NPMs/libraries used by the Node Server
-/routes/                                    - Handlebars routes
-/routes/api.js                              - Configures the available routes for the "{webserver:port}/api/*" urls
-/routes/index.js                            - Configures the available routes for the default "{webserver:port}/" url
-/routes/main.js                             - Configures the available routes for the "{webserver:port}/sss/*" urls
-/routes/users.js                            - Configures the available routes for the "{webserver:port}/users/*" urls
-/tests/                                     -
-/views/                                     - Handlebars templates for JS and resources (eg html)
-/views/error.hbs                            - Handlebar template - injects error html code
-/views/index.hbs                            - Handlebar template - injects login html code
-/views/layout.hbs                           - Handlebar template - default html page to hold other content
-/views/main/                                -
-/views/main/index.hbs                       - Handlebar template for default Angular view.  Adds the Angular App javascript files to each page. Note: If any new Angular view is added, make sure to include a reference to it's javascript file here.
-/views/users/                               -
-/views/users/create.hbs                     - Handlebar template for Create User form
 /app.js                                     - Node master configuration that configures and starts the Express() web-server
 /config.js                                  - Generic configuration values
-/gulpfile.js                                - Files to be combined into the production delivery javascript file
-/karma.conf.js                              - Configuration of Karma testing framework
+/gulpfile.js                                - Gulp configuration. Produces a minified javascript file, with all application javascript included
+/auth/                                      - ** AUTHENTICATION **
+/auth/auth-config.js                        - Stores credentials to be used by Passport Strategies.  Git ignored.  Create this file manually by using the text found in this file
+/auth/authentication.js                     - Code for passport authentication strategies, and serialize/deserialize user to local storage
+/auth/restrict.js                           - Code that checks if a user is authenticated and causes a redirect to the authentication url, if not
+/bin/                                       - ** BINARIES **
+/bin/www                                    - Node Express starting javascript file
+/db/                                        - ** STORAGE OPERATION DAO FILES
+/db/github-dao.js                           - Dao used to expose github apis to the application
+/db/mongo-dao.js                            - Dao used to expose mongo apis to the application
+/node_modules                               - ** NODE MODULES ** (NPMs/libraries used by the Node Server. Git ignored. Run "install npm" to recreate)
+/routes/                                    - ** NODE-EXPRESS ROUTING **
+/routes/index.js                            - Routing configuration
+/routes/api.js                              - "{webserver:port}/api/*" urls/routes
+/routes/main.js                             - "{webserver:port}/*" urls/routes
+/tests/                                     - TESTING
+/tests/karma.conf.js                        - Configuration of Karma testing framework
+/tests/mocha.conf.js                        - Configuration of Mocha testing framework
+/tests/protractor.conf.js                   - Configuration of Protractor testing framework
+/tests/karma-frontend-unit-tests            - Holds all of the Karma tests used for client side testing (eg. AngularJS code)
+/tests/mocha-backend-unit-tests             - Holds all of the Mocha tests used for server side testing (eg. NodeJS code)
+/tests/protractor-end2end-tests             - Holds all of the Protractor tests used for system testing (eg. Browser/GUI tests)
+/views/                                     - HANDLEBARS/MUSTACHES TEMPLATES
+/views/error.hbs                            - Handlebars template - injects error html code
+/views/layout.hbs                           - Handlebars template - default html layout to hold other content
 
 
 :-:-: CLIENT SIDE :-:-:
-/public/                                    -
-/public/bower/                              - Bower packages/libraries used by the webapp
-/public/images/                             - Webapp images
-/public/fonts/                              - Webapp fonts
-/public/css/                                - Webapp stylesheets
+/public/                                    - ** WEB-APP ROOT **
+/public/favicon.ico                         - Favorite icon file displayed on browser tabs
+/public/bower/                              - ** BOWER PACKAGES ** (Bower packages/libraries used by the web-app. Git ignored.  Run "install bower" to recreate)
+/public/images/                             - Web-app images
+/public/fonts/                              - Web-app fonts
+/public/css/                                - ** STYLESHEETS **
 /public/css/styles.css                      - Master stylesheet. Imports all other stylesheets (eg. bootstrap).
-/public/js/                                 - Webapp javascript and resources
-/public/js/app/                             - Angular code for webapp
+/public/js/                                 - ** JAVASCRIPT / RESOURCES **
+/public/js/app/                             - ** ANGULAR ROOT **
 /public/js/app/app.js                       - Provides the default Angular route, includes all dependant modules, and adds the $state and $stateparams data to the $scope available to each Controller
-/public/js/app/services/                    - Utility services used to interact with the backend Node server via the exposed REST Services (eg API Routes)
-/public/js/app/services/angular-service.js  - Angular API wrapper that manages calls to the Node REST Services
-/public/js/app/services/search-service.js   - Angular Service/Factory used to manage the snippet searches
-/public/js/app/sss/                         - Angular views and javascript (eg Controller definitions)
-/public/js/app/sss/search/view.html         - Configures this specific Angular view/layout (html code)
-/public/js/app/sss/search/view.js           - Configures/Defines this views Angular state, route, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebars' /views/index.hbs file.
-/public/js/app/sss/search/*_partial.html    - These files are html snippets that are used to populate this view/layout.
-/public/js/app/sss/results/view.html        - Configures this specific Angular view/layout (html code)
-/public/js/app/sss/results/view.js          - Configures/Defines this views Angular state, route, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebars' /views/index.hbs file.
-/public/js/app/sss/results/*_partial.html   - These files are html snippets that are used to populate this view/layout.
+/public/js/app/services/                    - ** ANGULAR SERVICES/FACTORIES **
+/public/js/app/services/node-services.js  - API wrapper that manages calls to the Node-Express REST URLs
+/public/js/app/services/search-service.js   - Search Service/Factory that encapsulates/manages snippet searches
+/public/js/app/sss/                         - ** ANGULAR VIEWS/CONTROLLERS/STATES **
+/public/js/app/sss/search/view.html         - "/search" view/state html code
+/public/js/app/sss/search/view.js           - "/search" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
+/public/js/app/sss/search/*_partial.html    - These files are html snippets that are used to populate this state's view.html
+/public/js/app/sss/results/view.html        - "/results" view/state html code
+/public/js/app/sss/results/view.js          - "/results" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
+/public/js/app/sss/results/*_partial.html   - These files are html snippets that are used to populate this state's view.html
 /public/js/app/sss/details/*                - Experimental code.  Not used.
 /public/js/app/sss/overview/*               - Experimental code.  Not used.
-/public/js/build/                           - Directory with the latest Gulp build of the application
+/public/js/build/                           - ** BUILD ** (Directory with the latest Gulp build of the application. Git ignored)
 
 -------------
 Bibliography

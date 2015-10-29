@@ -16,8 +16,8 @@
         <div class="col-md-12">
             <div class="btn-group-vertical">
                 <h5>Technologies</h5>
-                <label ng-repeat="category in results_filter.categories" ng-class="{ active: category.count > 0 }" class="btn btn-default btn-sm">
-                    <input type="checkbox" ng-model="category.active" autocomplete="off">{{category.displayValue}} <span class="badge">{{category.count}}</span>
+                <label ng-repeat="category in results_filter.categories" ng-model="results_filter.categories[$index].active" ng-class="{ disabled: category.count <= 0 }" class="btn btn-default btn-sm" uib-btn-checkbox>
+                    {{category.displayValue}} <span class="badge">{{category.count}}</span>
                 </label>
             </div>
         </div>
@@ -26,8 +26,8 @@
         <div class="col-md-12">
             <div class="btn-group-vertical">
                 <h5>Tags</h5>
-                <label ng-repeat="tag in results_filter.tags" ng-class="{ active: tag.count > 0 }" class="btn btn-default btn-sm">
-                    <input type="checkbox" ng-model="tag.active" autocomplete="off">{{tag.displayValue}} <span class="badge">{{tag.count}}</span>
+                <label ng-repeat="tag in results_filter.tags" ng-model="results_filter.tags[$index].active" ng-class="{ disabled: tag.count <= 0 }" class="btn btn-default btn-sm" uib-btn-checkbox>
+                    {{tag.displayValue}} <span class="badge">{{tag.count}}</span>
                 </label>
             </div>
         </div>
@@ -36,8 +36,8 @@
         <div class="col-md-12">
             <div class="btn-group-vertical">
                 <h5>Ratings</h5>
-                <label ng-repeat="rating in results_filter.ratings" ng-class="{ active: rating.count > 0 }" class="btn btn-default btn-sm">
-                    <input type="checkbox" ng-model="rating.active" autocomplete="off">{{rating.displayValue}} <span class="badge">{{rating.count}}</span>
+                <label ng-repeat="rating in results_filter.ratings" ng-model="results_filter.ratings[$index].active" ng-class="{ disabled: rating.count <= 0 }" class="btn btn-default btn-sm" uib-btn-checkbox>
+                    {{rating.displayValue}} <span class="badge">{{rating.count}}</span>
                 </label>
             </div>
         </div>

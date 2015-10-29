@@ -7,15 +7,14 @@
             'app.angularService',
             'app.searchService',
             'app.search',
-            'app.results',
-            'app.overview',
-            'app.details'
+            'app.results'
         ])
         .config(['$urlRouterProvider',
             function($urlRouterProvider) {
-                $urlRouterProvider.otherwise('/search');
+                $urlRouterProvider.otherwise('/search');    // Sets default view to render
             }
-        ]).directive('ngEnter', function() {
+        ])
+        .directive('ngEnter', function() {
             return function(scope, element, attrs) {
                 element.bind("keydown keypress", function(event) {
                     if(event.which === 13) {
@@ -27,10 +26,13 @@
                     }
                 });
             };
-        }).run(
-            function ($rootScope, $state, $stateParams) {
+        })
+        .run(
+            function ($rootScope, $state, $stateParams, $log) {
+                $rootScope.$log = $log;
                 $rootScope.$state = $state;
                 $rootScope.$stateParams = $stateParams;
             }
         );
+
 }());

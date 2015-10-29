@@ -1,4 +1,4 @@
-<div data-ng-repeat="searchItem in searchService.searchResults.items" show-more-directive>
+<div data-ng-repeat="item in searchService.searchResults.items" show-more-directive>
     <h2>{{searchItem.name}}</h2>
     <div class="row show-more">
         <div class="col-md-9">
@@ -14,12 +14,16 @@
         <div class="col-md-3">
             <article>
                 <p>
-                    * * * * * Rating: 5 - 150 votes<br/>
-                    Score: {{searchItem.score}}<br/>
-                    Last updated 2015/9/4<br/>
-                    1001 views<br/>
-                    Posted on 2013/1/6<br/>
-                    Posted by {{searchItem.owner.login}}<br/>
+                    <uib-rating ng-model="item.score" max="max" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['one','two','three']"></uib-rating>
+                    <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show="overStar && !isReadonly">{{percent}}%</span>
+                    <div>Score: {{item.score}}</div>
+                    <div>Last updated 2015/9/4</div>
+                    <div>1001 views</div>
+                    <div>Posted on </div>
+                    <div>Posted by {{item.repository.owner.login}}</div>
+                    <br/>
+                    <br/>
+                    <br/>
                 </p>
             </article>
         </div>

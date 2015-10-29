@@ -1,5 +1,5 @@
-<div class="btn-group">
-    <label ng-repeat="criteria in search_criteria" ng-class="{ active : criteria.count > 0 }" class="btn btn-default btn-sm">
-        <input type="checkbox" autocomplete="off">{{criteria.displayValue}} <span class="badge">{{criteria.count}}</span>
+<span ng-repeat="criteria in search_criteria">
+    <label ng-model="search_criteria[$index].active" ng-class="{ disabled: criteria.count <= 0 }" class="btn btn-default btn-sm" uib-btn-checkbox>
+        {{criteria.displayValue}} <span class="badge">{{criteria.count}}</span>
     </label>
-</div>
+</span>                    `

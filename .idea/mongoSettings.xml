@@ -10,7 +10,6 @@
               <option value="localhost:27017" />
             </list>
           </option>
-          <option name="userDatabaseAsMySingleDatabase" value="true" />
         </ServerConfiguration>
       </list>
     </option>

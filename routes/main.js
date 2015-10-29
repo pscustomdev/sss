@@ -13,7 +13,7 @@ module.exports = function(app, passport) {
                 error: req.flash('error'),
                 isAuthenticated: req.isAuthenticated()
             };
-            res.render('index', vm);
+            res.render('layout', vm);
         });
     main_routes.get('/ping',    // a convenience test route
         restrict,

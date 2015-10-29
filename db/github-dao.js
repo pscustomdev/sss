@@ -34,13 +34,24 @@ exports.getRepos = function(next) {
     });
 };
 
+// ToDo: change to look in all of GitHub for the results, rather than just the sss-storage user
 exports.searchCode = function (s, next) {
     var searchCriteria = {};
     searchCriteria.q =  s + "+user:sss-storage";
+    console.log("searchCriteria:" + JSON.stringify(searchCriteria));
 
     //This will search the name, desc and README
-    console.log("searchCriteria:" + JSON.stringify(searchCriteria));
     github.search.code(searchCriteria, function(err, resultData) {
+        console.log("resultData:" + JSON.stringify(resultData));
+        next(err, resultData);
+    });
+};
+
+exports.getCommits = function (repoOwner, repoName, next) {
+    var msg = { user: repoOwner, repo: repoName };
+    console.log("getCommits:" + JSON.stringify(msg));
+
+    github.repos.getCommits(msg, function(err, resultData) {
         console.log("resultData:" + JSON.stringify(resultData));
         next(err, resultData);
     });

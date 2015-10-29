@@ -4,14 +4,15 @@
     angular.module('app.angularService', [])
         .factory('angularService', apiFactory);
 
-    apiFactory.$inject = ['$http'];
+    apiFactory.$inject = ['$http','$log'];
 
-    function apiFactory($http) {
+    function apiFactory($http, $log) {
         return {
             getSnippets : getSnippets,
             getSnippetOverview : getSnippetOverview,
             getSnippetDetail: getSnippetDetail,
-            searchCode: searchCode
+            searchCode: searchCode,
+            getCommits: getCommits
         };
         
         //Make sure to add the function into the return statement.
@@ -21,10 +22,10 @@
                     return response.data;
                 },
                 function(reason) {
-                    console.log(reason);
+                    $log.debug(reason);
                 })
                 .catch(function(err) {
-                    console.log(err);    
+                    $log.debug(err);
                 });
         }
 
@@ -34,10 +35,10 @@
                     return response.data;
                 },
                 function(reason) {
-                    console.log(reason);
+                    $log.debug(reason);
                 })
                 .catch(function(err) {
-                    console.log(err);    
+                    $log.debug(err);
                 });
         }
 
@@ -47,25 +48,39 @@
                     return response.data;
                 },
                 function(reason) {
-                    console.log(reason);
+                    $log.debug(reason);
                 })
                 .catch(function(err) {
-                    console.log(err);    
+                    $log.debug(err);
                 });
         }
        
         function searchCode(searchTerms) {
             return $http.get('/api/snippet-search?q=' + searchTerms)
                 .then(function(response) {
-                    console.log("response: " + JSON.stringify(response.data));
+                    $log.debug("response: " + JSON.stringify(response.data));
                     return response.data;
                 },
                 function(reason) {
-                    console.log(reason);
+                    $log.debug(reason);
                 })
                 .catch(function(err) {
-                    console.log(err);    
+                    $log.debug(err);
                 });    
+        }
+
+        function getCommits(repoOwner, repoName) {
+            return $http.get('/api/snippet-search/' + repoOwner + "/" + repoName)
+                .then(function(response) {
+                    $log.debug("response: " + JSON.stringify(response.data));
+                    return response.data;
+                },
+                function(reason) {
+                    $log.debug(reason);
+                })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
         }
     }
 }());

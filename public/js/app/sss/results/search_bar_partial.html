@@ -1,14 +1,14 @@
 
 <div class="input-group">
     <div class="input-group-btn">
-        <button ng-disabled="search.$invalid" ng-click="searchService.submitSearch(searchTerms)" type="button"
+        <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch(searchTerms)" type="button"
                 class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </button>
         <button type="button" class="btn btn-default" uib-popover-template="results_filter.templateUrl" popover-placement="bottom">
             <span class="caret"></span>
         </button>
     </div>
-    <input type="text" ng-model="searchTerms" name="q" required class="form-control" autofocus ng-enter="searchService.submitSearch(searchTerms);" placeholder="Search for...">
+    <input type="text" ng-model="searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch(searchTerms);" placeholder="Search for...">
 </div>
 
 <script type="text/ng-template" id="results_filter.html">

@@ -8,7 +8,7 @@ describe('Unit: SSS Views', function() {
         beforeEach(module('app'));
 
         beforeEach(inject(function ($injector) {
-            searchService = $injector.get('searchService');
+            searchService = $injector.get('$searchService');
             httpBackend = $injector.get('$httpBackend');
             httpBackend.whenGET(/\/js\/app\/sss\/search\/.*/).respond(200, '');  // Prevents ui router calls to retrieve views from throwing a false error
         }));

@@ -1,4 +1,16 @@
-<!--ToDo: Make work-->
 <nav class="text-center">
-    <uib-pagination boundary-links="true" total-items="searchService.searchResults.total_count" ng-model="currentPage" class="pagination-md" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+    <div>
+        <uib-pagination total-items="$searchService.pagination.totalItems" ng-model="$searchService.pagination.currentPage" ng-change="$searchService.pagination.pageChanged()" max-size="$searchService.pagination.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="$searchService.pagination.numPages" items-per-page="$searchService.pagination.itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+    </div>
+    <div>
+        View <select ng-model="$searchService.pagination.viewby" ng-change="$searchService.pagination.setItemsPerPage($searchService.pagination.viewby)">
+        <option>1</option>
+        <option>5</option>
+        <option>10</option>
+        <option>20</option>
+        <option>30</option>
+        <option>40</option>
+        <option>50</option>
+    </select> records at a time.
+    </div>
 </nav>

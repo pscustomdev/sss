@@ -3,6 +3,9 @@ Setting up SSS on the host
 1) Checkout code
 2) Open Terminal/Command Prompt:
     # npm install
+        If on windows bcrypt will need to be rebuilt by node-gyp which has some pre-requists that need to be met:
+        https://github.com/nodejs/node-gyp
+        On windows Visual Studio 2013 works the best.
     # bower install
 3) Set DEBUG=sss in the OS environment
 4) Install MongoDB

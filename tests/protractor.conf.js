@@ -2,7 +2,7 @@ exports.config = {
     allScriptsTimeout: 11000,
 
     specs: [
-        'tests/protractor-end2end-tests/*.js'
+        'end2end-gui-tests/*.js'
     ],
 
     capabilities: {

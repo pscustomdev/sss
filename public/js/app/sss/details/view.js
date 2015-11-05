@@ -1,32 +1,28 @@
 (function() {
     'use strict';
 
-    angular.module('app.details', ['ui.router'])
+    angular.module('app.details', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
-        .controller('DetailsController', Controller);
+        .controller('DetailsController', DetailsController);
 
     StateProvider.$inject = ['$stateProvider'];
-    Controller.$inject = ['angularService','$stateParams'];
+    DetailsController.$inject = ['$nodeServices', '$stateParams'];
 
-    function StateProvider(stateProvider) {
-        stateProvider.state('details', {
+    function StateProvider($stateProvider) {
+        $stateProvider.state('details', {
             url: '/snippet-detail/:snippetId/:fileName',
             views: {
-                '': {
-                    controller: 'DetailsController',
-                    controllerAs: 'vm',
-                    templateUrl: '/js/app/sss/details/view.html'
-                }
+                '': { templateUrl: '/js/app/sss/details/view.html', controller: 'DetailsController' }
             }
         });
     }
 
-    function Controller(angularService, stateParams) {
+    function DetailsController($nodeServices, $stateParams) {
         var vm = this;
-        vm.snippetId = stateParams.snippetId;
-        vm.fileName = stateParams.fileName;
+        vm.snippetId = $stateParams.snippetId;
+        vm.fileName = $stateParams.fileName;
 
-        angularService.getSnippetDetail(vm.snippetId, vm.fileName).then (
+        $nodeServices.getSnippetDetail(vm.snippetId, vm.fileName).then (
             function(data) {
                 vm.snippetDetail = data;
             }

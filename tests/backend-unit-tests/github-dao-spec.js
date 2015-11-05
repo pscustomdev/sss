@@ -1,8 +1,8 @@
 'use strict';
+console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
 
 var gh = require('../../db/github-dao');
 
-console.log("**** (JASMINE/NODE/KARMA Back-End-Unit Testing: 'github-dao-spec') ****");
 describe("GitHub Dao", function() {
     it('should get all repos for user', function (done) {
         gh.getRepos(function(err, repos){

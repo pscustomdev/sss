@@ -1,8 +1,8 @@
 'use strict';
+console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'createUserPage-spec') ****");
+
 var db = require('../../db/mongo-dao');
 
-console.log("(PROTRACTOR End-to-End Testing: 'createUserPage-spec')");
-//TODO Move this to it's own SPEC
 describe('Create User page', function() {
     //browser.driver.get('http://localhost:3000/users/create');
     //browser.driver.get('https://sss-pscustomdev.c9.io/users/create');

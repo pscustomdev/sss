@@ -7,7 +7,7 @@
     SearchService.$inject = ['$nodeServices', '$log'];
 
     function SearchService($nodeServices, $log) {
-        var vm = {};
+        var vm = this;
         vm.searchResults = []; // The array that will contain search results
         vm.searchTerms = []; // The search term (for decoration)
         vm.userSearched = false; // Control if user searched recently

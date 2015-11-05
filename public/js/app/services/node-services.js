@@ -8,8 +8,8 @@
 
     function apiFactory($http, $log) {
         return {
-            getSnippets : getSnippets,
-            getSnippetOverview : getSnippetOverview,
+            getSnippets: getSnippets,
+            getSnippetOverview: getSnippetOverview,
             getSnippetDetail: getSnippetDetail,
             searchCode: searchCode,
             getCommits: getCommits

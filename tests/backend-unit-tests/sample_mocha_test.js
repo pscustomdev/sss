@@ -1,4 +1,6 @@
-var should = require("should");
+'use strict';
+console.log("**** (Backend Unit Testing [MOCHA]: 'mongo-dao-spec') ****");
+
 var mongoose = require('mongoose');
 var db;
 
@@ -31,8 +33,8 @@ describe('User', function() {
 
   it ('find a user by username', function(done) {
     db.findById({ oauthID: 12345, name: "testy" }, function(err, user) {
-      user.name.should.eql('testy');
-      user.oauthID.should.eql(12345);
+      user.name.should.equal('testy');
+      user.oauthID.should.equal(12345);
       console.log("		name: ", user.name);
       console.log("		oauthID: ", user.oauthID);
       done();

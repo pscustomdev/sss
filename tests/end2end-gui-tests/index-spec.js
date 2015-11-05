@@ -1,4 +1,6 @@
 'use strict';
+console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'index-spec') ****");
+
 var db = require('../../db/mongo-dao');
 //*******************NOTES*******************
 // browser.driver.whatever is how you use the native web driver when angular is not involved.
@@ -7,7 +9,6 @@ var db = require('../../db/mongo-dao');
 // TO delay/wait browser.wait(function(){}, 10000, "blah");
 //*******************NOTES*******************
 
-console.log("(PROTRACTOR End-to-End Testing: 'index-spec')");
 //TODO Figure out how to refresh the browser between each describe.
 describe('SSS Index Page', function() {
     browser.driver.get('http://localhost:3000');

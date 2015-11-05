@@ -1,31 +1,27 @@
 (function() {
     'use strict';
 
-    angular.module('app.overview', ['ui.router'])
+    angular.module('app.overview', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
-        .controller('OverviewController', Controller);
+        .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    Controller.$inject = ['angularService', '$stateParams'];
+    OverviewController.$inject = ['$nodeServices', '$stateParams'];
 
-    function StateProvider(stateProvider) {
-        stateProvider.state('overview', {
+    function StateProvider($stateProvider) {
+        $stateProvider.state('overview', {
             url: '/snippet-overview/:snippetId',
             views: {
-                '': {
-                    controller: 'OverviewController',
-                    controllerAs: 'vm',
-                    templateUrl: '/js/app/sss/overview/view.html'
-                }
+                '': { templateUrl: '/js/app/sss/overview/view.html', controller: 'OverviewController' }
             }
         });
     }
 
-    function Controller(angularService, stateParams) {
+    function OverviewController($nodeServices, $stateParams) {
         var vm = this;
-        vm.snippetId = stateParams.snippetId;
+        vm.snippetId = $stateParams.snippetId;
 
-        angularService.getSnippetOverview(vm.snippetId).then (
+        $nodeServices.getSnippetOverview(vm.snippetId).then (
             function(data) {
                 vm.snippetOverview = data;
             }

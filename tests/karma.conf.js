@@ -1,61 +1,43 @@
-// Karma configuration
 module.exports = function(config) {
+  'use strict';
   config.set({
+    basePath: '../', // base path that will be used to resolve all patterns (eg. files, exclude)
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '../',
+    frameworks: ['mocha', 'chai'],
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    //frameworks: ['mocha'],
-    frameworks: ['jasmine'],
-
-    // list of files / patterns to load in the browser
     files: [
-      "node_modules/chai/chai.js",
-      'public/bower/angular/angular.js',
-      'public/bower/angular-mocks/angular-mocks.js',
-      'public/bower/angular-bootstrap/ui-bootstrap.js',
-      'public/bower/angular-ui-router/release/angular-ui-router.js',
-      'app/services/node-services.js',
-      'public/js/app/services/search-service.js',
-      'public/js/app/sss/**/*.js',
-      'public/js/app/*.js',
-      'tests/karma-frontend-unit-tests/**/*.js'
+      'public/bower/underscore/underscore.js', // Included Library
+      'public/bower/angular/angular.js', // Included Library
+      'public/bower/angular-ui-router/release/angular-ui-router.js', // Included Library
+      'public/bower/angular-bootstrap/ui-bootstrap-tpls.js', // Included Library
+      'public/bower/angular-animate/angular-animate.js', // Included Library
+      'public/bower/angular-mocks/angular-mocks.js', // Included Library
+      'public/bower/jquery/dist/jquery.js', // Included Library
+
+      'public/js/app/services/util.js', // Source Files
+      'public/js/app/services/node-services.js', // Source Files
+      'public/js/app/services/search-service.js', // Source Files
+      'public/js/app/sss/search/view.js', // Source Files
+      'public/js/app/sss/results/view.js', // Source Files
+      'public/js/app/sss/details/view.js', // Source Files
+      'public/js/app/sss/overview/view.js', // Source Files
+      'public/js/app/app.js', // Source Files
+      'tests/frontend-unit-tests/**/*spec.js', // Tests Files
+      'tests/frontend-unit-tests/**/*.spec.js' // Tests Files
     ],
 
-    // list of files to exclude
-    exclude: [],
+    exclude: [
+      '**/*.html'
+    ],
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-    },
+    reporters: ['progress'], // possible values: 'dots', 'progress'
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
-
-    // web server port
     port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
     colors: true,
+    autoWatch: true, // enable / disable watching file and executing tests whenever any file changes
+    singleRun: false,
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    logLevel: config.LOG_INFO, // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    browsers: ['PhantomJS']
   });
 };

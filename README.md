@@ -32,11 +32,11 @@ Starting tests
 		* ./mongod-start
 2) Start sss via nodejs
 		node ./bin/www
-*  Start karma
+*  Start Frontend Tests
 		karma start
-*  Start mocha (won't autorun on cloud9 when files change)
-  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/mocha-backend-unit-tests --captureExceptions --autotest
-*  Start protractor
+*  Start Backend Tests (won't autorun on cloud9 when files change)
+  		jasmine-node-karma node_modules/jasmine-node-karma/lib/jasmine-node-karma/cli.js /home/ubuntu/workspace/tests/backend-mocha-unit-tests --captureExceptions --autotest
+*  Start End-To-End Tests
 			webdriver-manager start  (Starts the selenium server)
 			/usr/local/lib/node_modules/protractor/lib/cli.js protractor.conf.js
 
@@ -82,9 +82,9 @@ module.exports = {
 /tests/karma.conf.js                        - Configuration of Karma testing framework
 /tests/mocha.conf.js                        - Configuration of Mocha testing framework
 /tests/protractor.conf.js                   - Configuration of Protractor testing framework
-/tests/karma-frontend-unit-tests            - Holds all of the Karma tests used for client side testing (eg. AngularJS code)
-/tests/mocha-backend-unit-tests             - Holds all of the Mocha tests used for server side testing (eg. NodeJS code)
-/tests/protractor-end2end-tests             - Holds all of the Protractor tests used for system testing (eg. Browser/GUI tests)
+/tests/frontend-karma-unit-tests            - Holds all of the Frontend tests used for client side testing (eg. testing AngularJS code)
+/tests/backend-mocha-unit-tests             - Holds all of the Backend tests used for server side testing (eg. testing NodeJS code)
+/tests/end2end-protractor-tests             - Holds all of the End to End tests used for system testing (eg. testing Browser/GUI)
 /views/                                     - HANDLEBARS/MUSTACHES TEMPLATES
 /views/error.hbs                            - Handlebars template - injects error html code
 /views/layout.hbs                           - Handlebars template - default html layout to hold other content

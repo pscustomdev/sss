@@ -1,8 +1,8 @@
 'use strict';
+console.log("**** (Backend Unit Testing [MOCHA]: 'mongo-dao-spec') ****");
 
 var db = require('../../db/mongo-dao');
 
-console.log("**** (JASMINE/NODE/KARMA Back-End-Unit Testing: 'mongo-dao-spec') ****");
 describe("Mongo Dao", function() {
     
     var fakeUser = {

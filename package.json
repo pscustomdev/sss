@@ -45,19 +45,21 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "chai": "^3.3.0",
+    "chai": "^3.4.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-uglify": "^1.4.1",
     "jasmine-core": "^2.3.4",
     "jasmine-node-karma": "^1.6.1",
     "karma": "^0.12.33",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.12",
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.2.1",
+    "karma-sinon": "^1.0.4",
     "mocha": "^2.3.3",
     "phantomjs": "^1.9.18",
     "protractor": "^2.2.0",
-    "should": "^7.1.0"
+    "sinon": "^1.17.2"
   }
 }

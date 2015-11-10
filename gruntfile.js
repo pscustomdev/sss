@@ -1,104 +1,136 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         env: {
-            dev: {
+            debug: {
                 NODE_ENV: 'development',
                 DEBUG: 'SSS:*'
+            },
+            dev: {
+                NODE_ENV: 'development'
             },
             prod: {
                 NODE_ENV: 'production'
             }
         },
-        nodemon: {
+        nodemon: {    // Restart NodeJS's Application whenever watched file patterns are added, changed or deleted
             dev: {
                 script: 'bin/www',
                 options: {
-                    ext: 'js,html,hbs',
-                    watch: ['*.js', '*.json', 'auth/**/*.js', 'bin/www', 'db/**/*.js', 'routes/**/*.js', 'views/**/*.hbs']
+                    ext: 'js, hbs',
+                    watch: ['auth', 'db', 'routes', 'views']
+                },
+                callback: function (nodemon) {
+                    nodemon.on('log', function (event) {
+                        console.log(event.colour);
+                    });
+
+                    // opens browser on initial server start
+                    nodemon.on('config:update', function () {
+                        // Delay before server listens on port
+                        setTimeout(function() {
+                            require('open')('http://localhost:5455');
+                        }, 1000);
+                    });
                 }
             },
             debug: {
                 script: 'bin/www',
                 options: {
                     nodeArgs: ['--debug'],
-                    ext: 'js,html,hbs',
-                    watch: ['*.js', '*.json', 'auth/**/*.js', 'bin/www', 'db/**/*.js', 'routes/**/*.js', 'views/**/*.hbs']
+                    ext: 'js, hbs',
+                    watch: ['auth', 'db', 'routes', 'views']
+                },
+                callback: function (nodemon) {
+                    nodemon.on('log', function (event) {
+                        console.log(event.colour);
+                    });
+
+                    // opens browser on initial server start
+                    nodemon.on('config:update', function () {
+                        // Delay before server listens on port
+                        setTimeout(function() {
+                            require('open')('http://localhost:5455');
+                        }, 1000);
+                    });
                 }
             }
         },
-        mochaTest: {
-            src: 'tests/backend-unit-tests/**/*.js',
-            options: {
-                reporter: 'spec'
+        mochaTest: {    // Run backend javascript (eg Node) Mocha tests as defined here.
+            'single-pass': {
+                src: 'tests/backend-unit-tests/**/*-spec.js',
+                options: {
+                    reporter: 'spec'
+                }
+            },
+            unit: {
+                src: 'tests/backend-unit-tests/**/*-spec.js',
+                options: {
+                    reporter: 'spec'
+                }
             }
         },
-        karma: {
+        karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
             unit: {
                 configFile: 'tests/karma.conf.js'
             }
         },
-        protractor: {
+        protractor: {   // Run end-to-end (eg Browser/GUI) Protractor tests as defined in config.
             e2e: {
                 options: {
                     configFile: 'tests/protractor.conf.js'
                 }
             }
         },
-        csslint: {
-            all: {
-                src: 'public/css/**/*.css'
-            }
-        },
-        jshint: {
-            all: {
-                src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js']
+        csslint: {  // Lint CSS files
+            options: {
+                import: false   // @import is known to cause synchronous downloading of stylesheets, thus will hurt performance.  We don't care yet, so disabling warnings.
             },
-            min: {
-                src: ['gruntfile.js', 'public/js/app/app.js', 'public/js/app/**/*.js']
-            }
+            src: ['public/css/**/*.css']
         },
-        concat: {
-            'public/js/build/sss.js': ['public/js/app/app.js', 'public/js/app/**/*.js']
+        jshint: {   // Validate files with JSHint
+            src: ['*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'tests/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
         },
-        uglify: {
-            'public/js/build/sss.min.js': ['public/js/build/sss.js']
+        concat: {   // Concatenate files
+            src: ['public/js/app/app.js', 'public/js/app/**/*.js'],
+            dest: 'public/js/build/sss.js'
         },
-        watch: {
-            min: {
-                files: ['<%= jshint.files =>'],
-                tasks: ['jshint:min', 'concat', 'uglify']
+        uglify: {   // Minify files with UglifyJS
+            src: ['public/js/build/sss.js'],
+            dest: 'public/js/build/sss.min.js'
+        },
+        watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
+            grunt: {
+                files: ['gruntfile.js', 'package.json', 'bower.json'],
+                tasks: "default"
             },
             js: {
-                files: ['*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/**/*.js', 'public/bower/**/*.js'],
-                tasks: ['jshint:all']
+                files: ['<%= jshint.files =>'],
+                tasks: ['jshint', 'run-all-tests']
             },
             css: {
-                files: 'public/css/**/*.css',
-                tasks: ['csslint:all']
+                files: ['<%= csslint.files =>'],
+                tasks: ['csslint']
             }
         },
         concurrent: {
             sss: {
-                tasks: ['nodemon:dev', 'watch:js', 'watch:css'],
+                tasks: ['env:dev', 'nodemon:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'sss-debug': {
-                tasks: ['nodemon:debug', 'watch:js', 'watch:css'],
+                tasks: ['env:debug', 'nodemon:debug'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
-            'sss-debug-node': {
-                tasks: ['nodemon:debug', 'watch:js', 'watch:css', 'node-inspector:debug'],
+            'sss-test': {
+                tasks: ['env:prod'],
                 options: {
                     logConcurrentOutput: true
                 }
             }
-        },
-        'node-inspector': {
-            debug: {}
         }
     });
 
@@ -113,16 +145,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-node-inspector');
 
-    grunt.registerTask('default', ['sss-debug']);
-    grunt.registerTask('run-tests-in-dev-environment', ['env:dev', 'sss-debug', 'backend-tests', 'frontend-tests', 'end2end-tests']);
-    grunt.registerTask('run-tests-in-prod-environment', ['env:prod', 'sss', 'backend-tests', 'frontend-tests', 'end2end-tests']);
-    grunt.registerTask('lint', ['jshint:all', 'csslint:all']);
-    grunt.registerTask('sss', ['env:prod', 'lint', 'concurrent:sss']);
-    grunt.registerTask('sss-debug', ['env:dev', 'lint', 'concurrent:sss-debug']);
-    grunt.registerTask('sss-debug-node', ['env:dev', 'lint', 'concurrent:sss-debug']);
-    grunt.registerTask('backend-tests', ['mochaTest']);
-    grunt.registerTask('frontend-tests', ['karma:unit']);
-    grunt.registerTask('end2end-tests', ['protractor:e2e']);
+    grunt.registerTask('lint', ['jshint', 'csslint']);
+    grunt.registerTask('sss', ['concurrent:sss']);
+    grunt.registerTask('sss-debug', ['concurrent:sss-debug']);
+    grunt.registerTask('sss-test', ['concurrent:sss-test']);
+    grunt.registerTask('backend-tests', ['sss-test', 'mochaTest']);
+    grunt.registerTask('frontend-tests', ['sss-test', 'karma:unit']);
+    grunt.registerTask('end2end-tests', ['sss-test', 'protractor:e2e']);
+    grunt.registerTask('run-all-tests', ['backend-tests', 'frontend-tests', 'end2end-tests']);
+    grunt.registerTask('build', ['run-all-tests', 'lint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['run-all-tests']);
 };

@@ -7,7 +7,6 @@
     "node_modules",
     "bower_components",
     "public/bower",
-    "test",
     "tests"
   ],
   "dependencies": {

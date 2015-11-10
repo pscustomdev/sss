@@ -3,12 +3,12 @@ Setting up SSS on the host
 1) Checkout code
 2) Open Terminal/Command Prompt:
     # npm install
-        If on windows bcrypt will need to be rebuilt by node-gyp which has some pre-requists that need to be met:
+        If on windows, bcrypt will need to be rebuilt by node-gyp, which has some pre-requisites that need to be met:
         https://github.com/nodejs/node-gyp
         On windows Visual Studio 2013 works the best.
     # npm install -g grunt-cli
         Need to install grunt globally, if you want to run from the command line (eg Jenkins)
-    # ./node_modules/grunt-protractor-runner/scripts/webdriver-manager-update
+    # node ./node_modules/protractor/bin/webdriver-manager update
         Downloads the necessary Protractor web-driver binaries
     # bower install
 3) Set DEBUG=sss in the OS environment

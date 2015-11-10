@@ -15,7 +15,7 @@ describe('SSS Index Page', function() {
     //browser.driver.get('https://sss-pscustomdev.c9.io');
 
     it('should have a title', function () {
-        expect(browser.driver.getTitle()).toEqual('Login - SSS');
+        expect(browser.driver.getTitle()).to.equal('Login - SSS');
     });
 
     it('should have the header', function () {

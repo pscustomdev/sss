@@ -1,11 +1,14 @@
 module.exports = function(config) {
   'use strict';
+
   config.set({
     basePath: '../', // base path that will be used to resolve all patterns (eg. files, exclude)
 
     frameworks: ['mocha', 'chai'],
 
     files: [
+      'node_modules/chai/chai.js', // Included Library
+      'node_modules/sinon-chai/lib/sinon-chai.js', // Included Library
       'public/bower/underscore/underscore.js', // Included Library
       'public/bower/angular/angular.js', // Included Library
       'public/bower/angular-ui-router/release/angular-ui-router.js', // Included Library
@@ -23,7 +26,8 @@ module.exports = function(config) {
       'public/js/app/sss/overview/view.js', // Source Files
       'public/js/app/app.js', // Source Files
       'tests/frontend-unit-tests/**/*spec.js', // Tests Files
-      'tests/frontend-unit-tests/**/*.spec.js' // Tests Files
+      'tests/frontend-unit-tests/**/*.spec.js', // Tests Files
+      'tests/karma.conf.js' // Config File
     ],
 
     exclude: [
@@ -31,6 +35,7 @@ module.exports = function(config) {
     ],
 
     reporters: ['progress'], // possible values: 'dots', 'progress'
+    //reporters: ['coverage'],
 
     port: 9876,
     colors: true,

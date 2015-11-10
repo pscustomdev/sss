@@ -2,7 +2,7 @@ exports.config = {
     allScriptsTimeout: 11000,
 
     specs: [
-        'end2end-gui-tests/*.js'
+        'end2end-gui-tests/**/*.js'
     ],
 
     capabilities: {

@@ -9,7 +9,7 @@ body {
   padding-top: 70px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
 }
 
-section.affix {
+.affix {
   position: fixed; /* Affixes Searchbar so it won't scroll with content */
   top: 70px; /* Sets Searchbar location on page */
   width: 61%; /* Sets Searchbar length */

@@ -46,12 +46,25 @@
   },
   "devDependencies": {
     "chai": "^3.4.0",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-concurrent": "^2.0.4",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-csslint": "^0.5.0",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-env": "^0.4.4",
+    "grunt-karma": "^0.12.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-node-inspector": "^0.4.1",
+    "grunt-nodemon": "^0.4.0",
+    "grunt-protractor-runner": "^2.1.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-uglify": "^1.4.1",
     "jasmine-core": "^2.3.4",
     "jasmine-node-karma": "^1.6.1",
-    "karma": "^0.12.33",
+    "karma": "^0.13.15",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.12",
     "karma-jasmine": "^0.3.5",
@@ -60,6 +73,7 @@
     "mocha": "^2.3.3",
     "phantomjs": "^1.9.18",
     "protractor": "^2.2.0",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0"
   }
 }

@@ -19,6 +19,12 @@ Setting up SSS on the host
    * Create \data\db
    * Open Terminal/Command Prompt:
       # mongod --nojournal --dbpath=data
+5) On windows find in npm module mongodb ..node_modules\mongodb\node_modules\bson\ext\index.js
+   * and change path to js version in catch block
+        bson = require('../build/Release/bson');
+     to
+        bson = require('../browser_build/bson');
+
 
 Starting Application
 ---------------------

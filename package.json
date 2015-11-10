@@ -35,6 +35,8 @@
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "github": "^0.2.4",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-uglify": "^0.10.0",
     "hbs": "^2.9.0",
     "method-override": "^2.3.5",
     "mongoskin": "^1.4.13",

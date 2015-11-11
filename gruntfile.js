@@ -32,7 +32,7 @@ module.exports = function(grunt) {
                     nodemon.on('config:update', function () {
                         // Delay before server listens on port
                         setTimeout(function() {
-                            require('open')('http://localhost:5455');
+                            require('open')('http://localhost:3000');
                         }, 1000);
                     });
                 }
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                     nodemon.on('config:update', function () {
                         // Delay before server listens on port
                         setTimeout(function() {
-                            require('open')('http://localhost:5455');
+                            require('open')('http://localhost:3000');
                         }, 1000);
                     });
                 }
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                     reporter: 'spec'
                 }
             },
-            'development': {
+            'single-pass': {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
                     reporter: 'spec'
@@ -76,15 +76,17 @@ module.exports = function(grunt) {
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
             options: {
                 configFile: 'tests/karma.conf.js',
-                autoWatch: false   // disable the Karma server file watch functionality.  This will be done via Grunt's Watch.
+                autoWatch: false,   // disable the Karma server file watch functionality.  This will be done via Grunt's Watch.
+                background: false,   // Keep tests on main process so you can see the results better.
+                singleRun: true    // Keep Karma server running in background for use by each test
             },
             'continuous-integration': {
-                background: false,   // Keep tests on main process so you can see the results better.
-                singleRun: true    // Shutdown the Karma server after test.
+                options: {
+                }
             },
-            development: {
-                background: true,   // Run tests in background process so subsequent Grunt tasks can run.
-                singleRun: false    // Keep Karma server running in background for use by each test
+            'single-pass': {
+                options: {
+                }
             }
         },
         protractor: {   // Run end-to-end (eg Browser/GUI) Protractor tests as defined in config.
@@ -98,7 +100,7 @@ module.exports = function(grunt) {
                 options: {
                 }
             },
-            development: {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+            'single-pass': {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
                 options: {
                 }
             }
@@ -135,14 +137,14 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     hostname: 'localhost',
-                    port: 5455
+                    port: 3000
                 }
             }
         },
         watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
             dev: {
                 files: ['<%= jshint.files =>', 'package.json', 'bower.json'],
-                tasks: ['karma:development','protractor:development','mochaTest:development'],
+                tasks: ['run-all-tests'],
                 options: {
                     atBegin: true
                 }
@@ -184,13 +186,19 @@ module.exports = function(grunt) {
                 }
             },
             'sss-debug-mode': {
-                tasks: ['env:debug', 'nodemon:debug', 'watch:dev', 'watch:js', 'watch:css'],
+                tasks: ['env:debug', 'nodemon:dev-debug', 'watch:dev', 'watch:js', 'watch:css'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'sss-continuous-integration': {
                 tasks: ['env:prod', 'nodemon:dev'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            },
+            'run-all-tests': {
+                tasks: ['all-tests'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -216,11 +224,11 @@ module.exports = function(grunt) {
     grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
     grunt.registerTask('sss-debug-mode', ['concurrent:sss-debug-mode']);
 
-    grunt.registerTask('backend-tests', ['mochaTest:continuous-integration']);
-    grunt.registerTask('frontend-tests', ['karma:continuous-integration']);
-    grunt.registerTask('end2end-tests', ['protractor:continuous-integration']);
-    grunt.registerTask('run-all-tests-continuous-integration', ['sss-continuous-integration', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
-    grunt.registerTask('run-all-tests-manually', ['sss-development', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
+    grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
+    grunt.registerTask('frontend-tests', ['karma:single-pass']);
+    grunt.registerTask('end2end-tests', ['protractor:single-pass']);
+    grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
+    grunt.registerTask('run-all-tests', ['concurrent:run-all-tests']);
     grunt.registerTask('lint', ['jshint', 'csslint']);
     grunt.registerTask('build', ['run-all-tests', 'lint', 'concat', 'uglify']);
     grunt.registerTask('default', ['run-all-tests']);

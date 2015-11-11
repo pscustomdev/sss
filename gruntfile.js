@@ -141,15 +141,15 @@ module.exports = function(grunt) {
         },
         watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
             dev: {
-                files: ['gruntfile.js', 'package.json', 'bower.json'],
-                tasks: ['jshint', 'karma:development:run','protractor:development','mochaTest:development'],
+                files: ['<%= jshint.files =>', 'package.json', 'bower.json'],
+                tasks: ['karma:development','protractor:development','mochaTest:development'],
                 options: {
                     atBegin: true
                 }
             },
-            min: {
+            js: {
                 files: ['<%= jshint.files =>'],
-                tasks: ['jshint', 'karma:development:run','protractor:development','mochaTest:development']
+                tasks: ['jshint']
             },
             css: {
                 files: ['<%= csslint.files =>'],
@@ -178,13 +178,13 @@ module.exports = function(grunt) {
         },
         concurrent: {
             'sss-development': {
-                tasks: ['env:dev', 'nodemon:dev', 'watch:grunt', 'watch:js', 'watch:css'],
+                tasks: ['env:dev', 'nodemon:dev', 'watch:dev', 'watch:js', 'watch:css'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'sss-debug-mode': {
-                tasks: ['env:debug', 'nodemon:debug', 'watch:grunt', 'watch:js', 'watch:css'],
+                tasks: ['env:debug', 'nodemon:debug', 'watch:dev', 'watch:js', 'watch:css'],
                 options: {
                     logConcurrentOutput: true
                 }

@@ -25,9 +25,7 @@ module.exports = function(config) {
       'public/js/app/sss/details/view.js', // Source Files
       'public/js/app/sss/overview/view.js', // Source Files
       'public/js/app/app.js', // Source Files
-      'tests/frontend-unit-tests/**/*spec.js', // Tests Files
-      'tests/frontend-unit-tests/**/*.spec.js', // Tests Files
-      'tests/karma.conf.js' // Config File
+      'tests/frontend-unit-tests/**/*spec.js' // Tests Files
     ],
 
     exclude: [

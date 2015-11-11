@@ -216,9 +216,9 @@ module.exports = function(grunt) {
     grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
     grunt.registerTask('sss-debug-mode', ['concurrent:sss-debug-mode']);
 
-    grunt.registerTask('backend-tests', ['sss-continuous-integration', 'mochaTest:continuous-integration']);
-    grunt.registerTask('frontend-tests', ['sss-continuous-integration', 'karma:continuous-integration']);
-    grunt.registerTask('end2end-tests', ['sss-continuous-integration', 'protractor:continuous-integration']);
+    grunt.registerTask('backend-tests', ['mochaTest:continuous-integration']);
+    grunt.registerTask('frontend-tests', ['karma:continuous-integration']);
+    grunt.registerTask('end2end-tests', ['protractor:continuous-integration']);
     grunt.registerTask('run-all-tests-continuous-integration', ['sss-continuous-integration', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
     grunt.registerTask('run-all-tests-manually', ['sss-development', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
     grunt.registerTask('lint', ['jshint', 'csslint']);

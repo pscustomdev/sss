@@ -4,5 +4,3 @@ require('package-script').spawn([
         args: ["install", "-g", "grunt-cli"]
     }
 ]);
-
-require('node_modules/grunt-protractor-runner/scripts/webdriver-manager-update');

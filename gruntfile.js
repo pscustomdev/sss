@@ -1,5 +1,9 @@
+"use strict";
+
 module.exports = function(grunt) {
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+
         env: {
             debug: {
                 NODE_ENV: 'development',
@@ -33,7 +37,7 @@ module.exports = function(grunt) {
                     });
                 }
             },
-            debug: {
+            'dev-debug': {
                 script: 'bin/www',
                 options: {
                     nodeArgs: ['--debug'],
@@ -108,20 +112,42 @@ module.exports = function(grunt) {
         jshint: {   // Validate files with JSHint
             src: ['*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'tests/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
         },
-        concat: {   // Concatenate files
-            src: ['public/js/app/app.js', 'public/js/app/**/*.js'],
-            dest: 'public/js/build/sss.js'
+        clean: {
+            temp: {
+                src: [ 'tmp' ]
+            }
         },
         uglify: {   // Minify files with UglifyJS
-            src: ['public/js/build/sss.js'],
-            dest: 'public/js/build/sss.min.js'
+            files: {
+                'public/js/build/sss.js': ['public/js/build/sss.min.js']
+            },
+            options: {
+                mangle: false
+            }
+        },
+        concat: {   // Concatenate files
+            dist: {
+                src: ['public/js/app/app.js', 'public/js/app/**/*.js'],
+                dest: 'public/js/build/sss.js'
+            }
+        },
+        connect: {
+            server: {
+                options: {
+                    hostname: 'localhost',
+                    port: 5455
+                }
+            }
         },
         watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
-            grunt: {
+            dev: {
                 files: ['gruntfile.js', 'package.json', 'bower.json'],
-                tasks: "default"
+                tasks: ['jshint', 'karma:development:run','protractor:development','mochaTest:development'],
+                options: {
+                    atBegin: true
+                }
             },
-            js: {
+            min: {
                 files: ['<%= jshint.files =>'],
                 tasks: ['jshint', 'karma:development:run','protractor:development','mochaTest:development']
             },
@@ -130,15 +156,35 @@ module.exports = function(grunt) {
                 tasks: ['csslint']
             }
         },
+        compress: {
+            dist: {
+                options: {
+                    archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
+                },
+                files: [{
+                    src: [ 'index.html' ],
+                    dest: '/'
+                }, {
+                    src: [ 'dist/**' ],
+                    dest: 'dist/'
+                }, {
+                    src: [ 'assets/**' ],
+                    dest: 'assets/'
+                }, {
+                    src: [ 'libs/**' ],
+                    dest: 'libs/'
+                }]
+            }
+        },
         concurrent: {
-            sss: {
-                tasks: ['env:dev', 'nodemon:dev'],
+            'sss-development': {
+                tasks: ['env:dev', 'nodemon:dev', 'watch:grunt', 'watch:js', 'watch:css'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'sss-debug-mode': {
-                tasks: ['env:debug', 'nodemon:debug'],
+                tasks: ['env:debug', 'nodemon:debug', 'watch:grunt', 'watch:js', 'watch:css'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -152,28 +198,31 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-env');
-    grunt.loadNpmTasks('grunt-nodeMon');
-    grunt.loadNpmTasks('grunt-mocha-test');
-    grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
+    grunt.loadNpmTasks('grunt-env');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-nodeMon');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 
-    grunt.registerTask('sss', ['concurrent:sss']);
+    grunt.registerTask('sss-development', ['concurrent:sss-development']);
+    grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
     grunt.registerTask('sss-debug-mode', ['concurrent:sss-debug-mode']);
 
     grunt.registerTask('backend-tests', ['sss-continuous-integration', 'mochaTest:continuous-integration']);
     grunt.registerTask('frontend-tests', ['sss-continuous-integration', 'karma:continuous-integration']);
     grunt.registerTask('end2end-tests', ['sss-continuous-integration', 'protractor:continuous-integration']);
-    grunt.registerTask('run-all-tests', ['backend-tests', 'frontend-tests', 'end2end-tests']);
-    grunt.registerTask('run-all-tests', ['backend-tests', 'frontend-tests', 'end2end-tests']);
+    grunt.registerTask('run-all-tests-continuous-integration', ['sss-continuous-integration', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
+    grunt.registerTask('run-all-tests-manually', ['sss-development', 'mochaTest:continuous-integration', 'karma:continuous-integration', 'protractor:continuous-integration']);
     grunt.registerTask('lint', ['jshint', 'csslint']);
-    grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
     grunt.registerTask('build', ['run-all-tests', 'lint', 'concat', 'uglify']);
     grunt.registerTask('default', ['run-all-tests']);
+    grunt.registerTask('package', [ 'lint', 'karma:unit', 'concat:dist', 'uglify:dist', 'clean:temp', 'compress:dist' ]);
 };

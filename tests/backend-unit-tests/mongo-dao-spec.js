@@ -2,6 +2,7 @@
 console.log("**** (Backend Unit Testing [MOCHA]: 'mongo-dao-spec') ****");
 
 var db = require('../../db/mongo-dao');
+var expect = require('chai').expect;
 
 describe("Mongo Dao", function() {
     
@@ -31,18 +32,17 @@ describe("Mongo Dao", function() {
     it('should be able to add a user to the database', function (done) {
         db.addUser(fakeUser, function(err, users){
             if(users){
-                expect(users).toBeTruthy();
-                expect(users[0].firstName).toEqual("fakeFirst");
-                expect(users[0].lastName).toEqual("fakeLast");
-                expect(users[0].email).toEqual("fake@email.com");
+                expect(users).to.exist;
+                expect(users[0].firstName).equal("fakeFirst");
+                expect(users[0].lastName).equal("fakeLast");
+                expect(users[0].email).equal("fake@email.com");
             } else {
-                expect(err).toEqual("ERROR");
+                expect(err).equal("ERROR");
             }
-            done();
             var userEmail = {email: "fake@email.com"};
             db.findUsers(userEmail, function (err, user){
-                expect(users).toBeTruthy();
-                expect(users[0].firstName).toEqual("fakeFirst");
+                expect(users).to.exist;
+                expect(users[0].firstName).equal("fakeFirst");
                 done();
             })
         });
@@ -51,13 +51,11 @@ describe("Mongo Dao", function() {
     it('should be able to remove a user from the database', function (done) {
         //create the user so we can remove it.
         db.addUser(fakeUser, function(err, users){
-            done();
             db.removeUser(fakeUser, function (err, data) {
                 if (err) console.log(err);
-                done();
                 var userEmail = {email: "fake@email.com"};
                 db.findUsers(userEmail, function (err, user){
-                    expect(user).toBeFalsy();  
+                    expect(user).to.not.exist;
                     done();
                 })
             });

@@ -56,13 +56,13 @@ module.exports = function(grunt) {
             }
         },
         mochaTest: {    // Run backend javascript (eg Node) Mocha tests as defined here.
-            'single-pass': {
+            'continuous-integration': {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
                     reporter: 'spec'
                 }
             },
-            unit: {
+            'development': {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
                     reporter: 'spec'
@@ -70,14 +70,32 @@ module.exports = function(grunt) {
             }
         },
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
-            unit: {
-                configFile: 'tests/karma.conf.js'
+            options: {
+                configFile: 'tests/karma.conf.js',
+                autoWatch: false   // disable the Karma server file watch functionality.  This will be done via Grunt's Watch.
+            },
+            'continuous-integration': {
+                background: false,   // Keep tests on main process so you can see the results better.
+                singleRun: true    // Shutdown the Karma server after test.
+            },
+            development: {
+                background: true,   // Run tests in background process so subsequent Grunt tasks can run.
+                singleRun: false    // Keep Karma server running in background for use by each test
             }
         },
         protractor: {   // Run end-to-end (eg Browser/GUI) Protractor tests as defined in config.
-            e2e: {
+            options: {
+                configFile: 'tests/protractor.conf.js', // Default config file
+                webdriverManagerUpdate: true,
+                keepAlive: true, // If false, the grunt process stops when the test fails.
+                noColor: false // If true, protractor will not use colors in its output.
+            },
+            'continuous-integration': {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
                 options: {
-                    configFile: 'tests/protractor.conf.js'
+                }
+            },
+            development: {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+                options: {
                 }
             }
         },
@@ -105,7 +123,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= jshint.files =>'],
-                tasks: ['jshint', 'run-all-tests']
+                tasks: ['jshint', 'karma:development:run','protractor:development','mochaTest:development']
             },
             css: {
                 files: ['<%= csslint.files =>'],
@@ -119,14 +137,14 @@ module.exports = function(grunt) {
                     logConcurrentOutput: true
                 }
             },
-            'sss-debug': {
+            'sss-debug-mode': {
                 tasks: ['env:debug', 'nodemon:debug'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
-            'sss-test': {
-                tasks: ['env:prod'],
+            'sss-continuous-integration': {
+                tasks: ['env:prod', 'nodemon:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -146,14 +164,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
 
-    grunt.registerTask('lint', ['jshint', 'csslint']);
     grunt.registerTask('sss', ['concurrent:sss']);
-    grunt.registerTask('sss-debug', ['concurrent:sss-debug']);
-    grunt.registerTask('sss-test', ['concurrent:sss-test']);
-    grunt.registerTask('backend-tests', ['sss-test', 'mochaTest']);
-    grunt.registerTask('frontend-tests', ['sss-test', 'karma:unit']);
-    grunt.registerTask('end2end-tests', ['sss-test', 'protractor:e2e']);
+    grunt.registerTask('sss-debug-mode', ['concurrent:sss-debug-mode']);
+
+    grunt.registerTask('backend-tests', ['sss-continuous-integration', 'mochaTest:continuous-integration']);
+    grunt.registerTask('frontend-tests', ['sss-continuous-integration', 'karma:continuous-integration']);
+    grunt.registerTask('end2end-tests', ['sss-continuous-integration', 'protractor:continuous-integration']);
     grunt.registerTask('run-all-tests', ['backend-tests', 'frontend-tests', 'end2end-tests']);
+    grunt.registerTask('run-all-tests', ['backend-tests', 'frontend-tests', 'end2end-tests']);
+    grunt.registerTask('lint', ['jshint', 'csslint']);
+    grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
     grunt.registerTask('build', ['run-all-tests', 'lint', 'concat', 'uglify']);
     grunt.registerTask('default', ['run-all-tests']);
 };

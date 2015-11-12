@@ -7,6 +7,12 @@
     SearchService.$inject = ['$nodeServices', '$log'];
 
     function SearchService($nodeServices, $log) {
+        var snippetResults = {
+            repoId: {
+
+            }
+        };
+
         var vm = this;
         vm.searchResults = []; // The array that will contain search results
         vm.searchTerms = []; // The search term (for decoration)
@@ -47,10 +53,13 @@
             }
         };
 
+        function getFragment() {
+
+        }
 
         // Pagination for SearchResults
         vm.pagination = [];
-        vm.pagination.viewby = 1;
+        vm.pagination.viewby = 5;
         vm.pagination.totalItems = 0;
         vm.pagination.currentPage = 1;
         vm.pagination.itemsPerPage = vm.pagination.viewby;

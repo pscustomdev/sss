@@ -13,7 +13,8 @@ var github = new GitHubApi({
     pathPrefix: "", // for some GHEs; none for GitHub
     timeout: 5000,
     headers: {
-        "user-agent": "SoftwareSnippetSearch" // GitHub is happy with a unique user agent
+        'user-agent': 'SoftwareSnippetSearch', // GitHub is happy with a unique user agent
+        'Accept': 'application/vnd.github.v3.text-match+json'
     }
 });
 

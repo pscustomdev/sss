@@ -4,3 +4,4 @@ data/
 auth-conf.js
 /public/js/build
 .c9/
+/dist/

@@ -1,3 +1,4 @@
+var cfg = require('../config.js');
 exports.config = {
     allScriptsTimeout: 11000,
 
@@ -17,7 +18,7 @@ exports.config = {
     //}],
 
     //baseUrl: 'https://sss-pscustomdev.c9.io',
-    baseUrl: 'http://localhost:3000/',
+    baseUrl: 'http://localhost:' + cfg.serverPort + '/',
 /*
     login: function () {
         browser.driver.get('http://localhost:3000');

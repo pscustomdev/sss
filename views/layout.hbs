@@ -5,25 +5,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/bower/html5shiv/dist/html5shiv.js"></script>
-    <![endif]-->
-    <script src="/bower/underscore/underscore-min.js"></script>
-    <script src="/bower/angular/angular.min.js"></script>
-    <script src="/bower/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="/bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="/bower/angular-animate/angular-animate.min.js"></script>
     {{#if settings.production}}
-        <script src="/js/build/sss.min.js?v=2"></script>
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="/libs/html5shiv.js"></script>
+        <![endif]-->
+        <script src="/libs/underscore-min.js"></script>
+        <script src="/libs/angular.min.js"></script>
+        <script src="/libs/angular-ui-router.min.js"></script>
+        <script src="/libs/ui-bootstrap-tpls.min.js"></script>
+        <script src="/libs/angular-animate.min.js"></script>
+        <script src="/libs/jquery.min.js"></script>
+        <script src="/libs/sss.min.js?v=2"></script>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     {{else}}
-        <script src="/bower/jquery/dist/jquery.min.js"></script>
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="/bower/html5shiv/dist/html5shiv.js"></script>
+        <![endif]-->
+        <script src="/bower/underscore/underscore.js"></script>
+        <script src="/bower/angular/angular.js"></script>
+        <script src="/bower/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="/bower/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="/bower/angular-animate/angular-animate.js"></script>
+        <script src="/bower/jquery/dist/jquery.js"></script>
         <script src="/js/app/services/util.js"></script>
         <script src="/js/app/services/node-services.js"></script>
         <script src="/js/app/services/search-service.js"></script>
         <script src="/js/app/sss/search/view.js"></script>
         <script src="/js/app/sss/results/view.js"></script>
         <script src="/js/app/app.js"></script>
+        <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
     {{/if}}
 
     <link href="/css/style.css" rel="stylesheet">

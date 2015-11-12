@@ -1,83 +1,71 @@
 "use strict";
 
 module.exports = function(grunt) {
+    var cfg = require('./config.js');
+    var productionPort = 10 + cfg.serverPort;
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        env: {
-            debug: {
-                NODE_ENV: 'development',
-                DEBUG: 'SSS:*'
-            },
-            dev: {
-                NODE_ENV: 'development'
-            },
-            prod: {
-                NODE_ENV: 'production'
-            }
-        },
         clean: {
-            temp: {
-                src: [ 'tmp' ]
+            package: {
+                src: ['dist']
             }
         },
         compress: {
-            dist: {
+            package: {
                 options: {
                     archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
                 },
-                files: [{
-                    src: [ 'index.html' ],
-                    dest: '/'
-                }, {
-                    src: [ 'dist/**' ],
-                    dest: 'dist/'
-                }, {
-                    src: [ 'assets/**' ],
-                    dest: 'assets/'
-                }, {
-                    src: [ 'libs/**' ],
-                    dest: 'libs/'
-                }]
+                files: [
+                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js'], expand: true, flatten: true, filter: 'isFile'},
+                    {dest: 'sss/public/css/', src: ['public/bower/bootstrap/dist/css/*.min.css'], expand: true, flatten: true, filter: 'isFile'},
+                    {dest: 'sss/public/fonts/', src: ['public/bower/bootstrap/dist/fonts/*'], expand: true, flatten: true, filter: 'isFile'},
+                    {dest: 'sss//', src: ['app.js']},
+                    {dest: 'sss//', src: ['config.js']},
+                    {dest: 'sss//', src: ['auth/**']},
+                    {dest: 'sss//', src: ['bin/**']},
+                    {dest: 'sss//', src: ['db/**']},
+                    {dest: 'sss//', src: ['public/favicon.ico']},
+                    {dest: 'sss//', src: ['public/css/**']},
+                    {dest: 'sss//', src: ['public/fonts/**']},
+                    {dest: 'sss//', src: ['public/images/**']},
+                    {dest: 'sss//', src: ['public/js/app/**/*.html']},
+                    {dest: 'sss//', src: ['routes/**']},
+                    {dest: 'sss//', src: ['views/**']},
+                    {dest: 'sss//', src: ['node_modules/**']}
+                ]
             }
         },
         concat: {   // Concatenate files
-            dist: {
-                src: ['public/js/app/app.js', 'public/js/app/**/*.js'],
-                dest: 'public/js/build/sss.js'
+            package: {
+                files: {
+                    'dist/sss.js': ['public/js/app/**/*.js']
+                }
             }
         },
         concurrent: {
-            'sss-development': {
-                tasks: ['env:dev', 'nodemon:dev', 'watch:dev', 'watch:js', 'watch:css'],
+            'sss-development-mode': {
+                tasks: ['nodemon:sss', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
-            'sss-debug-mode': {
-                tasks: ['env:debug', 'nodemon:dev-debug', 'watch:dev', 'watch:js', 'watch:css'],
+            'sss-development-debug-mode': {
+                tasks: ['nodemon:sss-debug', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
-            'sss-continuous-integration': {
-                tasks: ['env:prod', 'nodemon:dev'],
+            'sss-production-mode': {
+                tasks: ['nodemon:sss-production'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'run-all-tests': {
-                tasks: ['all-tests'],
+                tasks: ['run-all-tests'],
                 options: {
                     logConcurrentOutput: true
-                }
-            }
-        },
-        connect: {
-            server: {
-                options: {
-                    hostname: 'localhost',
-                    port: 3000
                 }
             }
         },
@@ -87,8 +75,35 @@ module.exports = function(grunt) {
             },
             src: ['public/css/**/*.css']
         },
+        env: {
+            debug: {
+                NODE_ENV: 'development',
+                PORT: cfg.serverPort,
+                DEBUG: 'SSS:*'
+            },
+            dev: {
+                NODE_ENV: 'development' ,
+                PORT: cfg.serverPort
+            },
+            prod: {
+                NODE_ENV: 'production',
+                PORT: productionPort
+            }
+        },
         jshint: {   // Validate files with JSHint
-            src: ['*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'tests/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
+            tests: {
+                options: {
+                    node: true,
+                    expr: true
+                },
+                src: ['tests/**/*.js']
+            },
+            js: {
+                options: {
+                    node: true
+                },
+                src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
+            }
         },
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
             options: {
@@ -97,22 +112,12 @@ module.exports = function(grunt) {
                 background: false,   // Keep tests on main process so you can see the results better.
                 singleRun: true    // Keep Karma server running in background for use by each test
             },
-            'continuous-integration': {
-                options: {
-                }
-            },
             'single-pass': {
                 options: {
                 }
             }
         },
         mochaTest: {    // Run backend javascript (eg Node) Mocha tests as defined here.
-            'continuous-integration': {
-                src: 'tests/backend-unit-tests/**/*-spec.js',
-                options: {
-                    reporter: 'spec'
-                }
-            },
             'single-pass': {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
@@ -121,45 +126,68 @@ module.exports = function(grunt) {
             }
         },
         nodemon: {    // Restart NodeJS's Application whenever watched file patterns are added, changed or deleted
-            dev: {
+            sss: {
                 script: 'bin/www',
                 options: {
                     ext: 'js, hbs',
-                    watch: ['auth', 'db', 'routes', 'views']
-                },
-                callback: function (nodemon) {
-                    nodemon.on('log', function (event) {
-                        console.log(event.colour);
-                    });
+                    watch: ['auth', 'db', 'routes', 'views'],
+                    delay: 300,
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
 
-                    // opens browser on initial server start
-                    nodemon.on('config:update', function () {
-                        // Delay before server listens on port
-                        setTimeout(function() {
-                            require('open')('http://localhost:3000');
-                        }, 1000);
-                    });
+                        /** Open the application in a new browser window **/
+                        nodemon.on('config:update', function () {
+                            // Delay before server listens on port
+                            setTimeout(function () {
+                                require('open')('http://localhost:' + cfg.serverPort);
+                            }, 1000);
+                        });
+                    }
                 }
             },
-            'dev-debug': {
+            'sss-debug': {
                 script: 'bin/www',
                 options: {
                     nodeArgs: ['--debug'],
                     ext: 'js, hbs',
-                    watch: ['auth', 'db', 'routes', 'views']
-                },
-                callback: function (nodemon) {
-                    nodemon.on('log', function (event) {
-                        console.log(event.colour);
-                    });
+                    watch: ['auth', 'db', 'routes', 'views'],
+                    delay: 300,
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
 
-                    // opens browser on initial server start
-                    nodemon.on('config:update', function () {
-                        // Delay before server listens on port
-                        setTimeout(function() {
-                            require('open')('http://localhost:3000');
-                        }, 1000);
-                    });
+                        /** Open the application in a new browser window **/
+                        nodemon.on('config:update', function () {
+                            // Delay before server listens on port
+                            setTimeout(function () {
+                                require('open')('http://localhost:' + cfg.serverPort);
+                            }, 1000);
+                        });
+                    }
+                }
+            },
+            'sss-production': {
+                script: 'dist/sss/bin/www',
+                options: {
+                    ext: 'js, hbs',
+                    watch: ['auth', 'db', 'routes', 'views'],
+                    delay: 300,
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
+
+                        /** Open the application in a new browser window **/
+                        nodemon.on('config:update', function () {
+                            // Delay before server listens on port
+                            setTimeout(function () {
+                                require('open')('http://localhost:' + productionPort);
+                            }, 1000);
+                        });
+                    }
                 }
             }
         },
@@ -170,38 +198,52 @@ module.exports = function(grunt) {
                 keepAlive: true, // If false, the grunt process stops when the test fails.
                 noColor: false // If true, protractor will not use colors in its output.
             },
-            'continuous-integration': {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
-                options: {
-                }
-            },
-            'single-pass': {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+            'single-pass': {
                 options: {
                 }
             }
         },
         uglify: {   // Minify files with UglifyJS
-            files: {
-                'public/js/build/sss.js': ['public/js/build/sss.min.js']
-            },
             options: {
                 mangle: false
+            },
+            package: {
+                files: {
+                    'dist/sss.min.js': ['dist/sss.js']
+                }
             }
+        },
+        unzip: {
+            'dist/': 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
         },
         watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
             dev: {
-                files: ['<%= jshint.files =>', 'package.json', 'bower.json'],
-                tasks: ['run-all-tests'],
+                files: ['<%= jshint.js.files =>', '<%= jshint.tests.files =>', 'package.json', 'bower.json'],
+                tasks: ['concurrent:run-all-tests'],
                 options: {
                     atBegin: true
                 }
             },
             js: {
-                files: ['<%= jshint.files =>'],
-                tasks: ['jshint']
+                files: ['<%= jshint.js.files =>'],
+                tasks: ['jshint:js'],
+                options: {
+                    atBegin: true
+                }
+            },
+            tests: {
+                files: ['<%= jshint.tests.files =>'],
+                tasks: ['jshint:tests'],
+                options: {
+                    atBegin: true
+                }
             },
             css: {
                 files: ['<%= csslint.files =>'],
-                tasks: ['csslint']
+                tasks: ['csslint'],
+                options: {
+                    atBegin: true
+                }
             }
         }
     });
@@ -219,19 +261,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-nodeMon');
     grunt.loadNpmTasks('grunt-protractor-runner');
+    grunt.loadNpmTasks('grunt-zip');
 
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
-    grunt.registerTask('build', ['run-all-tests', 'lint', 'concat', 'uglify']);
-    grunt.registerTask('default', ['run-all-tests']);
+    grunt.registerTask('default', ['sss-development-mode']);
+    grunt.registerTask('deploy-production', ['package', 'unzip']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
-    grunt.registerTask('lint', ['jshint', 'csslint']);
-    grunt.registerTask('package', [ 'lint', 'karma:unit', 'concat:dist', 'uglify:dist', 'clean:temp', 'compress:dist' ]);
+    grunt.registerTask('lint', ['jshint:js', 'jshint:tests', 'csslint']);
+    grunt.registerTask('package', ['lint', 'run-all-tests', 'clean', 'concat', 'uglify', 'compress']);
     grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
-    grunt.registerTask('run-all-tests', ['concurrent:run-all-tests']);
-
-    grunt.registerTask('sss-development', ['concurrent:sss-development']);
-    grunt.registerTask('sss-continuous-integration', ['concurrent:sss-continuous-integration']);
-    grunt.registerTask('sss-debug-mode', ['concurrent:sss-debug-mode']);
+    grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);
+    grunt.registerTask('sss-production-mode', ['env:prod', 'concurrent:sss-production-mode']);
+    grunt.registerTask('sss-debug-mode', ['env:debug', 'concurrent:sss-development-debug-mode']);
 };

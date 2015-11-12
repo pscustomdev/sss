@@ -11,7 +11,6 @@ var MongoStore = connectMongo(expressSession);
 var config = require(path.join(__dirname, 'config'));
 
 var app = express();
-// change value to match the environment the current code is being deployed to ('development' or 'production')
 app.set('production', process.env.NODE_ENV === 'production');
 
 app.set('views', path.join(__dirname, 'views'));

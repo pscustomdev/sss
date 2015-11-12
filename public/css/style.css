@@ -1,6 +1,3 @@
-@import url(../bower/bootstrap/dist/css/bootstrap.min.css);
-@import url(../bower/bootstrap/dist/css/bootstrap-theme.min.css);
-
 .nav, .pagination, .carousel, .panel-title a {
   cursor: pointer; /* AngularJS's documented way to fix a Bootstrap/UI Bootstrap compatibility issue */
 }

@@ -94,13 +94,15 @@ module.exports = function(grunt) {
             tests: {
                 options: {
                     node: true,
-                    expr: true
+                    expr: true,
+                    mocha: true
                 },
                 src: ['tests/**/*.js']
             },
             js: {
                 options: {
-                    node: true
+                    node: true,
+                    mocha: true
                 },
                 src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
             }

@@ -50,4 +50,8 @@ exports.config = {
     },
 */
     framework: 'mocha'
+
+    //mochaNodeOpts: {
+    //    defaultTimeoutInterval: 30000
+    //}
 };

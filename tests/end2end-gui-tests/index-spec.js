@@ -2,6 +2,7 @@
 console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'index-spec') ****");
 
 var db = require('../../db/mongo-dao');
+var expect = require('chai').expect;
 //*******************NOTES*******************
 // browser.driver.whatever is how you use the native web driver when angular is not involved.
 // element(by.model('todoList.todoText')).sendKeys('write a protractor test') is how you do it if angular is involved;
@@ -15,11 +16,13 @@ describe('SSS Index Page', function() {
     //browser.driver.get('https://sss-pscustomdev.c9.io');
 
     it('should have a title', function () {
-        expect(browser.driver.getTitle()).to.equal('Login - SSS');
+        expect(browser.driver.getTitle().to.be.equal('Software Snippet Search');
+        done();
     });
 
     it('should have the header', function () {
-        expect(browser.driver.findElement(by.tagName('h3')).getText()).toEqual('Super Snippet Search');
+        expect(browser.driver.findElement(by.tagName('h4')).getText()).to.be.equal('Top Searches');
+        done();
     });
 
     // it('should have a login button', function () {
@@ -28,64 +31,64 @@ describe('SSS Index Page', function() {
     // });
 });
 
-describe('Login page', function() {
-    browser.wait(function(){}, 7000, "blah");
-    var vm = {
-        firstName: "fname",
-        lastName: "lname",
-        email:"fake@email.com",
-        password: "pwd"
-    };
-    
-    beforeEach(function(done) {
-        //cleanup fake user
-        db.removeUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-
-    }, 5000);
-
-    afterEach(function(done) {
-        //cleanup fake user
-        db.removeUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-
-    }, 5000);
-    
-    it('should be able to login a created user.' , function (done) {
-        db.addUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
-        browser.driver.findElement(by.id('password')).sendKeys(vm.password);
-        browser.driver.findElement(by.id('submit-login')).click();
-        expect(browser.driver.findElement(by.id('firstName')).getText()).toEqual(vm.firstName);
-        browser.driver.findElement(by.id('logoutBtn')).click();
-    });
-    
-    it('should be able to reject when user not exist' , function () {
-        //browser.wait(function(){}, 3000, "blah");
-        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
-        browser.driver.findElement(by.id('password')).sendKeys("blah");
-        browser.driver.findElement(by.id('submit-login')).click();
-        expect((browser.driver.findElement(by.id('loginError'))).getText()).toEqual("Invalid credentials");
-    });
-    
-    it('should be able to reject an invalid password' , function (done) {
-        db.addUser(vm, function (err, data) {
-            if (err) console.log(err);
-            done();
-        });
-        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
-        browser.driver.findElement(by.id('password')).sendKeys("blah");
-        browser.driver.findElement(by.id('submit-login')).click();
-        expect(browser.driver.findElement(by.id('loginError')).getText()).toEqual("Invalid credentials");
-    });
-});
+//describe('Login page', function() {
+//    browser.wait(function(){}, 7000, "blah");
+//    var vm = {
+//        firstName: "fname",
+//        lastName: "lname",
+//        email:"fake@email.com",
+//        password: "pwd"
+//    };
+//
+//    beforeEach(function(done) {
+//        //cleanup fake user
+//        db.removeUser(vm, function (err, data) {
+//            if (err) console.log(err);
+//            done();
+//        });
+//
+//    }, 5000);
+//
+//    afterEach(function(done) {
+//        //cleanup fake user
+//        db.removeUser(vm, function (err, data) {
+//            if (err) console.log(err);
+//            done();
+//        });
+//
+//    }, 5000);
+//
+//    it('should be able to login a created user.' , function (done) {
+//        db.addUser(vm, function (err, data) {
+//            if (err) console.log(err);
+//            done();
+//        });
+//        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+//        browser.driver.findElement(by.id('password')).sendKeys(vm.password);
+//        browser.driver.findElement(by.id('submit-login')).click();
+//        expect(browser.driver.findElement(by.id('firstName')).getText()).toEqual(vm.firstName);
+//        browser.driver.findElement(by.id('logoutBtn')).click();
+//    });
+//
+//    it('should be able to reject when user not exist' , function () {
+//        //browser.wait(function(){}, 3000, "blah");
+//        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+//        browser.driver.findElement(by.id('password')).sendKeys("blah");
+//        browser.driver.findElement(by.id('submit-login')).click();
+//        expect((browser.driver.findElement(by.id('loginError'))).getText()).toEqual("Invalid credentials");
+//    });
+//
+//    it('should be able to reject an invalid password' , function (done) {
+//        db.addUser(vm, function (err, data) {
+//            if (err) console.log(err);
+//            done();
+//        });
+//        browser.driver.findElement(by.id('email')).sendKeys(vm.email);
+//        browser.driver.findElement(by.id('password')).sendKeys("blah");
+//        browser.driver.findElement(by.id('submit-login')).click();
+//        expect(browser.driver.findElement(by.id('loginError')).getText()).toEqual("Invalid credentials");
+//    });
+//});
 /*
  function createGroup() {
  browser.get('/main');

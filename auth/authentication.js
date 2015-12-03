@@ -20,7 +20,6 @@ module.exports = function() {
                     user = {            // Normalize data into our own local user
                         id: profile.id,
                         username: profile.username,
-                        displayName: profile.displayName,
                         name: profile._json.name,
                         email: profile._json.email,
                         created: profile._json.created_at,

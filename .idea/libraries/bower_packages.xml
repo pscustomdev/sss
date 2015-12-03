@@ -10,8 +10,6 @@
       <root url="file://$PROJECT_DIR$/public/bower" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/public/bower" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

@@ -6,20 +6,16 @@ Setting up SSS on the host
         If on windows, bcrypt will need to be rebuilt by node-gyp, which has some pre-requisites that need to be met:
         https://github.com/nodejs/node-gyp
         On windows Visual Studio 2013 works the best.
-    # npm install -g grunt-cli
-        Need to install grunt globally, if you want to run from the command line (eg Jenkins)
-    # node ./node_modules/protractor/bin/webdriver-manager update
-        Downloads the necessary Protractor web-driver binaries
     # bower install
 3) Set DEBUG=sss in the OS environment
 4) Install MongoDB
    * Put mongo bin in the path:
       * C:\Program Files\MongoDB\Server\3.0\bin\
       * /usr/bin/
-   * Create /data/db
+   * Create \data\db
    * Open Terminal/Command Prompt:
-      # ./mongo-start.sh
-5) On Windows find in npm module mongodb ..node_modules\mongodb\node_modules\bson\ext\index.js
+      # mongod --nojournal --dbpath=data
+5) On Windows find in npm module mongodb ..node_moduales\mongodb\node_modules\bson\ext\index.js
    * and change path to js version in catch block
         bson = require('../build/Release/bson');
      to
@@ -54,20 +50,11 @@ Starting tests
 Files
 -------------
               
-auth-conf.js (NOTE: security values can't be stored in GIT or they will deactivate the token)
-============ COPY BELOW TEXT, THEN REPLACE WITH ACTUAL VALUES ============ 
-module.exports = {
-    github: {
-        clientID: 'follow url for value: http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS',
-        clientSecret: 'follow url for value: http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS',
-        callbackURL: 'follow url for value: http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS'
-    },
-    github_api: {
-        username: 'pscustomdev-sss',
-        token: 'follow url for value: http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS'
-    }
-};
-============ COPY ABOVE TEXT, THEN REPLACE WITH ACTUAL VALUES ============
+:-:-: auth-conf.js :-:-:
+ (NOTE: security values can't be stored in GIT or they will deactivate the token):
+============ REPLACE THE CONTENTS OF "auth-conf.js" WITH VALUE FROM FOLLOWING URL ============
+http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS
+============ REPLACE THE CONTENTS OF "auth-conf.js" WITH VALUE FROM ABOVE URL ============
 
 :-:-: SERVER SIDE :-:-:
 ============
@@ -177,6 +164,7 @@ To-Do
 ==============
 ToDo: Fix Lint errors
 ToDo: Fix Hint errors
+ToDo: Fix Grunt's Nodemon not updating node with file changes
 ToDo: Get End2End tests working
 ToDo: Validate Backend tests make sense
 ToDo: Validate End2End tests make sense

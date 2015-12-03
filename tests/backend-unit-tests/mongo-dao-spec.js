@@ -44,7 +44,7 @@ describe("Mongo Dao", function() {
                 expect(users).to.exist;
                 expect(users[0].firstName).equal("fakeFirst");
                 done();
-            })
+            });
         });
     });
     
@@ -57,7 +57,7 @@ describe("Mongo Dao", function() {
                 db.findUsers(userEmail, function (err, user){
                     expect(user).to.not.exist;
                     done();
-                })
+                });
             });
         });
     });

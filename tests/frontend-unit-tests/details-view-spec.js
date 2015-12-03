@@ -35,7 +35,7 @@ describe('SSS Views', function() {
             });
 
             it('should have the same filename payload as was passed in via mock', function() {
-                expect(controller.snippetDetail).to.equal("test");
+                expect(controller.snippetDetail).to.equal(mockPayload);
             });
         });
     });

@@ -3,6 +3,8 @@ console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'index-spec') ****");
 
 var db = require('../../db/mongo-dao');
 var expect = require('chai').expect;
+
+
 //*******************NOTES*******************
 // browser.driver.whatever is how you use the native web driver when angular is not involved.
 // element(by.model('todoList.todoText')).sendKeys('write a protractor test') is how you do it if angular is involved;
@@ -15,14 +17,23 @@ describe('SSS Index Page', function() {
     browser.driver.get('http://localhost:3000');
     //browser.driver.get('https://sss-pscustomdev.c9.io');
 
+
     it('should have a title', function () {
-        expect(browser.driver.getTitle().to.be.equal('Software Snippet Search');
-        done();
+       browser.driver.getTitle().then(function (text){
+           expect(text).to.equal('Software Snippet Search');
+       });
     });
 
     it('should have the header', function () {
-        expect(browser.driver.findElement(by.tagName('h4')).getText()).to.be.equal('Top Searches');
-        done();
+        browser.driver.findElement(by.tagName('h4')).getText().then(function (text) {
+            expect(text).to.equal('Top Searches');
+        });
+    });
+
+    it('should have more than 1 header', function () {
+        browser.driver.findElements(by.tagName('h4')).getText().then(function (text) {
+            expect(text).to.equal('Top Searches');
+        });
     });
 
     // it('should have a login button', function () {

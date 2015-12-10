@@ -162,18 +162,15 @@ End to End [Browser] (Protractor)
 
 To-Do
 ==============
-ToDo: Fix Lint errors
-ToDo: Fix Hint errors
 ToDo: Fix Grunt's Nodemon not restarting node after file changes
-ToDo: Get End2End tests working
-ToDo: Validate Backend tests make sense
-ToDo: Validate End2End tests make sense
-ToDo: Add Backend tests
-ToDo: Add Frontend tests
-ToDo: Add End2End tests
+ToDo: Tests - Validate Backend tests make sense
+ToDo: Tests - Validate End2End tests make sense
+ToDo: Tests - Add Backend tests
+ToDo: Tests - Add Frontend tests
+ToDo: Tests - Add End2End tests
 ToDo: Design - Snippet json object (pojo) to represent snippet results including individual hit data
 ToDo: Login - Make hover over "Logged in as NAME", not show mouse pointer.  We should not communicate that this does anything.
-ToDo: Add real data to GitHub
+ToDo: Tests - Add real data to GitHub
 ToDo: GitHub Dao - Expand GitHubDao to provide for calls that will retrieve missing data on results page
 ToDo: GitHub Dao - Results Page - For each result, display x characters before and after every "result hit"
 ToDo: GitHub Dao - Add api to write a snippet to GitHub
@@ -196,8 +193,3 @@ ToDo: Results Page - Change layout so it is as follows:
             File Name (first #1)
                 100 characters before and after hit #1 [More/Less]
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
-
-
-
-
-

@@ -97,7 +97,7 @@ module.exports = function(grunt) {
                     expr: true,
                     mocha: true
                 },
-                //src: ['tests/**/*.js']  // Comment entire line to DISABLE JSHINT.  Until we get our baseline cleaned up, this will be pretty noisy.
+                src: ['tests/**/*.js']  // Comment entire line to DISABLE JSHINT.  Until we get our baseline cleaned up, this will be pretty noisy.
             },
             js: {
                 options: {
@@ -226,20 +226,6 @@ module.exports = function(grunt) {
                     atBegin: true
                 }
             },
-            js: {
-                files: ['<%= jshint.js.files =>'],
-                tasks: ['jshint:js'],
-                options: {
-                    atBegin: true
-                }
-            },
-            tests: {
-                files: ['<%= jshint.tests.files =>'],
-                tasks: ['jshint:tests'],
-                options: {
-                    atBegin: true
-                }
-            },
             css: {
                 files: ['<%= csslint.files =>'],
                 tasks: ['csslint'],
@@ -271,9 +257,9 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy-production', ['package', 'unzip']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
-    grunt.registerTask('lint', ['jshint:js', 'jshint:tests', 'csslint']);
-    grunt.registerTask('package', ['run-all-tests', 'clean', 'concat', 'uglify', 'compress']);
-    //grunt.registerTask('package', ['lint', 'run-all-tests', 'clean', 'concat', 'uglify', 'compress']);
+    grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);
+    grunt.registerTask('csslint', ['csslint']);
+    grunt.registerTask('package', ['run-all-tests', 'csslint', 'clean', 'concat', 'uglify', 'compress']);  // 'jshint'
     grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
     grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);
     grunt.registerTask('sss-production-mode', ['env:prod', 'concurrent:sss-production-mode']);

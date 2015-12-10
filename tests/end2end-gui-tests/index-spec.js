@@ -30,12 +30,6 @@ describe('SSS Index Page', function() {
         });
     });
 
-    it('should have more than 1 header', function () {
-        browser.driver.findElements(by.tagName('h4')).getText().then(function (text) {
-            expect(text).to.equal('Top Searches');
-        });
-    });
-
     // it('should have a login button', function () {
     //     browser.driver.get('http://localhost:3000');
     //     expect(browser.driver.findElement(by.id('submit-login')).getAttribute('value')).toMatch('Log in');

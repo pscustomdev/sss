@@ -11,3 +11,20 @@
 
 2015-11-10 17:38:28.844  Package Script Complete 0
 2015-11-10 17:38:28.845  [package-script] process completed, see pkgscript.log for more information
+2015-12-03 15:22:40.129  
+
+************ Package Script  ************************************* process id: 35596
+2015-12-03 15:22:40.159  Package Script : #node-sudo-passwd#
+2015-12-03 15:22:54.687  Package Script : npm
+2015-12-03 15:22:54.687  Package Script :  
+2015-12-03 15:22:54.688  Package Script : WARN deprecated lodash@2.4.2: lodash@<3.0.0 is no longer maintained. Upgrade to lodash@^3.0.0.
+
+2015-12-03 15:22:55.101  CAT Installer: /usr/local/bin/grunt -> /usr/local/lib/node_modules/grunt-cli/bin/grunt
+
+2015-12-03 15:22:56.269  CAT Installer: grunt-cli@0.1.13 /usr/local/lib/node_modules/grunt-cli
+├── resolve@0.3.1
+├── nopt@1.0.10 (abbrev@1.0.7)
+└── findup-sync@0.1.3 (lodash@2.4.2, glob@3.2.11)
+
+2015-12-03 15:22:56.281  Package Script Complete 0
+2015-12-03 15:22:56.282  [package-script] process completed, see pkgscript.log for more information

@@ -97,7 +97,8 @@ module.exports = function(grunt) {
                     expr: true,
                     mocha: true
                 },
-                src: ['tests/**/*.js']
+                src: [],
+                //src: ['tests/**/*.js']
             },
             js: {
                 options: {
@@ -105,6 +106,7 @@ module.exports = function(grunt) {
                     mocha: true
                 },
                 src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
+                //src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
             }
         },
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
@@ -131,7 +133,7 @@ module.exports = function(grunt) {
             sss: {
                 script: 'bin/www',
                 options: {
-                    ext: 'js, hbs',
+                    ext: 'js',
                     watch: ['auth', 'db', 'routes', 'views'],
                     delay: 300,
                     callback: function (nodemon) {
@@ -153,7 +155,7 @@ module.exports = function(grunt) {
                 script: 'bin/www',
                 options: {
                     nodeArgs: ['--debug'],
-                    ext: 'js, hbs',
+                    ext: 'js',
                     watch: ['auth', 'db', 'routes', 'views'],
                     delay: 300,
                     callback: function (nodemon) {
@@ -174,7 +176,7 @@ module.exports = function(grunt) {
             'sss-production': {
                 script: 'dist/sss/bin/www',
                 options: {
-                    ext: 'js, hbs',
+                    ext: 'js',
                     watch: ['auth', 'db', 'routes', 'views'],
                     delay: 300,
                     callback: function (nodemon) {

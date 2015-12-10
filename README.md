@@ -164,7 +164,7 @@ To-Do
 ==============
 ToDo: Fix Lint errors
 ToDo: Fix Hint errors
-ToDo: Fix Grunt's Nodemon not updating node with file changes
+ToDo: Fix Grunt's Nodemon not restarting node after file changes
 ToDo: Get End2End tests working
 ToDo: Validate Backend tests make sense
 ToDo: Validate End2End tests make sense

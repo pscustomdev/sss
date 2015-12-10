@@ -29,6 +29,14 @@ describe("Mongo Dao", function() {
         });
     }, 5000);
     
+    it('should return error if user already exists', function (done) {
+        db.addUser(fakeUser, function(){});
+        db.addUser(fakeUser, function(err, users){
+            expect(err.code).equal(11000);  // 11000 means entry keyId already exists in database
+            done();
+        });
+    });
+
     it('should be able to add a user to the database', function (done) {
         db.addUser(fakeUser, function(err, users){
             if(users){
@@ -47,7 +55,7 @@ describe("Mongo Dao", function() {
             });
         });
     });
-    
+
     it('should be able to remove a user from the database', function (done) {
         //create the user so we can remove it.
         db.addUser(fakeUser, function(err, users){

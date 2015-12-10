@@ -1,7 +1,6 @@
 var debug = require('debug')('sss');
 var mongoskin = require('mongoskin');
 var config = require('../config');
-var bcrypt = require('bcrypt');
 
 var db = mongoskin.db(config.mongoUri, { safe:true });
 db.bind('snippets');
@@ -12,21 +11,9 @@ exports.addUser = function(profile, next) {
         if (err) {
             next(err, null);
         }
-        if (users[0]){
-            next("User already exists");
-        } else { //If user doesn't exist, then add them
-            if (profile.password) {
-                bcrypt.hash(profile.password, 10, function(err, hash) {
-                    if (err) {
-                        next(err, null);
-                    }
-                    profile.password = hash;
-                });
-            }
-            db.users.insert(profile, {}, function (err, results) {
-                next(err, results);
-            });
-        }
+        db.users.insert(profile, {}, function (err, results) {
+            next(err, results.ops);
+        });
     });
 };
 

@@ -71,7 +71,7 @@ module.exports = function(grunt) {
         },
         csslint: {  // Lint CSS files
             options: {
-                import: false   // @import is known to cause synchronous downloading of stylesheets, thus will hurt performance.  We don't care yet, so disabling warnings.
+                import: false
             },
             src: ['public/css/**/*.css']
         },
@@ -97,8 +97,7 @@ module.exports = function(grunt) {
                     expr: true,
                     mocha: true
                 },
-                src: [],
-                //src: ['tests/**/*.js']
+                //src: ['tests/**/*.js']  // Comment entire line to DISABLE JSHINT.  Until we get our baseline cleaned up, this will be pretty noisy.
             },
             js: {
                 options: {
@@ -106,7 +105,6 @@ module.exports = function(grunt) {
                     mocha: true
                 },
                 src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
-                //src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
             }
         },
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
@@ -274,7 +272,7 @@ module.exports = function(grunt) {
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
     grunt.registerTask('lint', ['jshint:js', 'jshint:tests', 'csslint']);
-    grunt.registerTask('package', ['clean', 'concat', 'uglify', 'compress']);
+    grunt.registerTask('package', ['run-all-tests', 'clean', 'concat', 'uglify', 'compress']);
     //grunt.registerTask('package', ['lint', 'run-all-tests', 'clean', 'concat', 'uglify', 'compress']);
     grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
     grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);

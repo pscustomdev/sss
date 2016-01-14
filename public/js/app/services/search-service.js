@@ -55,15 +55,15 @@
            snippets;
         }
 
-        function updateRating() {
+        function updateRating(snippets) {
 
         }
 
-        function updateViewsCount() {
+        function updateViewsCount(snippets) {
 
         }
 
-        function updatePostedOn() {
+        function updatePostedOn(snippets) {
             // Testing to see the best way to retrieve the earliest commit (thus providing the "Repo Creation Date")
             $nodeServices.getCommits("sss-storage", "2").then(function (response) {
                 vm["sss-storage"] = [];
@@ -72,11 +72,11 @@
             });
         }
 
-        function updatePostedBy() {
+        function updatePostedBy(snippets) {
 
         }
 
-        function updateLastUpdated() {
+        function updateLastUpdated(snippets) {
 
         }
 

@@ -27,9 +27,9 @@
                               ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
                               ng-show="overStar && !isReadonly">{{percent}}%</span>
                 <div>Score: {{item.score}}</div>
-                <div>Last updated 2015/9/4</div>
-                <div>1001 views</div>
-                <div>Posted on</div>
+                <div>Last updated (last commit date)</div>
+                <div>nnnn views (track in Mongo)</div>
+                <div>Posted on (initial commit date)</div>
                 <div>Posted by {{item.repository.owner.login}}</div>
                 <br/>
                 <br/>

@@ -57,6 +57,26 @@
 
         }
 
+        function getRating() {
+
+        }
+
+        function getViewsCount() {
+
+        }
+
+        function getPostedOn() {
+
+        }
+
+        function getPostedBy() {
+
+        }
+
+        function getLastUpdated() {
+
+        }
+
         // Pagination for SearchResults
         vm.pagination = [];
         vm.pagination.viewby = 5;

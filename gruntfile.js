@@ -45,13 +45,15 @@ module.exports = function(grunt) {
         },
         concurrent: {
             'sss-development-mode': {
-                tasks: ['nodemon:sss', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
+                tasks: ['nodemon:sss'],
+                //tasks: ['nodemon:sss', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
             },
             'sss-development-debug-mode': {
-                tasks: ['nodemon:sss-debug', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
+                tasks: ['nodemon:sss-debug'],
+                //tasks: ['nodemon:sss-debug', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
                 options: {
                     logConcurrentOutput: true
                 }

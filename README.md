@@ -12,7 +12,7 @@ Setting up SSS on the host
    * Put mongo bin in the path:
       * C:\Program Files\MongoDB\Server\3.0\bin\
       * /usr/bin/
-   * Create \data\db
+   * Create .\data\db
    * Open Terminal/Command Prompt:
       # mongod --nojournal --dbpath=data
 5) On Windows find in npm module mongodb ..node_moduales\mongodb\node_modules\bson\ext\index.js
@@ -193,3 +193,4 @@ ToDo: Results Page - Change layout so it is as follows:
             File Name (first #1)
                 100 characters before and after hit #1 [More/Less]
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
+ToDo: Change search to only bring up IDM(SSS) scripts

@@ -42,8 +42,12 @@ exports.searchCode = function (s, next) {
     console.log("searchCriteria:" + JSON.stringify(searchCriteria));
 
     //This will search the name, desc and README
+    //https://github.com/search?utf8=%E2%9C%93&q=test&type=Repositories&ref=advsearch&l=&l=
     github.search.code(searchCriteria, function(err, resultData) {
         console.log("resultData:" + JSON.stringify(resultData));
+        if (err) {
+            console.log("Error:" + err.message);
+        }
         next(err, resultData);
     });
 };

@@ -39,41 +39,44 @@
             if (searchTerms && searchTerms !== "") {
                 vm.searchTerms = searchTerms.split(" ");
 
-                $nodeServices.searchCode(searchTerms).then(function (response) {
-                    vm.userSearched = true;
-                    vm.searchResults = response;
-                    vm.pagination.totalItems = vm.searchResults.total_count;
-                    // Testing to see the best way to retrieve the earliest commit (thus providing the "Repo Creation Date")
-                    $nodeServices.getCommits("sss-storage", "2").then(function (response) {
-                        vm["sss-storage"] = [];
-                        vm["sss-storage"]["2"] = [];
-                        vm["sss-storage"]["2"].commits = response;
-                    });
-                });
+                $nodeServices.searchCode(searchTerms).then(
+                    function (response) {
+                        vm.userSearched = true;
+                        vm.searchResults = response;
+                        vm.pagination.totalItems = vm.searchResults.total_count;
+                        updatePostedOn(vm.searchResults.items); // assuming passing by ref
+                        updateFragment(vm.searchResults.items); // assuming passing by ref
+                    }
+                );
             }
         };
 
-        function getFragment() {
+        function updateFragment(snippets) {
+           snippets;
+        }
+
+        function updateRating() {
 
         }
 
-        function getRating() {
+        function updateViewsCount() {
 
         }
 
-        function getViewsCount() {
+        function updatePostedOn() {
+            // Testing to see the best way to retrieve the earliest commit (thus providing the "Repo Creation Date")
+            $nodeServices.getCommits("sss-storage", "2").then(function (response) {
+                vm["sss-storage"] = [];
+                vm["sss-storage"]["2"] = [];
+                vm["sss-storage"]["2"].commits = response;
+            });
+        }
+
+        function updatePostedBy() {
 
         }
 
-        function getPostedOn() {
-
-        }
-
-        function getPostedBy() {
-
-        }
-
-        function getLastUpdated() {
+        function updateLastUpdated() {
 
         }
 

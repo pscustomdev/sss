@@ -10,7 +10,9 @@
                     <div class="col-md-12">
                         <article>
                             <p>
-                                {{text_match.fragment}}
+                                <div data-ng-repeat="match in text_match.matches">
+                                    <div ng-bind-html="$searchService.trustHtmlSnippet(match.highlit_fragment)"></div>
+                                </div>
                             </p>
                         </article>
                     </div>

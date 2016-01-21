@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                     archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
                 },
                 files: [
-                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js'], expand: true, flatten: true, filter: 'isFile'},
+                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-sanitize/angular-sanitize.min.js', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss/public/css/', src: ['public/bower/bootstrap/dist/css/*.min.css'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss/public/fonts/', src: ['public/bower/bootstrap/dist/fonts/*'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss//', src: ['app.js']},
@@ -95,6 +95,7 @@ module.exports = function(grunt) {
         jshint: {   // Validate files with JSHint
             tests: {
                 options: {
+                    reporter: require('jshint-stylish'),
                     node: true,
                     expr: true,
                     mocha: true
@@ -103,10 +104,14 @@ module.exports = function(grunt) {
             },
             js: {
                 options: {
+                    reporter: require('jshint-stylish'),
                     node: true,
                     mocha: true
                 },
-                src: ['gruntfile.js', '*.js', 'bin/www', 'auth/**/*.js', 'db/**/*.js', 'routes/**/*.js', 'public/js/app/*.js']
+                src: [
+                    '**/*.js',
+                    '!node_modules/**/*.js'
+                ]
             }
         },
         karma: {    // Run frontend javascript (eg AngularJS) Karma tests as defined in config.
@@ -132,6 +137,7 @@ module.exports = function(grunt) {
         nodemon: {    // Restart NodeJS's Application whenever watched file patterns are added, changed or deleted
             sss: {
                 script: 'bin/www',
+                ignore:  ['node_modules/**'],
                 options: {
                     ext: 'js',
                     watch: ['auth', 'db', 'routes', 'views'],
@@ -153,6 +159,7 @@ module.exports = function(grunt) {
             },
             'sss-debug': {
                 script: 'bin/www',
+                ignore:  ['node_modules/**'],
                 options: {
                     nodeArgs: ['--debug'],
                     ext: 'js',
@@ -175,6 +182,7 @@ module.exports = function(grunt) {
             },
             'sss-production': {
                 script: 'dist/sss/bin/www',
+                ignore:  ['node_modules/**'],
                 options: {
                     ext: 'js',
                     watch: ['auth', 'db', 'routes', 'views'],

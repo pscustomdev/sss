@@ -4,9 +4,9 @@
     angular.module('app.$searchService', ['app.$nodeServices'])
         .factory('$searchService', SearchService);
 
-    SearchService.$inject = ['$nodeServices', '$log'];
+    SearchService.$inject = ['$nodeServices', '$sce', '$log'];
 
-    function SearchService($nodeServices, $log) {
+    function SearchService($nodeServices, $sce, $log) {
         var snippetResults = {
             repoId: {
 
@@ -44,15 +44,25 @@
                         vm.userSearched = true;
                         vm.searchResults = response;
                         vm.pagination.totalItems = vm.searchResults.total_count;
-                        updatePostedOn(vm.searchResults.items); // assuming passing by ref
                         updateFragment(vm.searchResults.items); // assuming passing by ref
+                        updateRating(vm.searchResults.items); // assuming passing by ref
                     }
                 );
             }
         };
 
-        function updateFragment(snippets) {
-           snippets;
+        vm.trustHtmlSnippet = function (html) {
+            return $sce.trustAsHtml(html);
+        };
+
+        function updateFragment(hits) {
+            hits.forEach(function(hit) {
+                hit.text_matches[0].matches.reverse().forEach(function(match) {
+                    match['highlit_fragment'] = hit.text_matches[0].fragment;
+                    match['highlit_fragment'] = match['highlit_fragment'].substr(0, match.indices[1]) + "</mark><code>" + match['highlit_fragment'].substr(match.indices[1]) + "</code>";
+                    match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
+                });
+           });
         }
 
         function updateRating(snippets) {
@@ -73,11 +83,18 @@
         }
 
         function updatePostedBy(snippets) {
-
+            // this will need to be tracked/retrieved in mongo
         }
 
         function updateLastUpdated(snippets) {
-
+            snippets.forEach(function(snippet){
+                snippet.text_matches.fragment;
+                $nodeServices.getCommits(snippet.repository.owner.login, snippet.repository.name).then(function (response) {
+                    snippet[""] = [];
+                    vm["sss-storage"]["2"] = [];
+                    vm["sss-storage"]["2"].commits = response;
+                });
+            });
         }
 
         // Pagination for SearchResults

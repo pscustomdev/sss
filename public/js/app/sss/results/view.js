@@ -1,7 +1,6 @@
 (function() {
     'use strict';
-
-    angular.module('app.results', ['ui.router', 'ngAnimate', 'ui.bootstrap'])
+    angular.module('app.results', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'ngSanitize'])
         .config(['$stateProvider', StateProvider])
         .controller('SearchBarFilteringController', SearchBarFilteringController)
         .controller('ResultsController', ResultsController)

@@ -60,21 +60,26 @@ exports.getCommits = function (repoOwner, repoName, next) {
         console.log("resultData:" + JSON.stringify(resultData));
         next(err, resultData);
     });
-};
+ };
 
-// exports.getRepoContents = function(repoId, next) {
-//     var repo = github.getRepo(auth_config.github_api.username, repoId);
-//     var pathToDir = ""; //Leaving empty because no sub directory planned
+ exports.getRepoContents = function(repoId, next) {
+     var msg = { user: "sss-storage", repo: repoId };
+     github.repos.get(msg, function(err, resultData) {
+         console.log("resultData:" + JSON.stringify(resultData));
+         next(err, resultData);
+     });
 
-//     repo.contents('master', pathToDir, function(err, contents) {
-//         if (err) {
-//             console.log(JSON.parse(err.request.responseText).message);
-//             return next(err);
-//         }
-//         console.log(JSON.stringify(contents));
-//         next(null, contents);
-//     });
-// };
+     //var pathToDir = ""; //Leaving empty because no sub directory planned
+     //
+     //repo.contents('master', pathToDir, function(err, contents) {
+     //    if (err) {
+     //        console.log(JSON.parse(err.request.responseText).message);
+     //        return next(err);
+     //    }
+     //    console.log(JSON.stringify(contents));
+     //    next(null, contents);
+     //});
+ };
 
 // exports.getRepoFile = function(repoId, fileName, next) {
 //     var repo = github.getRepo(auth_config.github_api.username, repoId);

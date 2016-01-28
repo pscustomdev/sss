@@ -27,13 +27,16 @@ describe('SSS Search Service', function() {
     });
 
     describe('submitSearch()', function(){
-        var mockPayload, mockSnippetSearchTerms;
+        var testData = readJSON('tests/frontend-unit-tests/test-data.json');
+        var mockResponse, mockSnippetSearchTerms;
 
         beforeEach(function() {
-            mockSnippetSearchTerms = "mock search terms";
-            mockPayload = [mockSnippetSearchTerms];
-            $httpBackend.expectGET(/\/api\/snippet-search\?.*/).respond(mockPayload);
-            $httpBackend.expectGET(/\/api\/snippet-search\/\w+.*\/\w+.*/).respond(mockPayload);
+            mockSnippetSearchTerms = testData.submitSearch.request.query_parameters[0];
+            mockResponse = testData.submitSearch.response;
+
+            $httpBackend.whenGET(/.*/).respond(mockResponse);
+            //$httpBackend.expectGET(/\/api\/snippet-search\?.*/).respond(mockResponse);
+            //$httpBackend.expectGET(/\/api\/snippet-search\/\w+.*\/\w+.*/).respond(mockResponse);
         });
 
         beforeEach(function() {
@@ -41,8 +44,9 @@ describe('SSS Search Service', function() {
             $httpBackend.flush();
         });
 
-        it('should return data as passed in via mock', function() {
-            expect($searchService.searchResults).to.deep.equal(mockPayload);
+        it('should return a response that inclueds a "highlit_fragment" attribute', function() {
+
+            ($searchService.searchResults.items[0].text_matches[0].matches[0]).should.have.property('highlit_fragment');
         });
 
         afterEach(function() {

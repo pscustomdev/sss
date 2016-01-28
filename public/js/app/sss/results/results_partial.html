@@ -12,7 +12,9 @@
 -->
 <div data-ng-repeat="item in $searchService.searchResults.items.slice((($searchService.pagination.currentPage-1)*$searchService.pagination.itemsPerPage), (($searchService.pagination.currentPage)*$searchService.pagination.itemsPerPage))"
      show-more-directive>
-    <h2>{{item.repository.name}}/{{item.name}}</h2>
+    <button ng-click="$state.go('overview', {snippetId: '{{item.repository.name}}'})">
+        <h2>{{item.repository.name}}/{{item.name}}</h2>
+    </button>
 
     <div class="row">
         <div class="col-md-9">

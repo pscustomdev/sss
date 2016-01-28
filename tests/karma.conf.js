@@ -9,6 +9,7 @@ module.exports = function(config) {
     files: [
       'node_modules/chai/chai.js', // Included Library
       'node_modules/sinon-chai/lib/sinon-chai.js', // Included Library
+      'node_modules/karma-read-json/karma-read-json.js', // Included Library
       'public/bower/underscore/underscore.js', // Included Library
       'public/bower/angular/angular.js', // Included Library
       'public/bower/angular-ui-router/release/angular-ui-router.js', // Included Library
@@ -26,7 +27,8 @@ module.exports = function(config) {
       'public/js/app/sss/details/view.js', // Source Files
       'public/js/app/sss/overview/view.js', // Source Files
       'public/js/app/app.js', // Source Files
-      'tests/frontend-unit-tests/**/*spec.js' // Tests Files
+      'tests/frontend-unit-tests/**/*spec.js',
+      'tests/frontend-unit-tests/**/*.json'
     ],
 
     exclude: [

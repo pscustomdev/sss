@@ -69,6 +69,7 @@
     "karma-chrome-launcher": "^0.1.12",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.1",
+    "karma-read-json": "^1.1.0",
     "karma-sinon": "^1.0.4",
     "mocha": "^2.3.3",
     "open": "0.0.5",

@@ -95,7 +95,6 @@ module.exports = function(grunt) {
         jshint: {   // Validate files with JSHint
             tests: {
                 options: {
-                    reporter: require('jshint-stylish'),
                     node: true,
                     expr: true,
                     mocha: true
@@ -104,7 +103,6 @@ module.exports = function(grunt) {
             },
             js: {
                 options: {
-                    reporter: require('jshint-stylish'),
                     node: true,
                     mocha: true
                 },

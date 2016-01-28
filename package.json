@@ -1,6 +1,9 @@
 {
   "name": "sss",
   "version": "0.0.1",
+  "engines": {
+    "node": "4.2.1"
+  },
   "description": "Software Snippet Search",
   "private": true,
   "main": "app.js",

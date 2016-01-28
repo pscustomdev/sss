@@ -17,11 +17,11 @@ module.exports = function(app) {
     );
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
-            github.getRepoContents(req.params.snippetId, function (err, repos) {
+            github.getRepoContents(req.params.snippetId, function (err, contents) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error retrieving repository contents'});
                 }
-                res.json(repos);
+                res.json(contents);
             });
         }
     );

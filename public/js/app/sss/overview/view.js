@@ -22,8 +22,8 @@
         vm.snippetId = $stateParams.snippetId;
 
         $nodeServices.getSnippetOverview(vm.snippetId).then (
-            function(data) {
-                vm.snippetOverview = data;
+            function(files) {
+                vm.snippetOverview = files;
             }
         );
     }

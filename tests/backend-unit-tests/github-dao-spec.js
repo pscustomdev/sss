@@ -26,9 +26,8 @@ describe("GitHub Dao", function() {
     });
 
     it('should get contents of a single repo', function (done) {
-        gh.getRepoContents(repoName, function(err, repo){
-            expect(repo).isArray;
-            //expect(repos).toBeTruthy();
+        gh.getRepoContents(repoName, function(err, files){
+            expect(files).isArray;
             done();
         });
     });

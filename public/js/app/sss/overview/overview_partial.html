@@ -3,7 +3,7 @@
     <strong ng-show="!vm.snippetOverview">Loading...</strong>
     <ul>
         <li ng-repeat="file in vm.snippetOverview">
-            <a ng-bind="file.name" ng-href="/main#/snippet-detail/{{vm.snippetId}}/{{file.name}}"></a>
+            <a ng-bind="file" ng-href="/main#/snippet-detail/{{vm.snippetId}}/{{file}}"></a>
         </li>
 
     </ul>

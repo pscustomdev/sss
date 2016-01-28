@@ -43,9 +43,11 @@
                     function (response) {
                         vm.userSearched = true;
                         vm.searchResults = response;
+
+
                         vm.pagination.totalItems = vm.searchResults.total_count;
-                        updateFragment(vm.searchResults.items); // assuming passing by ref
-                        updateRating(vm.searchResults.items); // assuming passing by ref
+                        updateFragment(vm.searchResults.items);
+                        updateRating(vm.searchResults.items);
                     }
                 );
             }

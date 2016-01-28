@@ -15,6 +15,7 @@ module.exports = function(config) {
       'public/bower/angular-bootstrap/ui-bootstrap-tpls.js', // Included Library
       'public/bower/angular-animate/angular-animate.js', // Included Library
       'public/bower/angular-mocks/angular-mocks.js', // Included Library
+      'public/bower/angular-sanitize/angular-sanitize.js', // Included Library
       'public/bower/jquery/dist/jquery.js', // Included Library
 
       'public/js/app/services/util.js', // Source Files

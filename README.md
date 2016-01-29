@@ -155,6 +155,19 @@ Front End [Angularjs] (Karma)
 Back End [Nodejs] (Mocha)
 End to End [Browser] (Protractor)
 
+Adding a New View
+=================
+To add a new view, pattern it after an existing view, such as "overview".
+1) Copy the folder structure of an existing view to a new folder.
+   e.g.  Copy folder "overview" and rename to "yournewview"
+2) Rename the files in the new folder accordingly
+3) Add the new module to the main module definition in app.js (like 'app.overview')
+     e.g.  angular.module('app', ['ui.router', 'app.$searchService', 'app.search', 'app.results', 'app.overview'])
+4) Include the new js file in layout.hbs
+     e.g.  <script src="/js/app/sss/overview/view.js"></script>
+5) Modify the new files accordingly
+
+
 To-Do
 ==============
 ToDo: Tests - Validate Backend tests make sense

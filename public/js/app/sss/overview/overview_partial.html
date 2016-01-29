@@ -1,10 +1,9 @@
-<h4>Snippet Overview - {{vm.snippetId}}</h4>
+<h4>{{snippetId}}</h4>
 <div>
-    <strong ng-show="!vm.snippetOverview">Loading...</strong>
+    <strong ng-show="!snippetOverview">Loading...</strong>
     <ul>
-        <li ng-repeat="file in vm.snippetOverview">
-            <a ng-bind="file" ng-href="/main#/snippet-detail/{{vm.snippetId}}/{{file}}"></a>
+        <li ng-repeat="file in snippetOverview">
+            <a ng-bind="file" ng-href="/main#/snippet-detail/{{snippetId}}/{{file}}"></a>
         </li>
-
     </ul>
 </div>

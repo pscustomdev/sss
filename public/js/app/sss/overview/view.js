@@ -1,29 +1,29 @@
 (function() {
     'use strict';
-
     angular.module('app.overview', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$nodeServices', '$stateParams'];
+    OverviewController.$inject = ['$scope', '$nodeServices', '$stateParams'];
 
-    function StateProvider($stateProvider) {
-        $stateProvider.state('overview', {
+    function StateProvider(stateProvider) {
+        stateProvider.state('overview', {
             url: '/snippet-overview/:snippetId',
             views: {
-                '': { templateUrl: '/js/app/sss/overview/view.html', controller: 'OverviewController' }
+                '': { templateUrl: '/js/app/sss/overview/view.html', controller: 'OverviewController' },
+                'overviewlist@overview': {
+                    templateUrl: '/js/app/sss/overview/overview_partial.html' }
             }
         });
     }
 
-    function OverviewController($nodeServices, $stateParams) {
-        var vm = this;
-        vm.snippetId = $stateParams.snippetId;
+    function OverviewController($scope, $nodeServices, $stateParams) {
+        $scope.snippetId = $stateParams.snippetId;
 
-        $nodeServices.getSnippetOverview(vm.snippetId).then (
+        $nodeServices.getSnippetOverview($scope.snippetId).then (
             function(files) {
-                vm.snippetOverview = files;
+                $scope.snippetOverview = files;
             }
         );
     }

@@ -28,7 +28,10 @@ module.exports = function(config) {
       'public/js/app/sss/overview/view.js', // Source Files
       'public/js/app/app.js', // Source Files
       'tests/frontend-unit-tests/**/*spec.js',
-      'tests/frontend-unit-tests/**/*.json'
+      { pattern:  'tests/frontend-unit-tests/*.json',
+        watched:  true,
+        served:   true,
+        included: false } // Data for Tests
     ],
 
     exclude: [

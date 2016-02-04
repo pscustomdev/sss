@@ -12,8 +12,7 @@
 -->
 <div data-ng-repeat="item in $searchService.searchResults.items.slice((($searchService.pagination.currentPage-1)*$searchService.pagination.itemsPerPage), (($searchService.pagination.currentPage)*$searchService.pagination.itemsPerPage))"
      show-more-directive>
-    <!--<h2><a ng-click="$state.go('overview', { snippetId: '{{item.repository.name}}'})">{{item.repository.name}}</a>/{{item.name}}</h2>-->
-    <h2><a ui-sref="overview({ snippetId: '{{item.repository.name}}'})">{{item.repository.name}}</a>/{{item.name}}</h2>
+    <h2><a ui-sref="overview({ snippetId: '{{item.repository.name}}'})">{{item.repository.name}}</a></h2>
 
     <div class="row">
         <div class="col-md-9">
@@ -22,11 +21,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <article>
-                            <p>
-                                <div data-ng-repeat="match in text_match.matches">
-                                    <div ng-bind-html="$searchService.trustHtmlSnippet(match.highlit_fragment)"></div>
-                                </div>
-                            </p>
+                            <div data-ng-repeat="match in text_match.matches">
+                                <div ng-bind-html="$searchService.trustHtmlSnippet(match.highlit_fragment)"></div>
+                            </div>
                         </article>
                     </div>
                 </div>
@@ -34,23 +31,18 @@
         </div>
         <div class="col-md-3">
             <article>
-                <p>
-                    <uib-rating ng-model="item.score" max="max" readonly="isReadonly"
-                                on-hover="hoveringOver(value)" on-leave="overStar = null"
-                                titles="['one','two','three']"></uib-rating>
-                        <span class="label"
-                              ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
-                              ng-show="overStar && !isReadonly">{{percent}}%</span>
+                <uib-rating ng-model="item.score" max="max" readonly="isReadonly"
+                            on-hover="hoveringOver(value)" on-leave="overStar = null"
+                            titles="['one','two','three']"></uib-rating>
+                <span class="label"
+                      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
+                      ng-show="overStar && !isReadonly">{{percent}}%</span>
                 <div>Score: {{item.score}}</div>
-                <!-- TODO: find the source of data for the following -->
                 <div>Last updated (last commit date)</div>
                 <div>nnnn views (track in Mongo)</div>
                 <div>Posted on (initial commit date)</div>
                 <div>Posted by (track in Mongo)</div>
-                <br/>
-                <br/>
-                <br/>
-                </p>
+                <br/><br/><br/>
             </article>
         </div>
     </div>

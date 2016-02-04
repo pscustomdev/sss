@@ -1,9 +1,18 @@
-<h4>{{snippetId}}</h4>
+<button class="pull-right btn btn-default" onclick="deleteSnippet()">Delete Snippet</button>
+<div class="panel panel-info">
+    <h3><div class="panel-heading">{{snippetId}}</div></h3>
+    <div class="panel-body">{{snippetOverview.description}}</div>
+</div>
 <div>
     <strong ng-show="!snippetOverview">Loading...</strong>
     <ul>
-        <li ng-repeat="file in snippetOverview">
+        <li ng-repeat="file in snippetOverview.files">
             <a ng-bind="file" ng-href="/main#/snippet-detail/{{snippetId}}/{{file}}"></a>
         </li>
     </ul>
+    <hr>
+    <div class="panel panel-info">
+        <div class="panel-heading">Snippet Readme</div>
+        <div class="panel-body" ng-bind-html="$searchService.trustHtmlSnippet(snippetOverview.readme)"></div>
+    </div>
 </div>

@@ -14,16 +14,29 @@
             searchCode: searchCode,
             getCommits: getCommits
         };
-        
+
         //Make sure to add the function into the return statement.
         function getSnippets() {
             return $http.get('/api/snippets')
                 .then(function(response) {
-                    return response.data;
-                },
-                function(reason) {
-                    $log.debug(reason);
-                })
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        function getSnippet() {
+            return $http.get('/api/snippet')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
                 .catch(function(err) {
                     $log.debug(err);
                 });

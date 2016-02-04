@@ -22,9 +22,13 @@
         $scope.snippetId = $stateParams.snippetId;
 
         $nodeServices.getSnippetOverview($scope.snippetId).then (
-            function(files) {
-                $scope.snippetOverview = files;
+            function(overview) {
+                $scope.snippetOverview = overview;
             }
         );
-    }
+     }
 }());
+
+function deleteSnippet() {
+    alert("TODO: Delete snippet (deletSnippet() -> overview/view.js)")
+}

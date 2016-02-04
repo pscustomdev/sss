@@ -35,6 +35,18 @@ exports.getRepos = function (next) {
     });
 };
 
+exports.getRepo = function (repoName, next) {
+    var msg = {user: "sss-storage", repo: repoName};
+    github.repos.get(msg, function (err, repo) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+        console.log(JSON.stringify(repo));
+        next(err, repo);
+    });
+};
+
 // ToDo: change to look in all of GitHub for the results, rather than just the sss-storage user
 exports.searchCode = function (s, next) {
     var searchCriteria = {};
@@ -62,23 +74,40 @@ exports.getCommits = function (repoOwner, repoName, next) {
     });
 };
 
+exports.getReadme = function (repoName, next) {
+    var msg = {user: "sss-storage", repo: repoName};
+
+    github.repos.getReadme(msg, function (err, resultData) {
+        console.log("getReadme:" + JSON.stringify(resultData));
+        next(err, resultData);
+    });
+};
+
 // retrieve the repo contents (files)
+// return object:
+// {
+//   name: reponame
+//   files: [ file1, file2, ... ]
+// }
 exports.getRepoContents = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: ''};
-    var retData = [];
+    var retData = {};
+    retData.name = repoName;
+    retData.files = [];
     github.repos.getContent(msg, function (err, resultData) {
-         if (err) {
-             return next(err);
-         }
+        if (err) {
+            return next(err);
+        }
         console.log("getRepoContents: " + JSON.stringify(resultData));
         try {
             for (var idx in resultData) {
                 // only interested in numeric idx values
                 if (Number(idx) > -1) {
-                    retData.push(resultData[idx].name);
+                    retData.files.push(resultData[idx].name);
                 }
             }
-        } catch (ignore) {}
+        } catch (ignore) {
+        }
         console.log(JSON.stringify(retData));
         next(err, retData);
     });

@@ -4,6 +4,7 @@ module.exports = function(app) {
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var github = require('../db/github-dao');
+    var ghm = require("github-flavored-markdown");
 
     api_routes.get('/snippets',
         function (req, res) {
@@ -15,13 +16,40 @@ module.exports = function(app) {
             });
         }
     );
+    api_routes.get('/snippet',
+        function (req, res) {
+            github.getRepo(function (err, repo) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving repository'});
+                }
+                res.json(repo);
+            });
+        }
+    );
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
+            var retObj = {};
             github.getRepoContents(req.params.snippetId, function (err, contents) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repository contents'});
                 }
-                res.json(contents);
+                retObj = contents;
+                // get the description
+                github.getRepo(req.params.snippetId, function (err, repo) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error retrieving repository'});
+                    }
+                    retObj.description = repo.description;
+                    // get the readme
+                    github.getReadme(req.params.snippetId, function (err, readmeobj) {
+                        if (err) {
+                            return res.status(500).json({error: 'Error retrieving repository readme'});
+                        }
+                        var b = new Buffer(readmeobj.content, 'base64');
+                        retObj.readme = ghm.parse(b.toString());
+                        res.json(retObj);
+                    });
+                });
             });
         }
     );

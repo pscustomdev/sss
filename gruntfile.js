@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                     archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
                 },
                 files: [
-                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-sanitize/angular-sanitize.min.js', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js'], expand: true, flatten: true, filter: 'isFile'},
+                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-sanitize/angular-sanitize.min.js', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss/public/css/', src: ['public/bower/bootstrap/dist/css/*.min.css'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss/public/fonts/', src: ['public/bower/bootstrap/dist/fonts/*'], expand: true, flatten: true, filter: 'isFile'},
                     {dest: 'sss//', src: ['app.js']},

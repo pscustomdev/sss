@@ -113,16 +113,23 @@ exports.getRepoContents = function (repoName, next) {
     });
 };
 
-
-// exports.getRepoFile = function(repoId, fileName, next) {
-//     var repo = github.getRepo(auth_config.github_api.username, repoId);
-
-//     repo.read('master', fileName, function(err, contents) {
-//         if (err) {
-//             return next(err);
-//         }
-//         console.log(JSON.stringify(contents));
-//         next(null, contents);
-//     });
-// };
-
+exports.getRepoFile = function (repoName, fileName, next) {
+    var msg = {user: "sss-storage", repo: repoName, path: fileName};
+    var retData = [];
+    github.repos.getContent(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        console.log("getRepoContents: " + JSON.stringify(resultData));
+        try {
+            for (var idx in resultData) {
+                // only interested in numeric idx values
+                if (Number(idx) > -1) {
+                    retData.push(resultData[idx].name);
+                }
+            }
+        } catch (ignore) {}
+        console.log(JSON.stringify(retData));
+        next(err, retData);
+    });
+};

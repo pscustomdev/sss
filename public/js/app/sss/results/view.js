@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    angular.module('app.results', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'ngSanitize'])
+    angular.module('app.results', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'ngSanitize'])
         .config(['$stateProvider', StateProvider])
         .controller('SearchBarFilteringController', SearchBarFilteringController)
         .controller('ResultsController', ResultsController)
@@ -13,22 +13,25 @@
     SearchCriteriaController.$inject = ['$scope'];
 
     function StateProvider(stateProvider) {
-        stateProvider.state('results', {
+        stateProvider.state('search.results', {
             url: '/results',
+            data: {
+                displayName: 'Results'
+            },
             views: {
-                '': {
+                '@': {
                     templateUrl: '/js/app/sss/results/view.html'},
-                'search_bar@results': {
+                'search_bar@search.results': {
                     templateUrl: '/js/app/sss/results/search_bar_partial.html', controller: 'SearchBarFilteringController' },
-                'total@results': {
+                'total@search.results': {
                     templateUrl: '/js/app/sss/results/total_partial.html' },
-                'sort@results': {
+                'sort@search.results': {
                     templateUrl: '/js/app/sss/results/sort_partial.html' },
-                'results@results': {
+                'results@search.results': {
                     templateUrl: '/js/app/sss/results/results_partial.html', controller: 'ResultsController' },
-                'search_criteria_filter@results': {
+                'search_criteria_filter@search.results': {
                     templateUrl: '/js/app/sss/results/search_criteria_filter_partial.html', controller: 'SearchCriteriaController' },
-                'pagination@results': {
+                'pagination@search.results': {
                     templateUrl: '/js/app/sss/results/pagination_partial.html' }
             }
         })

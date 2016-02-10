@@ -3,12 +3,12 @@
 }
 
 body {
-  padding-top: 70px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
+  padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
 }
 
 .affix {
   position: fixed; /* Affixes Searchbar so it won't scroll with content */
-  top: 70px; /* Sets Searchbar location on page */
+  top: 115px; /* Sets Searchbar location on page */
   width: 61%; /* Sets Searchbar length */
   z-index: 9999; /* Sets the Search bar to layer above all background content */
 }

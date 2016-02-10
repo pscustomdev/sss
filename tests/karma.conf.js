@@ -22,6 +22,7 @@ module.exports = function(config) {
       'public/js/app/services/util.js', // Source Files
       'public/js/app/services/node-services.js', // Source Files
       'public/js/app/services/search-service.js', // Source Files
+      'public/js/app/services/ui-router-breadcrumbs.js', // Source Files
       'public/js/app/sss/search/view.js', // Source Files
       'public/js/app/sss/results/view.js', // Source Files
       'public/js/app/sss/details/view.js', // Source Files

@@ -6,8 +6,8 @@
 <div>
     <strong ng-show="!snippetOverview">Loading...</strong>
     <ul>
-        <li ng-repeat="file in snippetOverview.files">
-            <a ng-bind="file" ng-href="/main#/snippet-detail/{{snippetId}}/{{file}}"></a>
+        <li ng-repeat="file in snippetOverview">
+            <a ng-bind="file" ng-href="api/snippet-detail/{{snippetId}}/{{file}}"></a>
         </li>
     </ul>
     <hr>

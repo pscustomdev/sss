@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    angular.module('app.details', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
+    angular.module('app.details', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
         .controller('DetailsController', DetailsController);
 
@@ -8,12 +8,18 @@
     DetailsController.$inject = ['$nodeServices', '$stateParams'];
 
     function StateProvider($stateProvider) {
-        $stateProvider.state('details', {
+        $stateProvider.state('search.results.overview.details', {
             url: '/snippet-detail/:snippetId/:fileName',
+            data: {
+                displayName: 'Details'
+            },
             views: {
-                '': { templateUrl: '/js/app/sss/details/view.html', controller: 'DetailsController' },
-                'details@details': {
-                    templateUrl: '/js/app/sss/details/details_partial.html' }
+                '@': {
+                    templateUrl: '/js/app/sss/details/view.html', controller: 'DetailsController'
+                },
+                'contents@search.results.overview.details': {
+                    templateUrl: '/js/app/sss/details/details_partial.html'
+                }
             }
         });
     }

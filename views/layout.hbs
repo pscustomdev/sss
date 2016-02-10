@@ -35,6 +35,7 @@
         <script src="/js/app/services/util.js"></script>
         <script src="/js/app/services/node-services.js"></script>
         <script src="/js/app/services/search-service.js"></script>
+        <script src="/js/app/services/ui-router-breadcrumbs.js"></script>
         <script src="/js/app/sss/overview/view.js"></script>
         <script src="/js/app/sss/search/view.js"></script>
         <script src="/js/app/sss/results/view.js"></script>
@@ -48,7 +49,7 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 
-<body>
+<body ng-app="app" >
 <header>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -74,13 +75,20 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="nav navbar-left">
+                        <ui-breadcrumbs displayname-property="data.displayName"></ui-breadcrumbs>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 </header>
 <main class="container">
     <div class="row">
         <div class="col-md-12">
-            <section ng-app="app" ui-view></section>     <!-- AngularJS ui-routing takes control -->
+            <section ui-view></section>     <!-- AngularJS ui-routing takes control -->
         </div>
     </div>
 </main>

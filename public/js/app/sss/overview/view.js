@@ -11,7 +11,7 @@
         stateProvider.state('search.results.overview', {
             url: '/snippet-overview/:snippetId',
             data: {
-                displayName: 'Overview'
+                displayName: '{{$stateParams.snippetId}}'
             },
             views: {
                 '@': { templateUrl: '/js/app/sss/overview/view.html', controller: 'OverviewController'

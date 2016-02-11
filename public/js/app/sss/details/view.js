@@ -11,7 +11,7 @@
         $stateProvider.state('search.results.overview.details', {
             url: '/snippet-detail/:snippetId/:fileName',
             data: {
-                displayName: 'Details'
+                displayName: '{{$stateParams.fileName}}'
             },
             views: {
                 '@': {

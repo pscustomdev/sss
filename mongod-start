@@ -1,3 +1,6 @@
 rm ~/Applications/mongodb/mongod.lock
+if [ ! -d "data" ]; then
+  mkdir data
+fi
 mongod --repair --dbpath=data
 mongod --nojournal --dbpath=data

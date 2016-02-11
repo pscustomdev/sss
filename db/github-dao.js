@@ -30,7 +30,7 @@ exports.getRepos = function (next) {
             return next(err);
         }
         var subRepos = _.pluck(repos, 'name');
-        console.log(JSON.stringify(subRepos));
+        //console.log(JSON.stringify(subRepos));
         next(err, subRepos);
     });
 };
@@ -42,7 +42,7 @@ exports.getRepo = function (repoName, next) {
             console.log(err);
             return next(err);
         }
-        console.log(JSON.stringify(repo));
+        //console.log(JSON.stringify(repo));
         next(err, repo);
     });
 };
@@ -69,7 +69,7 @@ exports.getCommits = function (repoOwner, repoName, next) {
     console.log("getCommits:" + JSON.stringify(msg));
 
     github.repos.getCommits(msg, function (err, resultData) {
-        console.log("resultData:" + JSON.stringify(resultData));
+        //console.log("resultData:" + JSON.stringify(resultData));
         next(err, resultData);
     });
 };
@@ -78,7 +78,7 @@ exports.getReadme = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName};
 
     github.repos.getReadme(msg, function (err, resultData) {
-        console.log("getReadme:" + JSON.stringify(resultData));
+        //console.log("getReadme:" + JSON.stringify(resultData));
         next(err, resultData);
     });
 };
@@ -98,7 +98,7 @@ exports.getRepoContents = function (repoName, next) {
         if (err) {
             return next(err);
         }
-        console.log("getRepoContents: " + JSON.stringify(resultData));
+        //console.log("getRepoContents: " + JSON.stringify(resultData));
         try {
             for (var idx in resultData) {
                 // only interested in numeric idx values
@@ -108,28 +108,25 @@ exports.getRepoContents = function (repoName, next) {
             }
         } catch (ignore) {
         }
-        console.log(JSON.stringify(retData));
+        //console.log(JSON.stringify(retData));
         next(err, retData);
     });
 };
 
 exports.getRepoFile = function (repoName, fileName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: fileName};
-    var retData = [];
+    var retData = "";
     github.repos.getContent(msg, function (err, resultData) {
         if (err) {
             return next(err);
         }
-        console.log("getRepoContents: " + JSON.stringify(resultData));
+        //console.log("getRepoFile: " + JSON.stringify(resultData));
         try {
-            for (var idx in resultData) {
-                // only interested in numeric idx values
-                if (Number(idx) > -1) {
-                    retData.push(resultData[idx].name);
-                }
+            if (resultData) {
+                retData = resultData.content;
             }
         } catch (ignore) {}
-        console.log(JSON.stringify(retData));
+        //console.log(retData);
         next(err, retData);
     });
 };

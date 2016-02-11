@@ -55,11 +55,13 @@ module.exports = function(app) {
     );
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
-            github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, repos) {
+            var retObj = "";
+            github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }
-                res.json(repos);
+                var b = new Buffer(content, 'base64');
+                res.json(b.toString());
             });
         }
     );

@@ -5,7 +5,7 @@
         .controller('DetailsController', DetailsController);
 
     StateProvider.$inject = ['$stateProvider'];
-    DetailsController.$inject = ['$nodeServices', '$stateParams'];
+    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams'];
 
     function StateProvider($stateProvider) {
         $stateProvider.state('search.results.overview.details', {
@@ -24,14 +24,13 @@
         });
     }
 
-    function DetailsController($nodeServices, $stateParams) {
-        var vm = this;
-        vm.snippetId = $stateParams.snippetId;
-        vm.fileName = $stateParams.fileName;
+    function DetailsController($scope, $nodeServices, $stateParams) {
+        $scope.snippetId = $stateParams.snippetId;
+        $scope.fileName = $stateParams.fileName;
 
-        $nodeServices.getSnippetDetail(vm.snippetId, vm.fileName).then (
+        $nodeServices.getSnippetDetail($scope.snippetId, $scope.fileName).then (
             function(data) {
-                vm.snippetDetail = data;
+                $scope.content = data;
             }
         );
     }

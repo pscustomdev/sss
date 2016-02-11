@@ -2,6 +2,11 @@
   cursor: pointer; /* AngularJS's documented way to fix a Bootstrap/UI Bootstrap compatibility issue */
 }
 
+.breadcrumb {
+  font-size: 11px;
+  margin: 0;
+}
+
 body {
   padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
 }

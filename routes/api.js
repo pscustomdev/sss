@@ -60,8 +60,15 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }
-                var b = new Buffer(content, 'base64');
-                res.json(b.toString());
+                //var b = new Buffer(content.content, 'base64');
+                //// if b contains binary content, return content.downloadUrl instead of the data
+                //var retData = "";
+                //if (b) {
+                //    retData = content.downloadUrl;
+                //} else {
+                //    retData = b.toString();
+                //}
+                res.json(content);
             });
         }
     );

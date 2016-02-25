@@ -115,15 +115,35 @@ exports.getRepoContents = function (repoName, next) {
 
 exports.getRepoFile = function (repoName, fileName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: fileName};
-    var retData = "";
+    var retData = {};
     github.repos.getContent(msg, function (err, resultData) {
         if (err) {
             return next(err);
         }
-        //console.log("getRepoFile: " + JSON.stringify(resultData));
+        console.log("getRepoFile: " + JSON.stringify(resultData));
         try {
             if (resultData) {
-                retData = resultData.content;
+                var retData = "";
+                var isBinary = false;
+
+                // check for known binary files
+                var filename = resultData.name.toLowerCase();
+                if (filename.endsWith("png") ||
+                    filename.endsWith("gif") ||
+                    filename.endsWith("jpg") ||
+                    filename.endsWith("jpeg") ||
+                    filename.endsWith("bmp")
+                ) {
+                    isBinary = true;
+                }
+
+                // if b contains binary content, return downloadUrl instead of the data
+                if (isBinary) {
+                    retData = resultData.download_url;
+                } else {
+                    var b = new Buffer(resultData.content, 'base64');
+                    retData = b.toString();
+                }
             }
         } catch (ignore) {}
         //console.log(retData);

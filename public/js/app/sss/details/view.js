@@ -30,7 +30,14 @@
 
         $nodeServices.getSnippetDetail($scope.snippetId, $scope.fileName).then (
             function(data) {
-                $scope.content = data;
+                // if the data starts with http, assume the file contains binary data
+                // so it is a URL (see db/github-dao.js)
+                if (data.toLowerCase().startsWith("http")) {
+                    $scope.contentUrl = data;
+                // otherwise it is raw data
+                } else {
+                    $scope.content = data;
+                }
             }
         );
     }

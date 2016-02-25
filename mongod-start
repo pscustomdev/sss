@@ -1,4 +1,4 @@
-rm ~/Applications/mongodb/mongod.lock
+rm data/mongod.lock
 if [ ! -d "data" ]; then
   mkdir data
 fi

@@ -1,4 +1,4 @@
-Setting up SSS on the host         blahbalgosudhfainowgr
+Setting up SSS on the host
 ---------------------
 1) Checkout code
 2) Open Terminal/Command Prompt:

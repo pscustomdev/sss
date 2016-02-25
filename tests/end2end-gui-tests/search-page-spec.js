@@ -1,5 +1,5 @@
 'use strict';
-console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'index-spec') ****");
+console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'search-page-spec') ****");
 
 var db = require('../../db/mongo-dao');
 var expect = require('chai').expect;
@@ -13,7 +13,7 @@ var expect = require('chai').expect;
 //*******************NOTES*******************
 
 //TODO Figure out how to refresh the browser between each describe.
-describe('SSS Index Page', function() {
+describe('SSS Search Page', function() {
     browser.driver.get('http://localhost:3000');
     //browser.driver.get('https://sss-pscustomdev.c9.io');
 

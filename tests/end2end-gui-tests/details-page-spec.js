@@ -1,9 +1,9 @@
 'use strict';
-console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'overview-page-spec') ****");
+console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'details-page-spec') ****");
 
 var db = require('../../db/mongo-dao');
 
-describe('Overview', function() {
+describe('Details', function() {
     //browser.driver.get('http://localhost:3000/users/create');
     //browser.driver.get('https://sss-pscustomdev.c9.io/users/create');
     //var vm = {

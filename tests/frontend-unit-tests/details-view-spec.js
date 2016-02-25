@@ -5,9 +5,12 @@ describe('SSS Views', function() {
     describe('Details-View', function() {
         beforeEach(module('app.details'));
 
-        var $httpBackend, $controller;
+        var $scope, $nodeServices, $stateParams, $httpBackend, $controller;
 
         beforeEach(inject(function($injector) {
+            $scope = $injector.get('$rootScope').$new();  // Create a new child scope or $rootScope
+            $nodeServices = $injector.get('$nodeServices');
+            $stateParams = $injector.get('$stateParams');
             $httpBackend = $injector.get('$httpBackend');
         }));
 
@@ -25,7 +28,7 @@ describe('SSS Views', function() {
 
             beforeEach(function() {
                 mockPayload = "mock file data";
-                controller = $controller('DetailsController');
+                controller = $controller('DetailsController', { $scope: $scope, $nodeServices: $nodeServices, $stateParams: $stateParams});
                 $httpBackend.expectGET(/\/api\/snippet-detail\/\w+.*\/.*/).respond(200, mockPayload);
                 $httpBackend.flush();
             });
@@ -34,9 +37,6 @@ describe('SSS Views', function() {
                 expect(controller).to.not.be.undefined;
             });
 
-            it('should have the same filename payload as was passed in via mock', function() {
-                expect(controller.snippetDetail).to.equal(mockPayload);
-            });
         });
     });
 });

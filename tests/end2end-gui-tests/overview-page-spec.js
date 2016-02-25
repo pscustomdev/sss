@@ -3,7 +3,7 @@ console.log("**** (End-To-End GUI Testing [PROTRACTOR]: 'createUserPage-spec') *
 
 var db = require('../../db/mongo-dao');
 
-describe('Create User page', function() {
+describe('Search', function() {
     //browser.driver.get('http://localhost:3000/users/create');
     //browser.driver.get('https://sss-pscustomdev.c9.io/users/create');
     //var vm = {

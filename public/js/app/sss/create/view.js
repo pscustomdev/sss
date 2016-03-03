@@ -25,12 +25,18 @@
     }
 
     function CreateController($scope, $nodeServices, $stateParams) {
+        $scope.formData = {};
+
+        $scope.createSnippet = function() {
+            alert ("TODO CreateSnippet: " + $scope.formData.name);
+
+
+
+
+            //TODO redirect to the edit page
+        }
+
+
     }
 
-
 }());
-
-
-function createSnippet() {
-    alert ("TODO CreateSnippet");
-}

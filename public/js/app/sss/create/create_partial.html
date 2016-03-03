@@ -1,15 +1,20 @@
 <h4>Create Snippet</h4>
 <div>
-    <label for="snippet_name">Snippet Name</label>
-    <input id="snippet_name"/>
-    <br>
-    <label for="snippet_desc">Description</label>
-    <input id="snippet_desc"/>
-    <br>
-    <label for="snippet_readme">Readme</label>
-    <textarea id="snippet_readme" rows="10"></textarea>
-    <br>
-    <button onclick="createSnippet()">Create</button>
-    <button onclick="alert('TODO cancel from create')">Cancel</button>
+    <form id="create_form" ng-submit="createSnippet()">
+        <div class="form-group">
+            <label for="snippet_name">Snippet Name</label>
+            <input id="snippet_name" type="text" class="form-control" data-ng-model="formData.name"/>
+        </div>
+        <div class="form-group">
+            <label for="snippet_desc">Description</label>
+            <input id="snippet_desc" type="text" class="form-control" data-ng-model="formData.desc"/>
+        </div>
+        <div class="form-group">
+            <label for="snippet_readme">Readme</label>
+            <textarea id="snippet_readme" rows="10" type="text" class="form-control" data-ng-model="formData.readme"></textarea>
+        </div>
 
+        <button type="submit" class="btn">Create</button>
+        <button class="btn" onclick="alert('TODO: wire up to cancel')">Cancel</button>
+    </form>
 </div>

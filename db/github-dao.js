@@ -2,7 +2,6 @@ var auth_config = require('../auth/auth-conf');
 var GitHubApi = require('github');
 var _ = require('underscore');
 
-
 var github = new GitHubApi({
     // required
     version: "3.0.0",

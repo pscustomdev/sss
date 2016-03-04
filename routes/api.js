@@ -5,6 +5,7 @@ module.exports = function(app) {
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var github = require('../db/github-dao');
+    var db = require('../db/mongo-dao');
 
     api_routes.get('/snippets',
         function (req, res) {
@@ -26,33 +27,59 @@ module.exports = function(app) {
             });
         }
     );
+
+    api_routes.post('/snippet',
+        function (req, res) {
+            db.addModifySnippet(req.body, function (err) {
+                if (err) {
+                    return res.status(500).json({error: 'Error adding repository to database'});
+                }
+            });
+
+            github.createRepo(req.body, function (err, repo) {
+                if (err) {
+                    return res.status(500).json({error: 'Error creating repository on GitHub'});
+                }
+                res.json(repo);
+            });
+        }
+    );
+
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
             var retObj = {};
-            github.getRepoContents(req.params.snippetId, function (err, contents) {
+            db.getSnippet(req.params.snippetId, function (err, contents) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repository contents'});
+                    return res.status(500).json({error: 'Error retrieving database contents'});
                 }
                 retObj = contents;
-                // get the description
-                github.getRepo(req.params.snippetId, function (err, repo) {
+
+                github.getRepoContents(req.params.snippetId, function (err, contents) {
                     if (err) {
-                        return res.status(500).json({error: 'Error retrieving repository'});
+                        return res.status(500).json({error: 'Error retrieving repository contents'});
                     }
-                    retObj.description = repo.description;
-                    // get the readme
-                    github.getReadme(req.params.snippetId, function (err, readmeobj) {
+                    retObj = contents;
+                    // get the description
+                    github.getRepo(req.params.snippetId, function (err, repo) {
                         if (err) {
-                            return res.status(500).json({error: 'Error retrieving repository readme'});
+                            return res.status(500).json({error: 'Error retrieving repository'});
                         }
-                        var b = new Buffer(readmeobj.content, 'base64');
-                        retObj.readme = ghm.parse(b.toString());
-                        res.json(retObj);
+                        retObj.description = repo.description;
+                        // get the readme
+                        github.getReadme(req.params.snippetId, function (err, readmeobj) {
+                            if (err) {
+                                return res.status(500).json({error: 'Error retrieving repository readme'});
+                            }
+                            var b = new Buffer(readmeobj.content, 'base64');
+                            retObj.readme = ghm.parse(b.toString());
+                            res.json(retObj);
+                        });
                     });
                 });
             });
         }
     );
+
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             var retObj = "";
@@ -94,6 +121,12 @@ module.exports = function(app) {
                 }
                 res.json(commits);
             });
+        }
+    );
+
+    api_routes.get('/authenticated-user',
+        function (req, res) {
+            return res.send(req.user);
         }
     );
 

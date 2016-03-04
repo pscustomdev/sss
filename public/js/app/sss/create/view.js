@@ -1,14 +1,15 @@
 (function() {
     'use strict';
+
     angular.module('app.create', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
         .controller('CreateController', CreateController);
 
     StateProvider.$inject = ['$stateProvider'];
-    CreateController.$inject = ['$scope', '$nodeServices', '$stateParams'];
+    CreateController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices'];
 
     function StateProvider($stateProvider) {
-        $stateProvider.state('create', {
+        $stateProvider.state('search.create', {
             url: '/create',
             data: {
                 displayName: 'Create'
@@ -17,26 +18,27 @@
                 '@': {
                     templateUrl: '/js/app/sss/create/view.html', controller: 'CreateController'
                 },
-                'contents@create': {
+                'contents@search.create': {
                     templateUrl: '/js/app/sss/create/create_partial.html'
                 }
             }
         });
     }
 
-    function CreateController($scope, $nodeServices, $stateParams) {
-        $scope.formData = {};
-
+    function CreateController($scope, $rootScope, $state, $nodeServices) {
         $scope.createSnippet = function() {
-            alert ("TODO CreateSnippet: " + $scope.formData.name);
+            var uuid = generateUUID();
 
+            $nodeServices.addModifySnippet({_id: uuid, displayName: $scope.formData.displayName, description: $scope.formData.description, owner: $rootScope.currentUser.username}).then(
+                function () {
+                    $state.go('search.results.overview', { snippetId: uuid});
+                }
+            );
 
+            //ToDo: Add edit controls to details page, displayed when the current user is the owner
 
+        };
 
-            //TODO redirect to the edit page
-        }
-
-
+        $scope.formData = {};
     }
-
 }());

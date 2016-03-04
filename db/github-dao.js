@@ -114,7 +114,7 @@ exports.getRepoContents = function (repoName, next) {
 
 exports.getRepoFile = function (repoName, fileName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: fileName};
-    var retData = {};
+
     github.repos.getContent(msg, function (err, resultData) {
         if (err) {
             return next(err);
@@ -147,5 +147,27 @@ exports.getRepoFile = function (repoName, fileName, next) {
         } catch (ignore) {}
         //console.log(retData);
         next(err, retData);
+    });
+};
+
+exports.createRepo = function (snippet, next) {
+    var msg = {
+            org: "sss-storage",
+            name: snippet._id,
+            description: snippet.description,
+            homepage: "",
+            private: false,
+            has_issues: true,
+            has_wiki: true,
+            has_downloads: true,
+            auto_init: true
+        };
+
+    github.repos.createFromOrg(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        console.log("createRepo:" + JSON.stringify(resultData));
+        next(err, resultData);
     });
 };

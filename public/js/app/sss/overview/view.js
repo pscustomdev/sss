@@ -25,6 +25,7 @@
 
     function OverviewController($scope, $nodeServices, $stateParams) {
         $scope.snippetId = $stateParams.snippetId;
+        $scope.snippetDisplayName = $scope.displayName;
 
         $nodeServices.getSnippetOverview($scope.snippetId).then (
             function(overview) {
@@ -34,6 +35,6 @@
      }
 }());
 
-function deleteSnippet() {
-    alert("TODO: Delete snippet (deletSnippet() -> overview/view.js)")
+function deleteSnippet(snippetId) {
+    alert("TODO: Delete snippet (deletSnippet(snippetId) -> overview/view.js)")
 }

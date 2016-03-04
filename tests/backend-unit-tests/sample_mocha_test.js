@@ -32,7 +32,7 @@
 //  });
 //
 //  it ('find a user by username', function(done) {
-//    db.findById({ oauthID: 12345, name: "testy" }, function(err, user) {
+//    db.findUser({ oauthID: 12345, name: "testy" }, function(err, user) {
 //      user.name.should.equal('testy');
 //      user.oauthID.should.equal(12345);
 //      console.log("		name: ", user.name);

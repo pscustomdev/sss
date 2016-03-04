@@ -33,7 +33,7 @@ exports.findUsers = function(queryObject, next) {
     });
 };
 
-exports.findById = function(id, next) {
+exports.findUser = function(id, next) {
     db.users.find(id).toArray(function(err, users){
         if (users[0]){
             next(err, users[0]);
@@ -41,4 +41,28 @@ exports.findById = function(id, next) {
             next("User not found");
         }
     });
+};
+
+// snippet = {_id: "id", name: "name", rating: "rating", viewCount: "viewCount", owner: "postedBy"}
+exports.addModifySnippet = function(snippet, next) {
+    db.collection("snippets").update({_id:snippet._id}, {owner: snippet.owner, displayName: snippet.displayName}, {upsert:true},
+        function(err, object) {
+            if (err){
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+        }
+    );
+};
+
+exports.getSnippet = function(id, next) {
+    db.collection('snippets').findOne({_id: id},
+        function(err, result) {
+            if (err) {
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
 };

@@ -10,7 +10,7 @@ module.exports = function() {
             callbackURL: auth_config.github.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
-            db.findById({ id: profile.id }, function(err, user) {
+            db.findUser({ id: profile.id }, function(err, user) {
                 if (err) {              // Log errors, if any
                     console.log(err);
                 }
@@ -46,7 +46,7 @@ module.exports = function() {
 
     passport.deserializeUser(function(profile, done) {
         console.log("deserializeUser id: " + profile.id);
-        db.findById({id:profile.id}, function(err, user) {
+        db.findUser({id:profile.id}, function(err, user) {
             if (!err) {
                 done (null, user);
             } else {

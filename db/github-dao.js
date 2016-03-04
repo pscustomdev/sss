@@ -167,7 +167,7 @@ exports.createRepo = function (snippet, next) {
         if (err) {
             return next(err);
         }
-        console.log("createRepo:" + JSON.stringify(resultData));
+        //console.log("createRepo:" + JSON.stringify(resultData));
         next(err, resultData);
     });
 };

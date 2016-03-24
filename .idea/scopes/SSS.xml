@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="SSS" pattern="!file[sss]:data//*&amp;&amp;!file[sss]:node_modules//*&amp;&amp;!file[sss]:public/bower//*" />
+</component>

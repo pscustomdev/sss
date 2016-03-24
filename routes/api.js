@@ -53,7 +53,6 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving database contents'});
                 }
                 retObj = contents;
-
                 github.getRepoContents(req.params.snippetId, function (err, contents) {
                     if (err) {
                         return res.status(500).json({error: 'Error retrieving repository contents'});

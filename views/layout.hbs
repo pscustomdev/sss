@@ -5,22 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {{#if settings.production}}
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-        <script src="/libs/html5shiv.js"></script>
-        <![endif]-->
-        <script src="/libs/underscore-min.js"></script>
-        <script src="/libs/angular.min.js"></script>
-        <script src="/libs/angular-ui-router.min.js"></script>
-        <script src="/libs/ui-bootstrap-tpls.min.js"></script>
-        <script src="/libs/angular-animate.min.js"></script>
-        <script src="/libs/angular-sanitize.min.js"></script>
-        <script src="/libs/jquery.min.js"></script>
-        <script src="/libs/sss.min.js?v=2"></script>
-        <link href="/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
-    {{else}}
+    {{#if settings.development}}
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="/bower/html5shiv/dist/html5shiv.js"></script>
@@ -45,6 +30,21 @@
         <script src="/js/app/app.js"></script>
         <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    {{else}}
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="/libs/html5shiv.js"></script>
+        <![endif]-->
+        <script src="/libs/underscore-min.js"></script>
+        <script src="/libs/angular.min.js"></script>
+        <script src="/libs/angular-ui-router.min.js"></script>
+        <script src="/libs/ui-bootstrap-tpls.min.js"></script>
+        <script src="/libs/angular-animate.min.js"></script>
+        <script src="/libs/angular-sanitize.min.js"></script>
+        <script src="/libs/jquery.min.js"></script>
+        <script src="/libs/sss.min.js?v=2"></script>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     {{/if}}
 
     <link href="/css/style.css" rel="stylesheet">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div class="nav navbar-right">
-                        <p class="navbar-text"><a class="navbar-link" ui-sref="search.create" title="Create Snippet">Create <span class="glyphicon glyphicon-plus-sign"></span></a></p>
+                        <p class="navbar-text"><a class="navbar-link" ui-sref="search.create" title="Create Snippet">Add New Snippet <span class="glyphicon glyphicon-plus-sign"></span></a></p>
                         {{#if isAuthenticated}}
                             <p class="navbar-text">Signed in as
                                 {{#if user.name}}

@@ -11,7 +11,7 @@ var MongoStore = connectMongo(expressSession);
 var config = require(path.join(__dirname, 'config'));
 
 var app = express();
-app.set('production', process.env.NODE_ENV === 'production');
+app.set('development', process.env.NODE_ENV === 'dev');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

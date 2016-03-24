@@ -69,8 +69,9 @@ module.exports = function(app) {
                             if (err) {
                                 return res.status(500).json({error: 'Error retrieving repository readme'});
                             }
-                            var b = new Buffer(readmeobj.content, 'base64');
-                            retObj.readme = ghm.parse(b.toString());
+                            var b = new Buffer(readmeobj.content, 'base64').toString();
+                            b = b.replace(/</g, "&lt;");
+                            retObj.readme = ghm.parse(b);
                             res.json(retObj);
                         });
                     });

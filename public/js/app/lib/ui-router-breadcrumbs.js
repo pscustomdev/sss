@@ -12,7 +12,7 @@
      * Config
      */
     var moduleName = 'ui.router.breadcrumbs';
-    var templateUrl = '/js/app/services/ui-router-breadcrumbs.tpl.html';
+    var templateUrl = '/js/app/lib/ui-router-breadcrumbs.tpl.html';
 
     /**
      * Module

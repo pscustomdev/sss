@@ -14,7 +14,7 @@
             },
             views: {
                 '': {
-                    templateUrl: '/js/app/sss/search.html' }
+                    templateUrl: '/views/search.html' }
             }
         })
     }

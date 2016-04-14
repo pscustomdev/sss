@@ -14,7 +14,7 @@
                 displayName: '{{$stateParams.snippetId}}'
             },
             views: {
-                '@': { templateUrl: '/js/app/sss/overview.html', controller: 'OverviewController'
+                '@': { templateUrl: '/views/overview.html', controller: 'OverviewController'
                 }
             }
         });

@@ -99,7 +99,7 @@ http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS
 /public/js/app/                             - ** ANGULAR ROOT **
 /public/js/app/app.js                       - Provides the default Angular route, includes all dependant modules, and adds the $state and $stateparams data to the $scope available to each Controller
 /public/js/app/services/                    - ** ANGULAR SERVICES/FACTORIES **
-/public/js/app/services/node-services.js  - API wrapper that manages calls to the Node-Express REST URLs
+/public/js/app/services/angular-to-node-bridge.js  - API wrapper that manages calls to the Node-Express REST URLs
 /public/js/app/services/search-service.js   - Search Service/Factory that encapsulates/manages snippet searches
 /public/js/app/sss/                         - ** ANGULAR VIEWS/CONTROLLERS/STATES **
 /public/js/app/sss/search/view.html         - "/search" view/state html code

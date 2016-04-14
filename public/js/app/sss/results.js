@@ -20,7 +20,7 @@
             },
             views: {
                 '@': {
-                    templateUrl: '/js/app/sss/results.html'}
+                    templateUrl: '/views/results.html'}
             }
         })
     }

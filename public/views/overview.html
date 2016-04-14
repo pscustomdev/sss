@@ -1,0 +1,22 @@
+<div class="row">
+    <section class="col-md-12">
+        <div class="panel panel-info">
+            <button class="pull-right btn btn-default" ng-click="deleteSnippet(snippetId)">Delete Snippet</button>
+            <div><h3 class="panel-heading">{{snippetId}}</h3></div>
+            <div class="panel-body">{{snippetOverview.description}}</div>
+        </div>
+        <div>
+            <strong ng-show="!snippetOverview">Loading...</strong>
+            <ul>
+                <li ng-repeat="file in snippetOverview.files">
+                    <a ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file}}'})">{{file}}</a>
+                </li>
+            </ul>
+            <hr>
+            <div class="panel panel-info">
+                <div class="panel-heading">ReadMe</div>
+                <div class="panel-body" ng-bind-html="$searchService.trustHtmlSnippet(snippetOverview.readme)"></div>
+            </div>
+        </div>
+    </section>
+</div>

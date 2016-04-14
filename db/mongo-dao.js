@@ -51,6 +51,7 @@ exports.addModifySnippet = function(snippet, next) {
                 console.warn(err.message);  // returns error if no matching object found
                 next(err, null);
             }
+            next(err, object);
         }
     );
 };

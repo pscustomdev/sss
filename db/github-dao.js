@@ -41,7 +41,7 @@ exports.getRepo = function (repoName, next) {
             console.log(err);
             return next(err);
         }
-        //console.log(JSON.stringify(repo));
+        //console.log("getRepo: " + JSON.stringify(repo));
         next(err, repo);
     });
 };
@@ -155,19 +155,30 @@ exports.createRepo = function (snippet, next) {
             org: "sss-storage",
             name: snippet._id,
             description: snippet.description,
-            homepage: "",
-            private: false,
-            has_issues: true,
-            has_wiki: true,
-            has_downloads: true,
-            auto_init: true
+            auto_init: false
         };
 
     github.repos.createFromOrg(msg, function (err, resultData) {
         if (err) {
             return next(err);
         }
-        //console.log("createRepo:" + JSON.stringify(resultData));
+
+        // create readme and add to repo
+        var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
+        readmeContent = new Buffer(readmeContent).toString('base64');
+        var readme_msg = {
+            user: "sss-storage",
+            repo: snippet._id,
+            path: "README.md",
+            message: "Initial readme creation",
+            content: readmeContent
+        };
+        github.repos.createFile(readme_msg, function(err, resultData) {
+            if (err) {
+                return next(err);
+            }
+        });
+
         next(err, resultData);
     });
 };

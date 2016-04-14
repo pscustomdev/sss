@@ -25,6 +25,7 @@
 
         $nodeServices.getSnippetOverview($scope.snippetId).then (
             function(overview) {
+
                 $scope.snippetOverview = overview;
             }
         );

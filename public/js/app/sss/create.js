@@ -16,10 +16,7 @@
             },
             views: {
                 '@': {
-                    templateUrl: '/js/app/sss/create/view.html', controller: 'CreateController'
-                },
-                'contents@search.create': {
-                    templateUrl: '/js/app/sss/create/create_partial.html'
+                    templateUrl: '/js/app/sss/create.html', controller: 'CreateController'
                 }
             }
         });

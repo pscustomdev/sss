@@ -14,10 +14,7 @@
                 displayName: '{{$stateParams.snippetId}}'
             },
             views: {
-                '@': { templateUrl: '/js/app/sss/overview/view.html', controller: 'OverviewController'
-                },
-                'list@search.results.overview': {
-                    templateUrl: '/js/app/sss/overview/overview_partial.html'
+                '@': { templateUrl: '/js/app/sss/overview.html', controller: 'OverviewController'
                 }
             }
         });
@@ -33,7 +30,7 @@
         );
 
         $scope.deleteSnippet = function(snippetId) {
-            alert("TODO: Delete snippet (deletSnippet(snippetId) -> overview/view.js)")
+            alert("TODO: Delete snippet (deletSnippet(snippetId) -> overview/create.js)")
         }
      }
 }());

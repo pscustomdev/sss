@@ -15,10 +15,7 @@
             },
             views: {
                 '@': {
-                    templateUrl: '/js/app/sss/details/view.html', controller: 'DetailsController'
-                },
-                'contents@search.results.overview.details': {
-                    templateUrl: '/js/app/sss/details/details_partial.html'
+                    templateUrl: '/js/app/sss/details.html', controller: 'DetailsController'
                 }
             }
         });

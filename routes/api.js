@@ -70,7 +70,11 @@ module.exports = function(app) {
                                 return res.status(500).json({error: 'Error retrieving repository readme'});
                             }
                             var b = new Buffer(readmeobj.content, 'base64').toString();
+                            // replace < in readme so any sample html content in the readme will render properly
                             b = b.replace(/</g, "&lt;");
+                            // replace <img src="image.jpg"> with a full path to the image on github
+                            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
+                            b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
                             retObj.readme = ghm.parse(b);
                             res.json(retObj);
                         });

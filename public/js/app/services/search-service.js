@@ -31,11 +31,12 @@
 
         vm.clearSearch = function () { // Clear the search
             vm.searchTerms = [];
-            vm.searchResults = [];
+            vm.searchResults = {};
             vm.userSearched = false;
         };
 
         vm.submitSearch = function (searchTerms) { // Search function
+            vm.searchResults = {};
             if (searchTerms && searchTerms !== "") {
                 vm.searchTerms = searchTerms.split(" ");
 
@@ -43,7 +44,6 @@
                     function (response) {
                         vm.userSearched = true;
                         vm.searchResults = response;
-
 
                         vm.pagination.totalItems = vm.searchResults.total_count;
                         updateFragment(vm.searchResults.items);

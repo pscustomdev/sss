@@ -123,21 +123,27 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }
-                //TODO get display name from the database.  could use async.js perhaps.
-                //     ??? how to make an async call within a for-each then wait for all processing to be done
-                for(idx in repos.items) {
-                    var repoId = repos.items[idx].repository.name;
-                    //db.getSnippet(repoId, function (err, repo) {
-                    //    if (err) {
-                    //        return res.status(500).json({error: 'Error retrieving repository from database'});
-                    //    }
-                    //    repos.items[idx].repository.displayName = repo ? repo.displayName : repId;
-                    //});
-
-                    //TODO fake the display name for now and add a cute smiley to know we are viewing the displayname
-                    repos.items[idx].repository.displayName = repoId + " (:~)";
-                };
-                res.json(repos);
+                // get display name from the database for each hit
+                // this pattern is helpful if you need to make async calls within a loop
+                // but you cannot return until all async calls have completed
+                var numItems = repos.items.length;
+                var ctr = 0;
+                for(var i in repos.items) {
+                    (function(idx) {
+                        var repoId = repos.items[idx].repository.name;
+                        db.getSnippet(repoId, function (err, repo) {
+                            if (err) {
+                                return res.status(500).json({error: 'Error retrieving repository from database'});
+                            }
+                            repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
+                            // do not return from the function until the last db call has returned
+                            if (ctr == numItems - 1) {
+                                res.json(repos);
+                            }
+                            ctr++;
+                        });
+                    })(i);
+                }
             });
         }
     );

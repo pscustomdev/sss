@@ -2,6 +2,10 @@
   cursor: pointer; /* AngularJS's documented way to fix a Bootstrap/UI Bootstrap compatibility issue */
 }
 
+div .panel-body img {
+  width: 100%;
+}
+
 .breadcrumb {
   font-size: 11px;
   margin: 0;

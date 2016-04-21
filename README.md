@@ -171,7 +171,6 @@ ToDo: Edit a snippet
 ToDo: Delete a snippet
 Todo: Disable meta data if not implemented
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
-ToDo: Get bryans code for displaying pics checked in.
 ToDo: Hide Top Searches and Highest Rated until implemented
 
 ===== RELEASE FUTURE ========

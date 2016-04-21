@@ -96,20 +96,16 @@ http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS
 /public/css/                                - ** STYLESHEETS **
 /public/css/styles.css                      - Master stylesheet. Imports all other stylesheets (eg. bootstrap).
 /public/js/                                 - ** JAVASCRIPT / RESOURCES **
-/public/js/app/                             - ** ANGULAR ROOT **
-/public/js/app/app.js                       - Provides the default Angular route, includes all dependant modules, and adds the $state and $stateparams data to the $scope available to each Controller
-/public/js/app/services/                    - ** ANGULAR SERVICES/FACTORIES **
-/public/js/app/services/angular-to-node-bridge.js  - API wrapper that manages calls to the Node-Express REST URLs
-/public/js/app/services/search-service.js   - Search Service/Factory that encapsulates/manages snippet searches
-/public/js/app/sss/                         - ** ANGULAR VIEWS/CONTROLLERS/STATES **
-/public/js/app/sss/search/view.html         - "/search" view/state html code
-/public/js/app/sss/search/view.js           - "/search" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
-/public/js/app/sss/search/*_partial.html    - These files are html snippets that are used to populate this state's view.html
-/public/js/app/sss/results/view.html        - "/results" view/state html code
-/public/js/app/sss/results/view.js          - "/results" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
-/public/js/app/sss/results/*_partial.html   - These files are html snippets that are used to populate this state's view.html
-/public/js/app/sss/details/*                - Experimental code.  Not used.
-/public/js/app/sss/overview/*               - Experimental code.  Not used.
+/public/app/                             - ** ANGULAR ROOT **
+/public/app/app.js                       - Provides the default Angular route, includes all dependant modules, and adds the $state and $stateparams data to the $scope available to each Controller
+/public/app/services/                    - ** ANGULAR SERVICES/FACTORIES **
+/public/app/services/client-rest-server-interface.js  - API wrapper that manages calls to the Node-Express REST URLs
+/public/app/services/search-service.js   - Search Service/Factory that encapsulates/manages snippet searches
+/public/app/controllers/                         - ** ANGULAR VIEWS/CONTROLLERS/STATES **
+/public/app/views/search.html         - "/search" view/state html code
+/public/app/controllers/search.js           - "/search" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
+/public/app/views/results.html        - "/results" view/state html code
+/public/app/controllers/results.js          - "/results" view/state configuration and code.  (eg. Angular state, template, controller, view-model and any other javascript specific to this view.  Note: this file must be included in the Handlebar ""/views/index.hbs" file)
 /public/js/build/                           - ** BUILD ** (Directory with the latest Gulp build of the application. Git ignored)
 
 -------------
@@ -164,12 +160,21 @@ To add a new view, pattern it after an existing view, such as "overview".
 3) Add the new module to the main module definition in app.js (like 'app.overview')
      e.g.  angular.module('app', ['ui.router', 'app.$searchService', 'app.search', 'app.results', 'app.overview'])
 4) Include the new js file in layout.hbs
-     e.g.  <script src="/js/app/sss/overview/view.js"></script>
+     e.g.  <script src="/app/controllers/overview/view.js"></script>
 5) Modify the new files accordingly
 
 
 To-Do
-==============
+===== RELEASE 1 =========
+ToDo: Edit a snippet
+  ToDo: Ability to add files to snippet
+ToDo: Delete a snippet
+Todo: Disable meta data if not implemented
+ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
+ToDo: Get bryans code for displaying pics checked in.
+ToDo: Hide Top Searches and Highest Rated until implemented
+
+===== RELEASE FUTURE ========
 ToDo: Tests - Validate Backend tests make sense
 ToDo: Tests - Validate End2End tests make sense
 ToDo: Tests - Add Backend tests
@@ -179,14 +184,12 @@ ToDo: Design - Snippet json object (pojo) to represent snippet results including
 ToDo: Login - Make hover over "Logged in as NAME", not show mouse pointer.  We should not communicate that this does anything.
 ToDo: GitHub Dao - Expand GitHubDao to provide for calls that will retrieve missing data on results page
 ToDo: GitHub Dao - Results Page - For each result, display x characters before and after every "result hit"
-ToDo: GitHub Dao - Add api to write a snippet to GitHub
 ToDo: GitHub Dao - Results Page - Write API to get "last updated" (based on latest commit date of whole repo) and add to page
 ToDo: GitHub Dao - Results Page - Write API to get "number of views" (repo based) and add to page
 ToDo: GitHub Dao - Results Page - Write API to get "posed date" [earliest commit] (repo based) and add to page
-ToDo: GitHub-meta Dao - Add ".sss-meta" file to GitHub
-ToDo: GitHub-meta Dao - Add result "rating" to .sss-meta
-ToDo: GitHub-meta Dao - Research "score" and determine if it might be helpful
-ToDo: GitHub-meta Dao - Add 'sss-id' to .sss-meta.  And figure out the sss-id format and how to create it.
+ToDo: Mongo Dao - Add result "rating" to mongo
+ToDo: Mongo Dao - Research "score" and determine if it might be helpful
+ToDo: Mongo Dao - Add 'sss-id' to mongo.  And figure out the sss-id format and how to create it.
 ToDo: Results Page - Change layout so it is as follows:
         Repo Title
           Repo Description [Less/More]
@@ -198,5 +201,3 @@ ToDo: Results Page - Change layout so it is as follows:
           Repo Description [Less/More]
             File Name (first #1)
                 100 characters before and after hit #1 [More/Less]
-ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
-ToDo: Change search to only bring up IDM(SSS) scripts

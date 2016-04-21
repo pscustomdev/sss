@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                     {dest: 'sss//', src: ['public/css/**']},
                     {dest: 'sss//', src: ['public/fonts/**']},
                     {dest: 'sss//', src: ['public/images/**']},
-                    {dest: 'sss//', src: ['public/js/app/**/*.html']},
+                    {dest: 'sss//', src: ['public/app/**/*.html']},
                     {dest: 'sss//', src: ['routes/**']},
                     {dest: 'sss//', src: ['views/**']},
                     {dest: 'sss//', src: ['node_modules/**']}
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
         concat: {   // Concatenate files
             package: {
                 files: {
-                    'dist/sss.js': ['public/js/app/**/*.js']
+                    'dist/sss.js': ['public/app/**/*.js']
                 }
             }
         },

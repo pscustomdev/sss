@@ -21,13 +21,13 @@ module.exports = function(config) {
 
       'app/lib/util.js', // Source Files
       'app/lib/ui-router-breadcrumbs.js', // Source Files
-      'public/js/app/services/search-service.js', // Source Files
-      'app/services/angular-to-node-bridge.js', // Source Files
-      'app/sss/search/search.js', // Source Files
-      'app/sss/results/results.js', // Source Files
-      'app/sss/details/details.js', // Source Files
-      'app/sss/overview/overview.js', // Source Files
-      'public/js/app/app.js', // Source Files
+      'public/app/services/search-service.js', // Source Files
+      'app/services/client-rest-server-interface.js', // Source Files
+      'app/controllers/search/search.js', // Source Files
+      'app/controllers/results/results.js', // Source Files
+      'app/controllers/details/details.js', // Source Files
+      'app/controllers/overview/overview.js', // Source Files
+      'public/app/app.js', // Source Files
       'tests/frontend-unit-tests/**/*spec.js',
       { pattern:  'tests/frontend-unit-tests/*.json',
         watched:  true,

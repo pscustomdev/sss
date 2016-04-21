@@ -9,7 +9,6 @@
       <sourceFolder url="file://$MODULE_DIR$/public/css" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/public/fonts" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/public/images" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/public/js" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/db" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/auth" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$" type="java-resource" />

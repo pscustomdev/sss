@@ -11,7 +11,7 @@
         stateProvider.state('search.results.overview', {
             url: '/snippet-overview/:snippetId',
             data: {
-                displayName: '{{$stateParams.snippetId}}'
+                displayName: 'Overview'
             },
             views: {
                 '@': { templateUrl: '/app/views/overview.html', controller: 'OverviewController'
@@ -25,12 +25,13 @@
 
         $nodeServices.getSnippetOverview($scope.snippetId).then (
             function(overview) {
+
                 $scope.snippetOverview = overview;
             }
         );
 
         $scope.deleteSnippet = function(snippetId) {
-            alert("TODO: Delete snippet (deletSnippet(snippetId) -> overview/create.js)")
+            alert("TODO: Delete snippet (overview.js -> deleteSnippet())")
         }
     }
 }());

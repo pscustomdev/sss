@@ -152,11 +152,11 @@ exports.getRepoFile = function (repoName, fileName, next) {
 
 exports.createRepo = function (snippet, next) {
     var msg = {
-            org: "sss-storage",
-            name: snippet._id,
-            description: snippet.description,
-            auto_init: false
-        };
+        org: "sss-storage",
+        name: snippet._id,
+        description: snippet.description,
+        auto_init: false
+    };
 
     github.repos.createFromOrg(msg, function (err, resultData) {
         if (err) {

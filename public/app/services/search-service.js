@@ -31,19 +31,19 @@
 
         vm.clearSearch = function () { // Clear the search
             vm.searchTerms = [];
-            vm.searchResults = [];
+            vm.searchResults = {};
             vm.userSearched = false;
         };
 
         vm.submitSearch = function (searchTerms) { // Search function
+            vm.searchResults = {};
             if (searchTerms && searchTerms !== "") {
                 vm.searchTerms = searchTerms.split(" ");
 
                 $restServices.searchCode(searchTerms).then(
                     function (response) {
-                        vm.userSearched = true;    // ToDo: Verify if need this to prevent duplicate searches.  We don't think it's used currently.
+                        vm.userSearched = true;
                         vm.searchResults = response;
-
 
                         vm.pagination.totalItems = vm.searchResults.total_count;
                         updateFragment(vm.searchResults.items);
@@ -65,7 +65,7 @@
                     match['highlit_fragment'] = match['highlit_fragment'].substr(0, match.indices[1]) + "</mark><code>" + match['highlit_fragment'].substr(match.indices[1]) + "</code>";
                     match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
                 });
-           });
+            });
         }
 
         function updateRating(snippets) {

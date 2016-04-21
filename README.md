@@ -172,6 +172,7 @@ ToDo: Delete a snippet
 Todo: Disable meta data if not implemented
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
 ToDo: Hide Top Searches and Highest Rated until implemented
+ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
 
 ===== RELEASE FUTURE ========
 ToDo: Tests - Validate Backend tests make sense

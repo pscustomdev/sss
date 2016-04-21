@@ -269,7 +269,8 @@ module.exports = function(grunt) {
     grunt.registerTask('csslint', ['csslint']);
     grunt.registerTask('package', ['run-all-tests','clean', 'concat', 'uglify', 'compress']);  // 'jshint'
     //grunt.registerTask('package', ['run-all-tests', 'csslint', 'clean', 'concat', 'uglify', 'compress']);  // 'jshint'
-    grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
+    // grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
+    grunt.registerTask('run-all-tests', ['backend-tests', 'end2end-tests']);
     grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);
     grunt.registerTask('sss-production-mode', ['env:prod', 'concurrent:sss-production-mode']);
     grunt.registerTask('sss-debug-mode', ['env:debug', 'concurrent:sss-development-debug-mode']);

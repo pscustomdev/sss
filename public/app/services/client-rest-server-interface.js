@@ -12,6 +12,7 @@
             getSnippets: getSnippets,
             getSnippetOverview: getSnippetOverview,
             getSnippetDetail: getSnippetDetail,
+            deleteSnippet: deleteSnippet,
             searchCode: searchCode,
             getCommits: getCommits,
             addModifySnippet: addModifySnippet
@@ -60,6 +61,19 @@
 
         function addModifySnippet(snippet) {
             return $http.post('/api/snippet', snippet)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        function deleteSnippet(snippetId) {
+            return $http.delete('/api/snippet/' + snippetId)
                 .then(function(response) {
                         return response.data;
                     },

@@ -34,9 +34,6 @@
                     $state.go('search.results.overview', { snippetId: uuid});
                 }
             );
-
-            //ToDo: Add edit controls to details page, displayed when the current user is the owner
-
         };
 
         $scope.formData = {};

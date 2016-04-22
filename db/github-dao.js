@@ -182,3 +182,17 @@ exports.createRepo = function (snippet, next) {
         next(err, resultData);
     });
 };
+
+exports.deleteRepo = function (snippetId, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: snippetId
+    };
+
+    github.repos.delete(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        next(err, resultData);
+    });
+};

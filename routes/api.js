@@ -45,6 +45,17 @@ module.exports = function(app) {
         }
     );
 
+    api_routes.delete('/snippet/:snippetId',
+        function (req, res) {
+            github.deleteRepo(req.params.snippetId, function (err, content) {
+                if (err) {
+                    return res.status(500).json({error: 'Error deleting repository'});
+                }
+                res.json("");
+            });
+        }
+    );
+
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
             var retObj = {};
@@ -84,6 +95,7 @@ module.exports = function(app) {
                                     return res.status(500).json({error: 'Error retrieving repository from database'});
                                 }
                                 retObj.displayName = repo ? repo.displayName : req.params.snippetId;
+                                retObj.owner = repo ? repo.owner : "unknown";
 
                                 res.json(retObj);
                             });
@@ -97,19 +109,10 @@ module.exports = function(app) {
 
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
-            var retObj = "";
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }
-                //var b = new Buffer(content.content, 'base64');
-                //// if b contains binary content, return content.downloadUrl instead of the data
-                //var retData = "";
-                //if (b) {
-                //    retData = content.downloadUrl;
-                //} else {
-                //    retData = b.toString();
-                //}
                 res.json(content);
             });
         }
@@ -128,6 +131,9 @@ module.exports = function(app) {
                 // but you cannot return until all async calls have completed
                 var numItems = repos.items.length;
                 var ctr = 0;
+                if (numItems == 0) {
+                    return res.json({});
+                }
                 for(var i in repos.items) {
                     (function(idx) {
                         var repoId = repos.items[idx].repository.name;

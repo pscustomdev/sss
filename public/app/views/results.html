@@ -3,14 +3,14 @@
 
         <div class="input-group">
             <div class="input-group-btn">
-                <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch(searchTerms)" type="button"
+                <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch($searchService.searchTerms)" type="button"
                         class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-default" uib-popover-template="results_filter.templateUrl" popover-placement="bottom">
                     <span class="caret"></span>
                 </button>
             </div>
-            <input type="text" ng-model="searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch(searchTerms);" placeholder="Search for...">
+            <input type="text" ng-model="$searchService.searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch($searchService.searchTerms);" placeholder="Search for...">
         </div>
 
         <script type="text/ng-template" id="results_filter.html">
@@ -50,7 +50,8 @@
 <br/><br/><br/>
 <div class="row">
     <section class="col-md-8">
-        {{$searchService.searchResults.total_count}} result(s) found
+        <span ng-show="!($searchService.searchResults.inProgress)">{{$searchService.searchResults.total_count}} result(s) found</span>
+        <span ng-show="$searchService.searchResults.inProgress">Searching...&nbsp;&nbsp;&nbsp;<img src="images/spinner.gif" height="20px" width="20px"/></span>
     </section>
     <section class="col-md-4">
         <span class="h4">Sort By: </span>

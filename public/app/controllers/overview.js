@@ -5,7 +5,7 @@
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$nodeServices', '$stateParams'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,18 +20,23 @@
         });
     }
 
-    function OverviewController($scope, $nodeServices, $stateParams) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state) {
         $scope.snippetId = $stateParams.snippetId;
 
         $nodeServices.getSnippetOverview($scope.snippetId).then (
             function(overview) {
-
                 $scope.snippetOverview = overview;
+                $scope.snippetOverview.isOwner = overview.owner == $rootScope.currentUser.username;
             }
         );
 
         $scope.deleteSnippet = function(snippetId) {
-            alert("TODO: Delete snippet (overview.js -> deleteSnippet())")
+            $nodeServices.deleteSnippet(snippetId).then (
+                function() {
+                    // redirect to the search page
+                    $state.go('search', {});
+                }
+            )
         }
     }
 }());

@@ -14,8 +14,10 @@
         };
 
         var vm = this;
-        vm.searchResults = []; // The array that will contain search results
-        vm.searchTerms = []; // The search term (for decoration)
+        vm.searchTerms = ""; // The search term (for decoration)
+        vm.searchResults = {}; // The object that will contain search results
+        vm.searchResults.total_count = 0;
+        vm.searchResults.inProgress = false;
         vm.userSearched = false; // Control if user searched recently
         vm.typeOfSearch = "web"; // Control the state of the search
 
@@ -30,20 +32,29 @@
         };
 
         vm.clearSearch = function () { // Clear the search
-            vm.searchTerms = [];
+            vm.searchTerms = "";
             vm.searchResults = {};
+            vm.searchResults.total_count = 0;
+            vm.searchResults.inProgress = false;
+
             vm.userSearched = false;
         };
 
         vm.submitSearch = function (searchTerms) { // Search function
             vm.searchResults = {};
+            vm.searchResults.total_count = 0;
+            vm.searchResults.inProgress = true;
             if (searchTerms && searchTerms !== "") {
-                vm.searchTerms = searchTerms.split(" ");
+                vm.searchTerms = searchTerms;
 
                 $restServices.searchCode(searchTerms).then(
                     function (response) {
                         vm.userSearched = true;
                         vm.searchResults = response;
+                        if (!response.total_count) {
+                            vm.searchResults.total_count = 0;
+                        }
+                        vm.searchResults.inProgress = false;
 
                         vm.pagination.totalItems = vm.searchResults.total_count;
                         updateFragment(vm.searchResults.items);

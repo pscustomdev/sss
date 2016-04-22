@@ -70,6 +70,7 @@
 
         // Inject html to add highlighting of returned results
         function updateFragment(hits) {
+            if (!hits) { return; }
             hits.forEach(function(hit) {
                 hit.text_matches[0].matches.reverse().forEach(function(match) {
                     match['highlit_fragment'] = hit.text_matches[0].fragment;

@@ -22,13 +22,31 @@
 
     function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state) {
         $scope.snippetId = $stateParams.snippetId;
+        var count = 0;
 
-        $nodeServices.getSnippetOverview($scope.snippetId).then (
-            function(overview) {
-                $scope.snippetOverview = overview;
-                $scope.snippetOverview.isOwner = overview.owner == $rootScope.currentUser.username;
+        function getOverview(snippetId) {
+            // retry getting the snippet 5 times
+            // this is necessary because sometimes the api will return a null overview when a snippet
+            // was just created and is not yet available to the api
+            if (count < 5) {
+                $nodeServices.getSnippetOverview(snippetId).then(
+                    function (overview) {
+                        if (!overview) {
+                            count++;
+                            console.log("Error getting snippet.  Retry #" + count + "...");
+                            getOverview(snippetId);
+                        } else {
+                            $scope.snippetOverview = overview;
+                            $scope.snippetOverview.isOwner = (overview.owner == $rootScope.currentUser.username);
+                        }
+                    }
+                );
+            } else {
+                $scope.snippetOverview = {};
+                $scope.snippetOverview.isOwner = false;
             }
-        );
+        }
+        getOverview($scope.snippetId);
 
         $scope.deleteSnippet = function(snippetId) {
             $nodeServices.deleteSnippet(snippetId).then (

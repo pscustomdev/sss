@@ -168,7 +168,6 @@ To-Do
 ===== RELEASE 1 =========
 ToDo: Edit a snippet
   ToDo: Ability to add files to snippet
-ToDo: Delete a snippet
 Todo: Disable meta data if not implemented
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
 ToDo: Hide Top Searches and Highest Rated until implemented

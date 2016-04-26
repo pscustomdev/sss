@@ -4,11 +4,13 @@
             <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" ng-click="deleteSnippet(snippetId)">Delete Snippet</button>
             <div>
                 <h3 class="panel-heading">
-                    <a href="#" editable-text="snippetOverview.displayName" onaftersave="updateSnippet()">{{snippetOverview.displayName}}</a>
+                    <span ng-hide="snippetOverview.isOwner">{{snippetOverview.displayName}}</span>
+                    <a ng-show="snippetOverview.isOwner" href="#" editable-text="snippetOverview.displayName" onaftersave="updateSnippet()">{{snippetOverview.displayName}}</a>
                 </h3>
             </div>
             <div class="panel-body">
-                <a href="#" editable-text="snippetOverview.description" onaftersave="updateSnippet()">{{snippetOverview.description}}</a>
+                <span ng-hide="snippetOverview.isOwner">{{snippetOverview.description}}</span>
+                <a ng-show="snippetOverview.isOwner" href="#" editable-text="snippetOverview.description" onaftersave="updateSnippet()">{{snippetOverview.description}}</a>
             </div>
         </div>
         <div>

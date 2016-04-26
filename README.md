@@ -167,7 +167,6 @@ To add a new view, pattern it after an existing view, such as "overview".
 To-Do
 ===== RELEASE 1 =========
 ToDo: Edit a snippet  (if snippetOverview.isOwner is true)
-  ToDo: Ability to edit snippet name & description
   ToDo: Ability to edit exiting files in snippet
   ToDo: Ability to add files to snippet
   ToDo: Ability to delete files from snippet

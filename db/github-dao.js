@@ -22,6 +22,7 @@ github.authenticate({
     token: auth_config.github_api.token
 });
 
+// get all repos for the user
 exports.getRepos = function (next) {
     github.repos.getAll({}, function (err, repos) {
         if (err) {
@@ -34,6 +35,7 @@ exports.getRepos = function (next) {
     });
 };
 
+// get data on a specific repo
 exports.getRepo = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName};
     github.repos.get(msg, function (err, repo) {
@@ -73,6 +75,7 @@ exports.getCommits = function (repoOwner, repoName, next) {
     });
 };
 
+// get the readme file for a repo
 exports.getReadme = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName};
 
@@ -82,7 +85,7 @@ exports.getReadme = function (repoName, next) {
     });
 };
 
-// retrieve the repo contents (files)
+// retrieve the repo contents (list of files)
 // return object:
 // {
 //   name: reponame
@@ -112,6 +115,7 @@ exports.getRepoContents = function (repoName, next) {
     });
 };
 
+// get the contents of a specific repo file
 exports.getRepoFile = function (repoName, fileName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: fileName};
 

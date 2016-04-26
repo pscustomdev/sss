@@ -34,6 +34,7 @@
                 });
         }
 
+        // list all snippets
         function getSnippets() {
             return $http.get('/api/snippets')
                 .then(function(response) {
@@ -47,6 +48,7 @@
                 });
         }
 
+        // get information about a snippet
         function getSnippet() {
             return $http.get('/api/snippet')
                 .then(function(response) {
@@ -99,6 +101,7 @@
                 });
         }
 
+        // get overview information about a snippet
         function getSnippetOverview(snippetId) {
             return $http.get('/api/snippet-overview/' + snippetId)
                 .then(function(response) {
@@ -112,6 +115,7 @@
                 });
         }
 
+        // get a file from a snippet
         function getSnippetDetail(snippetId, fileName) {
             return $http.get('/api/snippet-detail/' + snippetId + "/" + fileName, { cache: true })
                 .then(function(response) {

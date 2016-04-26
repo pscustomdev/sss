@@ -7,6 +7,7 @@ module.exports = function(app) {
     var github = require('../db/github-dao');
     var db = require('../db/mongo-dao');
 
+    // get a list of all snippets
     api_routes.get('/snippets',
         function (req, res) {
             github.getRepos(function (err, repos) {
@@ -17,6 +18,8 @@ module.exports = function(app) {
             });
         }
     );
+
+    // get information about a snippet
     api_routes.get('/snippet',
         function (req, res) {
             github.getRepo(function (err, repo) {
@@ -28,7 +31,7 @@ module.exports = function(app) {
         }
     );
 
-    // create snippet
+    // create snippet (post)
     api_routes.post('/snippet',
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
@@ -46,7 +49,7 @@ module.exports = function(app) {
         }
     );
 
-    // update snippet
+    // update snippet (put)
     api_routes.put('/snippet',
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
@@ -75,6 +78,11 @@ module.exports = function(app) {
         }
     );
 
+    // get data required for the snippet overview
+    // * specific snippet data (id, description)
+    // * list of files
+    // * readme contents
+    // * db data such as owner and display name
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
             var retObj = {};
@@ -127,6 +135,7 @@ module.exports = function(app) {
         }
     );
 
+    // get contents of a repo file
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
@@ -138,6 +147,7 @@ module.exports = function(app) {
         }
     );
 
+    // search all snippets and return result data
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;

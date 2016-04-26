@@ -28,15 +28,34 @@ module.exports = function(app) {
         }
     );
 
+    // create snippet
     api_routes.post('/snippet',
         function (req, res) {
-            db.addModifySnippet(req.body, function (err) {
+            db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
                     return res.status(500).json({error: 'Error adding repository to database'});
                 }
             });
 
             github.createRepo(req.body, function (err, repo) {
+                if (err) {
+                    return res.status(500).json({error: 'Error creating repository on GitHub'});
+                }
+                res.json(repo);
+            });
+        }
+    );
+
+    // update snippet
+    api_routes.put('/snippet',
+        function (req, res) {
+            db.addUpdateSnippet(req.body, function (err) {
+                if (err) {
+                    return res.status(500).json({error: 'Error adding repository to database'});
+                }
+            });
+
+            github.updateRepo(req.body, function (err, repo) {
                 if (err) {
                     return res.status(500).json({error: 'Error creating repository on GitHub'});
                 }
@@ -69,6 +88,7 @@ module.exports = function(app) {
                         return res.status(500).json({error: 'Error retrieving repository contents'});
                     }
                     retObj = contents;
+                    retObj._id = req.params.snippetId;
                     // get the description
                     github.getRepo(req.params.snippetId, function (err, repo) {
                         if (err) {

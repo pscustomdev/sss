@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
+    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'xeditable'])
         .config(['$stateProvider', StateProvider])
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', 'editableOptions'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,9 +20,10 @@
         });
     }
 
-    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions) {
         $scope.snippetId = $stateParams.snippetId;
         var count = 0;
+        editableOptions.theme = 'bs3';
 
         function getOverview(snippetId) {
             // retry getting the snippet 5 times
@@ -55,6 +56,15 @@
                     $state.go('search', {});
                 }
             )
-        }
+        };
+
+        $scope.updateSnippet = function() {
+            $nodeServices.updateSnippet($scope.snippetOverview).then (
+                function() {
+                    // TODO what should use see after update?
+
+                }
+            )
+        };
     }
 }());

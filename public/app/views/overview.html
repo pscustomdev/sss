@@ -2,8 +2,14 @@
     <section class="col-md-12">
         <div class="panel panel-info">
             <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" ng-click="deleteSnippet(snippetId)">Delete Snippet</button>
-            <div><h3 class="panel-heading">{{snippetOverview.displayName}}</h3></div>
-            <div class="panel-body">{{snippetOverview.description}}</div>
+            <div>
+                <h3 class="panel-heading">
+                    <a href="#" editable-text="snippetOverview.displayName" onaftersave="updateSnippet()">{{snippetOverview.displayName}}</a>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <a href="#" editable-text="snippetOverview.description" onaftersave="updateSnippet()">{{snippetOverview.description}}</a>
+            </div>
         </div>
         <div>
             <strong ng-show="!snippetOverview">Loading...</strong>

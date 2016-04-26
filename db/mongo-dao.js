@@ -43,12 +43,11 @@ exports.findUser = function(id, next) {
     });
 };
 
-// snippet = {_id: "id", name: "name", rating: "rating", viewCount: "viewCount", owner: "postedBy"}
-exports.addModifySnippet = function(snippet, next) {
+exports.addUpdateSnippet = function(snippet, next) {
     db.collection("snippets").update({_id:snippet._id}, {owner: snippet.owner, displayName: snippet.displayName}, {upsert:true},
         function(err, object) {
             if (err){
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, object);

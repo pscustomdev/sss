@@ -26,7 +26,7 @@
         $scope.createSnippet = function() {
             var uuid = generateUUID();
 
-            $nodeServices.addModifySnippet({_id: uuid, displayName: $scope.formData.displayName, description: $scope.formData.description, owner: $rootScope.currentUser.username, readme: $scope.formData.readme}).then(
+            $nodeServices.addSnippet({_id: uuid, displayName: $scope.formData.displayName, description: $scope.formData.description, owner: $rootScope.currentUser.username, readme: $scope.formData.readme}).then(
                 function () {
                     $state.go('search.results.overview', { snippetId: uuid});
                 }

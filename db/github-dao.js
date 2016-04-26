@@ -183,6 +183,22 @@ exports.createRepo = function (snippet, next) {
     });
 };
 
+exports.updateRepo = function (snippet, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: snippet._id,
+        name: snippet._id,
+        description: snippet.description
+    };
+
+    github.repos.update(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        next(err, resultData);
+    });
+};
+
 exports.deleteRepo = function (snippetId, next) {
     var msg = {
         user: "sss-storage",

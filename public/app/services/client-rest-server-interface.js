@@ -12,10 +12,11 @@
             getSnippets: getSnippets,
             getSnippetOverview: getSnippetOverview,
             getSnippetDetail: getSnippetDetail,
-            deleteSnippet: deleteSnippet,
             searchCode: searchCode,
             getCommits: getCommits,
-            addModifySnippet: addModifySnippet
+            addSnippet: addSnippet,
+           updateSnippet: updateSnippet,
+            deleteSnippet: deleteSnippet
         };
 
         //Make sure to add the function into the return statement.
@@ -59,8 +60,21 @@
                 });
         }
 
-        function addModifySnippet(snippet) {
+        function addSnippet(snippet) {
             return $http.post('/api/snippet', snippet)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        function updateSnippet(snippet) {
+            return $http.put('/api/snippet', snippet)
                 .then(function(response) {
                         return response.data;
                     },

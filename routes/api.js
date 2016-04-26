@@ -49,7 +49,7 @@ module.exports = function(app) {
         }
     );
 
-    // update snippet (put)
+    // update snippet data such as display name and description (put)
     api_routes.put('/snippet',
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
@@ -135,10 +135,48 @@ module.exports = function(app) {
         }
     );
 
+    // add a repo file
+    api_routes.post('/snippet-detail/:snippetId/:fileName',
+        function (req, res) {
+            var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
+            github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+                if (err) {
+                    return res.status(500).json({error: 'Error creating file: ' + err.message});
+                }
+                res.json(content);
+            });
+        }
+    );
+
+    // update contents of a repo file
+    api_routes.put('/snippet-detail/:snippetId/:fileName',
+        function (req, res) {
+            var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
+            github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving repositories'});
+                }
+                res.json(content);
+            });
+        }
+    );
+
     // get contents of a repo file
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving repositories'});
+                }
+                res.json(content);
+            });
+        }
+    );
+
+    // delete a repo file
+    api_routes.delete('/snippet-detail/:snippetId/:fileName',
+        function (req, res) {
+            github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving repositories'});
                 }

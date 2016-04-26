@@ -22,6 +22,7 @@
 
     function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions) {
         $scope.snippetId = $stateParams.snippetId;
+        $scope.fileContent = "";
         var count = 0;
         editableOptions.theme = 'bs3';
 
@@ -58,11 +59,20 @@
             )
         };
 
+        // update the display name and description
         $scope.updateSnippet = function() {
             $nodeServices.updateSnippet($scope.snippetOverview).then (
-                function() {
-                    // TODO what should use see after update?
+                function() {}
+            )
+        };
 
+        $scope.addFile = function(fileName) {
+            var content = {};
+            content.content = $scope.fileContent;
+            $nodeServices.addFile($scope.snippetId, fileName, content).then (
+                function() {
+                    // refresh the overview page
+                    $state.reload();
                 }
             )
         };

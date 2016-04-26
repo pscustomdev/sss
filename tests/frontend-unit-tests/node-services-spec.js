@@ -60,7 +60,7 @@ describe('SSS Node Services', function() {
         });
 
         it('should return data as passed in via mock', function() {
-            $nodeServices.getSnippetDetail(mockSnippetId, mockSnippetFilename).then(function(payload){
+            $nodeServices.getFile(mockSnippetId, mockSnippetFilename).then(function(payload){
                 expect(payload).to.deep.equal(mockPayload);
             });
         });

@@ -25,7 +25,7 @@
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
 
-        $nodeServices.getSnippetDetail($scope.snippetId, $scope.fileName).then (
+        $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
             function(data) {
                 // if the data starts with http, assume the file contains binary data
                 // so it is a URL (see db/github-dao.js)

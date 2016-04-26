@@ -14,6 +14,9 @@
             </div>
         </div>
         <div>
+            <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" ng-click="addFile(newFileName)">New Empty File</button>
+            <span class="pull-right">Temp filename: <input ng-model="newFileName"/></span>&nbsp;
+
             <strong ng-show="!snippetOverview">Loading...</strong>
             <ul>
                 <li ng-repeat="file in snippetOverview.files">

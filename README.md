@@ -167,9 +167,10 @@ To add a new view, pattern it after an existing view, such as "overview".
 To-Do
 ===== RELEASE 1 =========
 ToDo: Edit a snippet  (if snippetOverview.isOwner is true)
-  ToDo: Ability to edit exiting files in snippet
-  ToDo: Ability to add files to snippet
-  ToDo: Ability to delete files from snippet
+  ToDo: Edit exiting files in snippet
+  ToDo: Add files to snippet
+  ToDo: Delete files from snippet
+  ToDo: Rename a file
 Todo: Disable meta data if not implemented
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
 ToDo: Hide Top Searches and Highest Rated until implemented

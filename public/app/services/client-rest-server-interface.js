@@ -11,12 +11,15 @@
             getCurrentUser: getCurrentUser,
             getSnippets: getSnippets,
             getSnippetOverview: getSnippetOverview,
-            getSnippetDetail: getSnippetDetail,
             searchCode: searchCode,
             getCommits: getCommits,
             addSnippet: addSnippet,
-           updateSnippet: updateSnippet,
-            deleteSnippet: deleteSnippet
+            updateSnippet: updateSnippet,
+            deleteSnippet: deleteSnippet,
+            getFile: getFile,
+            addFile: addFile,
+            updateFile: updateFile,
+            deleteFile: deleteFile
         };
 
         //Make sure to add the function into the return statement.
@@ -116,7 +119,7 @@
         }
 
         // get a file from a snippet
-        function getSnippetDetail(snippetId, fileName) {
+        function getFile(snippetId, fileName) {
             return $http.get('/api/snippet-detail/' + snippetId + "/" + fileName, { cache: true })
                 .then(function(response) {
                         return response.data;
@@ -128,7 +131,49 @@
                     $log.debug(err);
                 });
         }
-       
+
+        // add a file to a snippet
+        function addFile(snippetId, fileName, content) {
+            return $http.post('/api/snippet-detail/' + snippetId + "/" + fileName, content)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        // update a file in a snippet
+        function updateFile(snippetId, fileName, content) {
+            return $http.put('/api/snippet-detail/' + snippetId + "/" + fileName, content)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        // delete a file from a snippet
+        function deleteFile(snippetId, fileName) {
+            return $http.delete('/api/snippet-detail/' + snippetId + "/" + fileName)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
         function searchCode(searchTerms) {
             return $http.get('/api/snippet-search?q=' + searchTerms)
                 .then(function(response) {

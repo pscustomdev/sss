@@ -115,18 +115,86 @@ exports.getRepoContents = function (repoName, next) {
     });
 };
 
+exports.addRepoFile = function (repoName, fileName, content, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: repoName,
+        path: fileName,
+        message: fileName + " creation",
+        content: content
+    };
+
+    github.repos.createFile(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        next(err, resultData);
+    });
+};
+
+exports.updateRepoFile = function (repoName, fileName, content, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: repoName,
+        path: fileName,
+        message: fileName + " update",
+        content: content
+    };
+
+    exports.getRepoFileSha(repoName, fileName, function(err, sha) {
+        if (err) {
+            return next(err);
+        }
+        msg.sha = sha;
+
+        github.repos.updateFile(msg, function (err, resultData) {
+            if (err) {
+                return next(err);
+            }
+            next(err, resultData);
+        });
+    });
+};
+
+exports.deleteRepoFile = function (repoName, fileName, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: repoName,
+        path: fileName,
+        message: fileName + " deletion"
+    };
+
+    exports.getRepoFileSha(repoName, fileName, function(err, sha) {
+        if (err) {
+            return next(err);
+        }
+        msg.sha = sha;
+
+        github.repos.deleteFile(msg, function (err, resultData) {
+            if (err) {
+                return next(err);
+            }
+            next(err, resultData);
+        });
+    });
+};
+
 // get the contents of a specific repo file
 exports.getRepoFile = function (repoName, fileName, next) {
-    var msg = {user: "sss-storage", repo: repoName, path: fileName};
+    var msg = {
+        user: "sss-storage",
+        repo: repoName,
+        path: fileName
+    };
 
     github.repos.getContent(msg, function (err, resultData) {
         if (err) {
             return next(err);
         }
         console.log("getRepoFile: " + JSON.stringify(resultData));
+        var retData = "";
         try {
             if (resultData) {
-                var retData = "";
                 var isBinary = false;
 
                 // check for known binary files
@@ -154,6 +222,30 @@ exports.getRepoFile = function (repoName, fileName, next) {
     });
 };
 
+// get the sha blob of a specific repo file
+// this is required to update or delete a file
+exports.getRepoFileSha = function (repoName, fileName, next) {
+    var msg = {
+        user: "sss-storage",
+        repo: repoName,
+        path: fileName
+    };
+
+    github.repos.getContent(msg, function (err, resultData) {
+        if (err) {
+            return next(err);
+        }
+        console.log("getRepoFileSha: " + JSON.stringify(resultData));
+        var retData = "";
+        try {
+            if (resultData) {
+                retData = resultData.sha;
+            }
+        } catch (ignore) {}
+        next(err, retData);
+    });
+};
+
 exports.createRepo = function (snippet, next) {
     var msg = {
         org: "sss-storage",
@@ -170,20 +262,12 @@ exports.createRepo = function (snippet, next) {
         // create readme and add to repo
         var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
         readmeContent = new Buffer(readmeContent).toString('base64');
-        var readme_msg = {
-            user: "sss-storage",
-            repo: snippet._id,
-            path: "README.md",
-            message: "Initial readme creation",
-            content: readmeContent
-        };
-        github.repos.createFile(readme_msg, function(err, resultData) {
+        exports.addRepoFile(snippet._id, "README.md", readmeContent, function (err, resultData) {
             if (err) {
                 return next(err);
             }
+            next(err, resultData);
         });
-
-        next(err, resultData);
     });
 };
 

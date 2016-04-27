@@ -76,5 +76,21 @@
                 }
             )
         };
+
+        $scope.deleteFile = function(fileName) {
+            var content = {};
+            content.content = $scope.fileContent;
+            $nodeServices.deleteFile($scope.snippetId, fileName).then (
+                function() {
+                    // refresh the overview page
+                    $state.reload();
+                }
+            )
+        };
+
+        // focus the input field when the new file dialog is shown
+        $("#fileNameModal").on('shown.bs.modal', function() {
+            $("#newFileName").focus();
+        })
     }
 }());

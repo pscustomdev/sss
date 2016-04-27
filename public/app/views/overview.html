@@ -14,20 +14,41 @@
             </div>
         </div>
         <div>
-            <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" ng-click="addFile(newFileName)">New Empty File</button>
-            <span class="pull-right">Temp filename: <input ng-model="newFileName"/></span>&nbsp;
-
-            <strong ng-show="!snippetOverview">Loading...</strong>
-            <ul>
-                <li ng-repeat="file in snippetOverview.files">
-                    <a ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file}}'})">{{file}}</a>
-                </li>
-            </ul>
-            <hr>
-            <div class="panel panel-info">
-                <div class="panel-heading">ReadMe</div>
-                <div class="panel-body" ng-bind-html="$searchService.trustHtmlSnippet(snippetOverview.readme)"></div>
+            <div class="panel-body">
+                <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" data-toggle="modal" data-target="#fileNameModal">Create New File</button>
+                <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" onclick="alert('TODO')">Upload File</button>
             </div>
         </div>
+        <div>
+            <strong ng-show="!snippetOverview">Loading...</strong>
+            <ul class="list-group">
+                <li ng-repeat="file in snippetOverview.files" class="list-group-item">
+                    <a ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file}}'})">{{file}}</a>
+                    <span ng-show="file != 'README.md' && snippetOverview.isOwner" ng-click="deleteFile(file)" class="glyphicon glyphicon-trash pull-right" style="color:red; cursor:pointer;"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">ReadMe</div>
+            <div class="panel-body" ng-bind-html="$searchService.trustHtmlSnippet(snippetOverview.readme)"></div>
+        </div>
     </section>
+</div>
+
+<div id="fileNameModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Filename</h4>
+            </div>
+            <div class="modal-body">
+                <input id="newFileName" ng-model="newFileName" type="text" class="form-control"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" ng-click="addFile(newFileName)" data-dismiss="modal">Create File</button>
+            </div>
+        </div>
+    </div>
 </div>

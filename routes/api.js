@@ -12,7 +12,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getRepos(function (err, repos) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error retrieving repositories: ' + err.message});
                 }
                 res.json(repos);
             });
@@ -24,7 +24,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getRepo(function (err, repo) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repository'});
+                    return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
                 }
                 res.json(repo);
             });
@@ -36,13 +36,13 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database'});
+                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
             });
 
             github.createRepo(req.body, function (err, repo) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub'});
+                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
                 }
                 res.json(repo);
             });
@@ -54,13 +54,13 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database'});
+                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
             });
 
             github.updateRepo(req.body, function (err, repo) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub'});
+                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
                 }
                 res.json(repo);
             });
@@ -71,7 +71,7 @@ module.exports = function(app) {
         function (req, res) {
             github.deleteRepo(req.params.snippetId, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error deleting repository'});
+                    return res.status(500).json({error: 'Error deleting repository: ' + err.message});
                 }
                 res.json("");
             });
@@ -88,26 +88,42 @@ module.exports = function(app) {
             var retObj = {};
             db.getSnippet(req.params.snippetId, function (err, contents) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents'});
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
                 retObj = contents;
                 github.getRepoContents(req.params.snippetId, function (err, contents) {
                     if (err) {
-                        return res.status(500).json({error: 'Error retrieving repository contents'});
+                        return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
                     }
                     retObj = contents;
+
+                    //sort contents.files with README.md at the top of the list
+                    var readMeIdx = retObj.files.indexOf("README.md");
+                    if (readMeIdx > -1) {
+                        // preface with a space so it will sort at the top
+                        retObj.files[readMeIdx] = " README.md";
+                    }
+                    // sort - ignore case
+                    retObj.files.sort(function(a,b) {
+                        return a.toLowerCase().localeCompare(b.toLowerCase());
+                    });
+                    if (readMeIdx > -1) {
+                        // strip the leading space
+                        retObj.files[0] = "README.md";
+                    }
+
                     retObj._id = req.params.snippetId;
                     // get the description
                     github.getRepo(req.params.snippetId, function (err, repo) {
                         if (err) {
-                            return res.status(500).json({error: 'Error retrieving repository'});
+                            return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
                         }
                         retObj.description = repo.description;
 
                         // get the readme
                         github.getReadme(req.params.snippetId, function (err, readmeobj) {
                             if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository readme'});
+                                return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
                             }
                             var b = new Buffer(readmeobj.content, 'base64').toString();
                             // replace < in readme so any sample html content in the readme will render properly
@@ -120,7 +136,7 @@ module.exports = function(app) {
                             // get display name from database
                             db.getSnippet(req.params.snippetId, function (err, repo) {
                                 if (err) {
-                                    return res.status(500).json({error: 'Error retrieving repository from database'});
+                                    return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
                                 }
                                 retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                                 retObj.owner = repo ? repo.owner : "unknown";
@@ -154,7 +170,7 @@ module.exports = function(app) {
             var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
             github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error updating file: ' + err.message});
                 }
                 res.json(content);
             });
@@ -166,7 +182,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error retrieving file: ' + err.message});
                 }
                 res.json(content);
             });
@@ -178,7 +194,7 @@ module.exports = function(app) {
         function (req, res) {
             github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error deleting file: ' + err.message});
                 }
                 res.json(content);
             });
@@ -192,7 +208,7 @@ module.exports = function(app) {
             console.log("searchTerm: " + searchTerms);
             github.searchCode(searchTerms, function (err, repos) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
                 // this pattern is helpful if you need to make async calls within a loop
@@ -226,7 +242,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories'});
+                    return res.status(500).json({error: 'Error getting commits: ' + err.message});
                 }
                 res.json(commits);
             });

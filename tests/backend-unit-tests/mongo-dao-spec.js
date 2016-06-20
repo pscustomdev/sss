@@ -58,12 +58,12 @@ describe("Mongo Dao", function() {
 
     it('should be able to remove a user from the database', function (done) {
         //create the user so we can remove it.
-        db.addUser(fakeUser, function(err, users){
+        db.addUser(fakeUser, function(err, user){
             db.removeUser(fakeUser, function (err, data) {
                 if (err) console.log(err);
                 var userEmail = {email: "fake@email.com"};
-                db.findUsers(userEmail, function (err, user){
-                    expect(user).to.not.exist;
+                db.findUsers(userEmail, function (err, users){
+                    expect(users[0]).to.not.exist;
                     done();
                 });
             });

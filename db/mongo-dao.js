@@ -15,17 +15,22 @@ exports.addUser = function(profile, next) {
 };
 
 exports.removeUser = function(user, next) {
-    db.collection("users").remove({id: user.id}, function(err){
+    db.collection("users").remove({email: user.email}, function(err){
         next(err);
     });
 };
 
 exports.findUsers = function(queryObject, next) {
     db.collection("users").find(queryObject).toArray(function(err, users){
-        if(users && users[0]){
-            next(err, users);
+        if (err){
+            console.warn(err.message);
+            next(err, null);
         } else {
-            next("No user(s) found");
+            if (users) {
+                next(err, users);
+            } else {
+                next("No user(s) found");
+            }
         }
     });
 };

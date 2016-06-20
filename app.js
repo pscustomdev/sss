@@ -11,7 +11,7 @@ var MongoStore = connectMongo(expressSession);
 var config = require(path.join(__dirname, 'config'));
 
 var tingo = require('tingodb')();
-var sssDB = new tingo.Db('mongoDBFiles', {});
+var sssDB = new tingo.Db(config.mongoFilePath, {});
 
 var app = express();
 app.set('development', process.env.NODE_ENV === 'dev');

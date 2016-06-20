@@ -1,7 +1,7 @@
 var debug = require('debug')('sss');
 var config = require('../config');
 var tingo = require('tingodb')();
-var db = new tingo.Db('mongoDBFiles', {});
+var db = new tingo.Db(config.mongoFilePath, {});
 
 exports.addUser = function(profile, next) {
     db.collection("users").find({id: profile.email}).toArray(function(err, users){
@@ -9,7 +9,7 @@ exports.addUser = function(profile, next) {
             next(err, null);
         }
         db.collection("users").insert(profile, {}, function (err, results) {
-            next(err, results.ops);
+            next(err, results);
         });
     });
 };
@@ -22,7 +22,7 @@ exports.removeUser = function(user, next) {
 
 exports.findUsers = function(queryObject, next) {
     db.collection("users").find(queryObject).toArray(function(err, users){
-        if(users[0]){
+        if(users && users[0]){
             next(err, users);
         } else {
             next("No user(s) found");

@@ -32,7 +32,7 @@ describe("Mongo Dao", function() {
     it('should return error if user already exists', function (done) {
         db.addUser(fakeUser, function(){});
         db.addUser(fakeUser, function(err, users){
-            expect(err.code).equal(11000);  // 11000 means entry keyId already exists in database
+            expect(err.message).equal("duplicate key error index");
             done();
         });
     });
@@ -45,10 +45,10 @@ describe("Mongo Dao", function() {
                 expect(users[0].lastName).equal("fakeLast");
                 expect(users[0].email).equal("fake@email.com");
             } else {
-                expect(err).equal("ERROR");
+                expect(err.errmsg).contains("Error");
             }
             var userEmail = {email: "fake@email.com"};
-            db.findUsers(userEmail, function (err, user){
+            db.findUsers(userEmail, function (err, users){
                 expect(users).to.exist;
                 expect(users[0].firstName).equal("fakeFirst");
                 done();

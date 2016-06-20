@@ -10,6 +10,9 @@ var connectMongo = require('connect-mongo');
 var MongoStore = connectMongo(expressSession);
 var config = require(path.join(__dirname, 'config'));
 
+var tingo = require('tingodb')();
+var sssDB = new tingo.Db('mongoDBFiles', {});
+
 var app = express();
 app.set('development', process.env.NODE_ENV === 'dev');
 
@@ -28,7 +31,7 @@ app.use(expressSession(
         secret: "softwaresnippetsearch",
         saveUninitialized: false,
         resave: false,
-        store: new MongoStore({url: config.mongoUri}),
+        store: new MongoStore({db:sssDB}),
         cookie: {maxAge: config.cookieMaxAge}
     }
 ));

@@ -132,7 +132,7 @@ To manually install node_modules or bower_packages
    npm install -g jasmine-node-karma
    Run: jasmine-karma-node <test location> --autotest  NOTE: autotest runs test automatically
 
-5) npm install mongoskin --save
+5) npm install tingodb --save
 6) npm install github-api --save
 7) npm install underscore --save
 8) npm install bower -g

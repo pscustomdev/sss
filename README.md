@@ -52,9 +52,9 @@ Files
               
 :-:-: auth-conf.js :-:-:
  (NOTE: security values can't be stored in GIT or they will deactivate the token):
-============ REPLACE THE CONTENTS OF "auth-conf.js" WITH VALUE FROM FOLLOWING URL ============
+============ REPLACE THE CONTENTS OF "auth-conf-local.js" WITH VALUE FROM FOLLOWING URL ============
 http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS
-============ REPLACE THE CONTENTS OF "auth-conf.js" WITH VALUE FROM ABOVE URL ============
+============ REPLACE THE CONTENTS OF "auth-conf-local.js" WITH VALUE FROM ABOVE URL ============
 
 :-:-: SERVER SIDE :-:-:
 ============
@@ -62,7 +62,8 @@ http://nccd-archive.lab.novell.com/twiki/bin/view/Main/NccdInternal#SsS
 /config.js                                  - Generic configuration values
 /gulpfile.js                                - Gulp configuration. Produces a minified javascript file, with all application javascript included
 /auth/                                      - ** AUTHENTICATION **
-/auth/auth-config.js                        - Stores credentials to be used by Passport Strategies.  Git ignored.  Create this file manually by using the text found in this file
+/auth/auth-conf.js                        - Stores credentials from the environment in prod or from the auth-config-local.js in dev
+/auth/auth-conf-local.js                  - Stores credentials to be used by Passport Strategies.  Git ignored.  Create this file manually by using the text found in this file
 /auth/authentication.js                     - Code for passport authentication strategies, and serialize/deserialize user to local storage
 /auth/restrict.js                           - Code that checks if a user is authenticated and causes a redirect to the authentication url, if not
 /bin/                                       - ** BINARIES **

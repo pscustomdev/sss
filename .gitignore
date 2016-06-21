@@ -1,7 +1,7 @@
 /public/bower
 node_modules/
 data/
-auth-conf.js
+auth-conf-local.js
 /public/js/build
 .c9/
 /dist/

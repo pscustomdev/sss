@@ -2,6 +2,7 @@
 
 loggingEnabled: true
 logDirectory: iisnode
+debuggerExtensionDll: iisnode-inspector.dll
 # debuggingEnabled: false
 # devErrorsEnabled: false
 # node_env: production

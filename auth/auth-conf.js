@@ -3,7 +3,7 @@ var cfg = require('../config.js');
 
 //This is so we can set environment variables for the tokens in prod and not have them checked into git
 var githubClientID = process.env.GithubClientID;
-var githubClientSecret = process.env.GitHubClientSecret;
+var githubClientSecret = process.env.GithubClientSecret;
 var githubApiToken = process.env.GithubApiToken;
 
 if(process.env.NODE_ENV !== 'production'){

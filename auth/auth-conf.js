@@ -5,19 +5,22 @@ var cfg = require('../config.js');
 var githubClientID = process.env.GithubClientID;
 var githubClientSecret = process.env.GithubClientSecret;
 var githubApiToken = process.env.GithubApiToken;
+var githubCallbackURL = "http://www.softwaresnippetsearch.com:";
 
 if(process.env.NODE_ENV !== 'production'){
+
     var authConfLocal = require('../auth/auth-conf-local.js');
     githubClientID = authConfLocal.github.clientID;
     githubClientSecret =  authConfLocal.github.clientSecret;
     githubApiToken =  authConfLocal.github_api.token;
+    githubCallbackURL = "http://localhost:";
 }
 
 module.exports = {
     github: {
         clientID: githubClientID,
         clientSecret: githubClientSecret,
-        callbackURL: 'http://localhost:' + cfg.serverPort + '/auth/github/callback'
+        callbackURL: githubCallbackURL + cfg.serverPort + '/auth/github/callback'
     },
     github_api: {
         username: 'pscustomdev-sss',

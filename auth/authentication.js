@@ -1,13 +1,13 @@
 module.exports = function() {
     var passport = require('passport');
     var GithubStrategy = require('passport-github').Strategy;
-    var auth_config = require('../auth/auth-conf');
+    var auth_conf = require('../auth/auth-conf');
     var db = require('../db/mongo-dao');
 
     passport.use(new GithubStrategy({
-            clientID: auth_config.github.clientID,
-            clientSecret: auth_config.github.clientSecret,
-            callbackURL: auth_config.github.callbackURL
+            clientID: auth_conf.github.clientID,
+            clientSecret: auth_conf.github.clientSecret,
+            callbackURL: auth_conf.github.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
             db.findUser({ id: profile.id }, function(err, user) {

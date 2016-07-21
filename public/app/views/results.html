@@ -6,9 +6,9 @@
                 <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch($searchService.searchTerms)" type="button"
                         class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-default" uib-popover-template="results_filter.templateUrl" popover-placement="bottom">
-                    <span class="caret"></span>
-                </button>
+                <!--<button type="button" class="btn btn-default" uib-popover-template="results_filter.templateUrl" popover-placement="bottom">-->
+                    <!--<span class="caret"></span>-->
+                <!--</button>-->
             </div>
             <input type="text" ng-model="$searchService.searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch($searchService.searchTerms);" placeholder="Search for...">
         </div>
@@ -53,14 +53,14 @@
         <span ng-show="!($searchService.searchResults.inProgress)">{{$searchService.searchResults.total_count}} result(s) found</span>
         <span ng-show="$searchService.searchResults.inProgress">Searching...&nbsp;&nbsp;&nbsp;<img src="images/spinner.gif" height="20px" width="20px"/></span>
     </section>
-    <section class="col-md-4">
-        <span class="h4">Sort By: </span>
-        <div class="btn-group">
-            <label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'date'" uncheckable>Date</label>
-            <label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'rating'" uncheckable>Rating</label>
-            <label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'views'" uncheckable># Views</label>
-        </div>
-    </section>
+    <!--<section class="col-md-4">-->
+        <!--<span class="h4">Sort By: </span>-->
+        <!--<div class="btn-group">-->
+            <!--<label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'date'" uncheckable>Date</label>-->
+            <!--<label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'rating'" uncheckable>Rating</label>-->
+            <!--<label ng-model="results_sort" class="btn btn-default" uib-btn-radio="'views'" uncheckable># Views</label>-->
+        <!--</div>-->
+    <!--</section>-->
 </div>
 <hr/>
 <div class="row">
@@ -98,15 +98,15 @@
                 </div>
                 <div class="col-md-3">
                     <article>
-                        <uib-rating ng-model="item.score" max="max" readonly="isReadonly"
-                                    on-hover="hoveringOver(value)" on-leave="overStar = null"
-                                    titles="['one','two','three']"></uib-rating>
+                        <!--<uib-rating ng-model="item.score" max="max" readonly="isReadonly"-->
+                                    <!--on-hover="hoveringOver(value)" on-leave="overStar = null"-->
+                                    <!--titles="['one','two','three']"></uib-rating>-->
                 <span class="label"
                       ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
                       ng-show="overStar && !isReadonly">{{percent}}%</span>
                         <div>Score: {{item.score}}</div>
-                        <div>Last updated (last commit date)</div>
-                        <div>nnnn views (track in Mongo)</div>
+                        <!--<div>Last updated (last commit date)</div>-->
+                        <!--<div>nnnn views (track in Mongo)</div>-->
                         <div>Posted on (initial commit date)</div>
                         <div>Posted by (track in Mongo)</div>
                         <br/><br/><br/>

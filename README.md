@@ -170,14 +170,14 @@ To-Do
 ToDo: Edit a snippet  (if snippetOverview.isOwner is true)
   ToDo: Edit exiting files in snippet
   ToDo: Add files to snippet
-  ToDo: Delete files from snippet
-  ToDo: Rename a file
-Todo: Disable meta data if not implemented
-ToDo: Results Page - Fix issue with original/default results per page value isn't displayed
-ToDo: Hide Top Searches and Highest Rated until implemented
 ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
+ToDo: Posted by on the search results
+ToDo: Posted On to be written in Mongo and read
+
 
 ===== RELEASE FUTURE ========
+ToDo: Results Page - Fix issue with original/default results per page value isn't displayed (it defaults to 5)
+ToDo: Rename a file
 ToDo: Tests - Validate Backend tests make sense
 ToDo: Tests - Validate End2End tests make sense
 ToDo: Tests - Add Backend tests

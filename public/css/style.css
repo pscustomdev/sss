@@ -9,6 +9,7 @@ div .panel-body img {
 .breadcrumb {
   font-size: 11px;
   margin: 0;
+  background-color: transparent;
 }
 
 body {
@@ -21,4 +22,3 @@ body {
   width: 61%; /* Sets Searchbar length */
   z-index: 9999; /* Sets the Search bar to layer above all background content */
 }
-

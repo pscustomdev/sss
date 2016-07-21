@@ -46,7 +46,7 @@ exports.findUser = function(id, next) {
 };
 
 exports.addUpdateSnippet = function(snippet, next) {
-    db.collection("snippets").update({_id:snippet._id}, {owner: snippet.owner, displayName: snippet.displayName}, {upsert:true},
+    db.collection("snippets").update({snippetId:snippet._id}, {snippetId:snippet._id, owner: snippet.owner, displayName: snippet.displayName}, {upsert:true},
         function(err, object) {
             if (err){
                 console.warn(err.message);
@@ -58,7 +58,7 @@ exports.addUpdateSnippet = function(snippet, next) {
 };
 
 exports.getSnippet = function(id, next) {
-    db.collection('snippets').findOne({_id: id},
+    db.collection('snippets').findOne({snippetId: id},
         function(err, result) {
             if (err) {
                 console.warn(err.message);  // returns error if no matching object found

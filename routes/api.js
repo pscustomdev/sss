@@ -226,7 +226,6 @@ module.exports = function(app) {
                                 return res.status(500).json({error: 'Error retrieving repository from database'});
                             }
                             repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
-                            console.log("BLAH owner: " + JSON.stringify(repo));
                             repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
                             // do not return from the function until the last db call has returned
                             if (ctr == numItems - 1) {

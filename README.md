@@ -171,7 +171,6 @@ ToDo: Edit a snippet  (if snippetOverview.isOwner is true)
   ToDo: Edit exiting files in snippet
   ToDo: Add files to snippet
 ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
-ToDo: Posted by on the search results
 ToDo: Posted On to be written in Mongo and read
 
 

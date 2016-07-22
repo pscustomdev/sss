@@ -227,6 +227,7 @@ module.exports = function(app) {
                             }
                             repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
                             repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
+                            repos.items[idx].repository.postedOn = repo ? repo.postedOn : "unknown";
                             // do not return from the function until the last db call has returned
                             if (ctr == numItems - 1) {
                                 res.json(repos);

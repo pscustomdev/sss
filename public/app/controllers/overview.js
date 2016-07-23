@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'xeditable'])
+    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'xeditable', 'angularFileUpload'])
         .config(['$stateProvider', StateProvider])
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', 'editableOptions'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', 'editableOptions', 'FileUploader'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,7 +20,7 @@
         });
     }
 
-    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions, FileUploader) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileContent = "";
         var count = 0;
@@ -92,5 +92,15 @@
         $("#fileNameModal").on('shown.bs.modal', function() {
             $("#newFileName").focus();
         })
+
+        $scope.uploadComplete = function() {
+            // refresh the overview page
+            $state.reload();
+        };
+
+        // file uploader
+        var uploader = $scope.uploader = new FileUploader({
+            url: 'upload.php'
+        });
     }
 }());

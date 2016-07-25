@@ -1,11 +1,15 @@
 // Routes starting with "/api"
 module.exports = function(app) {
     var express = require('express');
+    var busboy = require('connect-busboy');
+    var fs = require('fs');
     var ghm = require("github-flavored-markdown");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var github = require('../db/github-dao');
     var db = require('../db/mongo-dao');
+
+    api_routes.use(busboy({ immediate: true }))
 
     // get a list of all snippets
     api_routes.get('/snippets',
@@ -67,6 +71,7 @@ module.exports = function(app) {
         }
     );
 
+    // delete snippet
     api_routes.delete('/snippet/:snippetId',
         function (req, res) {
             github.deleteRepo(req.params.snippetId, function (err, content) {
@@ -154,12 +159,33 @@ module.exports = function(app) {
     // add a repo file
     api_routes.post('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
+            // base64 encode content
             var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
             github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error creating file: ' + err.message});
                 }
-                res.json(content);
+                res.json({});
+            });
+        }
+    );
+
+    // upload and add a repo file
+    api_routes.post('/snippet-detail/:snippetId',
+        function (req, res) {
+            var snippetId = req.params.snippetId;
+            req.pipe(req.busboy);
+            req.busboy.on('file', function(fieldname, file, filename) {
+                file.on('data', function(data){
+                    // base64 encode file data
+                    var content = new Buffer(data).toString('base64');
+                    github.addRepoFile(req.params.snippetId, filename, content, function (err, content) {
+                        if (err) {
+                            return res.status(500).json({error: 'Error creating file: ' + err.message});
+                        }
+                        res.json({});
+                    });
+                });
             });
         }
     );
@@ -167,12 +193,13 @@ module.exports = function(app) {
     // update contents of a repo file
     api_routes.put('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
+            // base64 encode content
             var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
             github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error updating file: ' + err.message});
                 }
-                res.json(content);
+                res.json({});
             });
         }
     );

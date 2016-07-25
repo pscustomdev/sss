@@ -93,14 +93,15 @@
             $("#newFileName").focus();
         })
 
+        // file uploader
+        var uploader = $scope.uploader = new FileUploader({
+            url: '/api/snippet-detail/' + $scope.snippetId
+        });
+
+        // refresh the overview page when upload is complete
         $scope.uploadComplete = function() {
-            // refresh the overview page
             $state.reload();
         };
 
-        // file uploader
-        var uploader = $scope.uploader = new FileUploader({
-            url: 'upload.php'
-        });
     }
 }());

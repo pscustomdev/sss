@@ -212,6 +212,7 @@ exports.getRepoFile = function (repoName, fileName, next) {
                 if (isBinary) {
                     retData = resultData.download_url;
                 } else {
+                    // base64 decode the data in resultData.content
                     var b = new Buffer(resultData.content, 'base64');
                     retData = b.toString();
                 }
@@ -261,6 +262,7 @@ exports.createRepo = function (snippet, next) {
 
         // create readme and add to repo
         var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
+        // base64 encode data from readmeContent
         readmeContent = new Buffer(readmeContent).toString('base64');
         exports.addRepoFile(snippet._id, "README.md", readmeContent, function (err, resultData) {
             if (err) {

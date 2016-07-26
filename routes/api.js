@@ -9,7 +9,13 @@ module.exports = function(app) {
     var github = require('../db/github-dao');
     var db = require('../db/mongo-dao');
 
-    api_routes.use(busboy({ immediate: true }))
+    // limit file upload to 512k which is a github limit
+    api_routes.use(busboy({
+        immediate: true,
+        limits: {
+            fileSize: 512 * 1024
+        }
+    }));
 
     // get a list of all snippets
     api_routes.get('/snippets',
@@ -179,12 +185,16 @@ module.exports = function(app) {
                 var filesize = Number(req.headers['content-length']) * 2;
                 var content = new Uint8Array(filesize);
                 var offset = 0;
-                // read data from file in 32k buffers
+                var cnt = 0;
+                // read data from file in buffers
                 file.on('data', function(data) {
-                    if (data.length != 32768) {
+                    // only process the even number packets
+                    // I don't know why the data is sent this way from angular-file-upload
+                    if (cnt == 0 || cnt % 2 == 0) {
                         content.set(data, offset);
                         offset += data.length;
                     }
+                    cnt++;
                 });
                 // once file read is complete, add the file to the snippet
                 file.on('end', function() {

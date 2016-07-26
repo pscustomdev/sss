@@ -176,9 +176,21 @@ module.exports = function(app) {
             var snippetId = req.params.snippetId;
             req.pipe(req.busboy);
             req.busboy.on('file', function(fieldname, file, filename) {
-                file.on('data', function(data){
+                var filesize = Number(req.headers['content-length']) * 2;
+                var content = new Uint8Array(filesize);
+                var offset = 0;
+                // read data from file in 32k buffers
+                file.on('data', function(data) {
+                    if (data.length != 32768) {
+                        content.set(data, offset);
+                        offset += data.length;
+                    }
+                });
+                // once file read is complete, add the file to the snippet
+                file.on('end', function() {
+                    content = content.slice(0, offset);
                     // base64 encode file data
-                    var content = new Buffer(data).toString('base64');
+                    content = new Buffer(content).toString('base64');
                     github.addRepoFile(req.params.snippetId, filename, content, function (err, content) {
                         if (err) {
                             return res.status(500).json({error: 'Error creating file: ' + err.message});

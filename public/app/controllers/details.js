@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    angular.module('app.details', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
+    angular.module('app.details', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'ui.ace'])
         .config(['$stateProvider', StateProvider])
         .controller('DetailsController', DetailsController);
 

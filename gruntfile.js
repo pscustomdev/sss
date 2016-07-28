@@ -11,31 +11,6 @@ module.exports = function(grunt) {
                 src: ['dist']
             }
         },
-        compress: {
-            package: {
-                options: {
-                    archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
-                },
-                files: [
-                    {dest: 'sss/public/libs/', src: ['dist/**/sss.min.js', 'public/bower/angular-xeditable/dist/js/xeditable.min.js', 'public/bower/angular/angular.min.js', 'public/bower/angular/angular.min.js.map', 'public/bower/angular-animate/angular-animate.min.js', 'public/bower/angular-animate/angular-animate.min.js.map', 'public/bower/angular-sanitize/angular-sanitize.min.js', 'public/bower/angular-sanitize/angular-sanitize.min.js.map', 'public/bower/angular-bootstrap/ui-bootstrap-tpls.min.js', 'public/bower/bootstrap/js/modal.js','public/bower/angular-ui-router/release/angular-ui-router.min.js', 'public/bower/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js', 'public/bower/html5shiv/dist/html5shiv.min.js', 'public/bower/jquery/dist/jquery.min.js', 'public/bower/underscore/underscore-min.js', 'public/bower/underscore/underscore-min.map'], expand: true, flatten: true, filter: 'isFile'},
-                    {dest: 'sss/public/css/', src: ['public/bower/angular-xeditable/dist/css/xeditable.min.css', 'public/bower/bootstrap/dist/css/*.min.css','public/bower/bootstrap/dist/css/bootstrap.min.css.map','public/bower/bootstrap/dist/css/bootstrap-theme.min.css.map'], expand: true, flatten: true, filter: 'isFile'},
-                    {dest: 'sss/public/fonts/', src: ['public/bower/bootstrap/dist/fonts/*'], expand: true, flatten: true, filter: 'isFile'},
-                    {dest: 'sss//', src: ['app.js']},
-                    {dest: 'sss//', src: ['config.js']},
-                    {dest: 'sss//', src: ['auth/**']},
-                    {dest: 'sss//', src: ['bin/**']},
-                    {dest: 'sss//', src: ['db/**']},
-                    {dest: 'sss//', src: ['public/favicon.ico']},
-                    {dest: 'sss//', src: ['public/css/**']},
-                    {dest: 'sss//', src: ['public/fonts/**']},
-                    {dest: 'sss//', src: ['public/images/**']},
-                    {dest: 'sss//', src: ['public/app/**/*.html']},
-                    {dest: 'sss//', src: ['routes/**']},
-                    {dest: 'sss//', src: ['views/**']},
-                    {dest: 'sss//', src: ['node_modules/**']}
-                ]
-            }
-        },
         concat: {   // Concatenate files
             package: {
                 files: {
@@ -246,7 +221,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -263,12 +237,11 @@ module.exports = function(grunt) {
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);
     grunt.registerTask('deploy-production', ['package', 'unzip']);
+    grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
     grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);
     grunt.registerTask('csslint', ['csslint']);
-    grunt.registerTask('package', ['run-all-tests','clean', 'concat', 'uglify', 'compress']);  // 'jshint'
-    //grunt.registerTask('package', ['run-all-tests', 'csslint', 'clean', 'concat', 'uglify', 'compress']);  // 'jshint'
     // grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
     grunt.registerTask('run-all-tests', ['backend-tests', 'end2end-tests']);
     grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);

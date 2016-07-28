@@ -237,7 +237,8 @@ module.exports = function(grunt) {
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);
     grunt.registerTask('deploy-production', ['package', 'unzip']);
-    grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
+    //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
+    grunt.registerTask('build-production', ['clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
     grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);

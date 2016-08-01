@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 
         clean: {
             dist: ['dist'],
-            production: ['gruntfile.js','copyAuthConf', 'deploy.sh', 'installer.js', 'README.md','sss.iml','tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules']
+            production: ['gruntfile.js','copyAuthConf', 'installer.js', 'README.md','sss.iml','tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules']
         }
             ,
         concat: {   // Concatenate files

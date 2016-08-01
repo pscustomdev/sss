@@ -4,7 +4,7 @@
     angular.module('app.$nodeServices', [])
         .factory('$nodeServices', apiFactory);
 
-    apiFactory.$inject = ['$http','$log'];
+    apiFactory.$inject = ['$http', '$log'];
 
     function apiFactory($http, $log) {
         return {
@@ -120,7 +120,7 @@
 
         // get a file from a snippet
         function getFile(snippetId, fileName) {
-            return $http.get('/api/snippet-detail/' + snippetId + "/" + fileName, { cache: true })
+            return $http.get('/api/snippet-detail/' + snippetId + "/" + fileName)
                 .then(function(response) {
                         return response.data;
                     },
@@ -134,7 +134,9 @@
 
         // add a file to a snippet
         function addFile(snippetId, fileName, content) {
-            return $http.post('/api/snippet-detail/' + snippetId + "/" + fileName, content)
+            var data = {};
+            data.content = content;
+            return $http.post('/api/snippet-detail/' + snippetId + "/" + fileName, data)
                 .then(function(response) {
                         return response.data;
                     },
@@ -148,7 +150,9 @@
 
         // update a file in a snippet
         function updateFile(snippetId, fileName, content) {
-            return $http.put('/api/snippet-detail/' + snippetId + "/" + fileName, content)
+            var data = {};
+            data.content = content;
+            return $http.put('/api/snippet-detail/' + snippetId + "/" + fileName, data)
                 .then(function(response) {
                         return response.data;
                     },

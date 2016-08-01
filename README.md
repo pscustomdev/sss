@@ -165,12 +165,11 @@ To add a new view, pattern it after an existing view, such as "overview".
 5) Modify the new files accordingly
 
 
-To-Do
+
 ===== RELEASE 1 =========
-ToDo: Edit a snippet  (if snippetOverview.isOwner is true)
-  ToDo: Edit exiting files in snippet
-  ToDo: Add files to snippet
 ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
+ToDo: ACE: Dynamic ace editor height
+ToDo: ACE: Determine file type and set syntax highlighter
 
 ===== RELEASE FUTURE ========
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed (it defaults to 5)

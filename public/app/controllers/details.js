@@ -5,7 +5,7 @@
         .controller('DetailsController', DetailsController);
 
     StateProvider.$inject = ['$stateProvider'];
-    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams'];
+    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams', '$state'];
 
     function StateProvider($stateProvider) {
         $stateProvider.state('search.results.overview.details', {
@@ -21,9 +21,10 @@
         });
     }
 
-    function DetailsController($scope, $nodeServices, $stateParams) {
+    function DetailsController($scope, $nodeServices, $stateParams, $state) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
+        $scope.content = "";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
             function(data) {
@@ -37,5 +38,25 @@
                 }
             }
         );
+
+        $scope.aceLoaded = function(_editor){
+            var _session = _editor.getSession();
+            var _renderer = _editor.renderer;
+
+            _session.setUndoManager(new ace.UndoManager());
+        };
+
+        $scope.saveFile = function() {
+            $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
+                function() {
+                    $state.go('search.results.overview', {});
+                }
+            )
+        }
+
+        $scope.cancelEdit = function() {
+            $state.go('search.results.overview', {});
+        }
+
     }
 }());

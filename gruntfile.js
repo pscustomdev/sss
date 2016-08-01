@@ -7,10 +7,10 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         clean: {
-            package: {
-                src: ['dist']
-            }
-        },
+            dist: ['dist'],
+            production: ['gruntfile.js','copyAuthConf', 'deploy.sh', 'installer.js', 'README.md','sss.iml','tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules']
+        }
+            ,
         concat: {   // Concatenate files
             package: {
                 files: {
@@ -239,7 +239,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);
-    grunt.registerTask('build-production', ['clean', 'concat', 'uglify', 'remove']);
+    grunt.registerTask('build-production', ['clean:dist', 'concat', 'uglify', 'clean:production']);
     //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);

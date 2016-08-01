@@ -188,13 +188,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        remove: {
-            options: {
-                trace: true
-            },
-            fileList: ['copyAuthConf', 'deploy.sh', 'gruntfile.js', 'installer.js', 'README.md','sss.iml'],
-            dirList: ['tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules']
-        },
         uglify: {   // Minify files with UglifyJS
             options: {
                 mangle: false

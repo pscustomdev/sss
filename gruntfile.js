@@ -188,6 +188,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+        remove: {
+            options: {
+                trace: true
+            },
+            fileList: ['copyAuthConf', 'deploy.sh', 'gruntfile.js', 'installer.js', 'README.md','sss.iml'],
+            dirList: ['tests', 'public/app/controllers','public/app/services','.idea','docs']
+        },
         uglify: {   // Minify files with UglifyJS
             options: {
                 mangle: false
@@ -231,9 +238,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);
-    grunt.registerTask('deploy-production', ['package', 'unzip']);
+    grunt.registerTask('deploy-production', ['clean', 'concat', 'uglify', 'remove']);
     //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
-    grunt.registerTask('build-production', ['clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);
     grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);

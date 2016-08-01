@@ -198,9 +198,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        unzip: {
-            'dist/': 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
-        },
         watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
             dev: {
                 files: ['<%= jshint.js.files =>', '<%= jshint.tests.files =>', 'package.json', 'bower.json'],
@@ -231,8 +228,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-nodeMon');
     grunt.loadNpmTasks('grunt-protractor-runner');
-    grunt.loadNpmTasks('grunt-zip');
-
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);

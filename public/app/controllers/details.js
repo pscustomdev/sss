@@ -17,6 +17,9 @@
                 '@': {
                     templateUrl: '/app/views/details.html', controller: 'DetailsController'
                 }
+            },
+            params: {
+                isOwner: null
             }
         });
     }
@@ -24,6 +27,7 @@
     function DetailsController($scope, $nodeServices, $stateParams, $state) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
+        $scope.isOwner = $stateParams.isOwner;
         $scope.content = "";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
@@ -42,7 +46,7 @@
         $scope.aceLoaded = function(_editor){
             var _session = _editor.getSession();
             var _renderer = _editor.renderer;
-
+            _editor.setReadOnly(!$scope.isOwner)
             _session.setUndoManager(new ace.UndoManager());
         };
 

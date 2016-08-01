@@ -1,20 +1,24 @@
 <div class="row">
     <section class="col-md-12">
-        <div ng-show="!contentUrl" class="btn-group pull-right">
+        <!-- upper set of buttons -->
+        <div ng-show="!contentUrl && isOwner" class="btn-group pull-right">
             <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
             <button class="btn btn-success" ng-click="saveFile()">Save</button>
         </div>
         <h4><strong>{{fileName}}</strong></h4>
-        <div>
-            <strong ng-show="!content && !contentUrl">Loading...</strong>
-            <div ng-show="!contentUrl">
-                <div ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
-                <div class="btn-group pull-right">
-                    <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
-                    <button class="btn btn-success" ng-click="saveFile()">Save</button>
-                </div>
-            </div>
-            <img ng-show="contentUrl" src="{{contentUrl}}"/>
+        <strong ng-show="!content && !contentUrl">Loading...</strong>
+
+        <!-- show text file contents -->
+        <div ng-show="!contentUrl">
+            <div ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
         </div>
+        <!-- lower set of buttons -->
+        <div ng-show="!contentUrl && isOwner" class="btn-group pull-right">
+            <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+            <button class="btn btn-success" ng-click="saveFile()">Save</button>
+        </div>
+
+        <!--  show contents of URL such as an image -->
+        <img ng-show="contentUrl" src="{{contentUrl}}"/>
     </section>
 </div>

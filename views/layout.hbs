@@ -5,10 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-        <script src="/bower/html5shiv/dist/html5shiv.js"></script>
-        <![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/bower/html5shiv/dist/html5shiv.js"></script>
+    <![endif]-->
+    <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="../bower/angular-xeditable/dist/css/xeditable.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+
+    {{#if settings.development}}
         <script src="/bower/underscore/underscore.js"></script>
         <script src="/bower/angular/angular.js"></script>
         <script src="/bower/angular-ui-router/release/angular-ui-router.js"></script>
@@ -30,30 +37,11 @@
         <script src="/app/controllers/create.js"></script>
         <script src="/app/controllers/sss.js"></script>
         <script src="/app/app.js"></script>
-        <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-        <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
-        <link href="../bower/angular-xeditable/dist/css/xeditable.min.css" rel="stylesheet">
+    {{else}}  <!--we don't need the above in prod since we concat and uglify them all into sss.min.js-->
+        <script src="/app/sss.min.js"></script>
+    {{/if}}
 
-        <!--Possibly use this if we use production via the grunt file.  But we are pushing via git so we aren't going to use this.-->
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-        <!--<script src="/libs/html5shiv.js"></script>-->
-        <![endif]-->
-        <!--<script src="/libs/underscore-min.js"></script>-->
-        <!--<script src="/libs/angular.min.js"></script>-->
-        <!--<script src="/libs/angular-ui-router.min.js"></script>-->
-        <!--<script src="/libs/angular-sanitize.min.js"></script>-->
-        <!--<script src="/libs/angular-animate.min.js"></script>-->
-        <!--<script src="/libs/jquery.min.js"></script>-->
-        <!--<script src="/libs/ui-bootstrap-tpls.min.js"></script>-->
-        <!--<script src="/libs/modal.js"></script>-->
-        <!--<script src="/libs/xeditable.min.js"></script>-->
-        <!--<script src="/libs/sss.min.js?v=2"></script>-->
-        <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
-        <!--<link href="/css/bootstrap-theme.min.css" rel="stylesheet">-->
-        <!--<link href="/css/xeditable.min.css" rel="stylesheet">-->
 
-    <link href="/css/style.css" rel="stylesheet">
 </head>
 
 <body ng-app="app" >

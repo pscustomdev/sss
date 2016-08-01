@@ -193,7 +193,7 @@ module.exports = function(grunt) {
                 trace: true
             },
             fileList: ['copyAuthConf', 'deploy.sh', 'gruntfile.js', 'installer.js', 'README.md','sss.iml'],
-            dirList: ['tests', 'public/app/controllers','public/app/services','.idea','docs']
+            dirList: ['tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules']
         },
         uglify: {   // Minify files with UglifyJS
             options: {
@@ -201,7 +201,7 @@ module.exports = function(grunt) {
             },
             package: {
                 files: {
-                    'dist/sss.min.js': ['dist/sss.js']
+                    'public/app/sss.min.js': ['dist/sss.js']
                 }
             }
         },

@@ -2,7 +2,6 @@
 
 module.exports = function(grunt) {
     var cfg = require('./config.js');
-    var productionPort = 10 + cfg.serverPort;
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -97,7 +96,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
-    grunt.registerTask('default', ['sss-development-mode']);
+    grunt.registerTask('default', ['run-all-tests']);
     grunt.registerTask('build-production', ['clean:dist', 'concat', 'uglify', 'clean:production']);
     //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
@@ -105,5 +104,5 @@ module.exports = function(grunt) {
     grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);
     grunt.registerTask('csslint', ['csslint']);
     // grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
-    grunt.registerTask('run-all-tests', ['backend-tests', 'end2end-tests']);
+    grunt.registerTask('run-all-tests', ['backend-tests']);
 };

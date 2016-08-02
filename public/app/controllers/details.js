@@ -28,6 +28,7 @@
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
         $scope.isOwner = $stateParams.isOwner;
+        $scope.isMarkdown = false;
         $scope.content = "";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
@@ -46,8 +47,19 @@
         $scope.aceLoaded = function(_editor){
             var _session = _editor.getSession();
             var _renderer = _editor.renderer;
-            _editor.setReadOnly(!$scope.isOwner)
+
+            // autodetect file type by extension
+            var fileComps = ($scope.fileName ? $scope.fileName.toLowerCase().split(".") : ['txt']);
+            var mode = fileComps[fileComps.length - 1];
+            switch (mode) {
+                case 'xsl': mode = 'xml'; break;
+                case 'md': mode = 'markdown'; $scope.isMarkdown = true; break;
+            }
+            _session.setMode('ace/mode/' + mode);
             _session.setUndoManager(new ace.UndoManager());
+            _editor.setReadOnly(!$scope.isOwner);
+
+            $(window).resize();
         };
 
         $scope.saveFile = function() {

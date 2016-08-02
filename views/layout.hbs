@@ -23,10 +23,10 @@
     <script src="/bower/bootstrap/js/modal.js"></script>
     <script src="/bower/angular-xeditable/dist/js/xeditable.min.js"></script>
     <script src="/bower/angular-file-upload/dist/angular-file-upload.js"></script>
+    <script src="/app/lib/util.js"></script> <!--these aren't concatenated by grunt so we need them here-->
+    <script src="/app/lib/ui-router-breadcrumbs.js"></script>  <!--these aren't concatenated by grunt so we need them here-->
 
     {{#if settings.development}}
-        <script src="/app/lib/util.js"></script>
-        <script src="/app/lib/ui-router-breadcrumbs.js"></script>
         <script src="/app/services/client-rest-server-interface.js"></script>
         <script src="/app/services/search-service.js"></script>
         <script src="/app/controllers/search.js"></script>

@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         concat: {   // Concatenate files
             package: {
                 files: {
-                    'dist/sss.js': ['public/app/controllers/*.js','public/app/services/*.js']
+                    'dist/sss.js': ['public/app/controllers/*.js','public/app/services/*.js','public/app/*.js']
                 }
             }
         },

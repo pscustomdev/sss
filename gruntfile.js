@@ -9,40 +9,11 @@ module.exports = function(grunt) {
         clean: {
             dist: ['dist'],
             production: ['gruntfile.js','copyAuthConf', 'installer.js', 'README.md','sss.iml','tests', 'public/app/controllers','public/app/services','.idea','docs','node-modules','public/bower']
-        }
-            ,
+        },
         concat: {   // Concatenate files
             package: {
                 files: {
                     'dist/sss.js': ['public/app/controllers/*.js','public/app/services/*.js','public/app/*.js']
-                }
-            }
-        },
-        concurrent: {
-            'sss-development-mode': {
-                tasks: ['nodemon:sss'],
-                //tasks: ['nodemon:sss', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
-                options: {
-                    logConcurrentOutput: true
-                }
-            },
-            'sss-development-debug-mode': {
-                tasks: ['nodemon:sss-debug'],
-                //tasks: ['nodemon:sss-debug', 'watch:js', 'watch:tests', 'watch:css', 'watch:dev'],
-                options: {
-                    logConcurrentOutput: true
-                }
-            },
-            'sss-production-mode': {
-                tasks: ['nodemon:sss-production'],
-                options: {
-                    logConcurrentOutput: true
-                }
-            },
-            'run-all-tests': {
-                tasks: ['run-all-tests'],
-                options: {
-                    logConcurrentOutput: true
                 }
             }
         },
@@ -51,21 +22,6 @@ module.exports = function(grunt) {
                 import: false
             },
             src: ['public/css/**/*.css']
-        },
-        env: {
-            debug: {
-                NODE_ENV: 'development',
-                PORT: cfg.serverPort,
-                DEBUG: 'SSS:*'
-            },
-            dev: {
-                NODE_ENV: 'development' ,
-                PORT: cfg.serverPort
-            },
-            prod: {
-                NODE_ENV: 'production',
-                PORT: productionPort
-            }
         },
         jshint: {   // Validate files with JSHint
             tests: {
@@ -107,75 +63,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        nodemon: {    // Restart NodeJS's Application whenever watched file patterns are added, changed or deleted
-            sss: {
-                script: 'bin/www',
-                ignore:  ['node_modules/**'],
-                options: {
-                    ext: 'js',
-                    watch: ['auth', 'db', 'routes', 'views'],
-                    delay: 300,
-                    callback: function (nodemon) {
-                        nodemon.on('log', function (event) {
-                            console.log(event.colour);
-                        });
-
-                        /** Open the application in a new browser window **/
-                        nodemon.on('config:update', function () {
-                            // Delay before server listens on port
-                            setTimeout(function () {
-                                require('open')('http://localhost:' + cfg.serverPort);
-                            }, 1000);
-                        });
-                    }
-                }
-            },
-            'sss-debug': {
-                script: 'bin/www',
-                ignore:  ['node_modules/**'],
-                options: {
-                    nodeArgs: ['--debug'],
-                    ext: 'js',
-                    watch: ['auth', 'db', 'routes', 'views'],
-                    delay: 300,
-                    callback: function (nodemon) {
-                        nodemon.on('log', function (event) {
-                            console.log(event.colour);
-                        });
-
-                        /** Open the application in a new browser window **/
-                        nodemon.on('config:update', function () {
-                            // Delay before server listens on port
-                            setTimeout(function () {
-                                require('open')('http://localhost:' + cfg.serverPort);
-                            }, 1000);
-                        });
-                    }
-                }
-            },
-            'sss-production': {
-                script: 'dist/sss/bin/www',
-                ignore:  ['node_modules/**'],
-                options: {
-                    ext: 'js',
-                    watch: ['auth', 'db', 'routes', 'views'],
-                    delay: 300,
-                    callback: function (nodemon) {
-                        nodemon.on('log', function (event) {
-                            console.log(event.colour);
-                        });
-
-                        /** Open the application in a new browser window **/
-                        nodemon.on('config:update', function () {
-                            // Delay before server listens on port
-                            setTimeout(function () {
-                                require('open')('http://localhost:' + productionPort);
-                            }, 1000);
-                        });
-                    }
-                }
-            }
-        },
         protractor: {   // Run end-to-end (eg Browser/GUI) Protractor tests as defined in config.
             options: {
                 configFile: 'tests/protractor.conf.js', // Default config file
@@ -197,38 +84,17 @@ module.exports = function(grunt) {
                     'public/app/sss.min.js': ['dist/sss.js']
                 }
             }
-        },
-        watch: {    // Run predefined tasks whenever watched file patterns are added, changed or deleted
-            dev: {
-                files: ['<%= jshint.js.files =>', '<%= jshint.tests.files =>', 'package.json', 'bower.json'],
-                tasks: ['concurrent:run-all-tests'],
-                options: {
-                    atBegin: true
-                }
-            },
-            css: {
-                files: ['<%= csslint.files =>'],
-                tasks: ['csslint'],
-                options: {
-                    atBegin: true
-                }
-            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-env');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-mocha-test');
-    grunt.loadNpmTasks('grunt-nodeMon');
     grunt.loadNpmTasks('grunt-protractor-runner');
-    grunt.loadNpmTasks('grunt-remove');
 
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['sss-development-mode']);
@@ -240,7 +106,4 @@ module.exports = function(grunt) {
     grunt.registerTask('csslint', ['csslint']);
     // grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
     grunt.registerTask('run-all-tests', ['backend-tests', 'end2end-tests']);
-    grunt.registerTask('sss-development-mode', ['env:dev', 'concurrent:sss-development-mode']);
-    grunt.registerTask('sss-production-mode', ['env:prod', 'concurrent:sss-production-mode']);
-    grunt.registerTask('sss-debug-mode', ['env:debug', 'concurrent:sss-development-debug-mode']);
 };

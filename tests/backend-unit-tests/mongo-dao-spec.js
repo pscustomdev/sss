@@ -69,4 +69,68 @@ describe("Mongo Dao", function() {
             });
         });
     });
+
+    xit('should be able to find users in the the database', function (done) {
+        //exports.findUsers = function(queryObject, next) {
+        //    db.collection("users").find(queryObject).toArray(function(err, users){
+        //        if (err){
+        //            console.warn(err.message);
+        //            next(err, null);
+        //        } else {
+        //            if (users) {
+        //                next(err, users);
+        //            } else {
+        //                next("No user(s) found");
+        //            }
+        //        }
+        //    });
+        //};
+    });
+
+    xit('should be find a specific user in the database', function (done) {
+        //
+        //exports.findUser = function(id, next) {
+        //    db.collection("users").find(id).toArray(function(err, users){
+        //        if (users[0]){
+        //            next(err, users[0]);
+        //        } else {
+        //            next("User not found");
+        //        }
+        //    });
+        //};
+        //
+    });
+
+    xit('should be able to update a snippet in the database', function (done) {
+        //exports.addUpdateSnippet = function(snippet, next) {
+        //    db.collection("snippets").update({snippetId:snippet._id}, {snippetId:snippet._id, owner: snippet.owner, displayName: snippet.displayName, postedOn: Date.now()}, {upsert:true},
+        //        function(err, object) {
+        //            if (err){
+        //                console.warn(err.message);
+        //                next(err, null);
+        //            }
+        //            next(err, object);
+        //        }
+        //    );
+        //};
+    });
+
+
+    xit('should be able to add a snippet to the database', function (done) {
+
+    });
+
+    xit('should be able to get a snippet from the database', function (done) {
+        //exports.getSnippet = function(id, next) {
+        //    db.collection('snippets').findOne({snippetId: id},
+        //        function(err, result) {
+        //            if (err) {
+        //                console.warn(err.message);  // returns error if no matching object found
+        //                next(err, null);
+        //            }
+        //            next(err, result);
+        //        }
+        //    );
+        //};
+    });
 });

@@ -6,7 +6,7 @@ var githubClientID = process.env.GithubClientID;
 var githubClientSecret = process.env.GithubClientSecret;
 var githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'testing') {
     var authConfLocal = require('../auth/auth-conf-local.js');
     githubApiToken =  authConfLocal.github_api.token;
     githubClientID = authConfLocal.github.clientID;

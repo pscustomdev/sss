@@ -177,7 +177,6 @@
         function searchCode(searchTerms) {
             return $http.get('/api/snippet-search?q=' + searchTerms)
                 .then(function(response) {
-                    $log.debug("response: " + JSON.stringify(response.data));
                         return response.data;
                     },
                     function(reason) {
@@ -191,7 +190,6 @@
         function getCommits(repoOwner, repoName) {
             return $http.get('/api/snippet-search/' + repoOwner + "/" + repoName)
                 .then(function(response) {
-                    $log.debug("response: " + JSON.stringify(response.data));
                         return response.data;
                     },
                     function(reason) {

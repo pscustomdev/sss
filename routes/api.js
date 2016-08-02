@@ -4,7 +4,6 @@ module.exports = function(app) {
     var bodyParser = require('body-parser');
     var busboy = require('connect-busboy');
     var fs = require('fs');
-    var ghm = require("github-flavored-markdown");
     var marked = require("marked");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
@@ -146,7 +145,6 @@ module.exports = function(app) {
                             // replace <img src="image.jpg"> with a full path to the image on github
                             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
                             b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
-/*                            retObj.readme = ghm.parse(b);*/
                             retObj.readme = marked(b);
 
                             // get display name from database

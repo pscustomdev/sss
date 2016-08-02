@@ -16,7 +16,15 @@ describe("GitHub Dao", function() {
             done();
         });
     });
-    
+
+    it('should get data on a specific repo', function (done) {
+        var repoName = 'IDMPolicyForEach';
+        gh.getRepo(repoName, function(err, repo){
+            expect(repo.name).to.eql(repoName);
+            done();
+        });
+    });
+
     it('should get search results from code', function (done) {
         gh.searchCode("This is a new file for testing", function(err, repos){
             expect(repos).isArray;

@@ -83,6 +83,12 @@ module.exports = function(app) {
     // delete snippet
     api_routes.delete('/snippet/:snippetId',
         function (req, res) {
+            db.removeSnippet(req.params.snippetId, function (err){
+                if (err) {
+                    return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
+                }
+            });
+
             github.deleteRepo(req.params.snippetId, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error deleting repository: ' + err.message});

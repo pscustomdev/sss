@@ -39,7 +39,7 @@
                             getOverview(snippetId);
                         } else {
                             $scope.snippetOverview = overview;
-                            $scope.snippetOverview.isOwner = (overview.owner == $rootScope.currentUser.username || $rootScope.currentUser.username == 'pscustomdev-sss');
+                            $scope.snippetOverview.isOwner = (overview.owner == $rootScope.currentUser.username);
                         }
                     }
                 );
@@ -61,14 +61,14 @@
 
         // update the display name and description
         $scope.updateSnippet = function() {
-            $scope.snippetOverview.owner = $rootScope.currentUser.username;
             $nodeServices.updateSnippet($scope.snippetOverview).then (
                 function() {}
             )
         };
 
         $scope.addFile = function(fileName) {
-            var content = "";
+            var content = {};
+            content.content = $scope.fileContent;
             $nodeServices.addFile($scope.snippetId, fileName, content).then (
                 function() {
                     // refresh the overview page
@@ -78,6 +78,8 @@
         };
 
         $scope.deleteFile = function(fileName) {
+            var content = {};
+            content.content = $scope.fileContent;
             $nodeServices.deleteFile($scope.snippetId, fileName).then (
                 function() {
                     // refresh the overview page

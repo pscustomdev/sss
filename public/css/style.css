@@ -2,6 +2,10 @@
   cursor: pointer; /* AngularJS's documented way to fix a Bootstrap/UI Bootstrap compatibility issue */
 }
 
+div .panel-body img {
+  width: 100%;
+}
+
 .breadcrumb {
   font-size: 11px;
   margin: 0;
@@ -9,7 +13,7 @@
 }
 
 body {
-  padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict
+  padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
 }
 
 .affix {
@@ -17,8 +21,4 @@ body {
   top: 115px; /* Sets Searchbar location on page */
   width: 61%; /* Sets Searchbar length */
   z-index: 9999; /* Sets the Search bar to layer above all background content */
-}
-
-.ace_editor {
-  height: 600px;
 }

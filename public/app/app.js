@@ -40,10 +40,3 @@
     }
 
 }());
-
-$(document).ready(function() {
-    $(window).resize(function() {
-        var bodyheight = $(this).height();
-        $(".ace_editor").css("height", bodyheight - 250 + "px");
-    });
-});

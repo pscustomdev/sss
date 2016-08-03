@@ -1,16 +1,13 @@
 // Routes starting with "/api"
 module.exports = function(app) {
     var express = require('express');
-    var bodyParser = require('body-parser');
     var busboy = require('connect-busboy');
     var fs = require('fs');
-    var marked = require("marked");
+    var ghm = require("github-flavored-markdown");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var github = require('../db/github-dao');
     var db = require('../db/mongo-dao');
-
-    var textParser = bodyParser.text();
 
     // limit file upload to 512k which is a github limit
     api_routes.use(busboy({
@@ -145,7 +142,7 @@ module.exports = function(app) {
                             // replace <img src="image.jpg"> with a full path to the image on github
                             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
                             b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
-                            retObj.readme = marked(b);
+                            retObj.readme = ghm.parse(b);
 
                             // get display name from database
                             db.getSnippet(req.params.snippetId, function (err, repo) {
@@ -166,7 +163,7 @@ module.exports = function(app) {
     );
 
     // add a repo file
-    api_routes.post('/snippet-detail/:snippetId/:fileName', textParser,
+    api_routes.post('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             // base64 encode content
             var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
@@ -216,10 +213,10 @@ module.exports = function(app) {
     );
 
     // update contents of a repo file
-    api_routes.put('/snippet-detail/:snippetId/:fileName', textParser,
+    api_routes.put('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             // base64 encode content
-            var content = new Buffer(req.body.content).toString('base64');
+            var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
             github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error updating file: ' + err.message});

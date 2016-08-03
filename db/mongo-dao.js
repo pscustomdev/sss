@@ -68,3 +68,15 @@ exports.getSnippet = function(id, next) {
         }
     );
 };
+
+exports.removeSnippet = function(id, next) {
+    db.collection('snippets').remove({snippetId: id},
+        function(err, result) {
+            if (err) {
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};

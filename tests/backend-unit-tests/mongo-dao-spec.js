@@ -70,21 +70,13 @@ describe("Mongo Dao", function() {
         });
     });
 
-    xit('should be able to find users in the the database', function (done) {
-        //exports.findUsers = function(queryObject, next) {
-        //    db.collection("users").find(queryObject).toArray(function(err, users){
-        //        if (err){
-        //            console.warn(err.message);
-        //            next(err, null);
-        //        } else {
-        //            if (users) {
-        //                next(err, users);
-        //            } else {
-        //                next("No user(s) found");
-        //            }
-        //        }
-        //    });
-        //};
+    it('should be able to find users in the the database', function (done) {
+        db.addUser(fakeUser, function(err, user) {
+            db.findUsers({firstName: fakeUser.firstName}, function(err, results){
+                expect(results[0].lastName).to.be.eql(fakeUser.lastName);
+                done();
+            })
+        });
     });
 
     xit('should be find a specific user in the database', function (done) {
@@ -101,36 +93,45 @@ describe("Mongo Dao", function() {
         //
     });
 
-    xit('should be able to update a snippet in the database', function (done) {
-        //exports.addUpdateSnippet = function(snippet, next) {
-        //    db.collection("snippets").update({snippetId:snippet._id}, {snippetId:snippet._id, owner: snippet.owner, displayName: snippet.displayName, postedOn: Date.now()}, {upsert:true},
-        //        function(err, object) {
-        //            if (err){
-        //                console.warn(err.message);
-        //                next(err, null);
-        //            }
-        //            next(err, object);
-        //        }
-        //    );
-        //};
+    it('should be able to add a snippet in the database', function (done) {
+        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
+        db.addUpdateSnippet(fakeSnippet, function(err, result){
+            expect(result).to.be.eql(1);
+            db.getSnippet(fakeSnippet._id, function(err, result) {
+                expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                db.removeSnippet(fakeSnippet._id, function(err, result){
+                    done();
+                });
+            })
+        });
     });
 
-
-    xit('should be able to add a snippet to the database', function (done) {
-
+    it('should be able to update a snippet in the database', function (done) {
+        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
+        db.addUpdateSnippet(fakeSnippet, function(err, result){
+            expect(result).to.be.eql(1);
+            fakeSnippet.displayName="blah";
+            db.addUpdateSnippet(fakeSnippet, function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(result.displayName).to.be.eql("blah");
+                    db.removeSnippet(fakeSnippet._id, function (err, result) {
+                        done();
+                    });
+                })
+            })
+        });
     });
 
-    xit('should be able to get a snippet from the database', function (done) {
-        //exports.getSnippet = function(id, next) {
-        //    db.collection('snippets').findOne({snippetId: id},
-        //        function(err, result) {
-        //            if (err) {
-        //                console.warn(err.message);  // returns error if no matching object found
-        //                next(err, null);
-        //            }
-        //            next(err, result);
-        //        }
-        //    );
-        //};
+    it('should be able to get a snippet from the database', function (done) {
+        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
+        db.addUpdateSnippet(fakeSnippet, function(err, result){
+            expect(result).to.be.eql(1);
+            db.getSnippet(fakeSnippet._id, function (err, result) {
+                expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                db.removeSnippet(fakeSnippet._id, function (err, result) {
+                    done();
+                });
+            })
+        });
     });
 });

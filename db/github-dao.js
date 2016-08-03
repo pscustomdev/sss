@@ -52,12 +52,9 @@ exports.getRepo = function (repoName, next) {
 exports.searchCode = function (s, next) {
     var searchCriteria = {};
     searchCriteria.q = s + "+user:sss-storage";
-    console.log("searchCriteria:" + JSON.stringify(searchCriteria));
-
     //This will search the name, desc and README
     //https://github.com/search?utf8=%E2%9C%93&q=test&type=Repositories&ref=advsearch&l=&l=
     github.search.code(searchCriteria, function (err, resultData) {
-        console.log("search.code: " + JSON.stringify(resultData));
         if (err) {
             console.log("Error:" + err.message);
         }
@@ -67,7 +64,6 @@ exports.searchCode = function (s, next) {
 
 exports.getCommits = function (repoOwner, repoName, next) {
     var msg = {user: repoOwner, repo: repoName};
-    console.log("getCommits:" + JSON.stringify(msg));
 
     github.repos.getCommits(msg, function (err, resultData) {
         //console.log("resultData:" + JSON.stringify(resultData));
@@ -191,7 +187,6 @@ exports.getRepoFile = function (repoName, fileName, next) {
         if (err) {
             return next(err);
         }
-        console.log("getRepoFile: " + JSON.stringify(resultData));
         var retData = "";
         try {
             if (resultData) {
@@ -236,7 +231,6 @@ exports.getRepoFileSha = function (repoName, fileName, next) {
         if (err) {
             return next(err);
         }
-        console.log("getRepoFileSha: " + JSON.stringify(resultData));
         var retData = "";
         try {
             if (resultData) {

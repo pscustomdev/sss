@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    angular.module('app.details', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
+    angular.module('app.details', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'ui.ace'])
         .config(['$stateProvider', StateProvider])
         .controller('DetailsController', DetailsController);
 
     StateProvider.$inject = ['$stateProvider'];
-    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams'];
+    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams', '$state'];
 
     function StateProvider($stateProvider) {
         $stateProvider.state('search.results.overview.details', {
@@ -17,13 +17,19 @@
                 '@': {
                     templateUrl: '/app/views/details.html', controller: 'DetailsController'
                 }
+            },
+            params: {
+                isOwner: null
             }
         });
     }
 
-    function DetailsController($scope, $nodeServices, $stateParams) {
+    function DetailsController($scope, $nodeServices, $stateParams, $state) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
+        $scope.isOwner = $stateParams.isOwner;
+        $scope.isMarkdown = false;
+        $scope.content = "";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
             function(data) {
@@ -37,5 +43,36 @@
                 }
             }
         );
+
+        $scope.aceLoaded = function(_editor){
+            var _session = _editor.getSession();
+            var _renderer = _editor.renderer;
+
+            // autodetect file type by extension
+            var fileComps = ($scope.fileName ? $scope.fileName.toLowerCase().split(".") : ['txt']);
+            var mode = fileComps[fileComps.length - 1];
+            switch (mode) {
+                case 'xsl': mode = 'xml'; break;
+                case 'md': mode = 'markdown'; $scope.isMarkdown = true; break;
+            }
+            _session.setMode('ace/mode/' + mode);
+            _session.setUndoManager(new ace.UndoManager());
+            _editor.setReadOnly(!$scope.isOwner);
+
+            $(window).resize();
+        };
+
+        $scope.saveFile = function() {
+            $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
+                function() {
+                    $state.go('search.results.overview', {});
+                }
+            )
+        }
+
+        $scope.cancelEdit = function() {
+            $state.go('search.results.overview', {});
+        }
+
     }
 }());

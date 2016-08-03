@@ -7,7 +7,7 @@
         .directive('ngEnter', ngEnter)
         .run(main);
 
-   URLRouteProvider.$inject = ['$urlRouterProvider'];
+    URLRouteProvider.$inject = ['$urlRouterProvider'];
     main.$inject = ['$rootScope', '$searchService', '$state', '$stateParams', '$log', '$nodeServices'];
     
     function URLRouteProvider(urlRouterProvider) {

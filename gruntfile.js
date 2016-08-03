@@ -58,7 +58,8 @@ module.exports = function(grunt) {
             'single-pass': {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
-                    reporter: 'spec'
+                    reporter: 'spec',
+                    timeout: '8000'
                 }
             }
         },

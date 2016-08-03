@@ -5,6 +5,57 @@ var gh = require('../../db/github-dao');
 var expect = require("chai").expect;
 
 describe("GitHub Dao", function() {
+
+    var fakeSnippetId = "MochaTestRepo";
+    var fakeSnippet = {_id: fakeSnippetId, description: "Mocha Description"};
+
+    beforeEach(function(done) {
+        //cleanup fake repo
+        gh.deleteRepo(fakeSnippetId, function (err, result) {
+            //if (err) console.log(err);
+            done();
+        });
+    }, 5000);
+
+    afterEach(function(done) {
+        gh.deleteRepo(fakeSnippetId, function (err, result) {
+            //if (err) console.log(err);
+            done();
+        });
+    }, 5000);
+
+
+    it('should create a repo and then delete it', function (done) {
+        gh.createRepo(fakeSnippet, function (err, result) {
+            expect(result).isObject;
+            expect(result.content.name = "README.md");
+            expect(result.content.url = "https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master");
+            gh.deleteRepo(fakeSnippetId, function (err, result) {
+                expect(result).isObject;
+                expect(result.meta).isObject;
+                expect(result.meta.status).to.be.eql("204 No Content");
+                done();
+            });
+        });
+    });
+
+
+    it('should update a repo', function (done) {
+        gh.createRepo(fakeSnippet, function (err, result) {
+            fakeSnippet.description = "blah";
+            gh.updateRepo(fakeSnippet, function (err, result) {
+                expect(result).isObject;
+                expect(result.description).to.be.eql("blah");
+                gh.deleteRepo(fakeSnippetId, function (err, result) {
+                    expect(result).isObject;
+                    expect(result.meta).isObject;
+                    expect(result.meta.status).to.be.eql("204 No Content");
+                    done();
+                });
+            });
+        });
+    });
+    
     var repoName = "";
     it('should get all repos for user', function (done) {
         gh.getRepos(function(err, repos){
@@ -18,100 +69,66 @@ describe("GitHub Dao", function() {
     });
 
     it('should get data on a specific repo', function (done) {
-        var repoName = 'IDMPolicyForEach';
-        gh.getRepo(repoName, function(err, repo){
-            expect(repo.name).to.eql(repoName);
-            done();
-        });
-    });
-
-    it('should get search results from code', function (done) {
-        gh.searchCode("This is a new file for testing", function(err, repos){
-            expect(repos).isArray;
-            //expect(repos).toBeTruthy();
-            done();
-        });
+        gh.createRepo(fakeSnippet, function (err, result) {
+            gh.getRepo(fakeSnippetId, function (err, repo) {
+                expect(repo.name).to.eql(fakeSnippetId);
+                done();
+            });
+        })
     });
 
     it('should get contents of a single repo', function (done) {
-        gh.getRepoContents(repoName, function(err, files){
-            expect(files).isArray;
+        gh.createRepo(fakeSnippet, function (err, result) {
+            gh.getRepoContents(fakeSnippetId, function (err, result) {
+                expect(result).isObject;
+                expect(result.files).isArray;
+                expect(result.name).to.be.eql(fakeSnippetId);
+                done();
+            });
+        });
+    });
+
+    it('should search the repos and return some results', function (done) {
+        //TODO make this test independent of what's existing in the repos
+        var searchTerms = "idm";
+        gh.searchCode(searchTerms, function(err, results){
+            expect(results.items[0].name).to.eql("README.md");
             done();
         });
     });
 
-    xit('should get search the repos and return some results', function (done) {
-        //exports.searchCode = function (s, next) {
-        //    var searchCriteria = {};
-        //    searchCriteria.q = s + "+user:sss-storage";
-        //    console.log("searchCriteria:" + JSON.stringify(searchCriteria));
-        //
-        //    //This will search the name, desc and README
-        //    //https://github.com/search?utf8=%E2%9C%93&q=test&type=Repositories&ref=advsearch&l=&l=
-        //    github.search.code(searchCriteria, function (err, resultData) {
-        //        console.log("search.code: " + JSON.stringify(resultData));
-        //        if (err) {
-        //            console.log("Error:" + err.message);
-        //        }
-        //        next(err, resultData);
-        //    });
-        //};
+    it('should get the commits of a repo', function (done) {
+        var repoOwner = "sss-storage";
+        gh.createRepo(fakeSnippet, function (err, result) {
+            gh.getCommits(repoOwner, fakeSnippetId, function (err, results) {
+                expect(results).isArray;
+                expect(results[0].author.login).to.be.eql("pscustomdev-sss");
+                done();
+            });
+        });
+    });
+    it('should get the readme of a repo', function (done) {
+        gh.createRepo(fakeSnippet, function (err, result) {
+            gh.getReadme(fakeSnippetId, function (err, results) {
+                expect(results).isArray;
+                expect(results.name).to.eql("README.md");
+                done();
+            });
+        });
     });
 
-    xit('should get the commits of a repo', function (done) {
-        //exports.getCommits = function (repoOwner, repoName, next) {
-        //    var msg = {user: repoOwner, repo: repoName};
-        //    console.log("getCommits:" + JSON.stringify(msg));
-        //
-        //    github.repos.getCommits(msg, function (err, resultData) {
-        //        //console.log("resultData:" + JSON.stringify(resultData));
-        //        next(err, resultData);
-        //    });
-        //};
-    });
-    xit('should get the readme of a repo', function (done) {
-        //exports.getReadme = function (repoName, next) {
-        //    var msg = {user: "sss-storage", repo: repoName};
-        //
-        //    github.repos.getReadme(msg, function (err, resultData) {
-        //        //console.log("getReadme:" + JSON.stringify(resultData));
-        //        next(err, resultData);
-        //    });
-        //};
+    it('should get the contents of a repo', function (done) {
+        gh.createRepo(fakeSnippet, function (err, result) {
+            gh.getRepoContents(fakeSnippetId, function (err, results) {
+                expect(results).isObject;
+                expect(results.files).isArray;
+                expect(results.name).to.eql(fakeSnippetId);
+                done();
+            });
+        });
     });
 
-    xit('should get the contents of a repo', function (done) {
-        // retrieve the repo contents (list of files)
-        // return object:
-        // {
-        //   name: reponame
-        //   files: [ file1, file2, ... ]
-        // }
-        //exports.getRepoContents = function (repoName, next) {
-        //    var msg = {user: "sss-storage", repo: repoName, path: ''};
-        //    var retData = {};
-        //    retData.name = repoName;
-        //    retData.files = [];
-        //    github.repos.getContent(msg, function (err, resultData) {
-        //        if (err) {
-        //            return next(err);
-        //        }
-        //        //console.log("getRepoContents: " + JSON.stringify(resultData));
-        //        try {
-        //            for (var idx in resultData) {
-        //                // only interested in numeric idx values
-        //                if (Number(idx) > -1) {
-        //                    retData.files.push(resultData[idx].name);
-        //                }
-        //            }
-        //        } catch (ignore) {
-        //        }
-        //        //console.log(JSON.stringify(retData));
-        //        next(err, retData);
-        //    });
-        //};
-    });
-
+   
 
     xit('should add a file to the repo', function (done) {
         //
@@ -258,68 +275,5 @@ describe("GitHub Dao", function() {
         //    });
         //};
     });
-
-    xit('should create a repo', function (done) {
-        //exports.createRepo = function (snippet, next) {
-        //    var msg = {
-        //        org: "sss-storage",
-        //        name: snippet._id,
-        //        description: snippet.description,
-        //        auto_init: false
-        //    };
-        //
-        //    github.repos.createFromOrg(msg, function (err, resultData) {
-        //        if (err) {
-        //            return next(err);
-        //        }
-        //
-        //        // create readme and add to repo
-        //        var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
-        //        // base64 encode data from readmeContent
-        //        readmeContent = new Buffer(readmeContent).toString('base64');
-        //        exports.addRepoFile(snippet._id, "README.md", readmeContent, function (err, resultData) {
-        //            if (err) {
-        //                return next(err);
-        //            }
-        //            next(err, resultData);
-        //        });
-        //    });
-        //};
-    });
-
-    xit('should update a repo', function (done) {
-        //exports.updateRepo = function (snippet, next) {
-        //    var msg = {
-        //        user: "sss-storage",
-        //        repo: snippet._id,
-        //        name: snippet._id,
-        //        description: snippet.description
-        //    };
-        //
-        //    github.repos.update(msg, function (err, resultData) {
-        //        if (err) {
-        //            return next(err);
-        //        }
-        //        next(err, resultData);
-        //    });
-        //};
-    });
-
-    xit('should delete a repo', function (done) {
-        //exports.deleteRepo = function (snippetId, next) {
-        //    var msg = {
-        //        user: "sss-storage",
-        //        repo: snippetId
-        //    };
-        //
-        //    github.repos.delete(msg, function (err, resultData) {
-        //        if (err) {
-        //            return next(err);
-        //        }
-        //        next(err, resultData);
-        //    });
-        //};
-    });
-
 
 });

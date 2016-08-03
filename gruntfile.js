@@ -99,6 +99,7 @@ module.exports = function(grunt) {
     grunt.registerTask('backend-tests', ['mochaTest:single-pass']);
     grunt.registerTask('default', ['run-all-tests']);
     grunt.registerTask('build-production', ['clean:dist', 'concat', 'uglify', 'clean:production']);
+    grunt.registerTask('build-testing', ['clean:dist', 'concat', 'uglify']);
     //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
     grunt.registerTask('frontend-tests', ['karma:single-pass']);

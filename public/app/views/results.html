@@ -89,7 +89,7 @@
                             <div class="col-md-12">
                                 <article>
                                     <div data-ng-repeat="match in text_match.matches">
-                                        <div ng-bind-html="$searchService.trustHtmlSnippet(match.highlit_fragment)"></div>
+                                        <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(match.highlit_fragment))"></div>
                                     </div>
                                 </article>
                             </div>

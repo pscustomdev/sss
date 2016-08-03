@@ -68,6 +68,10 @@
             return $sce.trustAsHtml(html);
         };
 
+        vm.stripImageTag = function (content) {
+            return $('<x>').html(content).find("img").remove().end().html();
+        };
+
         // Inject html to add highlighting of returned results
         function updateFragment(hits) {
             if (!hits) { return; }

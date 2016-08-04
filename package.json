@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.0",
+    "chai-http": "^3.0.0",
     "grunt": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-concat": "latest",

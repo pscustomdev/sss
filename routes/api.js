@@ -33,16 +33,17 @@ module.exports = function(app) {
     );
 
     // get information about a snippet
-    api_routes.get('/snippet',
-        function (req, res) {
-            github.getRepo(function (err, repo) {
-                if (err) {
-                    return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-                }
-                res.json(repo);
-            });
-        }
-    );
+    //TODO This is not implemented
+    //api_routes.get('/snippet',
+    //    function (req, res) {
+    //        github.getRepo(function (err, repo) {
+    //            if (err) {
+    //                return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
+    //            }
+    //            res.json(repo);
+    //        });
+    //    }
+    //);
 
     // create snippet (post)
     api_routes.post('/snippet',
@@ -310,6 +311,7 @@ module.exports = function(app) {
     );
 
     api_routes.get('/authenticated-user',
+        //return the authenticated user
         function (req, res) {
             return res.send(req.user);
         }

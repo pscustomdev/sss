@@ -4,9 +4,12 @@
     angular.module('app.$searchService', ['app.$nodeServices'])
         .factory('$searchService', SearchService);
 
+    //$nodeServices is defined in the client-rest-server-interface.js and is used to let the
+    // client to talk to the server's REST API (routes/api.js) which is programmed in NODE
+
     SearchService.$inject = ['$nodeServices', '$sce', '$log'];
 
-    function SearchService($restServices, $sce, $log) {
+    function SearchService($nodeServices, $sce, $log) {
         var snippetResults = {
             repoId: {
 
@@ -47,7 +50,7 @@
             if (searchTerms && searchTerms !== "") {
                 vm.searchTerms = searchTerms;
 
-                $restServices.searchCode(searchTerms).then(
+                $nodeServices.searchCode(searchTerms).then(
                     function (response) {
                         vm.userSearched = true;
                         vm.searchResults = response;
@@ -94,7 +97,7 @@
 
         function updatePostedOn(snippets) {
             // Testing to see the best way to retrieve the earliest commit (thus providing the "Repo Creation Date")
-            $restServices.getCommits("sss-storage", "2").then(function (response) {
+            $nodeServices.getCommits("sss-storage", "2").then(function (response) {
                 vm["sss-storage"] = [];
                 vm["sss-storage"]["2"] = [];
                 vm["sss-storage"]["2"].commits = response;
@@ -108,7 +111,7 @@
         function updateLastUpdated(snippets) {
             snippets.forEach(function(snippet){
                 snippet.text_matches.fragment;
-                $restServices.getCommits(snippet.repository.owner.login, snippet.repository.name).then(function (response) {
+                $nodeServices.getCommits(snippet.repository.owner.login, snippet.repository.name).then(function (response) {
                     snippet[""] = [];
                     vm["sss-storage"]["2"] = [];
                     vm["sss-storage"]["2"].commits = response;

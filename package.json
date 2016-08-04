@@ -70,6 +70,7 @@
     "karma-sinon": "^1.0.4",
     "mocha": "^2.3.3",
     "open": "0.0.5",
+    "passport-stub": "^1.1.1",
     "phantomjs": "^1.9.18",
     "protractor": "^2.2.0",
     "sinon": "^1.17.2",

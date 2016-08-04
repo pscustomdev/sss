@@ -12,7 +12,7 @@ module.exports = function (app) {
     // Configure standard routes
     require('../routes/main')(app, passport);
     // Setup Router-Groups
-    require('../routes/api')(app);
+    require('../routes/api')(app, passport);
 
     // Default route configurations
     // catch 404 and forward to error handler

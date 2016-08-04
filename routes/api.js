@@ -21,7 +21,7 @@ module.exports = function(app) {
     }));
 
     // get a list of all snippets
-    api_routes.get('/snippets',
+    api_routes.get('/snippets', restrict,
         function (req, res) {
             github.getRepos(function (err, repos) {
                 if (err) {
@@ -46,7 +46,7 @@ module.exports = function(app) {
     //);
 
     // create snippet (post)
-    api_routes.post('/snippet',
+    api_routes.post('/snippet', restrict,
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
@@ -64,7 +64,7 @@ module.exports = function(app) {
     );
 
     // update snippet data such as display name and description (put)
-    api_routes.put('/snippet',
+    api_routes.put('/snippet', restrict,
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
@@ -82,7 +82,7 @@ module.exports = function(app) {
     );
 
     // delete snippet
-    api_routes.delete('/snippet/:snippetId',
+    api_routes.delete('/snippet/:snippetId', restrict,
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
@@ -104,7 +104,7 @@ module.exports = function(app) {
     // * list of files
     // * readme contents
     // * db data such as owner and display name
-    api_routes.get('/snippet-overview/:snippetId',
+    api_routes.get('/snippet-overview/:snippetId', restrict,
         function (req, res) {
             var retObj = {};
             db.getSnippet(req.params.snippetId, function (err, contents) {
@@ -173,7 +173,7 @@ module.exports = function(app) {
     );
 
     // add a repo file
-    api_routes.post('/snippet-detail/:snippetId/:fileName', textParser,
+    api_routes.post('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
             // base64 encode content
             var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
@@ -187,7 +187,7 @@ module.exports = function(app) {
     );
 
     // upload and add a repo file
-    api_routes.post('/snippet-detail/:snippetId',
+    api_routes.post('/snippet-detail/:snippetId', restrict,
         function (req, res) {
             var snippetId = req.params.snippetId;
             req.pipe(req.busboy);
@@ -223,7 +223,7 @@ module.exports = function(app) {
     );
 
     // update contents of a repo file
-    api_routes.put('/snippet-detail/:snippetId/:fileName', textParser,
+    api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
             // base64 encode content
             var content = new Buffer(req.body.content).toString('base64');
@@ -237,7 +237,7 @@ module.exports = function(app) {
     );
 
     // get contents of a repo file
-    api_routes.get('/snippet-detail/:snippetId/:fileName',
+    api_routes.get('/snippet-detail/:snippetId/:fileName', restrict,
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
@@ -249,7 +249,7 @@ module.exports = function(app) {
     );
 
     // delete a repo file
-    api_routes.delete('/snippet-detail/:snippetId/:fileName',
+    api_routes.delete('/snippet-detail/:snippetId/:fileName', restrict,
         function (req, res) {
             github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
@@ -261,7 +261,7 @@ module.exports = function(app) {
     );
 
     // search all snippets and return result data
-    api_routes.get('/snippet-search',
+    api_routes.get('/snippet-search', restrict,
         function (req, res) {
             var searchTerms = req.query.q;
             console.log("searchTerm: " + searchTerms);
@@ -299,7 +299,7 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippet-search/:repoOwner/:repoName',
+    api_routes.get('/snippet-search/:repoOwner/:repoName', restrict,
         function (req, res) {
             github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
                 if (err) {
@@ -310,7 +310,7 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/authenticated-user',
+    api_routes.get('/authenticated-user', restrict,
         //return the authenticated user
         function (req, res) {
             return res.send(req.user);

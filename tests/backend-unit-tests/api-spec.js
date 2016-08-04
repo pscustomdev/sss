@@ -9,14 +9,17 @@ var app = require('../../app');
 var chai = require("chai");
 var expect = require("chai").expect;
 var should = require("chai").should();
+var passportStub = require("passport-stub");
 
 chai.use(chaiHttp);
+passportStub.install(app);
 
 describe("REST API Tests", function() {
 
     var fakeSnippetId = "MochaTestRepo";
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc};
+    passportStub.login({username: 'john.doe'});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
         //cleanup fake repo

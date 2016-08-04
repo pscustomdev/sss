@@ -42,7 +42,7 @@ describe("REST API Tests", function() {
             .end(function(err, res){
                 console.log("res: " + res);
                 expect(res.status).to.eql(200);
-                expect(res.data).isArray;
+                res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
                 done();
             });
     });

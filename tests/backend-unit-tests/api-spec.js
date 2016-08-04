@@ -15,7 +15,8 @@ chai.use(chaiHttp);
 describe("REST API Tests", function() {
 
     var fakeSnippetId = "MochaTestRepo";
-    var fakeSnippet = {_id: fakeSnippetId, description: "Mocha Description"};
+    var fakeSnippetDesc = "Mocha Description";
+    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc};
 
     beforeEach(function(done) {
         //cleanup fake repo
@@ -88,6 +89,8 @@ describe("REST API Tests", function() {
                         res.body.should.be.a('object');
                         res.body.should.have.property('description');
                         res.body.description.should.equal("blah");
+                        //Set the description back to the default for future tests.
+                        fakeSnippet.description = fakeSnippetDesc;
                         done();
                     });
             });
@@ -125,80 +128,26 @@ describe("REST API Tests", function() {
             });
     });
 
-    xit('should get data required for the snippet overview on /snippet-overview GET', function(done) {
-        //
-        //// get data required for the snippet overview
-        //// * specific snippet data (id, description)
-        //// * list of files
-        //// * readme contents
-        //// * db data such as owner and display name
-        //api_routes.get('/api/snippet-overview/:snippetId',
-        //    function (req, res) {
-        //        var retObj = {};
-        //        db.getSnippet(req.params.snippetId, function (err, contents) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
-        //            }
-        //            retObj = contents;
-        //            github.getRepoContents(req.params.snippetId, function (err, contents) {
-        //                if (err) {
-        //                    return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
-        //                }
-        //                retObj = contents;
-        //
-        //                //sort contents.files with README.md at the top of the list
-        //                var readMeIdx = retObj.files.indexOf("README.md");
-        //                if (readMeIdx > -1) {
-        //                    // preface with a space so it will sort at the top
-        //                    retObj.files[readMeIdx] = " README.md";
-        //                }
-        //                // sort - ignore case
-        //                retObj.files.sort(function(a,b) {
-        //                    return a.toLowerCase().localeCompare(b.toLowerCase());
-        //                });
-        //                if (readMeIdx > -1) {
-        //                    // strip the leading space
-        //                    retObj.files[0] = "README.md";
-        //                }
-        //
-        //                retObj._id = req.params.snippetId;
-        //                // get the description
-        //                github.getRepo(req.params.snippetId, function (err, repo) {
-        //                    if (err) {
-        //                        return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-        //                    }
-        //                    retObj.description = repo.description;
-        //
-        //                    // get the readme
-        //                    github.getReadme(req.params.snippetId, function (err, readmeobj) {
-        //                        if (err) {
-        //                            return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
-        //                        }
-        //                        var b = new Buffer(readmeobj.content, 'base64').toString();
-        //                        // replace < in readme so any sample html content in the readme will render properly
-        //                        b = b.replace(/</g, "&lt;");
-        //                        // replace <img src="image.jpg"> with a full path to the image on github
-        //                        var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-        //                        b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
-        //                        retObj.readme = marked(b);
-        //
-        //                        // get display name from database
-        //                        db.getSnippet(req.params.snippetId, function (err, repo) {
-        //                            if (err) {
-        //                                return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
-        //                            }
-        //                            retObj.displayName = repo ? repo.displayName : req.params.snippetId;
-        //                            retObj.owner = repo ? repo.owner : "unknown";
-        //
-        //                            res.json(retObj);
-        //                        });
-        //
-        //                    });
-        //                });
-        //            });
-        //        });
-        //    }
-        //);
+    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    .get('/api/snippet-overview/' + fakeSnippetId)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('name');
+                        res.body.name.should.equal("MochaTestRepo");
+                        res.body.should.have.property('description');
+                        res.body.description.should.equal(fakeSnippet.description);
+                        res.body.files.should.be.a('array');
+                        res.body.files[0].should.equal('README.md');
+                        done();
+                    })
+            });
     });
 
     xit('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
@@ -303,45 +252,19 @@ describe("REST API Tests", function() {
         //);
     });
 
-    xit('should search all snippets and return result data on /snippet-search GET', function(done) {
-        //// search all snippets and return result data
-        //api_routes.get('/api/snippet-search',
-        //    function (req, res) {
-        //        var searchTerms = req.query.q;
-        //        console.log("searchTerm: " + searchTerms);
-        //        github.searchCode(searchTerms, function (err, repos) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error searching: ' + err.message});
-        //            }
-        //            // get display name from the database for each hit
-        //            // this pattern is helpful if you need to make async calls within a loop
-        //            // but you cannot return until all async calls have completed
-        //            var numItems = repos.items.length;
-        //            var ctr = 0;
-        //            if (numItems == 0) {
-        //                return res.json({});
-        //            }
-        //            for(var i in repos.items) {
-        //                (function(idx) {
-        //                    var repoId = repos.items[idx].repository.name;
-        //                    db.getSnippet(repoId, function (err, repo) {
-        //                        if (err) {
-        //                            return res.status(500).json({error: 'Error retrieving repository from database'});
-        //                        }
-        //                        repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
-        //                        repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
-        //                        repos.items[idx].repository.postedOn = repo ? repo.postedOn : "unknown";
-        //                        // do not return from the function until the last db call has returned
-        //                        if (ctr == numItems - 1) {
-        //                            res.json(repos);
-        //                        }
-        //                        ctr++;
-        //                    });
-        //                })(i);
-        //            }
-        //        });
-        //    }
-        //);
+    it('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            //TODO not have a hardcoded string relying on current repository data
+            .get('/api/snippet-search?q=idm')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('items');
+                res.body.items.should.a('array');
+                res.body.items[0].name.should.equal("README.md");
+                done();
+            });
     });
 
     xit('should get commits from a snippet on /snippet-search/:repoOwner/:repoName GET', function(done) {
@@ -357,12 +280,14 @@ describe("REST API Tests", function() {
         //);
     });
 
-    xit('should return the authenticated user /authenticated-user GET', function(done) {
-        //
-        //api_routes.get('/api/authenticated-user',
-        //    function (req, res) {
-        //        return res.send(req.user);
-        //    }
-        //);
+    it('should return the authenticated user /authenticated-user GET', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .get('/api/authenticated-user')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                //TODO figure out how to authenticate so we can get the actual user.
+                done();
+            });
     });
 });

@@ -1,3 +1,5 @@
+# This file is used in api-spec.js to upload to a anipper.  It must start with a # to pass the test.
+
 We are using mocha with the expect or should syntax.
 
 Expect syntax:

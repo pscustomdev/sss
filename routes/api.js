@@ -21,7 +21,7 @@ module.exports = function(app) {
     }));
 
     // get a list of all snippets
-    api_routes.get('/snippets', restrict,
+    api_routes.get('/snippets',
         function (req, res) {
             github.getRepos(function (err, repos) {
                 if (err) {
@@ -104,7 +104,7 @@ module.exports = function(app) {
     // * list of files
     // * readme contents
     // * db data such as owner and display name
-    api_routes.get('/snippet-overview/:snippetId', restrict,
+    api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
             var retObj = {};
             db.getSnippet(req.params.snippetId, function (err, contents) {
@@ -237,7 +237,7 @@ module.exports = function(app) {
     );
 
     // get contents of a repo file
-    api_routes.get('/snippet-detail/:snippetId/:fileName', restrict,
+    api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
@@ -261,7 +261,7 @@ module.exports = function(app) {
     );
 
     // search all snippets and return result data
-    api_routes.get('/snippet-search', restrict,
+    api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
             console.log("searchTerm: " + searchTerms);
@@ -299,7 +299,7 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippet-search/:repoOwner/:repoName', restrict,
+    api_routes.get('/snippet-search/:repoOwner/:repoName',
         function (req, res) {
             github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
                 if (err) {
@@ -310,7 +310,7 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/authenticated-user', restrict,
+    api_routes.get('/authenticated-user',
         //return the authenticated user
         function (req, res) {
             return res.send(req.user);

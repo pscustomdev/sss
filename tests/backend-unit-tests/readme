@@ -1,2 +1,7 @@
-We are using mocha with the expect syntax.  This syntax has a bunch of examples here:
+We are using mocha with the expect or should syntax.
+
+Expect syntax:
 https://github.com/Automattic/expect.js
+
+or you can use the should syntax (used in the api tests):
+http://unitjs.com/guide/should-js.html

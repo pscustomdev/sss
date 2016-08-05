@@ -3,7 +3,7 @@ console.log("**** (Backend Unit Testing [MOCHA]: '(REST api-spec') ****");
 
 var gh = require('../../db/github-dao');
 var db = require('../../db/mongo-dao');
-
+var fs = require('fs');
 var chaiHttp = require('chai-http');
 var app = require('../../app');
 var chai = require("chai");
@@ -18,7 +18,10 @@ describe("REST API Tests", function() {
 
     var fakeSnippetId = "MochaTestRepo";
     var fakeSnippetDesc = "Mocha Description";
-    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc};
+    var fakeSnippetDisplayName = "Mocha Display Name";
+    var fakeSnippetReadme = "Mocha Readme";
+    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme};
+    var fakeFileName = "MochaTestFile"
     passportStub.login({username: 'john.doe'});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
@@ -153,106 +156,151 @@ describe("REST API Tests", function() {
             });
     });
 
-    xit('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
-        //
-        //// add a repo file
-        //api_routes.post('/api/snippet-detail/:snippetId/:fileName', textParser,
-        //    function (req, res) {
-        //        // base64 encode content
-        //        var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
-        //        github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error creating file: ' + err.message});
-        //            }
-        //            res.json({});
-        //        });
-        //    }
-        //);
+    it('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    //create new file
+                    .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        chai.request(app)
+                            //get overview to assure file was created
+                            .get('/api/snippet-overview/' + fakeSnippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.files.should.be.a('array');
+                                res.body.files[1].should.equal(fakeFileName);
+                                done();
+                            })
+                    });
+            });
     });
 
-    xit('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
-        //
-        //// upload and add a repo file
-        //api_routes.post('/api/snippet-detail/:snippetId',
-        //    function (req, res) {
-        //        var snippetId = req.params.snippetId;
-        //        req.pipe(req.busboy);
-        //        req.busboy.on('file', function(fieldname, file, filename) {
-        //            var filesize = Number(req.headers['content-length']) * 2;
-        //            var content = new Uint8Array(filesize);
-        //            var offset = 0;
-        //            var cnt = 0;
-        //            // read data from file in buffers
-        //            file.on('data', function(data) {
-        //                // only process the even number packets
-        //                // I don't know why the data is sent this way from angular-file-upload
-        //                if (cnt == 0 || cnt % 2 == 0) {
-        //                    content.set(data, offset);
-        //                    offset += data.length;
-        //                }
-        //                cnt++;
-        //            });
-        //            // once file read is complete, add the file to the snippet
-        //            file.on('end', function() {
-        //                content = content.slice(0, offset);
-        //                // base64 encode file data
-        //                content = new Buffer(content).toString('base64');
-        //                github.addRepoFile(req.params.snippetId, filename, content, function (err, content) {
-        //                    if (err) {
-        //                        return res.status(500).json({error: 'Error creating file: ' + err.message});
-        //                    }
-        //                    res.json({});
-        //                });
-        //            });
-        //        });
-        //    }
-        //);
+    it('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
+        var uploadedFileName = "readme";
+        var boundary = Math.random();
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    //upload a new file
+                    .post('/api/snippet-detail/' + fakeSnippetId)
+                    .attach('data', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        chai.request(app)
+                            //verify file contents
+                            .get('/api/snippet-detail/' + fakeSnippetId + "/" + uploadedFileName)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                // file should start with a # sign
+                                res.body.should.match(/#.*/);
+                                done();
+                            });
+                    });
+            });
     });
 
-    xit('should update contents of a repo file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
-        //
-        //// update contents of a repo file
-        //api_routes.put('/api/snippet-detail/:snippetId/:fileName', textParser,
-        //    function (req, res) {
-        //        // base64 encode content
-        //        var content = new Buffer(req.body.content).toString('base64');
-        //        github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error updating file: ' + err.message});
-        //            }
-        //            res.json({});
-        //        });
-        //    }
-        //);
+    it('should update contents of a repo file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
+        var fakeFileContents = "Sample data to write to file";
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    //create new file
+                    .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        chai.request(app)
+                            //get overview to assure file was created
+                            .get('/api/snippet-overview/' + fakeSnippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.files.should.be.a('array');
+                                res.body.files[1].should.equal(fakeFileName);
+                                chai.request(app)
+                                    //update file contents
+                                    .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
+                                    .send({content: fakeFileContents})
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        chai.request(app)
+                                            //verify file contents
+                                            .get('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
+                                            .end(function (err, res) {
+                                                res.should.have.status(200);
+                                                res.body.should.equal(fakeFileContents);
+                                                done();
+                                            });
+                                    });
+                            });
+                    });
+            });
     });
 
-    xit('should get contents of a repo file on /snippet-detail/:snippetId/:fileName GET', function(done) {
-        //// get contents of a repo file
-        //api_routes.get('/api/snippet-detail/:snippetId/:fileName',
-        //    function (req, res) {
-        //        github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error retrieving file: ' + err.message});
-        //            }
-        //            res.json(content);
-        //        });
-        //    }
-        //);
+    it('should get contents of a repo file on /snippet-detail/:snippetId/:fileName GET', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    //verify file contents
+                    .get('/api/snippet-detail/' + fakeSnippetId + "/README.md")
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        // README.md file should start with a # sign
+                        res.body.should.match(/#.*/);
+                        done();
+                    });
+            });
     });
 
-    xit('should delete a repo file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
+    it('should delete a repo file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    //create new file
+                    .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        chai.request(app)
+                            //get overview to assure file was created
+                            .get('/api/snippet-overview/' + fakeSnippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.files.should.be.a('array');
+                                res.body.files[1].should.equal(fakeFileName);
+                                chai.request(app)
+                                    //delete the file
+                                    .delete('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        chai.request(app)
+                                            //get overview to assure file is gone
+                                            .get('/api/snippet-overview/' + fakeSnippetId)
+                                            .end(function (err, res) {
+                                                res.should.have.status(200);
+                                                res.body.files.should.be.a('array');
+                                                res.body.files.should.have.length(1);
+                                                done();
+                                            });
 
-        //// delete a repo file
-        //api_routes.delete('/api/snippet-detail/:snippetId/:fileName',
-        //    function (req, res) {
-        //        github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error deleting file: ' + err.message});
-        //            }
-        //            res.json(content);
-        //        });
-        //    }
-        //);
+                                    });
+                            });
+                    });
+            });
     });
 
     it('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {

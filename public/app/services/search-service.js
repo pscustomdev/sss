@@ -58,10 +58,10 @@
                             vm.searchResults.total_count = 0;
                         }
                         vm.searchResults.inProgress = false;
-
                         vm.pagination.totalItems = vm.searchResults.total_count;
-                        updateFragment(vm.searchResults.items);
-                        updateRating(vm.searchResults.items);
+
+                        highlightSearchTerms(vm.searchResults.items);
+                        updateMetaData(vm.searchResults.items);
                     }
                 );
             }
@@ -76,7 +76,7 @@
         };
 
         // Inject html to add highlighting of returned results
-        function updateFragment(hits) {
+        function highlightSearchTerms(hits) {
             if (!hits) { return; }
             hits.forEach(function(hit) {
                 hit.text_matches[0].matches.reverse().forEach(function(match) {
@@ -85,6 +85,14 @@
                     match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
                 });
             });
+        }
+
+        function updateMetaData(snippets) {
+            updateRating(snippets);
+            // updateViewsCount(snippets);
+            // updatePostedOn(snippets);
+            // updatePostedBy(snippets);
+            // updateLastUpdated(snippets);
         }
 
         function updateRating(snippets) {
@@ -121,23 +129,18 @@
 
         // Pagination for SearchResults
         vm.pagination = [];
-        vm.pagination.viewby = 5;
+        vm.pagination.viewby = vm.pagination.viewby ? vm.pagination.viewby : '10';
         vm.pagination.totalItems = 0;
         vm.pagination.currentPage = 1;
         vm.pagination.itemsPerPage = vm.pagination.viewby;
-        vm.pagination.maxSize = 5; //Number of pager buttons to show
+        vm.pagination.maxSize = 5; // Number of page buttons to show
         vm.pagination.setPage = function (pageNo) {
             vm.pagination.currentPage = pageNo;
-        };
-        vm.pagination.pageChanged = function() {
-            $log.debug('Page changed to: ' + vm.pagination.currentPage + ' out of ' + vm.pagination.totalItems + ' pages.');
         };
         vm.pagination.setItemsPerPage = function(num) {
             vm.pagination.itemsPerPage = num;
             vm.pagination.currentPage = 1; //reset to first page
         };
-
-
         return vm;
     }
 }());

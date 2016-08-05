@@ -79,11 +79,12 @@
 -->
         <div data-ng-repeat="item in $searchService.searchResults.items.slice((($searchService.pagination.currentPage-1)*$searchService.pagination.itemsPerPage), (($searchService.pagination.currentPage)*$searchService.pagination.itemsPerPage))"
              show-more-directive>
+
             <h2><a ui-sref="search.results.overview({ snippetId: '{{item.repository.name}}'})">{{item.repository.displayName}}</a></h2>
 
             <div class="row">
                 <div class="col-md-9">
-                    <div data-ng-repeat="text_match in item.text_matches.slice((($searchService.pagination.currentPage-1)*$searchService.pagination.itemsPerPage), (($searchService.pagination.currentPage)*$searchService.pagination.itemsPerPage))"
+                    <div data-ng-repeat="text_match in item.text_matches"
                          show-more-directive>
                         <div class="row">
                             <div class="col-md-12">
@@ -98,12 +99,8 @@
                 </div>
                 <div class="col-md-3">
                     <article>
-                        <!--<uib-rating ng-model="item.score" max="max" readonly="isReadonly"-->
-                                    <!--on-hover="hoveringOver(value)" on-leave="overStar = null"-->
-                                    <!--titles="['one','two','three']"></uib-rating>-->
-                <span class="label"
-                      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
-                      ng-show="overStar && !isReadonly">{{percent}}%</span>
+                        <!--<uib-rating ng-model="item.score" max="max" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['one','two','three']"></uib-rating>-->
+                        <!--<span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show="overStar && !isReadonly">{{percent}}%</span>-->
                         <div>Score: {{item.score}}</div>
                         <!--<div>Last updated (last commit date)</div>-->
                         <!--<div>nnnn views (track in Mongo)</div>-->
@@ -125,26 +122,37 @@
         </span>
     </section>
 </div>
-
+<br/><br/><br/><br/>
 <div class="row">
     <section class="col-md-12">
         <nav class="text-center">
             <div>
-                <uib-pagination total-items="$searchService.pagination.totalItems" ng-model="$searchService.pagination.currentPage" ng-change="$searchService.pagination.pageChanged()" max-size="$searchService.pagination.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="$searchService.pagination.numPages" items-per-page="$searchService.pagination.itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+                <ul uib-pagination boundary-links="true" total-items="$searchService.pagination.totalItems" ng-model="$searchService.pagination.currentPage" max-size="$searchService.pagination.maxSize" class="pagination-sm" num-pages="$searchService.pagination.numPages" items-per-page="$searchService.pagination.itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
             </div>
             <div>
                 View <select ng-model="$searchService.pagination.viewby" ng-change="$searchService.pagination.setItemsPerPage($searchService.pagination.viewby)">
-                <option>1</option>
-                <option>5</option>
-                <option>10</option>
-                <option>20</option>
-                <option>30</option>
-                <option>40</option>
-                <option>50</option>
-            </select> records at a time.
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                </select> snippets at a time
             </div>
         </nav>
     </section>
 </div>
-<!-- so the pagination selector above won't be hidden by the footer -->
-<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/>
+<footer>
+    <nav class="page-number navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="nav">
+                    <p class="navbar-text">&copy; {{title}} 2016</p>
+                    <p id="pageNumber" class="navbar-text pull-right">Page: {{$searchService.pagination.currentPage}} / {{$searchService.pagination.numPages}}</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+</footer>

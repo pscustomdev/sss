@@ -29,6 +29,7 @@
     }
     
     function main($rootScope, $searchService, $state, $stateParams, $log, $nodeServices) {
+        $rootScope.title = 'Software Snippet Search';
         $rootScope.$log = $log;
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;

@@ -64,6 +64,7 @@ describe("GitHub Dao", function() {
         gh.createRepo(fakeSnippet, function (err, result) {
             gh.getRepos(function (err, repos) {
                 expect(repos).isArray;
+                console.log("repos:" + JSON.stringify(repos));
                 expect(repos).to.include(fakeSnippetId);
                 done();
             });

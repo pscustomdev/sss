@@ -19,10 +19,6 @@ body {
   z-index: 9998; /* Sets the Search bar to layer above all background content */
 }
 
-.ace_editor {
-  height: 600px;
-}
-
 .page-number {
   z-index: 5000;
 }

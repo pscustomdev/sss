@@ -14,7 +14,7 @@
 
         <!-- show text file contents -->
         <div ng-show="content && !contentUrl">
-            <div ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
+            <div id="edit_readme" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
         </div>
         <!-- lower set of buttons -->
         <div ng-show="content && !contentUrl && isOwner" class="btn-group pull-right">
@@ -28,116 +28,4 @@
     </section>
 </div>
 
-<div id="markupHelpModel" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">README Markup Help</h4>
-            </div>
-            <div class="modal-body">
-                <span class="well alert-info">NOTE: Some Github markdown elements are not yet supported.  This page contains all supported elements.</span>
-                <br><br>
-                <table>
-                    <tr>
-                        <td style="border-bottom: 1px solid grey" width="325"><h4>Tag Example</h4></td>
-                        <td style="border-bottom: 1px solid grey"><h4>Output</h4></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td># Header (use up to six ######)</td>
-                        <td><h1>Header (use up to six ######)</h1></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Text is **bold** or *italic* or ~~striked~~</td>
-                        <td>Text is <strong>bold</strong> or <i>italic</i> or <del>striked</del></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Horizontal line with: ___ or --- or ***</td>
-                        <td><hr style="color: lightgray;"/></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>> Indented quote</td>
-                        <td style="border-left: 2px solid lightgray"><div style="margin-left: 20px;">Indented quote</div></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>```<br>Code block (use 3 backticks)<br>```</td>
-                        <td><div style="border: 1px solid gray; background-color: #E6E6E6; padding: 5px;">Code block (use 3 backticks)</div></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Inline `Emphasis (use 1 backtick)` style</td>
-                        <td>Inline <span style="background-color: #F9F2F4; color: darkred; padding: 5px;">Emphasis (use 1 backtick)</span> style</td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>&lt;img src="mypic.jpg" height="" width="100%"/&gt;</td>
-                        <td>(the image file you have uploaded to your snippet will display here - you can adjust the height and width if desired)</td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>[My link](http://mysite.com)</td>
-                        <td><a href="http://mysite.com">My link</a></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>1. Item 1<br>2. Item 2</td>
-                        <td><ol><li>Item 1</li><li>Item 2</li></ol></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>* Bullet item 1<br>* Bullet item 2</td>
-                        <td><ul><li>Bullet item 1</li><li>Bullet item 2</li></ul></td>
-                    </tr>
-                    <tr>
-                        <td><br></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>* Bullet item 1<br>&nbsp;&nbsp;* Indented item 2 (indent 2 spaces)</td>
-                        <td><ul><li>Bullet item 1</li><li style="margin-left: 10px;">Indented item 2</li></ul></td>
-                    </tr>
-
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 

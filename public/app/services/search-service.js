@@ -79,10 +79,12 @@
         function highlightSearchTerms(hits) {
             if (!hits) { return; }
             hits.forEach(function(hit) {
-                hit.text_matches[0].matches.reverse().forEach(function(match) {
-                    match['highlit_fragment'] = hit.text_matches[0].fragment;
-                    match['highlit_fragment'] = match['highlit_fragment'].substr(0, match.indices[1]) + "</mark><code>" + match['highlit_fragment'].substr(match.indices[1]) + "</code>";
-                    match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
+                hit.text_matches.forEach(function(hit_text_match) {
+                    hit_text_match.matches.reverse().forEach(function (match) {
+                        match['highlit_fragment'] = hit_text_match.fragment;
+                        match['highlit_fragment'] = match['highlit_fragment'].substr(0, match.indices[1]) + "</mark><code>" + match['highlit_fragment'].substr(match.indices[1]) + "</code>";
+                        match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
+                    });
                 });
             });
         }

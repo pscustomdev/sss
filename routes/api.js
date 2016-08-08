@@ -289,6 +289,28 @@ module.exports = function(app) {
                             repos.items[idx].repository.postedOn = repo ? repo.postedOn : "unknown";
                             // do not return from the function until the last db call has returned
                             if (ctr == numItems - 1) {
+                                //combine the text matches of any duplicate results
+                                var seen = {};
+                                repos.items = repos.items.filter(function(entry) {
+                                    var previous;
+
+                                    // Have we seen this repository before?
+                                    if (seen.hasOwnProperty(entry.repository.full_name)) {
+                                        // Yes, grab it and add its text matches to it
+                                        previous = seen[entry.repository.full_name];
+                                        previous.text_matches.push(entry.text_matches[0]);
+
+                                        // Don't keep this entry, we've merged it into the previous one
+                                        return false;
+                                    }
+                                    // Remember that we've seen it
+                                    seen[entry.repository.full_name] = entry;
+
+                                    // Keep this one, we'll merge any others that match into it
+                                    return true;
+                                });
+                                //reset the count
+                                repos.total_count=repos.items.length;
                                 res.json(repos);
                             }
                             ctr++;

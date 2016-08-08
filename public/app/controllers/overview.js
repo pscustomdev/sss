@@ -23,6 +23,7 @@
     function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions, FileUploader) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileContent = "";
+        $scope.confirmDelete = false;
         var count = 0;
         editableOptions.theme = 'bs3';
 

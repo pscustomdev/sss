@@ -167,8 +167,7 @@ To add a new view, pattern it after an existing view, such as "overview".
 
 
 ===== RELEASE 1 =========
-ToDo: Create snippet should have ace editor for readme and readme help button.
-ToDo: Snippet overview should have edit icon by the trash can to show a file can be edited.
+
 
 ===== RELEASE FUTURE ========
 ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.

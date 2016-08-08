@@ -59,12 +59,15 @@ describe("GitHub Dao", function() {
             });
         });
     });
-    
+
     it('should get all repos for user', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
+            console.log("err: " + JSON.stringify(err));
+            console.log("result: " + JSON.stringify(result));
             gh.getRepos(function (err, repos) {
-                expect(repos).isArray;
+                console.log("err: " + JSON.stringify(err));
                 console.log("repos:" + JSON.stringify(repos));
+                expect(repos).isArray;
                 expect(repos).to.include(fakeSnippetId);
                 done();
             });

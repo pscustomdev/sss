@@ -22,36 +22,17 @@
 
 
     function MySnippetsController($scope, $rootScope, $state, $nodeServices) {
-        // Rating
-        //$scope.rate = 5;
-        //$scope.max = 5;
-        //$scope.isReadonly = true;
-        //$scope.hoveringOver = function(value) {
-        //    $scope.overStar = value;
-        //    $scope.percent = 100 * (value / $scope.max);
-        //};
-        //$nodeServices.addSnippet({_id: uuid, displayName: $scope.formData.displayName, description: $scope.formData.description, owner: $rootScope.currentUser.username, readme: $scope.formData.readme}).then(
-        //    function () {
-        //        $state.go('search.results.overview', { snippetId: uuid});
-        //    }
-        //);
-        //$scope.blah = function() {
-            $nodeServices.getSnippetsByOwner($rootScope.currentUser.username).then(
-                function (data) {
-                    console.log("blah");
+        $scope.noSnippet = "No Snippets Found";
+        $nodeServices.getSnippetsByOwner($rootScope.currentUser.username).then(
+            function (data) {
+                if(data){
                     $scope.mySnippets = data;
+                    $scope.noSnippet = "";
+                } else {
+                    $state.go('login', {});
                 }
-            );
-        //}
-    }
+            }
 
-    //function showMoreDirective() {
-    //    return function() {
-    //        $('.show-more').showMore({
-    //            adjustHeight: 40,
-    //            moreText: "+ More",
-    //            lessText: "- Less"
-    //        });
-    //    };
-    //}
+        );
+    }
 }());

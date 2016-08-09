@@ -1,7 +1,11 @@
-<div class="row">
-    <section class="col-md-12">
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <section class="col-md-8">
+        <span ng-bind="noSnippet"></span>
         <div ng-repeat="item in mySnippets">
-            <h2><a ui-sref="search.results.overview({ snippetId: '{{item.snippetId}}'})">{{item.displayName}}</a></h2>
+            <h2>
+                <a ui-sref="search.results.overview({ snippetId: '{{item.snippetId}}'})">{{item.displayName}}</a>
+            </h2>
+            <span ng-bind="item.description"></span>
         </div>
     </section>
 </div>

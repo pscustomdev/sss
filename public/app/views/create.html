@@ -13,11 +13,22 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-info pull-right" data-toggle="modal" data-target="#markupHelpModel">README Markdown Help</button>
-                    <br>
                 </div>
                 <div class="form-group">
-                    <label for="create_readme">ReadMe</label>
-                    <div id="create_readme" ui-ace ="{ onLoad:aceLoaded }" ng-model="formData.readme"></div>
+                    <label for="create_readme_ace">ReadMe</label>
+                    <ul class="nav nav-tabs">
+                        <li class="nav active">
+                            <a data-target="#create_readme_ace" data-toggle="tab">Edit</a>
+                        </li>
+                        <li class="nav">
+                            <a data-target="#create_readme_pre" data-toggle="tab" ng-click="formatReadme()">Preview</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="create_readme_ace" class="create_readme tab-pane fade in active" ui-ace ="{ onLoad:aceLoaded }" ng-model="formData.readme"></div>
+                        <div id="create_readme_pre" class="create_readme tab-pane fade well" style="overflow: auto; background: rgb(255,255,255); " ng-bind-html="$searchService.trustHtmlSnippet(formData.formattedReadme)"></div>
+                    </div>
                 </div>
 
                 <div class="btn-group pull-right">

@@ -271,6 +271,13 @@ module.exports = function(app) {
         }
     );
 
+    // return html given some marked-down readme content
+    api_routes.put('/snippet-detail/formatreadme',
+        function (req, res) {
+            res.json(marked(req.body.content));
+        }
+    );
+
     // search all snippets and return result data
     api_routes.get('/snippet-search',
         function (req, res) {

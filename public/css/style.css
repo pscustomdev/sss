@@ -9,7 +9,11 @@
 }
 
 body {
-  padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict
+  padding-top: 110px; /* Bootstrap's documented way to make sure the header content and the body content don't conflict */
+}
+
+.ace_editor {
+  margin-bottom: 20px;
 }
 
 .affix {

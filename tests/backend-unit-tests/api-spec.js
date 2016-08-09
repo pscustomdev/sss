@@ -336,6 +336,18 @@ describe("REST API Tests", function() {
             });
     });
 
+    it('should return html given marked-down readme data on /snippet-detail/formatreadme PUT', function(done) {
+        var fakeReadmeData = "# Title\n## Subtitle";
+        chai.request(app)
+            .put('/api/snippet-detail/formatreadme')
+            .send({content: fakeReadmeData})
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.body.should.match(/\<h1.*/);
+                done();
+            });
+    });
+
     it('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
         chai.request(app)
             // use a search term for existing snippets since creating a new snippet

@@ -1,21 +1,39 @@
 <div class="row">
     <section class="col-md-12">
         <!-- upper set of buttons -->
-        <div ng-show="content && !contentUrl && isOwner" class="btn-group pull-right">
-            <button class="btn btn-info" ng-show="isMarkdown" data-toggle="modal" data-target="#markupHelpModel">README Markdown Help</button>
+        <div ng-show="content && !contentUrl && isOwner && isMarkdown" class="btn-group pull-right">
+            <button class="btn btn-info" data-toggle="modal" data-target="#markupHelpModel">README Markdown Help</button>
         </div>
         <!-- back button for images and non-owners -->
         <div ng-show="contentUrl || (content && !isOwner)" class="btn-group pull-right">
             <button class="btn btn-default" ng-click="cancelEdit()">Back</button>
         </div>
 
-        <h4><strong>{{fileName}}</strong></h4>
+        <h4><strong>{{fileName}}</strong>&nbsp;&nbsp;<span class="alert-warning">{{isOwner?"":"(Read only)"}}</span></h4>
         <strong ng-show="!content && !contentUrl">Loading...</strong>
 
-        <!-- show text file contents -->
-        <div ng-show="content && !contentUrl">
-            <div id="edit_readme" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
+        <!-- edit normal text file contents -->
+        <div ng-show="content && !contentUrl && !isMarkdown">
+            <div class="edit_file" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
         </div>
+
+        <!-- edit readme with a tab for file preview -->
+        <div ng-show="content && !contentUrl && isMarkdown">
+            <ul class="nav nav-tabs">
+                <li class="nav active">
+                    <a data-target="#create_readme_ace" data-toggle="tab">Edit</a>
+                </li>
+                <li class="nav">
+                    <a data-target="#create_readme_pre" data-toggle="tab" ng-click="formatReadme()">Preview</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="create_readme_ace" class="edit_readme tab-pane fade in active" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
+                <div id="create_readme_pre" class="edit_readme tab-pane fade well" style="overflow: auto; background: rgb(255,255,255); " ng-bind-html="$searchService.trustHtmlSnippet(formattedReadme)"></div>
+            </div>
+        </div>
+
         <!-- lower set of buttons -->
         <div ng-show="content && !contentUrl && isOwner" class="btn-group pull-right">
             <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>

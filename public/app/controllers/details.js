@@ -30,6 +30,7 @@
         $scope.isOwner = $stateParams.isOwner;
         $scope.isMarkdown = false;
         $scope.content = "";
+        $scope.formattedReadme = "";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
             function(data) {
@@ -73,6 +74,15 @@
 
         $scope.cancelEdit = function() {
             $state.go('search.results.overview', {});
+        };
+
+        // format the marked down readme to html for preview
+        $scope.formatReadme = function() {
+            $nodeServices.formatReadme({content: $scope.content}).then(
+                function(data) {
+                    $scope.formattedReadme = data.data;
+                }
+            );
         }
 
     }

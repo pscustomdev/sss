@@ -24,6 +24,7 @@
 
     function CreateController($scope, $rootScope, $state, $nodeServices) {
         $scope.formData = {};
+        $scope.rawView = true;
 
         //if they aren't logged in then send them to the login page.
         $nodeServices.getCurrentUser().then(
@@ -58,5 +59,15 @@
             // height adjusted dynamically in util.js
             $(window).resize();
         };
+
+        // format the marked down readme to html for preview
+        $scope.formatReadme = function() {
+            $scope.formData.readme = $scope.formData.readme || "";
+            $nodeServices.formatReadme({content: $scope.formData.readme}).then(
+                function(data) {
+                    $scope.formData.formattedReadme = data.data;
+                }
+            );
+        }
     }
 }());

@@ -20,7 +20,8 @@ describe("REST API Tests", function() {
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";
     var fakeSnippetReadme = "Mocha Readme";
-    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme};
+    var fakeSnippetOwner = "fakeOwner";
+    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme, owner: fakeSnippetOwner};
     var fakeFileName = "MochaTestFile"
     passportStub.login({username: 'john.doe'});   //login a fake user via passport since the api is protected.
 
@@ -50,6 +51,38 @@ describe("REST API Tests", function() {
                 expect(res.status).to.eql(200);
                 res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
                 done();
+            });
+    });
+
+    it('should get a list of snippets by owner on /snippets/:owner GET', function(done) {
+        var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    .post('/api/snippet')
+                        .send(fakeSnippet2)
+                        .end(function (err, res) {
+                            chai.request(app)
+                                .get('/api/snippets/' + fakeSnippetOwner)
+                                .end(function (err, res) {
+                                    console.log("res: " + res);
+                                    expect(res.status).to.eql(200);
+                                    res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
+                                    res.body[0].should.have.property("displayName");
+                                    res.body[0].displayName.should.equal(fakeSnippet2.displayName);
+                                    res.body[0].should.have.property("owner");
+                                    res.body[0].owner.should.equal(fakeSnippetOwner);
+                                    res.body[1].should.have.property("displayName");
+                                    res.body[1].displayName.should.equal(fakeSnippet.displayName);
+                                    res.body[1].should.have.property("owner");
+                                    res.body[1].owner.should.equal(fakeSnippetOwner);
+                                    done();
+                                });
+                        });
+
             });
     });
 

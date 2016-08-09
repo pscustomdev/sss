@@ -1,0 +1,7 @@
+<div class="row">
+    <section class="col-md-12">
+        <div ng-repeat="item in mySnippets">
+            <h2><a ui-sref="search.results.overview({ snippetId: '{{item.snippetId}}'})">{{item.displayName}}</a></h2>
+        </div>
+    </section>
+</div>

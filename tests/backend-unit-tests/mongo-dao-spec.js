@@ -134,4 +134,23 @@ describe("Mongo Dao", function() {
             })
         });
     });
+
+    it('should be able to get snippets by owner from the database', function (done) {
+        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
+        var fakeSnippet2 = {_id: "MochaTestRepo2", owner:"testOwner", displayName:"testDisplayName2"};
+        db.addUpdateSnippet(fakeSnippet, function(err, result){
+            db.addUpdateSnippet(fakeSnippet2, function(err, result) {
+                db.getSnippetsByOwner(fakeSnippet.owner, function (err, results) {
+                    expect(results).to.exist;
+                    expect(results[0].displayName).to.be.eql(fakeSnippet2.displayName);
+                    expect(results[1].displayName).to.be.eql(fakeSnippet.displayName);
+                    db.removeSnippet(fakeSnippet._id, function (err, result) {
+                        db.removeSnippet(fakeSnippet2._id, function (err, result) {
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

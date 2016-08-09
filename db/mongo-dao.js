@@ -69,6 +69,16 @@ exports.getSnippet = function(id, next) {
     );
 };
 
+exports.getSnippetsByOwner = function(owner, next) {
+    db.collection('snippets').find({owner:owner}).sort({displayName:-1}).toArray(function(err, results){
+        if (results[0]){
+            next(err, results);
+        } else {
+            next("Snippets not found");
+        }
+    });
+};
+
 exports.removeSnippet = function(id, next) {
     db.collection('snippets').remove({snippetId: id},
         function(err, result) {

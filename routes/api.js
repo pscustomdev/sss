@@ -32,6 +32,17 @@ module.exports = function(app) {
         }
     );
 
+    api_routes.get('/snippets/:owner',
+        function (req, res) {
+            db.getSnippetsByOwner(req.params.owner, function(err, results){
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                }
+                res.json(results);
+            })
+        }
+    );
+
     // get information about a snippet
     //TODO This is not implemented
     //api_routes.get('/snippet',

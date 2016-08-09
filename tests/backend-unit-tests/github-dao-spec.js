@@ -3,6 +3,7 @@ console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
 
 var gh = require('../../db/github-dao');
 var expect = require("chai").expect;
+var waitTime = 5000;
 
 describe("GitHub Dao", function() {
 
@@ -48,14 +49,16 @@ describe("GitHub Dao", function() {
         gh.createRepo(fakeSnippet, function (err, result) {
             fakeSnippet.description = "blah";
             gh.updateRepo(fakeSnippet, function (err, result) {
-                expect(result).isObject;
-                expect(result.description).to.be.eql("blah");
-                gh.deleteRepo(fakeSnippetId, function (err, result) {
+                setTimeout(function(){
                     expect(result).isObject;
-                    expect(result.meta).isObject;
-                    expect(result.meta.status).to.be.eql("204 No Content");
-                    done();
-                });
+                    expect(result.description).to.be.eql("blah");
+                    gh.deleteRepo(fakeSnippetId, function (err, result) {
+                        expect(result).isObject;
+                        expect(result.meta).isObject;
+                        expect(result.meta.status).to.be.eql("204 No Content");
+                        done();
+                    });
+                }, waitTime)
             });
         });
     });

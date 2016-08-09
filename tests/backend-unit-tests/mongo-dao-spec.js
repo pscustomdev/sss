@@ -94,11 +94,12 @@ describe("Mongo Dao", function() {
     });
 
     it('should be able to add a snippet in the database', function (done) {
-        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
+        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
         db.addUpdateSnippet(fakeSnippet, function(err, result){
             expect(result).to.be.eql(1);
             db.getSnippet(fakeSnippet._id, function(err, result) {
                 expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                expect(result.description).to.be.eql(fakeSnippet.description);
                 db.removeSnippet(fakeSnippet._id, function(err, result){
                     done();
                 });
@@ -112,12 +113,14 @@ describe("Mongo Dao", function() {
             expect(result).to.be.eql(1);
             fakeSnippet.displayName="blah";
             db.addUpdateSnippet(fakeSnippet, function(err, result) {
-                db.getSnippet(fakeSnippet._id, function (err, result) {
-                    expect(result.displayName).to.be.eql("blah");
-                    db.removeSnippet(fakeSnippet._id, function (err, result) {
-                        done();
-                    });
-                })
+                setTimeout(function(){
+                    db.getSnippet(fakeSnippet._id, function (err, result) {
+                        expect(result.displayName).to.be.eql("blah");
+                        db.removeSnippet(fakeSnippet._id, function (err, result) {
+                            done();
+                        });
+                    })
+                }, 3000)
             })
         });
     });

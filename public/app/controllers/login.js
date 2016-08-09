@@ -1,38 +1,26 @@
 (function() {
     'use strict';
-    angular.module('app.mySnippets', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'ngSanitize','app.$nodeServices'])
+    angular.module('app.login', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'ngSanitize','app.$nodeServices'])
         .config(['$stateProvider', StateProvider])
-        .controller('MySnippetsController', MySnippetsController);
+        .controller('LoginController', LoginController);
 
     StateProvider.$inject = ['$stateProvider'];
-    MySnippetsController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices'];
+    LoginController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices'];
 
     function StateProvider(stateProvider) {
-        stateProvider.state('mySnippets', {
-            url: '/mySnippets',
+        stateProvider.state('login', {
+            url: '/login',
             data: {
-                displayName: 'My Snippets'
+                displayName: 'Login'
             },
             views: {
                 '@': {
-                    templateUrl: '/app/views/mySnippets.html', controller: 'MySnippetsController'}
+                    templateUrl: '/app/views/login.html', controller: 'LoginController'}
             }
         })
     }
 
 
-    function MySnippetsController($scope, $rootScope, $state, $nodeServices) {
-        $scope.noSnippet = "No Snippets Found";
-        $nodeServices.getSnippetsByOwner($rootScope.currentUser.username).then(
-            function (data) {
-                if(data){
-                    $scope.mySnippets = data;
-                    $scope.noSnippet = "";
-                } else {
-                    $state.go('login', {});
-                }
-            }
-
-        );
+    function LoginController($scope, $rootScope, $state, $nodeServices) {
     }
 }());

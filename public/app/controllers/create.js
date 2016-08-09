@@ -25,6 +25,15 @@
     function CreateController($scope, $rootScope, $state, $nodeServices) {
         $scope.formData = {};
 
+        //if they aren't logged in then send them to the login page.
+        $nodeServices.getCurrentUser().then(
+            function (user) {
+                if(!user) {
+                    $state.go('login');
+                }
+            }
+        );
+
         $scope.createSnippet = function() {
             var uuid = generateUUID();
 

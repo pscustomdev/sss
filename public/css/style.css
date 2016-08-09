@@ -22,3 +22,13 @@ body {
 .page-number {
   z-index: 5000;
 }
+
+.login {
+  margin-left: 40%;
+  max-width: 330px;
+  padding: 15px;
+}
+
+.login section {
+    background-color: #eee;
+}

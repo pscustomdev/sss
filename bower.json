@@ -21,7 +21,8 @@
     "angular-file-upload": "^2.2.0",
     "bootstrap": "^3.3.5",
     "html5shiv": "^3.7.3",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "bootstrap-social": "~5.0.0"
   },
   "overrides": {
     "ace-builds": {

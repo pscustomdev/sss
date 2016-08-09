@@ -11,6 +11,8 @@
     <![endif]-->
     <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="../bower/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+    <link href="../bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="../bower/angular-xeditable/dist/css/xeditable.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <script src="/bower/underscore/underscore.js"></script>
@@ -37,6 +39,7 @@
         <script src="/app/controllers/overview.js"></script>
         <script src="/app/controllers/create.js"></script>
         <script src="/app/controllers/mySnippets.js"></script>
+        <script src="/app/controllers/login.js"></script>
         <script src="/app/controllers/sss.js"></script>
         <script src="/app/app.js"></script>
     {{else}}  <!--we don't need the above in prod since we concat and uglify them all into sss.min.js-->
@@ -69,7 +72,7 @@
                                 {{/if}}
                                     &nbsp;<a class="navbar-link" href="/logout" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></p>
                                 {{else}}
-                            <p class="navbar-text"><a class="navbar-link" href="/login" title="Login">Login <span class="glyphicon glyphicon-log-in"></span></a></p>
+                            <p class="navbar-text"><a class="navbar-link" href="/#/login" title="Login">Login <span class="glyphicon glyphicon-log-in"></span></a></p>
                         {{/if}}
                     </div>
                 </div>

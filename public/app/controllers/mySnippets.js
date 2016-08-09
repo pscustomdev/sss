@@ -22,6 +22,16 @@
 
 
     function MySnippetsController($scope, $rootScope, $state, $nodeServices) {
+
+        //if they aren't logged in then send them to the login page.
+        $nodeServices.getCurrentUser().then(
+            function (user) {
+                if(!user) {
+                    $state.go('login');
+                }
+            }
+        );
+
         $scope.noSnippet = "No Snippets Found";
         $nodeServices.getSnippetsByOwner($rootScope.currentUser.username).then(
             function (data) {

@@ -52,3 +52,13 @@ var generateUUID = function () {
     });
     return uuid;
 };
+
+
+$(document).ready(function() {
+    $(window).resize(function() {
+        var bodyheight = $(this).height();
+        $("#edit_readme").css("height", bodyheight - 250 + "px");
+        $("#create_readme").css("height", bodyheight - 475 + "px");
+    });
+});
+

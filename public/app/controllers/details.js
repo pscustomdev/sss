@@ -59,6 +59,7 @@
             _session.setUndoManager(new ace.UndoManager());
             _editor.setReadOnly(!$scope.isOwner);
 
+            // height adjusted dynamically in util.js
             $(window).resize();
         };
 
@@ -68,7 +69,7 @@
                     $state.go('search.results.overview', {});
                 }
             )
-        }
+        };
 
         $scope.cancelEdit = function() {
             $state.go('search.results.overview', {});

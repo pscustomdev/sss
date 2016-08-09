@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('app.create', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices'])
+    angular.module('app.create', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'ui.ace'])
         .config(['$stateProvider', StateProvider])
         .controller('CreateController', CreateController);
 
@@ -23,6 +23,8 @@
     }
 
     function CreateController($scope, $rootScope, $state, $nodeServices) {
+        $scope.formData = {};
+
         $scope.createSnippet = function() {
             var uuid = generateUUID();
 
@@ -33,6 +35,19 @@
             );
         };
 
-        $scope.formData = {};
+        $scope.cancelCreate = function() {
+            $state.go('search', {});
+        }
+
+        $scope.aceLoaded = function(_editor){
+            var _session = _editor.getSession();
+            var _renderer = _editor.renderer;
+
+            _session.setMode('ace/mode/markdown');
+            _session.setUndoManager(new ace.UndoManager());
+
+            // height adjusted dynamically in util.js
+            $(window).resize();
+        };
     }
 }());

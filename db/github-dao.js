@@ -62,15 +62,6 @@ exports.searchCode = function (s, next) {
     });
 };
 
-exports.getCommits = function (repoOwner, repoName, next) {
-    var msg = {user: repoOwner, repo: repoName};
-
-    github.repos.getCommits(msg, function (err, resultData) {
-        //console.log("resultData:" + JSON.stringify(resultData));
-        next(err, resultData);
-    });
-};
-
 // get the readme file for a repo
 exports.getReadme = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName};
@@ -87,6 +78,7 @@ exports.getReadme = function (repoName, next) {
 //   name: reponame
 //   files: [ file1, file2, ... ]
 // }
+
 exports.getRepoContents = function (repoName, next) {
     var msg = {user: "sss-storage", repo: repoName, path: ''};
     var retData = {};

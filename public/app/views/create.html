@@ -2,23 +2,28 @@
     <section class="col-md-12">
         <h4>Create Snippet</h4>
         <div>
-            <form id="create_form" ng-submit="createSnippet()">
+            <form name="create_form">
                 <div class="form-group">
                     <label for="snippet_displayName">Snippet Name</label>
-                    <input id="snippet_displayName" type="text" class="form-control" ng-required="true" data-ng-model="formData.displayName"/>
+                    <input id="snippet_displayName" type="text" class="form-control" required data-ng-model="formData.displayName"/>
                 </div>
                 <div class="form-group">
                     <label for="snippet_description">Description</label>
-                    <input id="snippet_description" type="text" class="form-control" ng-required="true" data-ng-model="formData.description"/>
+                    <input id="snippet_description" type="text" class="form-control" required data-ng-model="formData.description"/>
                 </div>
                 <div class="form-group">
-                    <label for="snippet_readme">ReadMe</label>
-                    <small><a href="https://guides.github.com/features/mastering-markdown/#syntax" target="_blank">Markdown Syntax</a></small>
-                    <textarea id="snippet_readme" rows="10" class="form-control" data-ng-model="formData.readme"></textarea>
+                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#markupHelpModel">README Markdown Help</button>
+                    <br>
+                </div>
+                <div class="form-group">
+                    <label for="create_readme">ReadMe</label>
+                    <div id="create_readme" ui-ace ="{ onLoad:aceLoaded }" ng-model="formData.readme"></div>
                 </div>
 
-                <button type="submit" class="btn">Create</button>
-                <button class="btn" ui-sref="search">Cancel</button>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-default" ng-click="cancelCreate()")>Cancel</button>
+                    <button class="btn btn-success" ng-disabled="!create_form.$valid"  ng-click="createSnippet()">Create</button>
+                </div>
             </form>
         </div>
     </section>

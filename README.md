@@ -167,28 +167,21 @@ To add a new view, pattern it after an existing view, such as "overview".
 
 
 ===== RELEASE 1 =========
-ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
-ToDo: Results paging has an issue where the second page of results is a repeat of the first page without any hit details
-ToDo: Create snippet should have ace editor for readme and readme help button.
-ToDo: Snippet overview should have edit icon by the trash can to show a file can be edited.
+
 
 ===== RELEASE FUTURE ========
+ToDo: Line 31 in karma.conf.js is commented because the tests are just too complicated to triage.  We need to simplify the frontend tests to the point where we can understand them 2 days later.
 ToDo: Results Page - Fix issue with original/default results per page value isn't displayed (it defaults to 5)
 ToDo: Rename a file
-ToDo: Tests - Validate Backend tests make sense
 ToDo: Tests - Validate End2End tests make sense
-ToDo: Tests - Add Backend tests
 ToDo: Tests - Add Frontend tests
 ToDo: Tests - Add End2End tests
 ToDo: Design - Snippet json object (pojo) to represent snippet results including individual hit data
 ToDo: Login - Make hover over "Logged in as NAME", not show mouse pointer.  We should not communicate that this does anything.
 ToDo: GitHub Dao - Expand GitHubDao to provide for calls that will retrieve missing data on results page
-ToDo: GitHub Dao - Results Page - For each result, display x characters before and after every "result hit"
 ToDo: GitHub Dao - Results Page - Write API to get "last updated" (based on latest commit date of whole repo) and add to page
 ToDo: GitHub Dao - Results Page - Write API to get "number of views" (repo based) and add to page
-ToDo: GitHub Dao - Results Page - Write API to get "posed date" [earliest commit] (repo based) and add to page
 ToDo: Mongo Dao - Add result "rating" to mongo
-ToDo: Mongo Dao - Research "score" and determine if it might be helpful
 ToDo: Mongo Dao - Add 'sss-id' to mongo.  And figure out the sss-id format and how to create it.
 ToDo: Results Page - Change layout so it is as follows:
         Repo Title

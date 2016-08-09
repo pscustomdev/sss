@@ -1,7 +1,11 @@
 <div class="row">
     <section class="col-md-12">
         <div class="panel panel-info">
-            <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" ng-click="deleteSnippet(snippetId)">Delete Snippet</button>
+            <div class="btn-group pull-right">
+                <button ng-show="snippetOverview.isOwner && !confirmDelete" class="btn btn-warning" type="button" ng-click="confirmDelete = true" >Delete Snippet</button>
+                <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet(snippetId)" >Perform Delete</button>
+                <button ng-show="confirmDelete" class="btn btn-default" type="button" ng-click="confirmDelete = false" >Cancel Delete</button>
+            </div>
             <div>
                 <h3 class="panel-heading">
                     <span ng-hide="snippetOverview.isOwner">{{snippetOverview.displayName}}</span>
@@ -15,8 +19,10 @@
         </div>
         <div>
             <div class="panel-body">
-                <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" data-toggle="modal" data-target="#fileNameModal">Create New File</button>
-                <button ng-show="snippetOverview.isOwner" class="pull-right btn btn-default" data-toggle="modal" data-target="#fileUploadModal">File Upload</button>
+                <div class="btn-group pull-right">
+                    <button ng-show="snippetOverview.isOwner" class="btn btn-default" type="button" data-toggle="modal" data-target="#fileNameModal">Create New File</button>
+                    <button ng-show="snippetOverview.isOwner" class="btn btn-default" type="button" data-toggle="modal" data-target="#fileUploadModal">File Upload</button>
+                </div>
             </div>
         </div>
         <div>

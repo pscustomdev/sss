@@ -338,8 +338,8 @@ describe("REST API Tests", function() {
 
     it('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
         chai.request(app)
-            //create the initial snippet
-            //TODO not have a hardcoded string relying on current repository data
+            // use a search term for existing snippets since creating a new snippet
+            // is not immediately searchable
             .get('/api/snippet-search?q=idm')
             .end(function(err, res) {
                 res.should.have.status(200);
@@ -349,19 +349,6 @@ describe("REST API Tests", function() {
                 res.body.items[0].name.should.equal("README.md");
                 done();
             });
-    });
-
-    xit('should get commits from a snippet on /snippet-search/:repoOwner/:repoName GET', function(done) {
-        //api_routes.get('/api/snippet-search/:repoOwner/:repoName',
-        //    function (req, res) {
-        //        github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
-        //            if (err) {
-        //                return res.status(500).json({error: 'Error getting commits: ' + err.message});
-        //            }
-        //            res.json(commits);
-        //        });
-        //    }
-        //);
     });
 
     it('should return the authenticated user /authenticated-user GET', function(done) {

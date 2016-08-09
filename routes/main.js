@@ -25,13 +25,22 @@ module.exports = function(app, passport) {
     main_routes.get('/auth/github/callback',
         passport.authenticate('github', {
                 successReturnToOrRedirect: '/',
-                failureRedirect: '/login',
+                failureRedirect: '/#/login',
+                failureFlash: 'Invalid credentials'
+            }
+        ));
+    main_routes.get('/auth/google',
+        passport.authenticate('google',{ scope : ['profile', 'email'] }));
+    main_routes.get('/auth/google/callback',
+        passport.authenticate('google', {
+                successReturnToOrRedirect: '/',
+                failureRedirect: '/#/login',
                 failureFlash: 'Invalid credentials'
             }
         ));
     main_routes.get('/login',
         function (req, res) {
-            res.redirect('/auth/github');
+            res.redirect('/#/login');
         });
     main_routes.get('/logout',
         function (req, res) {

@@ -44,6 +44,7 @@
     "package-script": "0.0.8",
     "passport": "^0.3.0",
     "passport-github": ">= 0.0.0",
+    "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.3.0",
     "tingodb": "latest",

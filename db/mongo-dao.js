@@ -46,7 +46,7 @@ exports.findUser = function(id, next) {
 };
 
 exports.addUpdateSnippet = function(snippet, next) {
-    db.collection("snippets").update({snippetId:snippet._id}, {snippetId:snippet._id, owner: snippet.owner, displayName: snippet.displayName, postedOn: Date.now()}, {upsert:true},
+    db.collection("snippets").update({snippetId:snippet._id}, {snippetId:snippet._id, owner: snippet.owner, displayName: snippet.displayName, postedOn: Date.now(), description: snippet.description}, {upsert:true},
         function(err, object) {
             if (err){
                 console.warn(err.message);

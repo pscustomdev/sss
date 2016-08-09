@@ -59,7 +59,7 @@ module.exports = function(grunt) {
                 src: 'tests/backend-unit-tests/**/*-spec.js',
                 options: {
                     reporter: 'spec',
-                    timeout: '20000'
+                    timeout: '60000'
                 }
             }
         },

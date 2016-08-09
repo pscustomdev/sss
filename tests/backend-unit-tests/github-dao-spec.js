@@ -3,7 +3,7 @@ console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
 
 var gh = require('../../db/github-dao');
 var expect = require("chai").expect;
-var waitTime = 5000;
+var waitTime = 10000;
 
 describe("GitHub Dao", function() {
 
@@ -35,12 +35,14 @@ describe("GitHub Dao", function() {
             expect(result).isObject;
             expect(result.content.name = "README.md");
             expect(result.content.url = "https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master");
-            gh.deleteRepo(fakeSnippetId, function (err, result) {
-                expect(result).isObject;
-                expect(result.meta).isObject;
-                expect(result.meta.status).to.be.eql("204 No Content");
-                done();
-            });
+            setTimeout(function() {
+                gh.deleteRepo(fakeSnippetId, function (err, result) {
+                    expect(result).isObject;
+                    expect(result.meta).isObject;
+                    expect(result.meta.status).to.be.eql("204 No Content");
+                    done();
+                });
+            }, waitTime);
         });
     });
 
@@ -48,8 +50,8 @@ describe("GitHub Dao", function() {
     it('should update a repo', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
             fakeSnippet.description = "blah";
-            gh.updateRepo(fakeSnippet, function (err, result) {
-                setTimeout(function(){
+            setTimeout(function(){
+                gh.updateRepo(fakeSnippet, function (err, result) {
                     expect(result).isObject;
                     expect(result.description).to.be.eql("blah");
                     gh.deleteRepo(fakeSnippetId, function (err, result) {
@@ -58,8 +60,8 @@ describe("GitHub Dao", function() {
                         expect(result.meta.status).to.be.eql("204 No Content");
                         done();
                     });
-                }, waitTime)
-            });
+                });
+            }, waitTime);
         });
     });
 
@@ -85,12 +87,14 @@ describe("GitHub Dao", function() {
 
     it('should get contents of a single repo', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
-            gh.getRepoContents(fakeSnippetId, function (err, result) {
-                expect(result).isObject;
-                expect(result.files).isArray;
-                expect(result.name).to.be.eql(fakeSnippetId);
-                done();
-            });
+            setTimeout(function() {
+                gh.getRepoContents(fakeSnippetId, function (err, result) {
+                    expect(result).isObject;
+                    expect(result.files).isArray;
+                    expect(result.name).to.be.eql(fakeSnippetId);
+                    done();
+                });
+            }, waitTime);
         });
     });
 
@@ -116,28 +120,34 @@ describe("GitHub Dao", function() {
 
     it('should get the contents of a repo', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
-            gh.getRepoContents(fakeSnippetId, function (err, results) {
-                expect(results).isObject;
-                expect(results.files).isArray;
-                expect(results.name).to.eql(fakeSnippetId);
-                done();
-            });
+            setTimeout(function() {
+                gh.getRepoContents(fakeSnippetId, function (err, results) {
+                    expect(results).isObject;
+                    expect(results.files).isArray;
+                    expect(results.name).to.eql(fakeSnippetId);
+                    done();
+                });
+            }, waitTime);
         });
     });
 
     it('should add a file to the repo', function (done) {
         var fileContent = "Mocha file content";
         gh.createRepo(fakeSnippet, function (err, result) {
-            // base64 encode content
-            var content = new Buffer(fileContent).toString('base64');
-            gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
-                gh.getRepoContents(fakeSnippetId, function (err, results) {
-                    expect(results).isObject;
-                    expect(results.files).isArray;
-                    expect(results.files).to.include(fakeFileName);
-                    done();
+            setTimeout(function() {
+                // base64 encode content
+                var content = new Buffer(fileContent).toString('base64');
+                gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
+                    setTimeout(function() {
+                        gh.getRepoContents(fakeSnippetId, function (err, results) {
+                            expect(results).isObject;
+                            expect(results.files).isArray;
+                            expect(results.files).to.include(fakeFileName);
+                            done();
+                        });
+                    }, waitTime)
                 });
-            });
+            }, waitTime);
         });
     });
 
@@ -162,46 +172,58 @@ describe("GitHub Dao", function() {
     it('should delete a file from the repo', function (done) {
         var fileContent = "Mocha file content";
         gh.createRepo(fakeSnippet, function (err, result) {
-            // base64 encode content
-            var content = new Buffer(fileContent).toString('base64');
-            gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
-                gh.getRepoContents(fakeSnippetId, function (err, results) {
-                    expect(results.files).isArray;
-                    expect(results.files).to.include(fakeFileName);
-                    gh.deleteRepoFile(fakeSnippetId, fakeFileName, function (err, result) {
+            setTimeout(function() {
+                // base64 encode content
+                var content = new Buffer(fileContent).toString('base64');
+                gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
+                    setTimeout(function() {
                         gh.getRepoContents(fakeSnippetId, function (err, results) {
                             expect(results.files).isArray;
-                            expect(results.files).to.not.include(fakeFileName);
-                            done();
+                            expect(results.files).to.include(fakeFileName);
+                            gh.deleteRepoFile(fakeSnippetId, fakeFileName, function (err, result) {
+                                setTimeout(function() {
+                                    gh.getRepoContents(fakeSnippetId, function (err, results) {
+                                        expect(results.files).isArray;
+                                        expect(results.files).to.not.include(fakeFileName);
+                                        done();
+                                    });
+                                }, waitTime);
+                            });
                         });
-                    });
+                    }, waitTime);
                 });
-            });
+            }, waitTime);
         });
     });
 
     // get the contents of a specific repo file
     it('should get the contents of a file in the repo', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
-            gh.getRepoFile(fakeSnippetId, "README.md", function (err, result) {
-                expect(result).to.have.string(fakeSnippetReadme);
-                done();
-            });
+            setTimeout(function() {
+                gh.getRepoFile(fakeSnippetId, "README.md", function (err, result) {
+                    expect(result).to.have.string(fakeSnippetReadme);
+                    done();
+                });
+            }, waitTime);
         });
     });
 
     it('should get the sha blob of a specific repo file', function (done) {
         var fileContent = "Mocha file content";
         gh.createRepo(fakeSnippet, function (err, result) {
-            // base64 encode content
-            var content = new Buffer(fileContent).toString('base64');
-            gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
-                gh.getRepoFileSha(fakeSnippetId, fakeFileName, function(err, result) {
-                    // the sha value is 40 chars in length
-                    expect(result).to.have.lengthOf(40);
-                    done();
+            setTimeout(function() {
+                // base64 encode content
+                var content = new Buffer(fileContent).toString('base64');
+                gh.addRepoFile(fakeSnippetId, fakeFileName, content, function (err, result) {
+                    setTimeout(function() {
+                        gh.getRepoFileSha(fakeSnippetId, fakeFileName, function (err, result) {
+                            // the sha value is 40 chars in length
+                            expect(result).to.have.lengthOf(40);
+                            done();
+                        });
+                    }, waitTime);
                 });
-            });
+            }, waitTime);
         });
     });
 });

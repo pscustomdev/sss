@@ -8,7 +8,7 @@
     MySnippetsController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices'];
 
     function StateProvider(stateProvider) {
-        stateProvider.state('mySnippets', {
+        stateProvider.state('search.mySnippets', {
             url: '/mySnippets',
             data: {
                 displayName: 'My Snippets'

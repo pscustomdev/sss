@@ -10,6 +10,7 @@
         return {
             getCurrentUser: getCurrentUser,
             getSnippets: getSnippets,
+            getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
             searchCode: searchCode,
             getCommits: getCommits,
@@ -40,6 +41,20 @@
         // list all snippets
         function getSnippets() {
             return $http.get('/api/snippets')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        // get all snippets by owner
+        function getSnippetsByOwner(owner) {
+            return $http.get('/api/snippets/' + owner)
                 .then(function(response) {
                         return response.data;
                     },

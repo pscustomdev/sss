@@ -336,10 +336,10 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should return html given marked-down readme data on /snippet-detail/formatreadme PUT', function(done) {
+    it('should return html given marked-down readme data on /snippet-detail/:snippetId/readme/format PUT', function(done) {
         var fakeReadmeData = "# Title\n## Subtitle";
         chai.request(app)
-            .put('/api/snippet-detail/formatreadme')
+            .put('/api/snippet-detail/' + fakeSnippetId + '/readme/format')
             .send({content: fakeReadmeData})
             .end(function(err, res) {
                 res.should.have.status(200);

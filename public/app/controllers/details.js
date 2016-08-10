@@ -78,7 +78,7 @@
 
         // format the marked down readme to html for preview
         $scope.formatReadme = function() {
-            $nodeServices.formatReadme({content: $scope.content}).then(
+            $nodeServices.formatReadme($scope.snippetId, {content: $scope.content}).then(
                 function(data) {
                     $scope.formattedReadme = data.data;
                 }

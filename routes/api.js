@@ -272,9 +272,16 @@ module.exports = function(app) {
     );
 
     // return html given some marked-down readme content
-    api_routes.put('/snippet-detail/formatreadme',
+    api_routes.put('/snippet-detail/:snippetId/readme/format',
         function (req, res) {
-            res.json(marked(req.body.content));
+            var b = req.body.content;
+            // replace < in readme so any sample html content in the readme will render properly
+            b = b.replace(/</g, "&lt;");
+            // replace <img src="image.jpg"> with a full path to the image on github
+            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
+            b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
+
+            res.json(marked(b));
         }
     );
 

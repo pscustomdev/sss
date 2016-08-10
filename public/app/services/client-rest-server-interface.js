@@ -195,8 +195,8 @@
         }
 
         // format the marked-down readme content has html for the preview function
-        function formatReadme(content) {
-            return $http.put('/api/snippet-detail/formatreadme', content)
+        function formatReadme(snippetId, content) {
+            return $http.put('/api/snippet-detail/' + snippetId + '/readme/format', content)
                 .then(function(response) {
                         return response;
                     },

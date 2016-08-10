@@ -42,5 +42,5 @@ module.exports = {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
         callbackURL: googleCallbackURL
-    },
+    }
 };

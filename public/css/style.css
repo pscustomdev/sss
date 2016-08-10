@@ -29,7 +29,8 @@ body {
 
 .login {
   margin-left: 40%;
-  max-width: 330px;
+  max-width: 200px;
+  min-width: 200px;
   padding: 15px;
 }
 

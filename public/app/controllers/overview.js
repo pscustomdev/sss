@@ -79,12 +79,20 @@
         };
 
         $scope.deleteFile = function(fileName) {
-            $nodeServices.deleteFile($scope.snippetId, fileName).then (
-                function() {
-                    // refresh the overview page
-                    $state.reload();
+            // display modal to confim delete
+            $scope.confirmDelete = false;
+            $("#fileDeleteModal").modal();
+            $("#fileDeleteModal").on('hidden.bs.modal', function() {
+                if ($scope.confirmDelete) {
+                    $nodeServices.deleteFile($scope.snippetId, fileName).then (
+                        function() {
+                            // refresh the overview page
+                            $state.reload();
+                        }
+                    )
+                    $scope.confirmDelete = false;
                 }
-            )
+            });
         };
 
         // focus the input field when the new file dialog is shown

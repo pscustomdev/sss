@@ -16,7 +16,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";
     googleClientID = process.env.GoogleClientID;
     googleClientSecret = process.env.GoogleClientSecret;
-    githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
+    googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
 } else {
     var authConfLocal = require('../auth/auth-conf-local.js');
     githubApiToken =  authConfLocal.github_api.token;

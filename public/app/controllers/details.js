@@ -30,8 +30,11 @@
         $scope.isOwner = $stateParams.isOwner;
         $scope.isMarkdown = false;
         $scope.showEditor = false;
+        $scope.confirmCancel = false;
         $scope.content = "";
+        $scope.origContent = "";
         $scope.formattedReadme = "";
+        var overviewPage = "search.results.overview";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
             function(data) {
@@ -42,6 +45,7 @@
                     // otherwise it is raw data
                 } else {
                     $scope.content = data;
+                    $scope.origContent = data;
                     $scope.showEditor = true;
                 }
             }
@@ -67,15 +71,37 @@
         };
 
         $scope.saveFile = function() {
+            // if not modified, no need to save
+            if ($scope.content == $scope.origContent) {
+                $state.go(overviewPage, {});
+                return;
+            }
+
             $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
                 function() {
-                    $state.go('search.results.overview', {});
+                    $state.go(overviewPage, {});
                 }
             )
         };
 
         $scope.cancelEdit = function() {
-            $state.go('search.results.overview', {});
+            // if data has been modified, verify cancel
+            if ($scope.content != $scope.origContent) {
+                // display modal to confim cancel
+                $scope.confirmCancel = false;
+                $("#cancelEditModal").modal();
+                $("#cancelEditModal").on('hidden.bs.modal', function() {
+                    if ($scope.confirmCancel) {
+                        $state.go(overviewPage, {});
+                        return;
+                    }
+                });
+
+
+
+            } else {
+                $state.go(overviewPage, {});
+            }
         };
 
         // format the marked down readme to html for preview

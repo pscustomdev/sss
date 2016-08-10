@@ -236,8 +236,8 @@ module.exports = function(app) {
     // update contents of a repo file
     api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
-            // base64 encode content
-            var content = new Buffer(req.body.content).toString('base64');
+            // base64 encode content (if empty, save a space since github won't allow empty content)
+            var content = new Buffer(req.body.content || " ").toString('base64');
             github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error updating file: ' + err.message});

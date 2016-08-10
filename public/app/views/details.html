@@ -1,24 +1,24 @@
 <div class="row">
     <section class="col-md-12">
         <!-- upper set of buttons -->
-        <div ng-show="content && !contentUrl && isOwner && isMarkdown" class="btn-group pull-right">
+        <div ng-show="showEditor && isOwner && isMarkdown" class="btn-group pull-right">
             <button class="btn btn-info" data-toggle="modal" data-target="#markupHelpModel">README Markdown Help</button>
         </div>
         <!-- back button for images and non-owners -->
-        <div ng-show="contentUrl || (content && !isOwner)" class="btn-group pull-right">
+        <div ng-show="contentUrl || (showEditor && !isOwner)" class="btn-group pull-right">
             <button class="btn btn-default" ng-click="cancelEdit()">Back</button>
         </div>
 
-        <h4><strong>{{fileName}}</strong>&nbsp;&nbsp;<span class="alert-warning">{{isOwner?"":"(Read only)"}}</span></h4>
-        <strong ng-show="!content && !contentUrl">Loading...</strong>
+        <h4><strong>{{fileName}}</strong>&nbsp;&nbsp;<span class="alert-warning">{{(!showEditor || isOwner)?"":"(Read only)"}}</span></h4>
+        <strong ng-show="!showEditor && !contentUrl">Loading...</strong>
 
         <!-- edit normal text file contents -->
-        <div ng-show="content && !contentUrl && !isMarkdown">
+        <div ng-show="showEditor && !isMarkdown">
             <div class="edit_file" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
         </div>
 
         <!-- edit readme with a tab for file preview -->
-        <div ng-show="content && !contentUrl && isMarkdown">
+        <div ng-show="showEditor && isMarkdown">
             <ul class="nav nav-tabs">
                 <li class="nav active">
                     <a data-target="#create_readme_ace" data-toggle="tab">Edit</a>
@@ -35,13 +35,13 @@
         </div>
 
         <!-- lower set of buttons -->
-        <div ng-show="content && !contentUrl && isOwner" class="btn-group pull-right">
+        <div ng-show="showEditor && isOwner" class="btn-group pull-right">
             <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
             <button class="btn btn-success" ng-click="saveFile()">Save</button>
         </div>
 
         <!--  show contents of URL such as an image -->
-        <img ng-show="!content && contentUrl" src="{{contentUrl}}"/>
+        <img ng-show="!showEditor && contentUrl" src="{{contentUrl}}"/>
 
     </section>
 </div>

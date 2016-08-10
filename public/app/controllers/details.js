@@ -29,6 +29,7 @@
         $scope.fileName = $stateParams.fileName;
         $scope.isOwner = $stateParams.isOwner;
         $scope.isMarkdown = false;
+        $scope.showEditor = false;
         $scope.content = "";
         $scope.formattedReadme = "";
 
@@ -41,6 +42,7 @@
                     // otherwise it is raw data
                 } else {
                     $scope.content = data;
+                    $scope.showEditor = true;
                 }
             }
         );

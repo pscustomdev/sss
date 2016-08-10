@@ -9,6 +9,7 @@
     <!--[if lt IE 9]>
     <script src="/bower/html5shiv/dist/html5shiv.js"></script>
     <![endif]-->
+    <!--these aren't concatenated by grunt so we need them here-->
     <link href="../bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="../bower/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
     <link href="../bower/bootstrap-social/bootstrap-social.css" rel="stylesheet">
@@ -28,8 +29,8 @@
     <script src="/bower/angular-file-upload/dist/angular-file-upload.js"></script>
     <script src="/bower/ace-builds/src-min-noconflict/ace.js"></script>
     <script src="/bower/angular-ui-ace/ui-ace.min.js"></script>
-    <script src="/app/lib/util.js"></script> <!--these aren't concatenated by grunt so we need them here-->
-    <script src="/app/lib/ui-router-breadcrumbs.js"></script>  <!--these aren't concatenated by grunt so we need them here-->
+    <script src="/app/lib/util.js"></script>
+    <script src="/app/lib/ui-router-breadcrumbs.js"></script>
 
     {{#if settings.development}}
         <script src="/app/services/client-rest-server-interface.js"></script>

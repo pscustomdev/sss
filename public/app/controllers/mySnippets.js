@@ -38,8 +38,6 @@
                 if(data){
                     $scope.mySnippets = data;
                     $scope.noSnippet = "";
-                } else {
-                    $state.go('login', {});
                 }
             }
 

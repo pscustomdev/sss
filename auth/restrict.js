@@ -16,13 +16,18 @@ module.exports = function(req, res, next) {
             snippetId = snippetSplit[2];
         }
 
+        if(snippetId && req.user.username === "pscustomdev-sss"){
+            //We are the owner
+            return next();
+        }
+
         if(snippetId) {
             db.getSnippet(snippetId, function (err, snippet) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
 
-                if (snippet && (snippet.owner === req.user.username || req.user.username === "pscustomdev-sss")) {
+                if (snippet && (snippet.owner === req.user.username)) {
                     //We are the owner
                     return next();
                 }

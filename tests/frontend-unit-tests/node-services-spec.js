@@ -64,14 +64,15 @@ describe('SSS Node Services', function() {
         $nodeServices.addSnippet(mockPayload);
     });
 
-    it('updateSnippet() should call api/snippet PUT', function() {
-        var mockPayload = "snippet";
+    it('updateSnippet() should call api/snippet/:snippetId PUT', function() {
+        var snippet = {snippet:"snippet"};
+        snippet["_id"] = "123";
 
-        $httpBackend.expectPUT('/api/snippet', mockPayload, function(headers) {
+        $httpBackend.expectPUT('/api/snippet/' + snippet._id, snippet, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
 
-        $nodeServices.updateSnippet(mockPayload);
+        $nodeServices.updateSnippet(snippet);
     });
 
     it('deleteSnippet()should call api/snippet/:snippetId DELETE', function() {

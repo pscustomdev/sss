@@ -120,7 +120,7 @@ describe("REST API Tests", function() {
                 //update the snippet with a new desc
                 fakeSnippet.description = "blah";
                 chai.request(app)
-                    .put('/api/snippet')
+                    .put('/api/snippet/' + fakeSnippetId)
                     .send(fakeSnippet)
                     .end(function(err, res){
                         res.should.have.status(200);

@@ -65,8 +65,7 @@ describe('SSS Node Services', function() {
     });
 
     it('updateSnippet() should call api/snippet/:snippetId PUT', function() {
-        var snippet = {snippet:"snippet"};
-        snippet["_id"] = "123";
+        var snippet = {snippet:"snippet",_id:"123"};
 
         $httpBackend.expectPUT('/api/snippet/' + snippet._id, snippet, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';

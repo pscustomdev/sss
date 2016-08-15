@@ -23,7 +23,7 @@ describe("REST API Tests", function() {
     var fakeSnippetOwner = "fakeOwner";
     var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme, owner: fakeSnippetOwner};
     var fakeFileName = "MochaTestFile"
-    passportStub.login({username: 'john.doe'});   //login a fake user via passport since the api is protected.
+    passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
         //cleanup fake repo

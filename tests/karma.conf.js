@@ -7,28 +7,33 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai'],
 
     files: [
-      'node_modules/chai/chai.js', // Included Library
-      'node_modules/sinon-chai/lib/sinon-chai.js', // Included Library
-      'node_modules/karma-read-json/karma-read-json.js', // Included Library
+       //Dependent Libs
       'public/bower/underscore/underscore.js', // Included Library
-      'public/bower/angular/angular.js', // Included Library
-      'public/bower/angular-ui-router/release/angular-ui-router.js', // Included Library
-      'public/bower/angular-bootstrap/ui-bootstrap-tpls.js', // Included Library
-      'public/bower/angular-animate/angular-animate.js', // Included Library
-      'public/bower/angular-mocks/angular-mocks.js', // Included Library
-      'public/bower/angular-sanitize/angular-sanitize.js', // Included Library
-      'public/bower/jquery/dist/jquery.js', // Included Library
+      'public/bower/angular/angular.js',
+      'public/bower/angular-ui-router/release/angular-ui-router.js',
+      'public/bower/angular-bootstrap/ui-bootstrap-tpls.js',
+      'public/bower/angular-sanitize/angular-sanitize.js',
+      'public/bower/angular-animate/angular-animate.js',
+      'public/bower/jquery/dist/jquery.js',
+      'public/bower/bootstrap/js/modal.js',
+      'public/bower/bootstrap/js/tab.js',
+      'public/bower/angular-xeditable/dist/js/xeditable.min.js',
+      'public/bower/angular-file-upload/dist/angular-file-upload.js',
+      'public/bower/ace-builds/src-min-noconflict/ace.js',
+      'public/bower/angular-ui-ace/ui-ace.min.js',
 
-      'public/app/lib/util.js', // Source Files
-      'public/app/lib/ui-router-breadcrumbs.js', // Source Files
-      'public/app/services/search-service.js', // Source Files
-      'public/app/services/client-rest-server-interface.js', // Source Files
-      'public/app/controllers/search.js', // Source Files
-      'public/app/controllers/results.js', // Source Files
-      'public/app/controllers/details.js', // Source Files
-      'public/app/controllers/overview.js', // Source Files
-      'public/app/app.js', // Source Files
-//      'tests/frontend-unit-tests/**/*spec.js',            ToDo: disabled until we can simplify these to the point of understanding
+      // Libs Needed for testing and they need to be after the dependent libs or you'll get an error
+      'node_modules/chai/chai.js',
+      'node_modules/sinon-chai/lib/sinon-chai.js',
+      'node_modules/karma-read-json/karma-read-json.js',
+      'public/bower/angular-mocks/angular-mocks.js',
+      'public/bower/angular-sanitize/angular-sanitize.js',
+
+      'public/app/**/*.js',  //include all app files
+      //'tests/frontend-unit-tests/**/*spec.js',            //ToDo: disabled until we can simplify these to the point of understanding
+        'tests/frontend-unit-tests/node-services-spec.js',
+        'tests/frontend-unit-tests/mySnippets-spec.js',
+        'tests/frontend-unit-tests/details-spec.js',
       { pattern:  'tests/frontend-unit-tests/*.json',
         watched:  true,
         served:   true,
@@ -48,6 +53,6 @@ module.exports = function(config) {
     singleRun: false,
 
     logLevel: config.LOG_INFO, // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    browsers: ['PhantomJS']
+    browsers: ['Firefox']
   });
 };

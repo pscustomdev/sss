@@ -47,7 +47,8 @@ module.exports = function(grunt) {
                 configFile: 'tests/karma.conf.js',
                 autoWatch: false,   // disable the Karma server file watch functionality.  This will be done via Grunt's Watch.
                 background: false,   // Keep tests on main process so you can see the results better.
-                singleRun: true    // Keep Karma server running in background for use by each test
+                singleRun: true,    // Keep Karma server running in background for use by each test
+                browsers: ['Firefox']
             },
             'single-pass': {
                 options: {
@@ -101,9 +102,9 @@ module.exports = function(grunt) {
     grunt.registerTask('build-production', ['clean:dist', 'concat', 'uglify', 'clean:production']);
     //grunt.registerTask('build-production', ['run-all-tests','clean', 'concat', 'uglify']);
     grunt.registerTask('end2end-tests', ['protractor:single-pass']);
-    grunt.registerTask('frontend-tests', ['karma:single-pass']);
+    grunt.registerTask('frontend-karma-tests', ['karma']);
     grunt.registerTask('jshint', ['jshint:js', 'jshint:tests']);
     grunt.registerTask('csslint', ['csslint']);
     // grunt.registerTask('run-all-tests', ['frontend-tests', 'backend-tests', 'end2end-tests']);
-    grunt.registerTask('run-all-tests', ['backend-tests']);
+    grunt.registerTask('run-all-tests', ['frontend-karma-tests','backend-tests']);
 };

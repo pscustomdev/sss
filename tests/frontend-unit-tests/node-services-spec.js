@@ -18,67 +18,81 @@ describe('SSS Node Services', function() {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('getSnippets()', function() {
-        var mockPayload;
-
-        beforeEach(function() {
-            mockPayload = ["mockdata1", "mockdata2"];
-            $httpBackend.expectGET(/\/api\/snippets.*/).respond(mockPayload);
-        });
-
-        it('should return data as passed in via mock', function() {
-            $nodeServices.getSnippets().then(function(payload){
-                expect(payload).to.deep.equal(mockPayload);
-            });
-        });
+    it('getSnippets() should call api/snippets GET', function() {
+        $httpBackend.expectGET('/api/snippets').respond();
+        $nodeServices.getSnippets();
     });
 
-    describe('getSnippetOverview()', function(){
-        var mockPayload, mockSnippetId;
-
-        beforeEach(function() {
-            mockSnippetId = 'mockSnippetId';
-            mockPayload = [{"name": "README.md"}];
-            $httpBackend.expectGET(/\/api\/snippet\-overview\/\w+.*/).respond(mockPayload);
-        });
-
-        it('should return data as passed in via mock', function() {
-            $nodeServices.getSnippetOverview(mockSnippetId).then(function(payload){
-                expect(payload).to.deep.equal(mockPayload);
-            });
-        });
+    it('getSnippetOverview() should call api/snippet-overview GET', function() {
+        var mockSnippetId = 'mockSnippetId';
+        $httpBackend.expectGET('/api/snippet-overview/' + mockSnippetId).respond();
+        $nodeServices.getSnippetOverview(mockSnippetId);
     });
 
-    describe('getSnippetDetail()', function(){
-        var mockPayload, mockSnippetFilename, mockSnippetId;
-
-        beforeEach(function() {
-            mockSnippetFilename = 'mockFilename';
-            mockSnippetId = 'mockSnippetId';
-            mockPayload = "mock file data";
-            $httpBackend.expectGET(/\/api\/snippet\-detail\/\w+.*\/\w+.*/).respond(mockPayload);
-        });
-
-        it('should return data as passed in via mock', function() {
-            $nodeServices.getFile(mockSnippetId, mockSnippetFilename).then(function(payload){
-                expect(payload).to.deep.equal(mockPayload);
-            });
-        });
+    it('getSnippetDetail() should call api/snippet-detail GET', function() {
+        var mockSnippetFilename = 'mockFilename';
+        var mockSnippetId = 'mockSnippetId';
+        $httpBackend.expectGET('/api/snippet-detail/' + mockSnippetId + "/" + mockSnippetFilename).respond();
+        $nodeServices.getFile(mockSnippetId, mockSnippetFilename);
     });
 
-    describe('searchCode()', function(){
-        var mockPayload, mockSnippetSearchTerms;
+    it('searchCode() should call api/snippet-search?q=searchterms GET', function() {
+        var mockSnippetSearchTerms = "mock search terms";
+        var mockPayload = [mockSnippetSearchTerms];
+        $httpBackend.expectGET('/api/snippet-search?q=' + mockSnippetSearchTerms).respond();
+        $nodeServices.searchCode(mockSnippetSearchTerms);
+    });
 
-        beforeEach(function() {
-            mockSnippetSearchTerms = "mock search terms";
-            mockPayload = [mockSnippetSearchTerms];
-            $httpBackend.expectGET(/\/api\/snippet-search\?.*/).respond(mockPayload);
-        });
+    it('getCurrentUser() should call api/authenticated-user GET', function() {
+        $httpBackend.expectGET('/api/authenticated-user').respond();
+        $nodeServices.getCurrentUser();
+    });
 
-        it('should return data as passed in via mock', function() {
-            $nodeServices.searchCode(mockSnippetSearchTerms).then(function(payload){
-                expect(payload).to.deep.equal(mockPayload);
-            });
-        });
+    it('getSnippetsByOwner() should call api/snippets/:owner GET', function() {
+        var owner = "owner";
+        $httpBackend.expectGET('/api/snippets/' + owner).respond();
+        $nodeServices.getSnippetsByOwner(owner);
+    });
+
+    it('addSnippet() should call api/snippet POST', function() {
+        var mockPayload = "snippet";
+
+        $httpBackend.expectPOST('/api/snippet', mockPayload, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+
+        $nodeServices.addSnippet(mockPayload);
+    });
+
+    it('updateSnippet() should call api/snippet PUT', function() {
+        var mockPayload = "snippet";
+
+        $httpBackend.expectPUT('/api/snippet', mockPayload, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+
+        $nodeServices.updateSnippet(mockPayload);
+    });
+
+    it('deleteSnippet()should call api/snippet/:snippetId DELETE', function() {
+        var snippetId = "123"
+        $httpBackend.expectDELETE('/api/snippet/' + snippetId).respond();
+        $nodeServices.deleteSnippet(snippetId);
+    });
+
+    xit('getFile() should PUT data then have a response', function() {
+
+    });
+
+    xit('addFile() should PUT data then have a response', function() {
+
+    });
+
+    xit('updateFile() should PUT data then have a response', function() {
+
+    });
+
+    xit('deleteFile() should PUT data then have a response', function() {
+
     });
 });

@@ -95,7 +95,7 @@
         }
 
         function updateSnippet(snippet) {
-            return $http.put('/api/snippet', snippet)
+            return $http.put('/api/snippet/' + snippet._id, snippet)
                 .then(function(response) {
                         return response.data;
                     },

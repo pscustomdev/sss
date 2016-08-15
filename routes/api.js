@@ -75,7 +75,7 @@ module.exports = function(app) {
     );
 
     // update snippet data such as display name and description (put)
-    api_routes.put('/snippet', restrict,
+    api_routes.put('/snippet/:snippetId', restrict,
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {

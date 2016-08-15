@@ -158,11 +158,9 @@ module.exports = function(app) {
                                 return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
                             }
                             var b = new Buffer(readmeobj.content, 'base64').toString();
-                            // replace < in readme so any sample html content in the readme will render properly
-                            b = b.replace(/</g, "&lt;");
                             // replace <img src="image.jpg"> with a full path to the image on github
                             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-                            b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
+                            b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
                             retObj.readme = marked(b);
 
                             // get display name from database
@@ -275,11 +273,9 @@ module.exports = function(app) {
     api_routes.put('/snippet-detail/:snippetId/readme/format',
         function (req, res) {
             var b = req.body.content;
-            // replace < in readme so any sample html content in the readme will render properly
-            b = b.replace(/</g, "&lt;");
             // replace <img src="image.jpg"> with a full path to the image on github
             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-            b = b.replace(/&lt;img src=\"/g,"<img src=\"" + imgUrlPrefix);
+            b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
 
             res.json(marked(b));
         }

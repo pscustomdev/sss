@@ -170,7 +170,15 @@ module.exports = function(app) {
                                 }
                                 retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                                 retObj.owner = repo ? repo.owner : "unknown";
-
+                                // determine if the current user is the owner
+                                retObj.isOwner = false;
+                                // if logged in as the admin user
+                                if(req.user && req.user.username === "pscustomdev-sss"){
+                                    retObj.isOwner = true;
+                                }
+                                if (req.user && retObj.owner == req.user.username) {
+                                    retObj.isOwner = true;
+                                }
                                 res.json(retObj);
                             });
 

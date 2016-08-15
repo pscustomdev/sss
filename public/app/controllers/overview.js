@@ -40,7 +40,6 @@
                             getOverview(snippetId);
                         } else {
                             $scope.snippetOverview = overview;
-                            $scope.snippetOverview.isOwner = (overview.owner == $rootScope.currentUser.username || $rootScope.currentUser.username == 'pscustomdev-sss');
                         }
                     }
                 );

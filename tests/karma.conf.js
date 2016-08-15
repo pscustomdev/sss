@@ -31,7 +31,6 @@ module.exports = function(config) {
 
       'public/app/**/*.js',  //include all app files
       //'tests/frontend-unit-tests/**/*spec.js',            //ToDo: disabled until we can simplify these to the point of understanding
-      //  'tests/frontend-unit-tests/details-view-spec.js',
         'tests/frontend-unit-tests/node-services-spec.js',
         'tests/frontend-unit-tests/mySnippets-spec.js',
         'tests/frontend-unit-tests/details-spec.js',

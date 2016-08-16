@@ -81,16 +81,39 @@ describe('SSS Node Services', function() {
         $nodeServices.deleteSnippet(snippetId);
     });
 
-    xit('getFile() should PUT data then have a response', function() {
+    it('getFile() should call /api/snippet-detail/:snippetId/:fileName GET', function() {
+        var snippetId = "mockSnippetId";
+        var fileName = "mockFilename";
+        $httpBackend.expectGET('/api/snippet-detail/' + snippetId + "/" + fileName).respond();
+        $nodeServices.getFile(snippetId, fileName);
+    });
+
+    it('addFile() should call /api/snippet-detail/:snippetId/:fileName POST', function() {
+        var snippetId = "mockSnippetId";
+        var fileName = "mockFilename";
+        var fileContent = "This is file content";
+        $httpBackend.expectPOST('/api/snippet-detail/' + snippetId + "/" + fileName, {"content":"This is file content"}, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+        $nodeServices.addFile(snippetId, fileName, fileContent);
+    });
 
     });
 
-    xit('addFile() should PUT data then have a response', function() {
-
+    it('deleteFile() should call /api/snippet-detail/:snippetId/:fileName DELETE', function() {
+        var snippetId = "mockSnippetId";
+        var fileName = "mockFilename";
+        $httpBackend.expectDELETE('/api/snippet-detail/' + snippetId + "/" + fileName).respond();
+        $nodeServices.deleteFile(snippetId, fileName);
     });
 
-    xit('updateFile() should PUT data then have a response', function() {
-
+    it('formatReadme() should call /api/snippet-detail/:snippetId/readme/format PUT', function() {
+        var snippetId = "mockSnippetId";
+        var content = "This is readme content";
+        $httpBackend.expectPUT('/api/snippet-detail/' + snippetId + "/readme/format", content, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+        $nodeServices.formatReadme(snippetId, content);
     });
 
     xit('deleteFile() should PUT data then have a response', function() {

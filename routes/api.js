@@ -361,23 +361,12 @@ module.exports = function(app) {
         }
     );
 
-    // create snippet rating (post)
+    // create or update snippet rating (POST)
     api_routes.post('/snippet/:snippetId/rating',
         function (req, res) {
             db.addUpdateSnippetRating(req.body, function (err) {
                 if (err) {
                     return res.status(500).json({error: 'Error adding rating to database: ' + err.message});
-                }
-                res.json({});
-            });
-        }
-    );
-
-    api_routes.put('/snippet/:snippetId/rating',
-        function (req, res) {
-            db.addUpdateSnippetRating(req.body, function (err) {
-                if (err) {
-                    return res.status(500).json({error: 'Error updating rating to database: ' + err.message});
                 }
                 res.json({});
             });

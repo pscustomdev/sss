@@ -218,7 +218,7 @@ describe("REST API Tests", function() {
     it('should update a rating on /snippet/:snippetId/rating PUT', function(done) {
         var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
         chai.request(app)
-            .put('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
             .send(modifiedRating)
             .end(function(err, res) {
                 chai.request(app)

@@ -22,14 +22,21 @@ describe("REST API Tests", function() {
     var fakeSnippetReadme = "Mocha Readme";
     var fakeSnippetOwner = "fakeOwner";
     var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme, owner: fakeSnippetOwner};
-    var fakeFileName = "MochaTestFile"
+    var fakeFileName = "MochaTestFile";
+    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
+    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
+
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
         //cleanup fake repo
         gh.deleteRepo(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
-                done();
+                db.removeSnippetRating(fakeSnippetRating, function (err, result) {
+                    db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                        done();
+                    });
+                });
             });
         });
     }, 5000);
@@ -37,7 +44,11 @@ describe("REST API Tests", function() {
     afterEach(function(done) {
         gh.deleteRepo(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
-                done();
+                db.removeSnippetRating(fakeSnippetRating, function (err, result) {
+                    db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                        done();
+                    });
+                });
             });
         });
     }, 5000);
@@ -187,6 +198,67 @@ describe("REST API Tests", function() {
                         done();
                     })
             });
+    });
+
+    it('should create a rating on /snippet/:snippetId/rating POST', function(done) {
+        chai.request(app)
+            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .send(fakeSnippetRating)
+            .end(function(err, res) {
+                chai.request(app)
+                    .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        res.body.should.equal(5);
+                        done();
+                    })
+            });
+    });
+
+    it('should update a rating on /snippet/:snippetId/rating PUT', function(done) {
+        var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
+        chai.request(app)
+            .put('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .send(modifiedRating)
+            .end(function(err, res) {
+                chai.request(app)
+                    .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        res.body.should.equal(4);
+                        done();
+                    })
+            });
+    });
+
+    it('should get an average rating for the snippet on /snippet/:snippetId/rating GET', function(done) {
+        chai.request(app)
+            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .send(fakeSnippetRating)
+            .end(function(err, res) {
+                chai.request(app)
+                    .post('/api/snippet/' + fakeSnippetRating2.snippetId + '/rating')
+                    .send(fakeSnippetRating2)
+                    .end(function(err, res) {
+                        chai.request(app)
+                            .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.should.equal(3.25);
+                                done();
+                            });
+                    });
+            });
+    });
+
+    it('should get a 0 rating if one does not exist for the snippet on /snippet/:snippetId/rating GET', function(done) {
+        chai.request(app)
+            .get('/api/snippet/fakesnippet/rating')
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.equal(0); //Since we don't have a rating set yet it will be 0.
+                done();
+            })
     });
 
     it('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {

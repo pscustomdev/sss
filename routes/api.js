@@ -353,6 +353,37 @@ module.exports = function(app) {
         }
     );
 
+    api_routes.get('/snippet/:snippetId/rating',
+        function (req, res) {
+            db.getSnippetRatingsAvg(req.params.snippetId, function (err, ratingAvg) {
+                res.json(ratingAvg);
+            });
+        }
+    );
+
+    // create snippet rating (post)
+    api_routes.post('/snippet/:snippetId/rating',
+        function (req, res) {
+            db.addUpdateSnippetRating(req.body, function (err) {
+                if (err) {
+                    return res.status(500).json({error: 'Error adding rating to database: ' + err.message});
+                }
+                res.json({});
+            });
+        }
+    );
+
+    api_routes.put('/snippet/:snippetId/rating',
+        function (req, res) {
+            db.addUpdateSnippetRating(req.body, function (err) {
+                if (err) {
+                    return res.status(500).json({error: 'Error updating rating to database: ' + err.message});
+                }
+                res.json({});
+            });
+        }
+    );
+
     api_routes.get('/authenticated-user',
         //return the authenticated user
         function (req, res) {

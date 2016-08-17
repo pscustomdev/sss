@@ -12,9 +12,12 @@
             getSnippets: getSnippets,
             getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
+            getSnippetRating: getSnippetRating,
             searchCode: searchCode,
             getCommits: getCommits,
             addSnippet: addSnippet,
+            addSnippetRating: addSnippetRating,
+            updateSnippetRating: updateSnippetRating,
             updateSnippet: updateSnippet,
             deleteSnippet: deleteSnippet,
             getFile: getFile,
@@ -223,6 +226,47 @@
 
         function getCommits(repoOwner, repoName) {
             return $http.get('/api/snippet-search/' + repoOwner + "/" + repoName)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        function getSnippetRating(snippetId) {
+            return $http.get('/api/snippet/' + snippetId + '/rating')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        // add a rating for a snippet
+        function addSnippetRating(rating) {
+            return $http.post('/api/snippet/' + rating.snippetId + '/rating', rating)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(reason);
+                    })
+                .catch(function(err) {
+                    $log.debug(err);
+                });
+        }
+
+        // add a rating for a snippet
+        function updateSnippetRating(rating) {
+            return $http.put('/api/snippet/' + rating.snippetId + '/rating', rating)
                 .then(function(response) {
                         return response.data;
                     },

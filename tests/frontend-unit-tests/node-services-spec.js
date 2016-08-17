@@ -96,4 +96,31 @@ describe('SSS Node Services', function() {
     xit('deleteFile() should PUT data then have a response', function() {
 
     });
+
+    it('getSnippetRating() should call api/snippet/:snippetId/rating GET', function() {
+        var snippetId = "MochaTestRepo";
+        $httpBackend.expectGET('/api/snippet/' + snippetId + '/rating').respond();
+        $nodeServices.getSnippetRating(snippetId);
+    });
+
+    it('addRating() should call api/snippet/:snippetId/rating POST', function() {
+        var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
+
+        $httpBackend.expectPOST('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+
+        $nodeServices.addSnippetRating(rating);
+    });
+
+    it('updateRating() should call api/snippet/:snippetId/rating PUT', function() {
+        var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
+
+        $httpBackend.expectPUT('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+
+        $nodeServices.updateSnippetRating(rating);
+    });
+
 });

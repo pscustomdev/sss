@@ -7,6 +7,3 @@ https://github.com/Automattic/expect.js
 
 or you can use the should syntax (used in the api tests):
 http://unitjs.com/guide/should-js.html
-
-Already committed 2 changes to develop branch (that weren’t committed to hot fix nor master) and are now committing to the hot fix.
-Now committing 2nd to hot fix.  no commits to develop nor master

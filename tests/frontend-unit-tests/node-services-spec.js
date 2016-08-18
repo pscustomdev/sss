@@ -65,8 +65,7 @@ describe('SSS Node Services', function() {
     });
 
     it('updateSnippet() should call api/snippet/:snippetId PUT', function() {
-        var snippet = {snippet:"snippet"};
-        snippet["_id"] = "123";
+        var snippet = {snippet:"snippet", _id:"123"};
 
         $httpBackend.expectPUT('/api/snippet/' + snippet._id, snippet, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';
@@ -103,6 +102,12 @@ describe('SSS Node Services', function() {
         $nodeServices.getSnippetRating(snippetId);
     });
 
+    it('getSnippetRatingByUser() should call api/snippet/:snippetId/rating GET', function() {
+        var userRating = {snippetId:"fakeSnippetId", user:"fakeUser"};
+        $httpBackend.expectGET('/api/snippet/' + userRating.snippetId + '/' + userRating.user + '/rating').respond();
+        $nodeServices.getSnippetRatingByUser(userRating);
+    });
+
     it('addRating() should call api/snippet/:snippetId/rating POST', function() {
         var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
 
@@ -110,17 +115,17 @@ describe('SSS Node Services', function() {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
 
-        $nodeServices.addSnippetRating(rating);
+        $nodeServices.addUpdateSnippetRating(rating);
     });
 
     it('updateRating() should call api/snippet/:snippetId/rating PUT', function() {
         var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
 
-        $httpBackend.expectPUT('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
+        $httpBackend.expectPOST('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
 
-        $nodeServices.updateSnippetRating(rating);
+        $nodeServices.addUpdateSnippetRating(rating);
     });
 
 });

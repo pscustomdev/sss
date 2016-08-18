@@ -2,9 +2,17 @@
     <section class="col-md-12">
         <div class="panel panel-info">
             <div class="btn-group pull-right">
-                <button ng-show="snippetOverview.isOwner && !confirmDelete" class="btn btn-warning" type="button" ng-click="confirmDelete = true" >Delete Snippet</button>
-                <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet(snippetId)" >Perform Delete</button>
-                <button ng-show="confirmDelete" class="btn btn-default" type="button" ng-click="confirmDelete = false" >Cancel Delete</button>
+                <div>
+                    <button ng-show="snippetOverview.isOwner && !confirmDelete" class="btn btn-warning" type="button" ng-click="confirmDelete = true" >Delete Snippet</button>
+                    <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet(snippetId)" >Perform Delete</button>
+                    <button ng-show="confirmDelete" class="btn btn-default" type="button" ng-click="confirmDelete = false" >Cancel Delete</button>
+                </div>
+                <div ng-show="!snippetOverview.isOwner"><small>Your Rating of this Snippet</small></div>
+                <rate-yo ng-show="!snippetOverview.isOwner" on-set="setRating" ng-model="userRating" options="ratingOptions"></rate-yo>
+                <div ng-show="!snippetOverview.isOwner"><small>Avg Rating</small></div>
+                <rate-yo ng-model="avgRating" options="ratingOptions"></rate-yo>
+                <div class="padding-right"><small>Posted on: {{snippetOverview.postedOn | date:'shortDate'}}</small></div>
+                <div class="padding-right"><small>Posted by: {{snippetOverview.owner}}</small></div>
             </div>
             <div>
                 <h3 class="panel-heading">
@@ -122,10 +130,10 @@
                                     </td>
                                     <td nowrap>
                                         <!--<button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">-->
-                                            <!--<span class="glyphicon glyphicon-upload"></span> Upload-->
+                                        <!--<span class="glyphicon glyphicon-upload"></span> Upload-->
                                         <!--</button>-->
                                         <!--<button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">-->
-                                            <!--<span class="glyphicon glyphicon-ban-circle"></span> Cancel-->
+                                        <!--<span class="glyphicon glyphicon-ban-circle"></span> Cancel-->
                                         <!--</button>-->
                                         <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
                                             <span class="glyphicon glyphicon-trash"></span> Remove

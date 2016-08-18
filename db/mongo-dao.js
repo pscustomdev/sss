@@ -155,3 +155,15 @@ exports.getSnippetRatingsAvg = function(id, next) {
         }
     });
 };
+
+exports.getSnippetRatingByUser = function(userRating, next) {
+    db.collection('ratings').findOne(userRating,
+        function(err, result){
+            if (result){
+                next(err, result);
+            } else {
+                next("Rating not found");
+            }
+        }
+    );
+};

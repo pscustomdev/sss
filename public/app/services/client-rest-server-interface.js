@@ -13,11 +13,11 @@
             getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
             getSnippetRating: getSnippetRating,
+            getSnippetRatingByUser: getSnippetRatingByUser,
             searchCode: searchCode,
             getCommits: getCommits,
             addSnippet: addSnippet,
-            addSnippetRating: addSnippetRating,
-            updateSnippetRating: updateSnippetRating,
+            addUpdateSnippetRating: addUpdateSnippetRating,
             updateSnippet: updateSnippet,
             deleteSnippet: deleteSnippet,
             getFile: getFile,
@@ -250,9 +250,8 @@
                 });
         }
 
-        // add a rating for a snippet
-        function addSnippetRating(rating) {
-            return $http.post('/api/snippet/' + rating.snippetId + '/rating', rating)
+        function getSnippetRatingByUser(userRating) {
+            return $http.get('/api/snippet/' + userRating.snippetId + '/' + userRating.user + '/rating')
                 .then(function(response) {
                         return response.data;
                     },
@@ -265,8 +264,8 @@
         }
 
         // add a rating for a snippet
-        function updateSnippetRating(rating) {
-            return $http.put('/api/snippet/' + rating.snippetId + '/rating', rating)
+        function addUpdateSnippetRating(rating) {
+            return $http.post('/api/snippet/' + rating.snippetId + '/rating', rating)
                 .then(function(response) {
                         return response.data;
                     },

@@ -43,3 +43,7 @@ body {
 .login h4 {
      text-align: center     ;
 }
+
+.padding-right {
+    padding-right: 10px;
+}

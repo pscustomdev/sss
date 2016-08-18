@@ -251,6 +251,31 @@ describe("REST API Tests", function() {
             });
     });
 
+    it('should get a users rating for a snippet on /snippet/:snippetId/:user/rating GET', function(done) {
+        chai.request(app)
+            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .send(fakeSnippetRating)
+            .end(function(err, res) {
+                chai.request(app)
+                    .post('/api/snippet/' + fakeSnippetRating2.snippetId + '/rating')
+                    .send(fakeSnippetRating2)
+                    .end(function(err, res) {
+                        chai.request(app)
+                            .get('/api/snippet/' + fakeSnippetRating.snippetId + '/' + fakeSnippetRating.rater + '/rating')
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.should.have.property("snippetId");
+                                res.body.snippetId.should.equal(fakeSnippetRating.snippetId);
+                                res.body.should.have.property("rater");
+                                res.body.rater.should.equal(fakeSnippetRating.rater);
+                                res.body.should.have.property("rating");
+                                res.body.rating.should.equal(fakeSnippetRating.rating);
+                                done();
+                            });
+                    });
+            });
+    });
+
     it('should get a 0 rating if one does not exist for the snippet on /snippet/:snippetId/rating GET', function(done) {
         chai.request(app)
             .get('/api/snippet/fakesnippet/rating')

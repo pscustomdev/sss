@@ -190,6 +190,24 @@ describe("Mongo Dao", function() {
         });
     });
 
+    it('should be able to get a users snippet rating from the database', function (done) {
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            //get the rating
+            var userRating = {
+                snippetId: fakeSnippetRating.snippetId,
+                rater: fakeSnippetRating.rater
+            };
+            db.getSnippetRatingByUser(userRating, function (err, result) {
+                expect(result).to.exist;
+                expect(result.snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                expect(result.rater).to.be.eql(fakeSnippetRating.rater);
+                expect(result.rating).to.be.eql(5);
+                done();
+            });
+        });
+    });
+
     it('should be able to remove a snippet rating from the database', function (done) {
         //add a rating
         db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {

@@ -170,6 +170,7 @@ module.exports = function(app) {
                                 }
                                 retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                                 retObj.owner = repo ? repo.owner : "unknown";
+                                retObj.postedOn = repo ? repo.postedOn : "unknown";
 
                                 res.json(retObj);
                             });
@@ -357,6 +358,18 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippetRatingsAvg(req.params.snippetId, function (err, ratingAvg) {
                 res.json(ratingAvg);
+            });
+        }
+    );
+
+    api_routes.get('/snippet/:snippetId/:user/rating',
+        function (req, res) {
+            var userRating = {
+                snippetId:req.params.snippetId,
+                rater:req.params.user
+            };
+            db.getSnippetRatingByUser(userRating, function (err, rating) {
+                res.json(rating);
             });
         }
     );

@@ -24,10 +24,11 @@
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileContent = "";
         $scope.confirmDelete = false;
-        $scope.ratingOptions = {
-            //ratedFill: '#f00',
-            readOnly: false,
-            halfStar: true
+        $scope.avgRatingOptions = {
+            ratedFill: '#337ab7',
+            readOnly: true,
+            halfStar: true,
+            starWidth: "20px"
         };
 
         $nodeServices.getSnippetRatingByUser({snippetId: $scope.snippetId, user:$rootScope.currentUser.username}).then(
@@ -41,14 +42,14 @@
         $nodeServices.getSnippetRating($scope.snippetId).then(
             function(result) {
                 if(result){
-                    $scope.avgRating = result.rating;
+                    $scope.avgRating = result;
                 }
             }
         );
 
         $scope.setRating = function(event, data) {
-            if(data.rating && $scope.avgRating != data.rating) {
-                $scope.avgRating = data.rating;
+            if(data.rating && $scope.userRating != data.rating) {
+                $scope.userRating = data.rating;
                 var snippetRating = {snippetId: $scope.snippetId, rater:$rootScope.currentUser.username, rating:data.rating};
                 $nodeServices.addUpdateSnippetRating(snippetRating);
             }

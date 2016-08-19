@@ -7,10 +7,10 @@
                     <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet(snippetId)" >Perform Delete</button>
                     <button ng-show="confirmDelete" class="btn btn-default" type="button" ng-click="confirmDelete = false" >Cancel Delete</button>
                 </div>
-                <div ng-show="!snippetOverview.isOwner"><small>Your Rating of this Snippet</small></div>
-                <rate-yo ng-show="!snippetOverview.isOwner" on-set="setRating" ng-model="userRating" options="ratingOptions"></rate-yo>
-                <div ng-show="!snippetOverview.isOwner"><small>Avg Rating</small></div>
-                <rate-yo ng-model="avgRating" options="ratingOptions"></rate-yo>
+                <!--<div ng-show="!snippetOverview.isOwner"><small>Your Rating of this Snippet</small></div>-->
+                <!--<rate-yo ng-show="!snippetOverview.isOwner" on-set="setRating" ng-model="userRating" options="ratingOptions"></rate-yo>-->
+                <small>Avg Rating:</small>
+                <rate-yo ng-model="avgRating" options="avgRatingOptions"></rate-yo>
                 <div class="padding-right"><small>Posted on: {{snippetOverview.postedOn | date:'shortDate'}}</small></div>
                 <div class="padding-right"><small>Posted by: {{snippetOverview.owner}}</small></div>
             </div>

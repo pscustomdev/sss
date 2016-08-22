@@ -21,6 +21,8 @@ describe('SSS Views', function() {
             $controller = $injector.get('$controller');
             $controller('OverviewController', { $scope: $scope, $nodeServices: $nodeServices, $stateParams: $stateParams});
             var mockPayload = [{"name": "README.md"}];
+            $httpBackend.expectGET('/api/snippet/' + fakeSnippetId + '/' + $rootScope.currentUser.username + '/rating').respond(200, {rating:5});
+            $httpBackend.expectGET('/api/snippet/' + fakeSnippetId + '/rating').respond(200, {rating:5});
             $httpBackend.expectGET('/api/snippet-overview/' + fakeSnippetId).respond(200, mockPayload);
             $httpBackend.flush();
         }));
@@ -38,9 +40,11 @@ describe('SSS Views', function() {
             expect($scope.snippetId).to.be.eql(fakeSnippetId);
             expect($scope.fileContent).to.be.eql("");
             expect($scope.confirmDelete).to.be.eql(false);
-            expect($scope.ratingOptions).to.be.eql({
-                readOnly: false,
+            expect($scope.avgRatingOptions).to.be.eql({
+                ratedFill: '#337ab7',
+                readOnly: true,
                 halfStar: true,
+                starWidth: "20px"
             });
         });
 

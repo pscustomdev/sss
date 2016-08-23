@@ -5,16 +5,15 @@ describe('SSS Views', function() {
     describe('Results-View', function() {
         beforeEach(module('app.results'));
 
-        var $scope, $controller, resultsController, searchBarFilteringController, searchCriteriaController, $nodeServices;
+        var $scope, $controller, resultsController, searchBarFilteringController, searchCriteriaController;
 
         beforeEach(inject(function($injector) {
             $scope = $injector.get('$rootScope').$new();  // Create a new child scope or $rootScope
-            $nodeServices = $injector.get('$nodeServices');
         }));
 
         beforeEach(inject(function(_$controller_) {
             $controller = _$controller_;
-            resultsController = $controller('ResultsController', { $scope: $scope, $nodeServices: $nodeServices});
+            resultsController = $controller('ResultsController', { $scope: $scope});
             searchBarFilteringController = $controller('SearchBarFilteringController', { $scope: $scope});
             searchCriteriaController = $controller('SearchCriteriaController', { $scope: $scope});
         }));

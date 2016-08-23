@@ -3,7 +3,6 @@ console.log("**** (Backend Unit Testing [MOCHA]: 'mongo-dao-spec') ****");
 
 var db = require('../../db/mongo-dao');
 var expect = require('chai').expect;
-var should = require('should');
 
 describe("Mongo Dao", function() {
     
@@ -246,8 +245,8 @@ describe("Mongo Dao", function() {
                 db.addUpdateSnippetRating(fakeSnippetRating3, function (err, result) {
                     var ids = [fakeSnippetRating.snippetId, fakeSnippetRating3.snippetId];
                     db.getSnippetsRatingsAvg(ids, function (err, results) {
-                        results.should.containEql({snippetId:fakeSnippetRating3.snippetId,rating: 1.5});
-                        results.should.containEql({snippetId:fakeSnippetRating.snippetId,rating: 3.25});
+                        expect(results).to.contain({snippetId:fakeSnippetRating3.snippetId,rating: 1.5});
+                        expect(results).to.contain({snippetId:fakeSnippetRating.snippetId,rating: 3.25});
                         done();
                     })
                 });

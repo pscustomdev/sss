@@ -31,6 +31,13 @@
             starWidth: "20px"
         };
 
+        $scope.ratingOptions = {
+            //ratedFill: '#337ab7',
+            readOnly: false,
+            halfStar: true
+            //starWidth: "20px"
+        };
+
         $nodeServices.getSnippetRatingByUser({snippetId: $scope.snippetId, user:$rootScope.currentUser.username}).then(
             function(userRating) {
                 if(userRating){

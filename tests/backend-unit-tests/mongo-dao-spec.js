@@ -13,6 +13,12 @@ describe("Mongo Dao", function() {
         password: "fakePassword"
     };
 
+    var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
+    var fakeSnippet2 = {_id: "MochaTestRepo2", owner:"testOwner", displayName:"testDisplayName2"};
+    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
+    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"whoever", rating:1.5};
+    var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
+
     beforeEach(function(done) {
         //cleanup fake user
         db.removeUser(fakeUser, function (err, data) {
@@ -22,11 +28,22 @@ describe("Mongo Dao", function() {
     }, 5000);
 
     afterEach(function(done) {
-        //cleanup fake user
+        //cleanup fake user and snippets
         db.removeUser(fakeUser, function (err, data) {
-            if (err) console.log(err);
-            done();
+            db.removeSnippet(fakeSnippet._id, function(err, result){
+                db.removeSnippet(fakeSnippet2._id, function(err, result){
+                    db.removeSnippetRating(fakeSnippetRating, function (err, result) {
+                        db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                            db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                                if (err) console.log(err);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
         });
+
     }, 5000);
     
     it('should return error if user already exists', function (done) {
@@ -79,77 +96,161 @@ describe("Mongo Dao", function() {
         });
     });
 
-    xit('should be find a specific user in the database', function (done) {
-        //
-        //exports.findUser = function(id, next) {
-        //    db.collection("users").find(id).toArray(function(err, users){
-        //        if (users[0]){
-        //            next(err, users[0]);
-        //        } else {
-        //            next("User not found");
-        //        }
-        //    });
-        //};
-        //
+    it('should find a specific user in the database', function (done) {
+        db.addUser(fakeUser, function(err, user) {
+            var userId = user[0]._id.id;
+            db.findUser(userId, function(err, result){
+                expect(result.lastName).to.be.eql(fakeUser.lastName);
+                done();
+            })
+        });
     });
 
     it('should be able to add a snippet in the database', function (done) {
-        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
         db.addUpdateSnippet(fakeSnippet, function(err, result){
             expect(result).to.be.eql(1);
             db.getSnippet(fakeSnippet._id, function(err, result) {
                 expect(result.displayName).to.be.eql(fakeSnippet.displayName);
                 expect(result.description).to.be.eql(fakeSnippet.description);
-                db.removeSnippet(fakeSnippet._id, function(err, result){
-                    done();
-                });
+                done();
             })
         });
     });
 
     it('should be able to update a snippet in the database', function (done) {
-        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
         db.addUpdateSnippet(fakeSnippet, function(err, result){
             expect(result).to.be.eql(1);
             fakeSnippet.displayName="blah";
             db.addUpdateSnippet(fakeSnippet, function(err, result) {
                 db.getSnippet(fakeSnippet._id, function (err, result) {
                     expect(result.displayName).to.be.eql("blah");
-                    db.removeSnippet(fakeSnippet._id, function (err, result) {
-                        done();
-                    });
+                    done();
                 })
             })
         });
     });
 
     it('should be able to get a snippet from the database', function (done) {
-        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
         db.addUpdateSnippet(fakeSnippet, function(err, result){
             expect(result).to.be.eql(1);
             db.getSnippet(fakeSnippet._id, function (err, result) {
                 expect(result.displayName).to.be.eql(fakeSnippet.displayName);
-                db.removeSnippet(fakeSnippet._id, function (err, result) {
-                    done();
-                });
+                done();
             })
         });
     });
 
     it('should be able to get snippets by owner from the database', function (done) {
-        var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName"};
-        var fakeSnippet2 = {_id: "MochaTestRepo2", owner:"testOwner", displayName:"testDisplayName2"};
         db.addUpdateSnippet(fakeSnippet, function(err, result){
             db.addUpdateSnippet(fakeSnippet2, function(err, result) {
                 db.getSnippetsByOwner(fakeSnippet.owner, function (err, results) {
                     expect(results).to.exist;
                     expect(results[0].displayName).to.be.eql(fakeSnippet2.displayName);
                     expect(results[1].displayName).to.be.eql(fakeSnippet.displayName);
-                    db.removeSnippet(fakeSnippet._id, function (err, result) {
-                        db.removeSnippet(fakeSnippet2._id, function (err, result) {
-                            done();
-                        });
-                    });
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should be able to add a snippet ratings to the database', function (done) {
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            expect(err).to.be.null;
+            done();
+        });
+    });
+
+    it('should be able to update a snippet rating in the database', function (done) {
+        var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
+
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            db.addUpdateSnippetRating(modifiedRating, function (err, result) {
+                //get the rating
+                db.getSnippetRatings(fakeSnippetRating.snippetId, function (err, results) {
+                    expect(results).to.exist;
+                    expect(results[0].snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                    expect(results[0].rater).to.be.eql(fakeSnippetRating.rater);
+                    expect(results[0].rating).to.be.eql(4);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should be able to get a snippet rating from the database', function (done) {
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            //get the rating
+            db.getSnippetRatings(fakeSnippetRating.snippetId, function (err, results) {
+                expect(results).to.exist;
+                expect(results[0].snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                expect(results[0].rater).to.be.eql(fakeSnippetRating.rater);
+                expect(results[0].rating).to.be.eql(5);
+                done();
+            });
+        });
+    });
+
+    it('should be able to get a users snippet rating from the database', function (done) {
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            //get the rating
+            var userRating = {
+                snippetId: fakeSnippetRating.snippetId,
+                rater: fakeSnippetRating.rater
+            };
+            db.getSnippetRatingByUser(userRating, function (err, result) {
+                expect(result).to.exist;
+                expect(result.snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                expect(result.rater).to.be.eql(fakeSnippetRating.rater);
+                expect(result.rating).to.be.eql(5);
+                done();
+            });
+        });
+    });
+
+    it('should be able to remove a snippet rating from the database', function (done) {
+        //add a rating
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            //get the rating
+            db.getSnippetRatings(fakeSnippetRating.snippetId, function (err, results) {
+                expect(results).to.exist;
+                expect(results[0].snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                expect(results[0].rater).to.be.eql(fakeSnippetRating.rater);
+                expect(results[0].rating).to.be.eql(5);
+                db.removeSnippetRating(fakeSnippetRating, function (err, result) {
+                    expect(result).to.be.eql(1);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should get the snippets average of ratings', function (done) {
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            db.addUpdateSnippetRating(fakeSnippetRating2, function (err, result) {
+                db.getSnippetRatingsAvg(fakeSnippetRating.snippetId, function (err, result) {
+                    expect(result).to.be.eql(3.25);
+                    done();
+                })
+            });
+        });
+    });
+
+    it('should be able to get all snippets average ratings from the database', function (done) {
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            db.addUpdateSnippetRating(fakeSnippetRating2, function (err, result) {
+                db.addUpdateSnippetRating(fakeSnippetRating3, function (err, result) {
+                    var ids = [fakeSnippetRating.snippetId, fakeSnippetRating3.snippetId];
+                    db.getSnippetsRatingsAvg(ids, function (err, results) {
+                        expect(results[0].snippetId).to.be.eql(fakeSnippetRating3.snippetId);
+                        expect(results[0].rating).to.be.eql(1.5);
+                        expect(results[1].snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                        expect(results[1].rating).to.be.eql(3.25);
+                        done();
+                    })
                 });
             });
         });

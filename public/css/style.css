@@ -43,3 +43,13 @@ body {
 .login h4 {
      text-align: center     ;
 }
+
+.padding-right {
+    padding-right: 10px;
+}
+
+/*override the rateyo padding*/
+.jq-ry-container {
+    padding:0 0px;
+    left:-2px;
+}

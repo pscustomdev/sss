@@ -24,6 +24,44 @@
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileContent = "";
         $scope.confirmDelete = false;
+        $scope.avgRatingOptions = {
+            ratedFill: '#337ab7',
+            readOnly: true,
+            halfStar: true,
+            starWidth: "20px"
+        };
+
+        $scope.ratingOptions = {
+            //ratedFill: '#337ab7',
+            readOnly: false,
+            halfStar: true
+            //starWidth: "20px"
+        };
+
+        $nodeServices.getSnippetRatingByUser({snippetId: $scope.snippetId, user:$rootScope.currentUser.username}).then(
+            function(userRating) {
+                if(userRating){
+                    $scope.userRating = userRating.rating;
+                }
+            }
+        );
+
+        $nodeServices.getSnippetRating($scope.snippetId).then(
+            function(result) {
+                if(result){
+                    $scope.avgRating = result;
+                }
+            }
+        );
+
+        $scope.setRating = function(event, data) {
+            if(data.rating && $scope.userRating != data.rating) {
+                $scope.userRating = data.rating;
+                var snippetRating = {snippetId: $scope.snippetId, rater:$rootScope.currentUser.username, rating:data.rating};
+                $nodeServices.addUpdateSnippetRating(snippetRating);
+            }
+        };
+
         var count = 0;
         editableOptions.theme = 'bs3';
 
@@ -62,6 +100,7 @@
         // update the display name and description
         $scope.updateSnippet = function() {
             $scope.snippetOverview.owner = $rootScope.currentUser.username;
+            //TODO update my rating here.
             $nodeServices.updateSnippet($scope.snippetOverview).then (
                 function() {}
             )
@@ -88,7 +127,7 @@
                             // refresh the overview page
                             $state.reload();
                         }
-                    )
+                    );
                     $scope.confirmDelete = false;
                 }
             });
@@ -97,10 +136,10 @@
         // focus the input field when the new file dialog is shown
         $("#fileNameModal").on('shown.bs.modal', function() {
             $("#newFileName").focus();
-        })
+        });
 
         // file uploader
-        var uploader = $scope.uploader = new FileUploader({
+        $scope.uploader = new FileUploader({
             url: '/api/snippet-detail/' + $scope.snippetId
         });
 

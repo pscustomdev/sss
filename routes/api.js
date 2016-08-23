@@ -170,6 +170,7 @@ module.exports = function(app) {
                                 }
                                 retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                                 retObj.owner = repo ? repo.owner : "unknown";
+                                retObj.postedOn = repo ? repo.postedOn : "unknown";
                                 // determine if the current user is the owner
                                 retObj.isOwner = false;
                                 // if logged in as the admin user
@@ -357,6 +358,47 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error getting commits: ' + err.message});
                 }
                 res.json(commits);
+            });
+        }
+    );
+
+    api_routes.get('/rating/:snippetId',
+        function (req, res) {
+            db.getSnippetRatingsAvg(req.params.snippetId, function (err, ratingAvg) {
+                res.json(ratingAvg);
+            });
+        }
+    );
+
+    api_routes.get('/ratings/:snippetIds',
+        function (req, res) {
+            var sIds = decodeURIComponent(req.params.snippetIds).split(",");
+            db.getSnippetsRatingsAvg(sIds, function (err, ratings) {
+                res.json(ratings);
+            });
+        }
+    );
+
+    api_routes.get('/rating/:snippetId/:user',
+        function (req, res) {
+            var userRating = {
+                snippetId:req.params.snippetId,
+                rater:req.params.user
+            };
+            db.getSnippetRatingByUser(userRating, function (err, rating) {
+                res.json(rating);
+            });
+        }
+    );
+
+    // create or update snippet rating (POST)
+    api_routes.post('/rating/:snippetId',
+        function (req, res) {
+            db.addUpdateSnippetRating(req.body, function (err) {
+                if (err) {
+                    return res.status(500).json({error: 'Error adding rating to database: ' + err.message});
+                }
+                res.json({});
             });
         }
     );

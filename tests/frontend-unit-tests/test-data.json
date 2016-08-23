@@ -201,5 +201,6 @@
         "status": "200 OK"
       }
     }
-  }
+  },
+  "ratingsResponse":[{"snippetId":"ImCooler","rating":5},{"snippetId":"Strip-CN-from-DN", "rating":1.5}]
 }

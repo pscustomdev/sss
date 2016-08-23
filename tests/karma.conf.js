@@ -10,11 +10,13 @@ module.exports = function(config) {
        //Dependent Libs
       'public/bower/underscore/underscore.js', // Included Library
       'public/bower/angular/angular.js',
+      'public/bower/angular-rating-yo/src/angular-rating-yo.js',
       'public/bower/angular-ui-router/release/angular-ui-router.js',
       'public/bower/angular-bootstrap/ui-bootstrap-tpls.js',
       'public/bower/angular-sanitize/angular-sanitize.js',
       'public/bower/angular-animate/angular-animate.js',
       'public/bower/jquery/dist/jquery.js',
+      'public/bower/jquery-rateyo/src/jquery.rateyo.js',
       'public/bower/bootstrap/js/modal.js',
       'public/bower/bootstrap/js/tab.js',
       'public/bower/angular-xeditable/dist/js/xeditable.min.js',
@@ -34,6 +36,9 @@ module.exports = function(config) {
         'tests/frontend-unit-tests/node-services-spec.js',
         'tests/frontend-unit-tests/mySnippets-spec.js',
         'tests/frontend-unit-tests/details-spec.js',
+        'tests/frontend-unit-tests/overview-spec.js',
+        'tests/frontend-unit-tests/results-spec.js',
+        'tests/frontend-unit-tests/search-service-spec.js',
       { pattern:  'tests/frontend-unit-tests/*.json',
         watched:  true,
         served:   true,

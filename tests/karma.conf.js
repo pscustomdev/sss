@@ -37,6 +37,8 @@ module.exports = function(config) {
         'tests/frontend-unit-tests/mySnippets-spec.js',
         'tests/frontend-unit-tests/details-spec.js',
         'tests/frontend-unit-tests/overview-spec.js',
+        'tests/frontend-unit-tests/results-spec.js',
+        'tests/frontend-unit-tests/search-service-spec.js',
       { pattern:  'tests/frontend-unit-tests/*.json',
         watched:  true,
         served:   true,

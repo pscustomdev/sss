@@ -25,6 +25,7 @@ describe("REST API Tests", function() {
     var fakeFileName = "MochaTestFile";
     var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
     var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
+    var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
@@ -34,7 +35,9 @@ describe("REST API Tests", function() {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                        done();
+                        db.removeSnippetRating(fakeSnippetRating3, function (err, result) {
+                            done();
+                        });
                     });
                 });
             });
@@ -46,7 +49,9 @@ describe("REST API Tests", function() {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                        done();
+                        db.removeSnippetRating(fakeSnippetRating3, function (err, result) {
+                            done();
+                        });
                     });
                 });
             });
@@ -200,13 +205,13 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should create a rating on /snippet/:snippetId/rating POST', function(done) {
+    it('should create a rating on /rating/:snippetId POST', function(done) {
         chai.request(app)
-            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
             .end(function(err, res) {
                 chai.request(app)
-                    .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                    .get('/api/rating/' + fakeSnippetRating.snippetId)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         res.body.should.equal(5);
@@ -215,14 +220,14 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should update a rating on /snippet/:snippetId/rating PUT', function(done) {
+    it('should update a rating on /rating/:snippetId PUT', function(done) {
         var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
         chai.request(app)
-            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(modifiedRating)
             .end(function(err, res) {
                 chai.request(app)
-                    .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                    .get('/api/rating/' + fakeSnippetRating.snippetId)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         res.body.should.equal(4);
@@ -231,17 +236,17 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get an average rating for the snippet on /snippet/:snippetId/rating GET', function(done) {
+    it('should get an average rating for the snippet on /rating/:snippetId GET', function(done) {
         chai.request(app)
-            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
             .end(function(err, res) {
                 chai.request(app)
-                    .post('/api/snippet/' + fakeSnippetRating2.snippetId + '/rating')
+                    .post('/api/rating/' + fakeSnippetRating2.snippetId)
                     .send(fakeSnippetRating2)
                     .end(function(err, res) {
                         chai.request(app)
-                            .get('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+                            .get('/api/rating/' + fakeSnippetRating.snippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.should.equal(3.25);
@@ -251,23 +256,21 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a users rating for a snippet on /snippet/:snippetId/:user/rating GET', function(done) {
+    it('should get a users rating for a snippet on /rating/:snippetId/:user GET', function(done) {
         chai.request(app)
-            .post('/api/snippet/' + fakeSnippetRating.snippetId + '/rating')
+            .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
             .end(function(err, res) {
                 chai.request(app)
-                    .post('/api/snippet/' + fakeSnippetRating2.snippetId + '/rating')
+                    .post('/api/rating/' + fakeSnippetRating2.snippetId)
                     .send(fakeSnippetRating2)
                     .end(function(err, res) {
                         chai.request(app)
-                            .get('/api/snippet/' + fakeSnippetRating.snippetId + '/' + fakeSnippetRating.rater + '/rating')
+                            .get('/api/rating/' + fakeSnippetRating.snippetId + '/' + fakeSnippetRating.rater)
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.should.have.property("snippetId");
                                 res.body.snippetId.should.equal(fakeSnippetRating.snippetId);
-                                res.body.should.have.property("rater");
-                                res.body.rater.should.equal(fakeSnippetRating.rater);
                                 res.body.should.have.property("rating");
                                 res.body.rating.should.equal(fakeSnippetRating.rating);
                                 done();
@@ -276,9 +279,43 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a 0 rating if one does not exist for the snippet on /snippet/:snippetId/rating GET', function(done) {
+    it('should get a list of snippets average ratings /ratings/:listOfIds GET', function(done) {
+        var ids = encodeURIComponent(fakeSnippetRating.snippetId + "," + fakeSnippetRating3.snippetId);
         chai.request(app)
-            .get('/api/snippet/fakesnippet/rating')
+            .post('/api/rating/' + fakeSnippetRating.snippetId)
+            .send(fakeSnippetRating)
+            .end(function(err, res) {
+                chai.request(app)
+                    .post('/api/rating/' + fakeSnippetRating2.snippetId)
+                    .send(fakeSnippetRating2)
+                    .end(function(err, res) {
+                        chai.request(app)
+                            .post('/api/rating/' + fakeSnippetRating3.snippetId)
+                            .send(fakeSnippetRating3)
+                            .end(function(err, res) {
+                                chai.request(app)
+                                    .get('/api/ratings/' + ids)
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        res.body[0].should.have.property("snippetId");
+                                        res.body[0].should.not.have.property("rater");
+                                        res.body[0].snippetId.should.equal(fakeSnippetRating.snippetId);
+                                        res.body[0].should.have.property("rating");
+                                        res.body[0].rating.should.equal(3.25);
+                                        res.body[0].should.have.property("snippetId");
+                                        res.body[1].snippetId.should.equal(fakeSnippetRating3.snippetId);
+                                        res.body[1].should.have.property("rating");
+                                        res.body[1].rating.should.equal(1.5);
+                                        done();
+                                    });
+                            });
+                    });
+            });
+    });
+
+    it('should get a 0 rating if one does not exist for the snippet on /rating/:snippetId GET', function(done) {
+        chai.request(app)
+            .get('/api/rating/fakesnippet')
             .end(function (err, res) {
                 res.should.have.status(200);
                 res.body.should.equal(0); //Since we don't have a rating set yet it will be 0.
@@ -286,7 +323,7 @@ describe("REST API Tests", function() {
             })
     });
 
-    it('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
+    xit('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -310,7 +347,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
+    xit('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
         var uploadedFileName = "readme";
         var boundary = Math.random();
         chai.request(app)
@@ -337,7 +374,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should update contents of a repo file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
+    xit('should update contents of a repo file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
         var fakeFileContents = "Sample data to write to file";
         chai.request(app)
             //create the initial snippet
@@ -376,7 +413,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get contents of a repo file on /snippet-detail/:snippetId/:fileName GET', function(done) {
+    xit('should get contents of a repo file on /snippet-detail/:snippetId/:fileName GET', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -394,7 +431,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should delete a repo file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
+    xit('should delete a repo file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')

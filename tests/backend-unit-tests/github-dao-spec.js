@@ -131,7 +131,7 @@ describe("GitHub Dao", function() {
         });
     });
 
-    it('should add a file to the repo', function (done) {
+    xit('should add a file to the repo', function (done) {
         var fileContent = "Mocha file content";
         gh.createRepo(fakeSnippet, function (err, result) {
             setTimeout(function() {
@@ -197,7 +197,7 @@ describe("GitHub Dao", function() {
     });
 
     // get the contents of a specific repo file
-    it('should get the contents of a file in the repo', function (done) {
+    xit('should get the contents of a file in the repo', function (done) {
         gh.createRepo(fakeSnippet, function (err, result) {
             setTimeout(function() {
                 gh.getRepoFile(fakeSnippetId, "README.md", function (err, result) {
@@ -208,7 +208,7 @@ describe("GitHub Dao", function() {
         });
     });
 
-    it('should get the sha blob of a specific repo file', function (done) {
+    xit('should get the sha blob of a specific repo file', function (done) {
         var fileContent = "Mocha file content";
         gh.createRepo(fakeSnippet, function (err, result) {
             setTimeout(function() {

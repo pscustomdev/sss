@@ -21,8 +21,8 @@ describe('SSS Views', function() {
             $controller = $injector.get('$controller');
             $controller('OverviewController', { $scope: $scope, $nodeServices: $nodeServices, $stateParams: $stateParams});
             var mockPayload = [{"name": "README.md"}];
-            $httpBackend.expectGET('/api/snippet/' + fakeSnippetId + '/' + $rootScope.currentUser.username + '/rating').respond(200, {rating:5});
-            $httpBackend.expectGET('/api/snippet/' + fakeSnippetId + '/rating').respond(200, {rating:5});
+            $httpBackend.expectGET('/api/rating/' + fakeSnippetId + '/' + $rootScope.currentUser.username).respond(200, {rating:5});
+            $httpBackend.expectGET('/api/rating/' + fakeSnippetId).respond(200, {rating:5});
             $httpBackend.expectGET('/api/snippet-overview/' + fakeSnippetId).respond(200, mockPayload);
             $httpBackend.flush();
         }));

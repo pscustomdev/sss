@@ -143,17 +143,24 @@ exports.removeSnippetRating = function(id, next) {
 };
 
 exports.getSnippetRatingsAvg = function(id, next) {
-    //TingoDB doesn't support aggregate function so we have to average it ourselves.
-    db.collection('ratings').find({snippetId: id}).toArray(function(err, results) {
-        if (results && results.length > 0) {
-            var ratings = _.pluck(results, 'rating'); //get an array of only the ratings
-            var sum = ratings.reduce(function(a, b) { return a + b; });
-            var avg = sum / ratings.length;
-            next(err, avg);
-        } else {
-            next(err, 0);  //we send a 0 if we don't have any ratings yet.
-        }
+    db.collection('ratings').find({snippetId: id}).toArray(function(err, ratings) {
+        next(err, calcAvgRatingForSnippet(ratings));
     });
+};
+
+exports.getSnippetsRatingsAvg = function(snippetIds, next) {
+    var returnedRatings =[];
+        db.collection('ratings').find({ snippetId : { $in : snippetIds } }).toArray(function(err, ratings) {
+            var ratingsGrouped = _.groupBy(ratings, 'snippetId');
+            _.each(ratingsGrouped, function(ratings) {
+                returnedRatings.push({
+                    snippetId: ratings[0].snippetId,
+                    rating: calcAvgRatingForSnippet(ratings)
+                });
+            });
+            next(err,returnedRatings);
+        });
+
 };
 
 exports.getSnippetRatingByUser = function(userRating, next) {
@@ -167,3 +174,17 @@ exports.getSnippetRatingByUser = function(userRating, next) {
         }
     );
 };
+
+//TingoDB doesn't support aggregate function so we have to average it ourselves.
+function calcAvgRatingForSnippet(snippetRatings){
+    var avg = 0;
+    if (snippetRatings && snippetRatings.length > 0) {
+        var ratings = _.pluck(snippetRatings, 'rating'); //get an array of only the ratings
+        var sum = ratings.reduce(function (a, b) {
+            return a + b;
+        });
+        avg = sum / ratings.length;
+    }
+
+    return avg;
+}

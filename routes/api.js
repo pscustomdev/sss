@@ -354,7 +354,7 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippet/:snippetId/rating',
+    api_routes.get('/rating/:snippetId',
         function (req, res) {
             db.getSnippetRatingsAvg(req.params.snippetId, function (err, ratingAvg) {
                 res.json(ratingAvg);
@@ -362,7 +362,16 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippet/:snippetId/:user/rating',
+    api_routes.get('/ratings/:snippetIds',
+        function (req, res) {
+            var sIds = decodeURIComponent(req.params.snippetIds).split(",");
+            db.getSnippetsRatingsAvg(sIds, function (err, ratings) {
+                res.json(ratings);
+            });
+        }
+    );
+
+    api_routes.get('/rating/:snippetId/:user',
         function (req, res) {
             var userRating = {
                 snippetId:req.params.snippetId,
@@ -375,7 +384,7 @@ module.exports = function(app) {
     );
 
     // create or update snippet rating (POST)
-    api_routes.post('/snippet/:snippetId/rating',
+    api_routes.post('/rating/:snippetId',
         function (req, res) {
             db.addUpdateSnippetRating(req.body, function (err) {
                 if (err) {

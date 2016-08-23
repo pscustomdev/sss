@@ -20,7 +20,7 @@
             },
             views: {
                 '@': {
-                    templateUrl: '/app/views/results.html'}
+                    templateUrl: '/app/views/results.html', controller: 'ResultsController'}
             }
         })
     }
@@ -50,12 +50,11 @@
 
     function ResultsController($scope) {
         // Rating
-        $scope.rate = 5;
-        $scope.max = 5;
-        $scope.isReadonly = true;
-        $scope.hoveringOver = function(value) {
-            $scope.overStar = value;
-            $scope.percent = 100 * (value / $scope.max);
+        $scope.avgRatingOptions = {
+            ratedFill: '#337ab7',
+            readOnly: true,
+            halfStar: true,
+            starWidth: "20px"
         };
     }
 

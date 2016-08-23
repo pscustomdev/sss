@@ -96,32 +96,38 @@ describe('SSS Node Services', function() {
 
     });
 
-    it('getSnippetRating() should call api/snippet/:snippetId/rating GET', function() {
+    it('getSnippetRating() should call api/rating/:snippetId GET', function() {
         var snippetId = "MochaTestRepo";
-        $httpBackend.expectGET('/api/snippet/' + snippetId + '/rating').respond();
+        $httpBackend.expectGET('/api/rating/' + snippetId).respond();
         $nodeServices.getSnippetRating(snippetId);
     });
 
-    it('getSnippetRatingByUser() should call api/snippet/:snippetId/rating GET', function() {
+    it('getSnippetsRatings() should call api/ratings/listOfSnippetIds GET', function() {
+        var ids = "id1,id2,id3";
+        $httpBackend.expectGET('/api/ratings/' + ids).respond();
+        $nodeServices.getSnippetsRatingsByArray(ids);
+    });
+
+    it('getSnippetRatingByUser() should call api/rating/:snippetId GET', function() {
         var userRating = {snippetId:"fakeSnippetId", user:"fakeUser"};
-        $httpBackend.expectGET('/api/snippet/' + userRating.snippetId + '/' + userRating.user + '/rating').respond();
+        $httpBackend.expectGET('/api/rating/' + userRating.snippetId + '/' + userRating.user).respond();
         $nodeServices.getSnippetRatingByUser(userRating);
     });
 
-    it('addRating() should call api/snippet/:snippetId/rating POST', function() {
+    it('addRating() should call api/rating/:snippetId POST', function() {
         var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
 
-        $httpBackend.expectPOST('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
+        $httpBackend.expectPOST('/api/rating/' + rating.snippetId, rating, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
 
         $nodeServices.addUpdateSnippetRating(rating);
     });
 
-    it('updateRating() should call api/snippet/:snippetId/rating PUT', function() {
+    it('updateRating() should call api/rating/:snippetId PUT', function() {
         var rating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
 
-        $httpBackend.expectPOST('/api/snippet/' + rating.snippetId + '/rating', rating, function(headers) {
+        $httpBackend.expectPOST('/api/rating/' + rating.snippetId, rating, function(headers) {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
 

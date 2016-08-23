@@ -17,6 +17,7 @@ describe("Mongo Dao", function() {
     var fakeSnippet2 = {_id: "MochaTestRepo2", owner:"testOwner", displayName:"testDisplayName2"};
     var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
     var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"whoever", rating:1.5};
+    var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     beforeEach(function(done) {
         //cleanup fake user
@@ -33,8 +34,10 @@ describe("Mongo Dao", function() {
                 db.removeSnippet(fakeSnippet2._id, function(err, result){
                     db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                         db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                            if (err) console.log(err);
-                            done();
+                            db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                                if (err) console.log(err);
+                                done();
+                            });
                         });
                     });
                 });
@@ -232,6 +235,23 @@ describe("Mongo Dao", function() {
                     expect(result).to.be.eql(3.25);
                     done();
                 })
+            });
+        });
+    });
+
+    it('should be able to get all snippets average ratings from the database', function (done) {
+        db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
+            db.addUpdateSnippetRating(fakeSnippetRating2, function (err, result) {
+                db.addUpdateSnippetRating(fakeSnippetRating3, function (err, result) {
+                    var ids = [fakeSnippetRating.snippetId, fakeSnippetRating3.snippetId];
+                    db.getSnippetsRatingsAvg(ids, function (err, results) {
+                        expect(results[0].snippetId).to.be.eql(fakeSnippetRating3.snippetId);
+                        expect(results[0].rating).to.be.eql(1.5);
+                        expect(results[1].snippetId).to.be.eql(fakeSnippetRating.snippetId);
+                        expect(results[1].rating).to.be.eql(3.25);
+                        done();
+                    })
+                });
             });
         });
     });

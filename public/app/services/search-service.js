@@ -92,30 +92,28 @@
         function updateMetaData(snippets) {
             updateRating(snippets);
             // updateViewsCount(snippets);
-            // updatePostedOn(snippets);
-            // updatePostedBy(snippets);
             // updateLastUpdated(snippets);
         }
 
         function updateRating(snippets) {
-
+            //copy the repository name to the snippetId so we can merge the two arrays.
+            _.each(snippets, function(snippet){
+                snippet.snippetId = snippet.repository.name;
+            });
+            var ids = _.pluck(snippets, "snippetId");
+            $nodeServices.getSnippetsRatingsByArray(ids).then(
+                function(result) {
+                    if(result){
+                        //merge the ratings into the snippets so we can display then all together
+                        mergeByProperty(snippets, result.data, "snippetId");
+                        vm.searchResults.items = snippets;
+                    }
+                }
+            );
         }
 
         function updateViewsCount(snippets) {
 
-        }
-
-        function updatePostedOn(snippets) {
-            // Testing to see the best way to retrieve the earliest commit (thus providing the "Repo Creation Date")
-            $nodeServices.getCommits("sss-storage", "2").then(function (response) {
-                vm["sss-storage"] = [];
-                vm["sss-storage"]["2"] = [];
-                vm["sss-storage"]["2"].commits = response;
-            });
-        }
-
-        function updatePostedBy(snippets) {
-            // this will need to be tracked/retrieved in mongo
         }
 
         function updateLastUpdated(snippets) {

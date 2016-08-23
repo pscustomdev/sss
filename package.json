@@ -41,6 +41,7 @@
     "marked": "^0.3.6",
     "method-override": "^2.3.5",
     "morgan": "^1.5.1",
+    "nock": "^8.0.0",
     "package-script": "0.0.8",
     "passport": "^0.3.0",
     "passport-github": ">= 0.0.0",

@@ -75,6 +75,7 @@
     "passport-stub": "^1.1.1",
     "phantomjs-prebuilt": "^2.1.11",
     "protractor": "^2.2.0",
+    "should": "^11.1.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0"
   }

@@ -98,6 +98,14 @@ describe('SSS Node Services', function() {
         $nodeServices.addFile(snippetId, fileName, fileContent);
     });
 
+    it('updateFile() should call /api/snippet-detail/:snippetId/:fileName PUT', function() {
+        var snippetId = "mockSnippetId";
+        var fileName = "mockFilename";
+        var fileContent = "This is file content";
+        $httpBackend.expectPUT('/api/snippet-detail/' + snippetId + "/" + fileName, {"content":"This is file content"}, function(headers) {
+            return headers['Accept'] === 'application/json, text/plain, */*';
+        }).respond();
+        $nodeServices.updateFile(snippetId, fileName, fileContent);
     });
 
     it('deleteFile() should call /api/snippet-detail/:snippetId/:fileName DELETE', function() {
@@ -114,10 +122,6 @@ describe('SSS Node Services', function() {
             return headers['Accept'] === 'application/json, text/plain, */*';
         }).respond();
         $nodeServices.formatReadme(snippetId, content);
-    });
-
-    xit('deleteFile() should PUT data then have a response', function() {
-
     });
 
     it('getSnippetRating() should call api/rating/:snippetId GET', function() {

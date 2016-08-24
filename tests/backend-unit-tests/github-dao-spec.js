@@ -1,11 +1,18 @@
 'use strict';
 console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
 
-var authConfLocal = require('../../auth/auth-conf-local.js');
 var gh = require('../../db/github-dao');
 var expect = require("chai").expect;
 var nock = require("nock");
 var waitTime = 0;
+
+var apiToken = "";
+if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
+    apiToken = process.env.GithubApiToken;
+} else {
+    var authConfLocal = require('../../auth/auth-conf-local.js');
+    apiToken = authConfLocal.github_api.token;
+}
 
 describe("GitHub Dao", function() {
     var apiToken = authConfLocal.github_api.token;

@@ -1,7 +1,7 @@
 'use strict';
 console.log("**** (Backend Unit Testing [MOCHA]: '(REST api-spec') ****");
 
-var authConfLocal = require('../../auth/auth-conf-local.js');
+
 var gh = require('../../db/github-dao');
 var db = require('../../db/mongo-dao');
 var fs = require('fs');
@@ -13,11 +13,18 @@ var should = require("chai").should();
 var passportStub = require("passport-stub");
 var nock = require("nock");
 
+var apiToken = "";
+if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
+    apiToken = process.env.GithubApiToken;
+} else {
+    var authConfLocal = require('../../auth/auth-conf-local.js');
+    apiToken = authConfLocal.github_api.token;
+}
+
 chai.use(chaiHttp);
 passportStub.install(app);
 
 describe("REST API Tests", function() {
-    var apiToken = authConfLocal.github_api.token;
     var fakeSnippetId = "MochaTestRepo";
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";

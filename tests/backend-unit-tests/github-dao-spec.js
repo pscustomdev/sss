@@ -15,7 +15,6 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
 }
 
 describe("GitHub Dao", function() {
-    var apiToken = authConfLocal.github_api.token;
     var fakeSnippetId = "MochaTestRepo";
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";

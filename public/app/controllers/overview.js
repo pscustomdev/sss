@@ -22,6 +22,8 @@
 
     function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions, FileUploader) {
         $scope.snippetId = $stateParams.snippetId;
+        $scope.snippetOverview = {};
+        $scope.snippetOverview.isOwner = false;
         $scope.fileContent = "";
         $scope.confirmDelete = false;
         $scope.avgRatingOptions = {
@@ -62,28 +64,29 @@
             }
         };
 
-        var count = 0;
         editableOptions.theme = 'bs3';
+        var count = 0;
 
         function getOverview(snippetId) {
             // retry getting the snippet 5 times
             // this is necessary because sometimes the api will return a null overview when a snippet
             // was just created and is not yet available to the api
             if (count < 5) {
+                count++;
                 $nodeServices.getSnippetOverview(snippetId).then(
                     function (overview) {
                         if (!overview) {
-                            count++;
-                            console.log("Error getting snippet.  Retry #" + count + "...");
-                            getOverview(snippetId);
+                            setTimeout(function() {
+                                console.log("Error getting snippet.  Retry #" + count + "...");
+                                $scope.snippetOverview.description = (count < 4)?"":"Snippet content not found. Please refresh the page to try again.";
+                                $scope.snippetOverview.displayName = (count < 4)?"":"Not Found";
+                                getOverview(snippetId);
+                            },1500);
                         } else {
                             $scope.snippetOverview = overview;
                         }
                     }
                 );
-            } else {
-                $scope.snippetOverview = {};
-                $scope.snippetOverview.isOwner = false;
             }
         }
         getOverview($scope.snippetId);

@@ -35,7 +35,7 @@
             </div>
         </div>
         <div>
-            <strong ng-show="!snippetOverview">Loading...</strong>
+            <strong ng-show="!snippetOverview.displayName">Loading...</strong>
             <ul class="list-group">
                 <li ng-repeat="file in snippetOverview.files" class="list-group-item">
                     <a ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file}}', isOwner: {{snippetOverview.isOwner}} })">{{file}}</a>

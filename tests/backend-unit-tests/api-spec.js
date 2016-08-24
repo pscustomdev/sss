@@ -3114,20 +3114,20 @@ describe("REST API Tests", function() {
     function mockDataListOwnerSnippets() {
         nock('https://api.github.com:443', {"encodedQueryParams":true})
             .post('/orgs/sss-storage/repos', {"name":"MochaTestRepo","description":"Mocha Description","auto_init":false})
-            .query({"access_token":apiToken})
-            .reply(201, {"id":66400229,"name":"MochaTestRepo","full_name":"sss-storage/MochaTestRepo","owner":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/sss-storage/MochaTestRepo","description":"Mocha Description","fork":false,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo","forks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/forks","keys_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/teams","hooks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/hooks","issue_events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues/events{/number}","events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/events","assignees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/assignees{/user}","branches_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/branches{/branch}","tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/tags","blobs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/refs{/sha}","trees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/statuses/{sha}","languages_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/languages","stargazers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/stargazers","contributors_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contributors","subscribers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/subscribers","subscription_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/subscription","commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/commits{/sha}","git_commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits{/sha}","comments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/comments{/number}","issue_comment_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues/comments{/number}","contents_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/{+path}","compare_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/merges","archive_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/downloads","issues_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues{/number}","pulls_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/pulls{/number}","milestones_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/milestones{/number}","notifications_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/labels{/name}","releases_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/releases{/id}","deployments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/deployments","created_at":"2016-08-23T20:19:31Z","updated_at":"2016-08-23T20:19:31Z","pushed_at":"2016-08-23T20:19:31Z","git_url":"git://github.com/sss-storage/MochaTestRepo.git","ssh_url":"git@github.com:sss-storage/MochaTestRepo.git","clone_url":"https://github.com/sss-storage/MochaTestRepo.git","svn_url":"https://github.com/sss-storage/MochaTestRepo","homepage":null,"size":0,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true},"organization":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"network_count":0,"subscribers_count":2}, { server: 'GitHub.com',
-                date: 'Tue, 23 Aug 2016 20:19:31 GMT',
+            .query({"access_token":"43ed7ee49777e5d94ae377740b9477d39f94516d"})
+            .reply(201, {"id":66506528,"name":"MochaTestRepo","full_name":"sss-storage/MochaTestRepo","owner":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/sss-storage/MochaTestRepo","description":"Mocha Description","fork":false,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo","forks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/forks","keys_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/teams","hooks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/hooks","issue_events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues/events{/number}","events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/events","assignees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/assignees{/user}","branches_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/branches{/branch}","tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/tags","blobs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/refs{/sha}","trees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/statuses/{sha}","languages_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/languages","stargazers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/stargazers","contributors_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contributors","subscribers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/subscribers","subscription_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/subscription","commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/commits{/sha}","git_commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits{/sha}","comments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/comments{/number}","issue_comment_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues/comments{/number}","contents_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/{+path}","compare_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/merges","archive_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/downloads","issues_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/issues{/number}","pulls_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/pulls{/number}","milestones_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/milestones{/number}","notifications_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/labels{/name}","releases_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/releases{/id}","deployments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/deployments","created_at":"2016-08-24T23:18:06Z","updated_at":"2016-08-24T23:18:06Z","pushed_at":"2016-08-24T23:18:07Z","git_url":"git://github.com/sss-storage/MochaTestRepo.git","ssh_url":"git@github.com:sss-storage/MochaTestRepo.git","clone_url":"https://github.com/sss-storage/MochaTestRepo.git","svn_url":"https://github.com/sss-storage/MochaTestRepo","homepage":null,"size":0,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true},"organization":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"network_count":0,"subscribers_count":2}, { server: 'GitHub.com',
+                date: 'Wed, 24 Aug 2016 23:18:07 GMT',
                 'content-type': 'application/json; charset=utf-8',
                 'content-length': '5986',
                 connection: 'close',
                 status: '201 Created',
                 'x-ratelimit-limit': '5000',
-                'x-ratelimit-remaining': '4936',
-                'x-ratelimit-reset': '1471986645',
+                'x-ratelimit-remaining': '4984',
+                'x-ratelimit-reset': '1472083544',
                 'cache-control': 'private, max-age=60, s-maxage=60',
                 vary: 'Accept, Authorization, Cookie, X-GitHub-OTP, Accept-Encoding',
-                etag: '"5b2459788ee90b73912d53abc1f64c22"',
-                'x-oauth-scopes': 'admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user',
+                etag: '"e1600fa5dfe45a62be6d296cc8e3dad7"',
+                'x-oauth-scopes': 'repo',
                 'x-accepted-oauth-scopes': 'public_repo, repo',
                 location: 'https://api.github.com/repos/sss-storage/MochaTestRepo',
                 'x-github-media-type': 'github.v3; param=text-match; format=json',
@@ -3138,25 +3138,25 @@ describe("REST API Tests", function() {
                 'x-content-type-options': 'nosniff',
                 'x-frame-options': 'deny',
                 'x-xss-protection': '1; mode=block',
-                'x-served-by': 'bae57931a6fe678a3dffe9be8e7819c8',
-                'x-github-request-id': '4BA2FBBD:5CCD:32B87D9:57BCAFD3' });
+                'x-served-by': 'cee4c0729c8e9147e7abcb45b9d69689',
+                'x-github-request-id': '4BA2F5B5:5481:7D78D0D:57BE2B2E' });
 
         nock('https://api.github.com:443', {"encodedQueryParams":true})
             .put('/repos/sss-storage/MochaTestRepo/contents/README.md', {"message":"README.md creation","content":"IyBNb2NoYSBEaXNwbGF5IE5hbWUKTW9jaGEgUmVhZG1l"})
-            .query({"access_token":apiToken})
-            .reply(201, {"content":{"name":"README.md","path":"README.md","sha":"dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","size":33,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","html":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md"}},"commit":{"sha":"1446982978f71dc24a1e16548f7d85f01cc3738f","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits/1446982978f71dc24a1e16548f7d85f01cc3738f","html_url":"https://github.com/sss-storage/MochaTestRepo/commit/1446982978f71dc24a1e16548f7d85f01cc3738f","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-23T20:19:32Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-23T20:19:32Z"},"tree":{"sha":"db9072dd04da9576112b263956509df4fc97d727","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees/db9072dd04da9576112b263956509df4fc97d727"},"message":"README.md creation","parents":[]}}, { server: 'GitHub.com',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+            .query({"access_token":"43ed7ee49777e5d94ae377740b9477d39f94516d"})
+            .reply(201, {"content":{"name":"README.md","path":"README.md","sha":"dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","size":33,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","html":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md"}},"commit":{"sha":"0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits/0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","html_url":"https://github.com/sss-storage/MochaTestRepo/commit/0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:07Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:07Z"},"tree":{"sha":"db9072dd04da9576112b263956509df4fc97d727","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees/db9072dd04da9576112b263956509df4fc97d727"},"message":"README.md creation","parents":[]}}, { server: 'GitHub.com',
+                date: 'Wed, 24 Aug 2016 23:18:07 GMT',
                 'content-type': 'application/json; charset=utf-8',
                 'content-length': '1501',
                 connection: 'close',
                 status: '201 Created',
                 'x-ratelimit-limit': '5000',
-                'x-ratelimit-remaining': '4935',
-                'x-ratelimit-reset': '1471986645',
+                'x-ratelimit-remaining': '4983',
+                'x-ratelimit-reset': '1472083544',
                 'cache-control': 'private, max-age=60, s-maxage=60',
                 vary: 'Accept, Authorization, Cookie, X-GitHub-OTP, Accept-Encoding',
-                etag: '"82d44a081f97b269f91c0ccaece67521"',
-                'x-oauth-scopes': 'admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user',
+                etag: '"daca813c92aba8d7c9f3385203299977"',
+                'x-oauth-scopes': 'repo',
                 'x-accepted-oauth-scopes': '',
                 'x-github-media-type': 'github.v3; param=text-match; format=json',
                 'access-control-expose-headers': 'ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval',
@@ -3166,33 +3166,37 @@ describe("REST API Tests", function() {
                 'x-content-type-options': 'nosniff',
                 'x-frame-options': 'deny',
                 'x-xss-protection': '1; mode=block',
-                'x-served-by': 'cee4c0729c8e9147e7abcb45b9d69689',
-                'x-github-request-id': '4BA2FBBD:5CCD:32B8816:57BCAFD3' });
+                'x-served-by': '52437fedc85beec8da3449496900fb9a',
+                'x-github-request-id': '4BA2F5B5:5481:7D78D98:57BE2B2F' });
 
-        nock('http://127.0.0.1:53091', {"encodedQueryParams":true})
+        nock('http://127.0.0.1:62377', {"encodedQueryParams":true})
             .post('/api/snippet', {"_id":"MochaTestRepo","description":"Mocha Description","displayName":"Mocha Display Name","readme":"Mocha Readme","owner":"fakeOwner"})
-            .reply(200, {"content":{"name":"README.md","path":"README.md","sha":"dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","size":33,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","html":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md"}},"commit":{"sha":"1446982978f71dc24a1e16548f7d85f01cc3738f","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits/1446982978f71dc24a1e16548f7d85f01cc3738f","html_url":"https://github.com/sss-storage/MochaTestRepo/commit/1446982978f71dc24a1e16548f7d85f01cc3738f","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-23T20:19:32Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-23T20:19:32Z"},"tree":{"sha":"db9072dd04da9576112b263956509df4fc97d727","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees/db9072dd04da9576112b263956509df4fc97d727"},"message":"README.md creation","parents":[]},"meta":{"x-ratelimit-limit":"5000","x-ratelimit-remaining":"4935","x-ratelimit-reset":"1471986645","x-oauth-scopes":"admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user","etag":"\"82d44a081f97b269f91c0ccaece67521\"","status":"201 Created"}}, { 'x-powered-by': 'Express',
+            .reply(200, {"content":{"name":"README.md","path":"README.md","sha":"dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","size":33,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/blobs/dc7bc8e5a2399f3fd49fd7bfe50ce3e31328d49d","html":"https://github.com/sss-storage/MochaTestRepo/blob/master/README.md"}},"commit":{"sha":"0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/commits/0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","html_url":"https://github.com/sss-storage/MochaTestRepo/commit/0b0e0128b3e0edbd42735dc147a3572ab9bfcc9c","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:07Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:07Z"},"tree":{"sha":"db9072dd04da9576112b263956509df4fc97d727","url":"https://api.github.com/repos/sss-storage/MochaTestRepo/git/trees/db9072dd04da9576112b263956509df4fc97d727"},"message":"README.md creation","parents":[]},"meta":{"x-ratelimit-limit":"5000","x-ratelimit-remaining":"4983","x-ratelimit-reset":"1472083544","x-oauth-scopes":"repo","etag":"\"daca813c92aba8d7c9f3385203299977\"","status":"201 Created"}}, { 'x-powered-by': 'Express',
                 vary: 'X-HTTP-Method-Override',
                 'content-type': 'application/json; charset=utf-8',
-                'content-length': '1796',
-                etag: 'W/"704-Eek0Ofw4E3jFXWa/GspPqQ"',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+                'content-length': '1694',
+                etag: 'W/"69e-qM3GsKrRZxQCJOYe5aWi0w"',
+                date: 'Wed, 24 Aug 2016 23:18:07 GMT',
                 connection: 'close' });
 
         nock('https://api.github.com:443', {"encodedQueryParams":true})
             .post('/orgs/sss-storage/repos', {"name":"MochaTestRepo2","description":"Mocha Description2","auto_init":false})
-            .query({"access_token":apiToken})
-            .reply(422, {"message":"Validation Failed","errors":[{"resource":"Repository","code":"custom","field":"name","message":"name already exists on this account"}],"documentation_url":"https://developer.github.com/v3/repos/#create"}, { server: 'GitHub.com',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+            .query({"access_token":"43ed7ee49777e5d94ae377740b9477d39f94516d"})
+            .reply(201, {"id":66506530,"name":"MochaTestRepo2","full_name":"sss-storage/MochaTestRepo2","owner":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/sss-storage/MochaTestRepo2","description":"Mocha Description2","fork":false,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo2","forks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/forks","keys_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/keys{/key_id}","collaborators_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/teams","hooks_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/hooks","issue_events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/issues/events{/number}","events_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/events","assignees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/assignees{/user}","branches_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/branches{/branch}","tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/tags","blobs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/refs{/sha}","trees_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/trees{/sha}","statuses_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/statuses/{sha}","languages_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/languages","stargazers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/stargazers","contributors_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contributors","subscribers_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/subscribers","subscription_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/subscription","commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/commits{/sha}","git_commits_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/commits{/sha}","comments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/comments{/number}","issue_comment_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/issues/comments{/number}","contents_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contents/{+path}","compare_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/compare/{base}...{head}","merges_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/merges","archive_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/downloads","issues_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/issues{/number}","pulls_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/pulls{/number}","milestones_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/milestones{/number}","notifications_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/labels{/name}","releases_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/releases{/id}","deployments_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/deployments","created_at":"2016-08-24T23:18:07Z","updated_at":"2016-08-24T23:18:07Z","pushed_at":"2016-08-24T23:18:08Z","git_url":"git://github.com/sss-storage/MochaTestRepo2.git","ssh_url":"git@github.com:sss-storage/MochaTestRepo2.git","clone_url":"https://github.com/sss-storage/MochaTestRepo2.git","svn_url":"https://github.com/sss-storage/MochaTestRepo2","homepage":null,"size":0,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true},"organization":{"login":"sss-storage","id":13575366,"avatar_url":"https://avatars.githubusercontent.com/u/13575366?v=3","gravatar_id":"","url":"https://api.github.com/users/sss-storage","html_url":"https://github.com/sss-storage","followers_url":"https://api.github.com/users/sss-storage/followers","following_url":"https://api.github.com/users/sss-storage/following{/other_user}","gists_url":"https://api.github.com/users/sss-storage/gists{/gist_id}","starred_url":"https://api.github.com/users/sss-storage/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sss-storage/subscriptions","organizations_url":"https://api.github.com/users/sss-storage/orgs","repos_url":"https://api.github.com/users/sss-storage/repos","events_url":"https://api.github.com/users/sss-storage/events{/privacy}","received_events_url":"https://api.github.com/users/sss-storage/received_events","type":"Organization","site_admin":false},"network_count":0,"subscribers_count":2}, { server: 'GitHub.com',
+                date: 'Wed, 24 Aug 2016 23:18:08 GMT',
                 'content-type': 'application/json; charset=utf-8',
-                'content-length': '215',
+                'content-length': '6031',
                 connection: 'close',
-                status: '422 Unprocessable Entity',
+                status: '201 Created',
                 'x-ratelimit-limit': '5000',
-                'x-ratelimit-remaining': '4934',
-                'x-ratelimit-reset': '1471986645',
-                'x-oauth-scopes': 'admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user',
+                'x-ratelimit-remaining': '4982',
+                'x-ratelimit-reset': '1472083544',
+                'cache-control': 'private, max-age=60, s-maxage=60',
+                vary: 'Accept, Authorization, Cookie, X-GitHub-OTP, Accept-Encoding',
+                etag: '"b9829c1c8514f0eaf76062dcad7dd814"',
+                'x-oauth-scopes': 'repo',
                 'x-accepted-oauth-scopes': 'public_repo, repo',
+                location: 'https://api.github.com/repos/sss-storage/MochaTestRepo2',
                 'x-github-media-type': 'github.v3; param=text-match; format=json',
                 'access-control-expose-headers': 'ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval',
                 'access-control-allow-origin': '*',
@@ -3201,38 +3205,69 @@ describe("REST API Tests", function() {
                 'x-content-type-options': 'nosniff',
                 'x-frame-options': 'deny',
                 'x-xss-protection': '1; mode=block',
-                'x-github-request-id': '4BA2FBBD:5CCC:6AA7E90:57BCAFD4' });
+                'x-served-by': 'a30e6f9aa7cf5731b87dfb3b9992202d',
+                'x-github-request-id': '4BA2F5B5:5481:7D78DCC:57BE2B2F' });
 
-        nock('http://127.0.0.1:53095', {"encodedQueryParams":true})
+        nock('https://api.github.com:443', {"encodedQueryParams":true})
+            .put('/repos/sss-storage/MochaTestRepo2/contents/README.md', {"message":"README.md creation","content":"IyBNb2NoYSBEaXNwbGF5IE5hbWUyCk1vY2hhIFJlYWRtZTI="})
+            .query({"access_token":"43ed7ee49777e5d94ae377740b9477d39f94516d"})
+            .reply(201, {"content":{"name":"README.md","path":"README.md","sha":"7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","size":35,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo2/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/blobs/7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo2/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/blobs/7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","html":"https://github.com/sss-storage/MochaTestRepo2/blob/master/README.md"}},"commit":{"sha":"093cdb93a52d5f991b1b77807b59fcfe3adc98b4","url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/commits/093cdb93a52d5f991b1b77807b59fcfe3adc98b4","html_url":"https://github.com/sss-storage/MochaTestRepo2/commit/093cdb93a52d5f991b1b77807b59fcfe3adc98b4","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:08Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:08Z"},"tree":{"sha":"d4ccb136f023f7523f330f9c0ebf7291b22337bb","url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/trees/d4ccb136f023f7523f330f9c0ebf7291b22337bb"},"message":"README.md creation","parents":[]}}, { server: 'GitHub.com',
+                date: 'Wed, 24 Aug 2016 23:18:08 GMT',
+                'content-type': 'application/json; charset=utf-8',
+                'content-length': '1511',
+                connection: 'close',
+                status: '201 Created',
+                'x-ratelimit-limit': '5000',
+                'x-ratelimit-remaining': '4981',
+                'x-ratelimit-reset': '1472083544',
+                'cache-control': 'private, max-age=60, s-maxage=60',
+                vary: 'Accept, Authorization, Cookie, X-GitHub-OTP, Accept-Encoding',
+                etag: '"4a1f6f3a2b7e4de008a8e5ea68e7048b"',
+                'x-oauth-scopes': 'repo',
+                'x-accepted-oauth-scopes': '',
+                'x-github-media-type': 'github.v3; param=text-match; format=json',
+                'access-control-expose-headers': 'ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval',
+                'access-control-allow-origin': '*',
+                'content-security-policy': 'default-src \'none\'',
+                'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
+                'x-content-type-options': 'nosniff',
+                'x-frame-options': 'deny',
+                'x-xss-protection': '1; mode=block',
+                'x-served-by': '07ff1c8a09e44b62e277fae50a1b1dc4',
+                'x-github-request-id': '4BA2F5B5:5487:60D6F7C:57BE2B30' });
+
+        nock('http://127.0.0.1:62381', {"encodedQueryParams":true})
             .post('/api/snippet', {"_id":"MochaTestRepo2","description":"Mocha Description2","displayName":"Mocha Display Name2","readme":"Mocha Readme2","owner":"fakeOwner"})
-            .reply(500, {"error":"Error creating repository on GitHub: {\"message\":\"Validation Failed\",\"errors\":[{\"resource\":\"Repository\",\"code\":\"custom\",\"field\":\"name\",\"message\":\"name already exists on this account\"}],\"documentation_url\":\"https://developer.github.com/v3/repos/#create\"}"}, { 'x-powered-by': 'Express',
+            .reply(200, {"content":{"name":"README.md","path":"README.md","sha":"7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","size":35,"url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contents/README.md?ref=master","html_url":"https://github.com/sss-storage/MochaTestRepo2/blob/master/README.md","git_url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/blobs/7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","download_url":"https://raw.githubusercontent.com/sss-storage/MochaTestRepo2/master/README.md","type":"file","_links":{"self":"https://api.github.com/repos/sss-storage/MochaTestRepo2/contents/README.md?ref=master","git":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/blobs/7ccb3f9bfeb0bdeda30a62d08c63efe2fd1a5dcd","html":"https://github.com/sss-storage/MochaTestRepo2/blob/master/README.md"}},"commit":{"sha":"093cdb93a52d5f991b1b77807b59fcfe3adc98b4","url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/commits/093cdb93a52d5f991b1b77807b59fcfe3adc98b4","html_url":"https://github.com/sss-storage/MochaTestRepo2/commit/093cdb93a52d5f991b1b77807b59fcfe3adc98b4","author":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:08Z"},"committer":{"name":"pscustomdev-sss","email":"pscustomdev@gmail.com","date":"2016-08-24T23:18:08Z"},"tree":{"sha":"d4ccb136f023f7523f330f9c0ebf7291b22337bb","url":"https://api.github.com/repos/sss-storage/MochaTestRepo2/git/trees/d4ccb136f023f7523f330f9c0ebf7291b22337bb"},"message":"README.md creation","parents":[]},"meta":{"x-ratelimit-limit":"5000","x-ratelimit-remaining":"4981","x-ratelimit-reset":"1472083544","x-oauth-scopes":"repo","etag":"\"4a1f6f3a2b7e4de008a8e5ea68e7048b\"","status":"201 Created"}}, { 'x-powered-by': 'Express',
                 vary: 'X-HTTP-Method-Override',
                 'content-type': 'application/json; charset=utf-8',
-                'content-length': '290',
-                etag: 'W/"122-VjJNqE+tFO/LqLkGB3A3og"',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+                'content-length': '1704',
+                etag: 'W/"6a8-/P44W/qP/H1gazEOzibS5Q"',
+                date: 'Wed, 24 Aug 2016 23:18:08 GMT',
                 connection: 'close' });
 
-        nock('http://127.0.0.1:53098', {"encodedQueryParams":true})
+        nock('http://127.0.0.1:62386', {"encodedQueryParams":true})
             .get('/api/snippets/fakeOwner')
-            .reply(200, [{"snippetId":"MochaTestRepo2","owner":"fakeOwner","displayName":"Mocha Display Name2","postedOn":1471983572539,"description":"Mocha Description2","_id":3},{"snippetId":"MochaTestRepo","owner":"fakeOwner","displayName":"Mocha Display Name","postedOn":1471983571591,"description":"Mocha Description","_id":9}], { 'x-powered-by': 'Express',
+            .reply(200, [{"snippetId":"MochaTestRepo2","owner":"fakeOwner","displayName":"Mocha Display Name2","postedOn":1472080688161,"description":"Mocha Description2","_id":11},{"snippetId":"MochaTestRepo","owner":"fakeOwner","displayName":"Mocha Display Name","postedOn":1472080687076,"description":"Mocha Description","_id":12}], { 'x-powered-by': 'Express',
                 'content-type': 'application/json; charset=utf-8',
-                'content-length': '308',
-                etag: 'W/"134-fxPYtH5bMVZjnEjRb7KYUw"',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+                'content-length': '310',
+                etag: 'W/"136-TTjXmw13V2an1ncSqt9h7A"',
+                date: 'Wed, 24 Aug 2016 23:18:08 GMT',
                 connection: 'close' });
 
         nock('https://api.github.com:443', {"encodedQueryParams":true})
             .delete('/repos/sss-storage/MochaTestRepo')
-            .query({"access_token":apiToken})
-            .reply(204, "", { server: 'GitHub.com',
-                date: 'Tue, 23 Aug 2016 20:19:32 GMT',
+            .query({"access_token":"43ed7ee49777e5d94ae377740b9477d39f94516d"})
+            .reply(403, {"message":"Must have admin rights to Repository.","documentation_url":"https://developer.github.com/v3/repos/#delete-a-repository"}, { server: 'GitHub.com',
+                date: 'Wed, 24 Aug 2016 23:18:09 GMT',
+                'content-type': 'application/json; charset=utf-8',
+                'content-length': '132',
                 connection: 'close',
-                status: '204 No Content',
+                status: '403 Forbidden',
                 'x-ratelimit-limit': '5000',
-                'x-ratelimit-remaining': '4933',
-                'x-ratelimit-reset': '1471986645',
-                'x-oauth-scopes': 'admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user',
+                'x-ratelimit-remaining': '4980',
+                'x-ratelimit-reset': '1472083544',
+                'x-oauth-scopes': 'repo',
                 'x-accepted-oauth-scopes': 'delete_repo',
                 'x-github-media-type': 'github.v3; param=text-match; format=json',
                 'access-control-expose-headers': 'ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval',
@@ -3242,9 +3277,7 @@ describe("REST API Tests", function() {
                 'x-content-type-options': 'nosniff',
                 'x-frame-options': 'deny',
                 'x-xss-protection': '1; mode=block',
-                vary: 'Accept-Encoding',
-                'x-served-by': '474556b853193c38f1b14328ce2d1b7d',
-                'x-github-request-id': '4BA2FBBD:5CCE:545B316:57BCAFD4' });
+                'x-github-request-id': '4BA2F5B5:5481:7D78E89:57BE2B30' });
     }
 
     function mockDataCreateSnippet() {

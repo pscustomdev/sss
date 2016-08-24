@@ -59,16 +59,15 @@ module.exports = function(app) {
     // create snippet (post)
     api_routes.post('/snippet', restrict,
         function (req, res) {
-            db.addUpdateSnippet(req.body, function (err) {
-                if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                }
-            });
-
             github.createRepo(req.body, function (err, repo) {
                 if (err) {
                     return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
                 }
+                db.addUpdateSnippet(req.body, function (err) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    }
+                });
                 res.json(repo);
             });
         }
@@ -77,16 +76,15 @@ module.exports = function(app) {
     // update snippet data such as display name and description (put)
     api_routes.put('/snippet/:snippetId', restrict,
         function (req, res) {
-            db.addUpdateSnippet(req.body, function (err) {
-                if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                }
-            });
-
             github.updateRepo(req.body, function (err, repo) {
                 if (err) {
                     return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
                 }
+                db.addUpdateSnippet(req.body, function (err) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    }
+                });
                 res.json(repo);
             });
         }
@@ -100,7 +98,6 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
                 }
             });
-
             github.deleteRepo(req.params.snippetId, function (err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error deleting repository: ' + err.message});

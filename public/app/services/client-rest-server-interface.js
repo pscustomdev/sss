@@ -36,10 +36,10 @@
                         return response.data;
                     },
                     function (reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function (err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -50,10 +50,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -64,10 +64,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -78,10 +78,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -91,10 +91,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -104,10 +104,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -117,10 +117,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -131,10 +131,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -145,10 +145,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -161,10 +161,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -177,10 +177,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -191,10 +191,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -205,10 +205,10 @@
                         return response;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -218,10 +218,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });    
         }
 
@@ -231,10 +231,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -245,10 +245,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -260,10 +260,10 @@
                         return responses;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -273,10 +273,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
 
@@ -287,10 +287,10 @@
                         return response.data;
                     },
                     function(reason) {
-                        $log.debug(reason);
+                        $log.debug(JSON.stringify(reason));
                     })
                 .catch(function(err) {
-                    $log.debug(err);
+                    $log.debug(JSON.stringify(err));
                 });
         }
     }

@@ -394,6 +394,8 @@ describe("REST API Tests", function() {
             });
     });
 
+    // not able to test a file upload as the "attach" doesn't seem to send
+    // the file so it is recognized by the code in api.js.
     xit('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
         nock.recorder.rec({});
         mockDataUploadFile();
@@ -407,7 +409,7 @@ describe("REST API Tests", function() {
                 chai.request(app)
                     //upload a new file
                     .post('/api/snippet-detail/' + fakeSnippetId)
-                    .attach('data', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
+                    .attach('file', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         chai.request(app)

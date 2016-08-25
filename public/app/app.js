@@ -2,10 +2,14 @@
     'use strict';
 
     // Declare app level module which depends on views, and components
-    angular.module('app', ['ui.router', 'ui.router.breadcrumbs', 'rateYo', 'app.$nodeServices','app.$searchService', 'app.search', 'app.results', 'app.overview', 'app.details', 'app.create','app.mySnippets','app.login'])
+    var app = angular.module('app', ['ui.router', 'ui.router.breadcrumbs', 'rateYo', 'app.$nodeServices','app.$searchService', 'app.search', 'app.results', 'app.overview', 'app.details', 'app.create','app.mySnippets','app.login', 'angularUtils.directives.dirDisqus'])
        .config(['$urlRouterProvider', URLRouteProvider])
         .directive('ngEnter', ngEnter)
         .run(main);
+
+    app.config(function($locationProvider) {
+        $locationProvider.hashPrefix('!');
+    });
 
     URLRouteProvider.$inject = ['$urlRouterProvider'];
     main.$inject = ['$rootScope', '$searchService', '$state', '$stateParams', '$log', '$nodeServices'];

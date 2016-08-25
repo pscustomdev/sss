@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var expressSession = require('express-session');
 var connectMongo = require('connect-mongo');
+var authConf = require('./auth/auth-conf.js');
 var MongoStore = connectMongo(expressSession);
 var config = require(path.join(__dirname, 'config'));
 
@@ -28,7 +29,7 @@ app.use(expressSession(
         secret: "softwaresnippetsearch",
         saveUninitialized: false,
         resave: false,
-        store: new MongoStore({db:sssDB}),
+        store: new MongoStore({url: authConf.mongo.uri}),
         cookie: {maxAge: config.cookieMaxAge}
     }
 ));

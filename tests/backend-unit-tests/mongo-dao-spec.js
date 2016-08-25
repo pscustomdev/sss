@@ -7,6 +7,7 @@ var expect = require('chai').expect;
 describe("Mongo Dao", function() {
     
     var fakeUser = {
+        id:123,
         firstName: "fakeFirst",
         lastName: "fakeLast",
         email: "fake@email.com",
@@ -16,14 +17,24 @@ describe("Mongo Dao", function() {
     var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
     var fakeSnippet2 = {_id: "MochaTestRepo2", owner:"testOwner", displayName:"testDisplayName2"};
     var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
-    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"whoever", rating:1.5};
+    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     beforeEach(function(done) {
         //cleanup fake user
         db.removeUser(fakeUser, function (err, data) {
-            if (err) console.log(err);
-            done();
+            db.removeSnippet(fakeSnippet._id, function(err, result){
+                db.removeSnippet(fakeSnippet2._id, function(err, result){
+                    db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
+                        db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
+                            db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
+                                if (err) console.log(err);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
         });
     }, 5000);
 
@@ -32,9 +43,9 @@ describe("Mongo Dao", function() {
         db.removeUser(fakeUser, function (err, data) {
             db.removeSnippet(fakeSnippet._id, function(err, result){
                 db.removeSnippet(fakeSnippet2._id, function(err, result){
-                    db.removeSnippetRating(fakeSnippetRating, function (err, result) {
-                        db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                            db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
+                    db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
+                        db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
+                            db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
                                 if (err) console.log(err);
                                 done();
                             });
@@ -49,7 +60,7 @@ describe("Mongo Dao", function() {
     it('should return error if user already exists', function (done) {
         db.addUser(fakeUser, function(){});
         db.addUser(fakeUser, function(err, users){
-            expect(err.message).equal("duplicate key error index");
+            expect(err.message).contain("duplicate key error");
             done();
         });
     });
@@ -58,9 +69,9 @@ describe("Mongo Dao", function() {
         db.addUser(fakeUser, function(err, users){
             if(users){
                 expect(users).to.exist;
-                expect(users[0].firstName).equal("fakeFirst");
-                expect(users[0].lastName).equal("fakeLast");
-                expect(users[0].email).equal("fake@email.com");
+                expect(users.ops[0].firstName).equal("fakeFirst");
+                expect(users.ops[0].lastName).equal("fakeLast");
+                expect(users.ops[0].email).equal("fake@email.com");
             } else {
                 expect(err.errmsg).contains("Error");
             }
@@ -98,8 +109,8 @@ describe("Mongo Dao", function() {
 
     it('should find a specific user in the database', function (done) {
         db.addUser(fakeUser, function(err, user) {
-            var userId = user[0]._id.id;
-            db.findUser(userId, function(err, result){
+            //var userId = user.ops[0]._id.id;
+            db.findUser(fakeUser.id, function(err, result){
                 expect(result.lastName).to.be.eql(fakeUser.lastName);
                 done();
             })
@@ -107,8 +118,8 @@ describe("Mongo Dao", function() {
     });
 
     it('should be able to add a snippet in the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, result){
-            expect(result).to.be.eql(1);
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
             db.getSnippet(fakeSnippet._id, function(err, result) {
                 expect(result.displayName).to.be.eql(fakeSnippet.displayName);
                 expect(result.description).to.be.eql(fakeSnippet.description);
@@ -118,8 +129,8 @@ describe("Mongo Dao", function() {
     });
 
     it('should be able to update a snippet in the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, result){
-            expect(result).to.be.eql(1);
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
             fakeSnippet.displayName="blah";
             db.addUpdateSnippet(fakeSnippet, function(err, result) {
                 db.getSnippet(fakeSnippet._id, function (err, result) {
@@ -131,8 +142,8 @@ describe("Mongo Dao", function() {
     });
 
     it('should be able to get a snippet from the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, result){
-            expect(result).to.be.eql(1);
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
             db.getSnippet(fakeSnippet._id, function (err, result) {
                 expect(result.displayName).to.be.eql(fakeSnippet.displayName);
                 done();
@@ -220,8 +231,8 @@ describe("Mongo Dao", function() {
                 expect(results[0].snippetId).to.be.eql(fakeSnippetRating.snippetId);
                 expect(results[0].rater).to.be.eql(fakeSnippetRating.rater);
                 expect(results[0].rating).to.be.eql(5);
-                db.removeSnippetRating(fakeSnippetRating, function (err, result) {
-                    expect(result).to.be.eql(1);
+                db.removeSnippetRating(fakeSnippetRating, function (err, msg) {
+                    expect(msg.result.ok).to.be.eql(1);
                     done();
                 });
             });

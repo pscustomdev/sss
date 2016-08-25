@@ -40,6 +40,8 @@
     "hbs": "^2.9.0",
     "marked": "^0.3.6",
     "method-override": "^2.3.5",
+    "mongodb": "^2.2.8",
+    "mongoskin": "^2.1.0",
     "morgan": "^1.5.1",
     "nock": "^8.0.0",
     "package-script": "0.0.8",
@@ -48,7 +50,6 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.3.0",
-    "tingodb": "latest",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

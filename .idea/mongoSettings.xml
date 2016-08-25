@@ -11,6 +11,19 @@
             </list>
           </option>
         </ServerConfiguration>
+        <ServerConfiguration>
+          <option name="authenticationDatabase" value="admin" />
+          <option name="label" value="Azure Mongo" />
+          <option name="password" value="thtPY5eNIZ31J98yoPIj6VEwa8wwHNaRJe2kfMkze342OozDY8ztOYGfx9fx8NmmqWURVyaNCMjxDHxRNRX5Sg==" />
+          <option name="serverUrls">
+            <list>
+              <option value="sssdb.documents.azure.com:10250" />
+            </list>
+          </option>
+          <option name="sslConnection" value="true" />
+          <option name="userDatabase" value="sssdb" />
+          <option name="username" value="sssdb" />
+        </ServerConfiguration>
       </list>
     </option>
   </component>

@@ -8,6 +8,7 @@ var githubCallbackURL = "";
 var googleClientID = "";
 var googleClientSecret =  "";
 var googleCallbackURL = "";
+var mongoUri = "";
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     githubApiToken = process.env.GithubApiToken;
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     googleClientID = process.env.GoogleClientID;
     googleClientSecret = process.env.GoogleClientSecret;
     googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
+    mongoUri = process.env.MongoUri;
 } else {
     var authConfLocal = require('../auth/auth-conf-local.js');
     githubApiToken =  authConfLocal.github_api.token;
@@ -26,6 +28,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     googleClientID = authConfLocal.google.clientID;
     googleClientSecret =  authConfLocal.google.clientSecret;
     googleCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
+    mongoUri =  authConfLocal.mongo.uri;
 }
 
 module.exports = {
@@ -42,5 +45,8 @@ module.exports = {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
         callbackURL: googleCallbackURL
+    },
+    mongo: {
+        uri: mongoUri
     }
 };

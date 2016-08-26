@@ -1,27 +1,7 @@
 var azure = require('azure-storage');
 var auth_config = require('../auth/auth-conf');
-var _ = require('underscore');
 
 var blobSvc = azure.createBlobService('sssblob', auth_config.azureBlobStorage.key);
-
-
-//create a container/snippet
-// blobSvc.createContainerIfNotExists('mycontainer', {publicAccessLevel : 'blob'}, function(error, result, response){
-//     if(!error){
-//         // Container exists and is private
-//     }
-// });
-
-
-//Delete a container
-//I don't see this in the docs exactly but it looks to be in the code...the docs don't seem to have examples for this.
-//https://github.com/Azure/azure-storage-node/blob/master/lib/services/blob/blobservice.js
-// blobSvc.deleteContainer(containerName, 'myblob', function(error, response){
-//     if(!error){
-//         // Blob has been deleted
-//     }
-// });
-
 
 exports.createContainer = function (container, next) {
     //create the container/snippet if needed then add the file to the container
@@ -44,7 +24,6 @@ exports.deleteContainer = function (container, next) {
         next(err, result, response);
     });
 };
-
 
 exports.addFile = function (container, fileName, content, next) {
     //create the container/snippet if needed then add the file to the container
@@ -80,8 +59,6 @@ exports.deleteFile = function (container, fileName, next) {
         next(err, result);
     });
 };
-
-
 
 //list blobs in a container/snippet
 exports.getContainerContents = function (container, next) {

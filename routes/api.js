@@ -8,6 +8,7 @@ module.exports = function(app) {
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var github = require('../db/github-dao');
+    var azureStorage = require('../db/azure-storage-dao');
     var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
@@ -25,7 +26,7 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippets(req.params.owner, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
                 res.json(results);
             })
@@ -36,7 +37,7 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippetsByOwner(req.params.owner, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
                 res.json(results);
             })
@@ -48,7 +49,7 @@ module.exports = function(app) {
        function (req, res) {
             db.getSnippet(req.params.snippetId, function(err, snippet) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving snippet: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error retrieving snippet: ' + err.message});
                 }
                 res.json(snippet);
             })
@@ -60,7 +61,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -72,7 +73,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -84,7 +85,7 @@ module.exports = function(app) {
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
-                    return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error removing repository to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -101,12 +102,12 @@ module.exports = function(app) {
             var retObj = {};
             db.getSnippet(req.params.snippetId, function (err, contents) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
                 // retObj = contents;
                 // github.getRepoContents(req.params.snippetId, function (err, contents) {
                 //     if (err) {
-                //         return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
+                //         return res.statusCode(500).json({error: 'Error retrieving repository contents: ' + err.message});
                 //     }
                 //     retObj = contents;
 
@@ -130,14 +131,14 @@ module.exports = function(app) {
                     // get the description
                     // github.getRepo(req.params.snippetId, function (err, repo) {
                     //     if (err) {
-                    //         return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
+                    //         return res.statusCode(500).json({error: 'Error retrieving repository: ' + err.message});
                     //     }
                     //     retObj.description = repo.description;
 
                         // get the readme
                         // github.getReadme(req.params.snippetId, function (err, readmeobj) {
                         //     if (err) {
-                        //         return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
+                        //         return res.statusCode(500).json({error: 'Error retrieving repository readme: ' + err.message});
                         //     }
                         //     var b = new Buffer(readmeobj.content, 'base64').toString();
                             // replace <img src="image.jpg"> with a full path to the image on github
@@ -149,7 +150,7 @@ module.exports = function(app) {
                             // get display name from database
                             db.getSnippet(req.params.snippetId, function (err, snippet) {
                                 if (err) {
-                                    return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
+                                    return res.statusCode(500).json({error: 'Error retrieving repository from database: ' + err.message});
                                 }
                                 // retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                                 snippet.owner = snippet.owner || "unknown";
@@ -173,17 +174,24 @@ module.exports = function(app) {
         }
     );
 
-    // add a repo file
+    // add a snippet file
     api_routes.post('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
             // base64 encode content
-            var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
-            github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+            // var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
+            // github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+            //     if (err) {
+            //         return res.statusCode(500).json({error: 'Error creating file: ' + err.message});
+            //     }
+            //     res.json({});
+            // });
+            azureStorage.addFile(req.params.snippetId, req.params.fileName, req.body.content, function (err, content){
                 if (err) {
-                    return res.status(500).json({error: 'Error creating file: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error creating file: ' + err.message});
                 }
                 res.json({});
-            });
+            })
+
         }
     );
 
@@ -214,7 +222,7 @@ module.exports = function(app) {
                     content = new Buffer(content).toString('base64');
                     github.addRepoFile(req.params.snippetId, filename, content, function (err, content) {
                         if (err) {
-                            return res.status(500).json({error: 'Error creating file: ' + err.message});
+                            return res.statusCode(500).json({error: 'Error creating file: ' + err.message});
                         }
                         res.json({});
                     });
@@ -230,7 +238,7 @@ module.exports = function(app) {
             var content = new Buffer(req.body.content || " ").toString('base64');
             github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error updating file: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error updating file: ' + err.message});
                 }
                 res.json({});
             });
@@ -242,7 +250,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving file: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error retrieving file: ' + err.message});
                 }
                 res.json(content);
             });
@@ -254,7 +262,7 @@ module.exports = function(app) {
         function (req, res) {
             github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error deleting file: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error deleting file: ' + err.message});
                 }
                 res.json(content);
             });
@@ -280,7 +288,7 @@ module.exports = function(app) {
             console.log("searchTerm: " + searchTerms);
             github.searchCode(searchTerms, function (err, repos) {
                 if (err) {
-                    return res.status(500).json({error: 'Error searching: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
                 // this pattern is helpful if you need to make async calls within a loop
@@ -295,7 +303,7 @@ module.exports = function(app) {
                         var repoId = repos.items[idx].repository.name;
                         db.getSnippet(repoId, function (err, repo) {
                             if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository from database'});
+                                return res.statusCode(500).json({error: 'Error retrieving repository from database'});
                             }
                             repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
                             repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
@@ -338,7 +346,7 @@ module.exports = function(app) {
         function (req, res) {
             github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
                 if (err) {
-                    return res.status(500).json({error: 'Error getting commits: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error getting commits: ' + err.message});
                 }
                 res.json(commits);
             });
@@ -379,7 +387,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippetRating(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding rating to database: ' + err.message});
+                    return res.statusCode(500).json({error: 'Error adding rating to database: ' + err.message});
                 }
                 res.json({});
             });

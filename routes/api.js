@@ -23,12 +23,12 @@ module.exports = function(app) {
     // get a list of all snippets
     api_routes.get('/snippets',
         function (req, res) {
-            github.getRepos(function (err, repos) {
+            db.getSnippets(req.params.owner, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
-                res.json(repos);
-            });
+                res.json(results);
+            })
         }
     );
 
@@ -44,31 +44,25 @@ module.exports = function(app) {
     );
 
     // get information about a snippet
-    //TODO This is not implemented
-    //api_routes.get('/snippet',
-    //    function (req, res) {
-    //        github.getRepo(function (err, repo) {
-    //            if (err) {
-    //                return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-    //            }
-    //            res.json(repo);
-    //        });
-    //    }
-    //);
+    api_routes.get('/snippet/:snippetId',
+       function (req, res) {
+            db.getSnippet(req.params.snippetId, function(err, snippet) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving snippet: ' + err.message});
+                }
+                res.json(snippet);
+            })
+       }
+    );
 
     // create snippet (post)
     api_routes.post('/snippet', restrict,
         function (req, res) {
-            github.createRepo(req.body, function (err, repo) {
+            db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
+                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
-                db.addUpdateSnippet(req.body, function (err) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                    }
-                });
-                res.json(repo);
+                res.json("");
             });
         }
     );
@@ -76,16 +70,11 @@ module.exports = function(app) {
     // update snippet data such as display name and description (put)
     api_routes.put('/snippet/:snippetId', restrict,
         function (req, res) {
-            github.updateRepo(req.body, function (err, repo) {
+            db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
+                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
                 }
-                db.addUpdateSnippet(req.body, function (err) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                    }
-                });
-                res.json(repo);
+                res.json("");
             });
         }
     );
@@ -96,11 +85,6 @@ module.exports = function(app) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
                     return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
-                }
-            });
-            github.deleteRepo(req.params.snippetId, function (err, content) {
-                if (err) {
-                    return res.status(500).json({error: 'Error deleting repository: ' + err.message});
                 }
                 res.json("");
             });
@@ -119,71 +103,73 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
-                retObj = contents;
-                github.getRepoContents(req.params.snippetId, function (err, contents) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
-                    }
-                    retObj = contents;
+                // retObj = contents;
+                // github.getRepoContents(req.params.snippetId, function (err, contents) {
+                //     if (err) {
+                //         return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
+                //     }
+                //     retObj = contents;
 
+                //TODO Get file list once we are putting files
                     //sort contents.files with README.md at the top of the list
-                    var readMeIdx = retObj.files.indexOf("README.md");
-                    if (readMeIdx > -1) {
-                        // preface with a space so it will sort at the top
-                        retObj.files[readMeIdx] = " README.md";
-                    }
-                    // sort - ignore case
-                    retObj.files.sort(function(a,b) {
-                        return a.toLowerCase().localeCompare(b.toLowerCase());
-                    });
-                    if (readMeIdx > -1) {
-                        // strip the leading space
-                        retObj.files[0] = "README.md";
-                    }
+                    // var readMeIdx = retObj.files.indexOf("README.md");
+                    // if (readMeIdx > -1) {
+                    //     // preface with a space so it will sort at the top
+                    //     retObj.files[readMeIdx] = " README.md";
+                    // }
+                    // // sort - ignore case
+                    // retObj.files.sort(function(a,b) {
+                    //     return a.toLowerCase().localeCompare(b.toLowerCase());
+                    // });
+                    // if (readMeIdx > -1) {
+                    //     // strip the leading space
+                    //     retObj.files[0] = "README.md";
+                    // }
 
                     retObj._id = req.params.snippetId;
                     // get the description
-                    github.getRepo(req.params.snippetId, function (err, repo) {
-                        if (err) {
-                            return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-                        }
-                        retObj.description = repo.description;
+                    // github.getRepo(req.params.snippetId, function (err, repo) {
+                    //     if (err) {
+                    //         return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
+                    //     }
+                    //     retObj.description = repo.description;
 
                         // get the readme
-                        github.getReadme(req.params.snippetId, function (err, readmeobj) {
-                            if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
-                            }
-                            var b = new Buffer(readmeobj.content, 'base64').toString();
+                        // github.getReadme(req.params.snippetId, function (err, readmeobj) {
+                        //     if (err) {
+                        //         return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
+                        //     }
+                        //     var b = new Buffer(readmeobj.content, 'base64').toString();
                             // replace <img src="image.jpg"> with a full path to the image on github
-                            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-                            b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
-                            retObj.readme = marked(b);
+                //TODO set imgURLPrefix when we have files/images in the azure blob
+                //             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
+                //             b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
+                //             retObj.readme = marked(b);
 
                             // get display name from database
-                            db.getSnippet(req.params.snippetId, function (err, repo) {
+                            db.getSnippet(req.params.snippetId, function (err, snippet) {
                                 if (err) {
                                     return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
                                 }
-                                retObj.displayName = repo ? repo.displayName : req.params.snippetId;
-                                retObj.owner = repo ? repo.owner : "unknown";
-                                retObj.postedOn = repo ? repo.postedOn : "unknown";
+                                // retObj.displayName = repo ? repo.displayName : req.params.snippetId;
+                                snippet.owner = snippet.owner || "unknown";
+                                snippet.postedOn = snippet.postedOn || "unknown";
                                 // determine if the current user is the owner
-                                retObj.isOwner = false;
+                                snippet.isOwner = false;
                                 // if logged in as the admin user
                                 if(req.user && req.user.username === "pscustomdev-sss"){
-                                    retObj.isOwner = true;
+                                    snippet.isOwner = true;
                                 }
-                                if (req.user && retObj.owner == req.user.username) {
-                                    retObj.isOwner = true;
+                                if (req.user && snippet.owner == req.user.username) {
+                                    snippet.isOwner = true;
                                 }
-                                res.json(retObj);
+                                res.json(snippet);
                             });
 
-                        });
+                        // });
                     });
-                });
-            });
+                // });
+            // });
         }
     );
 

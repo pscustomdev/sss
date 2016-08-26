@@ -58,8 +58,8 @@ describe("REST API Tests", function() {
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
-        //cleanup fake repo
-        gh.deleteRepo(fakeSnippetId, function (err, result) {
+        // cleanup fake repo
+        // gh.deleteRepo(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
@@ -69,11 +69,11 @@ describe("REST API Tests", function() {
                     });
                 });
             });
-        });
+        // });
     }, 5000);
 
     afterEach(function(done) {
-        gh.deleteRepo(fakeSnippetId, function (err, result) {
+        // gh.deleteRepo(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
@@ -83,20 +83,34 @@ describe("REST API Tests", function() {
                     });
                 });
             });
-        });
+        // });
     }, 5000);
 
 
     it('should get a list of all snippets on /snippets GET', function(done) {
         //nock.recorder.rec({});
-        mockDataListAllSnippets();
+        // mockDataListAllSnippets();
+        var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
         chai.request(app)
-            .get('/api/snippets')
-            .end(function(err, res){
-                console.log("res: " + res);
-                expect(res.status).to.eql(200);
-                res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
-                done();
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                    .post('/api/snippet')
+                    .send(fakeSnippet2)
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .get('/api/snippets')
+                            .end(function (err, res) {
+                                console.log("res: " + res);
+                                expect(res.status).to.eql(200);
+                                res.body.should.be.a('array');
+                                //Should check for the objects in the array but we'd need to check for postedOn timestamp and other tricky things right now so we'll do it later.
+                                // expect(res.body).to.contain(fakeSnippet);
+                                // expect(res.body).to.contain(fakeSnippet2);
+                                done();
+                            });
+                    });
             });
     });
 
@@ -136,39 +150,55 @@ describe("REST API Tests", function() {
 
     it('should create a snippet on /snippet POST', function(done) {
         //nock.recorder.rec({});
-        mockDataCreateSnippet();
+        // mockDataCreateSnippet();
         chai.request(app)
             .post('/api/snippet')
             .send(fakeSnippet)
             .end(function(err, res){
                 res.should.have.status(200);
-                res.should.be.json;
-                res.body.should.be.a('object');
-                res.body.should.have.property('content');
-                res.body.content.should.be.a('object');
-                res.body.content.should.have.property('name');
-                res.body.content.should.have.property('url');
-                res.body.content.name.should.equal('README.md');
-                done();
+                db.getSnippet(fakeSnippetId, function (err, result) {
+                    expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                });
+            });
+    });
+
+    it('should get a snippet on /snippet/:snippetId GET', function(done) {
+        chai.request(app)
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res){
+                res.should.have.status(200);
+                db.getSnippet(fakeSnippetId, function (err, result) {
+                    expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                });
+                chai.request(app)
+                    .get('/api/snippet/' + fakeSnippetId)
+                    .end(function(err, res){
+                        console.log("res: " + res);
+                        expect(res.status).to.eql(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property("displayName");
+                        res.body.displayName.should.equal(fakeSnippet.displayName);
+                        res.body.should.have.property("owner");
+                        res.body.owner.should.equal(fakeSnippetOwner);
+                        res.body.should.have.property("description");
+                        res.body.description.should.equal(fakeSnippetDesc);
+                        res.body.should.have.property("postedOn");
+                        res.body.should.have.property("readme");
+                        done();
+                    });
             });
     });
 
     it('should update snippet data on /snippet PUT', function(done) {
         //nock.recorder.rec({});
-        mockDataUpdateSnippet();
+        // mockDataUpdateSnippet();
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
             .end(function(err, res){
                 res.should.have.status(200);
-                res.should.be.json;
-                res.body.should.be.a('object');
-                res.body.should.have.property('content');
-                res.body.content.should.be.a('object');
-                res.body.content.should.have.property('name');
-                res.body.content.should.have.property('url');
-                res.body.content.name.should.equal('README.md');
                 //update the snippet with a new desc
                 fakeSnippet.description = "blah";
                 chai.request(app)
@@ -176,54 +206,51 @@ describe("REST API Tests", function() {
                     .send(fakeSnippet)
                     .end(function(err, res){
                         res.should.have.status(200);
-                        res.should.be.json;
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('description');
-                        res.body.description.should.equal("blah");
-                        //Set the description back to the default for future tests.
-                        fakeSnippet.description = fakeSnippetDesc;
-                        done();
+                        chai.request(app)
+                            .get('/api/snippet/' + fakeSnippetId)
+                            .end(function(err, res){
+                                console.log("res: " + res);
+                                expect(res.status).to.eql(200);
+                                res.body.should.be.a('object');
+                                res.body.should.have.property("description");
+                                res.body.description.should.equal(fakeSnippet.description);
+                                //Set the description back to the default for future tests.
+                                fakeSnippet.description = fakeSnippetDesc;
+                                done();
+                            });
                     });
             });
     });
 
     it('should delete a snippet on /snippet DELETE', function(done) {
         //nock.recorder.rec({});
-        mockDataDeleteSnippet();
+        // mockDataDeleteSnippet();
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
             .end(function(err, res){
-                //let's make sure it's in gh before deleting it
-                gh.getRepo(fakeSnippetId, function (err, repo) {
-                    expect(repo.name).to.eql(fakeSnippetId);
-                    //lets make sure it exists in the db before deleting it
-                    db.getSnippet(fakeSnippetId, function (err, result) {
-                        expect(result.displayName).to.be.eql(fakeSnippet.displayName);
-                        //now let's delete it via the REST service
-                        chai.request(app)
-                            .delete('/api/snippet/' + fakeSnippetId)
-                            .end(function (err, res) {
-                                res.should.have.status(200);
-                                //Make sure it's gone from the GH
-                                gh.getRepo(fakeSnippetId, function (err, repo) {
-                                    expect(repo).isUndefined;
-                                    //Make sure it's gone from Mongo
-                                    db.getSnippet(fakeSnippet._id, function (err, result) {
-                                        expect(result).isUndefined;
-                                        done();
-                                    })
-                                });
-                            });
-                    });
+                //lets make sure it exists in the db before deleting it
+                db.getSnippet(fakeSnippetId, function (err, result) {
+                    expect(result.displayName).to.be.eql(fakeSnippet.displayName);
+                    //now let's delete it via the REST service
+                    chai.request(app)
+                        .delete('/api/snippet/' + fakeSnippetId)
+                        .end(function (err, res) {
+                            res.should.have.status(200);
+                            //Make sure it's gone from Mongo
+                            db.getSnippet(fakeSnippet._id, function (err, result) {
+                                expect(result).isUndefined;
+                                done();
+                            })
+                        });
                 });
             });
     });
 
     it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function(done) {
         //nock.recorder.rec({});
-        mockDataSnippetOverview();
+        // mockDataSnippetOverview();
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -234,12 +261,13 @@ describe("REST API Tests", function() {
                     .end(function (err, res) {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal("MochaTestRepo");
+                        // res.body.should.have.property('name'); //TODO do we need a name now?
+                        // res.body.name.should.equal("MochaTestRepo");
+                        res.body.should.have.property('displayName');
+                        res.body.displayName.should.equal(fakeSnippet.displayName);
                         res.body.should.have.property('description');
                         res.body.description.should.equal(fakeSnippet.description);
-                        res.body.files.should.be.a('array');
-                        res.body.files[0].should.equal('README.md');
+                        res.body.readme.should.equal('# Mocha Display Name\nMocha Readme');
                         done();
                     })
             });
@@ -536,7 +564,7 @@ describe("REST API Tests", function() {
 
     it('should return html given marked-down readme data on /snippet-detail/:snippetId/readme/format PUT', function(done) {
         //nock.recorder.rec({});
-        mockDataMarkedHtml();
+        // mockDataMarkedHtml();
         var fakeReadmeData = "# Title\n## Subtitle";
         chai.request(app)
             .put('/api/snippet-detail/' + fakeSnippetId + '/readme/format')

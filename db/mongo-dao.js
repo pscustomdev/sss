@@ -50,12 +50,14 @@ exports.findUser = function (id, next) {
 };
 
 exports.addUpdateSnippet = function (snippet, next) {
+    var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
     db.collection("snippets").update({snippetId: snippet._id}, {
             snippetId: snippet._id,
             owner: snippet.owner,
             displayName: snippet.displayName,
             postedOn: Date.now(),
-            description: snippet.description
+            description: snippet.description,
+            readme: readmeContent
         }, {upsert: true},
         function (err, object) {
             if (err) {
@@ -77,6 +79,16 @@ exports.getSnippet = function (id, next) {
             next(err, result);
         }
     );
+};
+
+exports.getSnippets = function (owner, next) {
+    db.collection('snippets').find().sort({displayName: -1}).toArray(function (err, results) {
+        if (results && results[0]) {
+            next(err, results);
+        } else {
+            next("Snippets not found");
+        }
+    });
 };
 
 exports.getSnippetsByOwner = function (owner, next) {

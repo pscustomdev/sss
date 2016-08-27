@@ -26,7 +26,7 @@ chai.use(chaiHttp);
 passportStub.install(app);
 
 describe("REST API Tests", function() {
-    var fakeSnippetId = "MochaTestRepo";
+    var fakeSnippetId = uuid.v4();
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";
     var fakeSnippetReadme = "Mocha Readme";
@@ -95,8 +95,6 @@ describe("REST API Tests", function() {
 
 
     it('should get a list of all snippets on /snippets GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataListAllSnippets();
         var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
         chai.request(app)
             .post('/api/snippet')
@@ -122,8 +120,6 @@ describe("REST API Tests", function() {
     });
 
     it('should get a list of snippets by owner on /snippets/:owner GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataListOwnerSnippets();
         var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
         chai.request(app)
             //create the initial snippet
@@ -155,8 +151,6 @@ describe("REST API Tests", function() {
     });
 
     it('should create a snippet on /snippet POST', function(done) {
-        //nock.recorder.rec({});
-        // mockDataCreateSnippet();
         chai.request(app)
             .post('/api/snippet')
             .send(fakeSnippet)
@@ -198,8 +192,6 @@ describe("REST API Tests", function() {
     });
 
     it('should update snippet data on /snippet PUT', function(done) {
-        //nock.recorder.rec({});
-        // mockDataUpdateSnippet();
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -230,8 +222,6 @@ describe("REST API Tests", function() {
     });
 
     it('should delete a snippet on /snippet DELETE', function(done) {
-        //nock.recorder.rec({});
-        // mockDataDeleteSnippet();
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -255,9 +245,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataSnippetOverview();
+    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET even if no files have been uploaded', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -275,14 +263,48 @@ describe("REST API Tests", function() {
                         res.body.should.have.property('description');
                         res.body.description.should.equal(fakeSnippet.description);
                         res.body.readme.should.equal('# Mocha Display Name\nMocha Readme');
+                        should.not.exist(res.body.files);
                         done();
                     })
             });
     });
 
+
+    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function(done) {
+        chai.request(app)
+            //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
+                chai.request(app)
+                //create the initial snippet
+                    .post('/api/snippet')
+                    .send(fakeSnippet)
+                    .end(function(err, res) {
+                        chai.request(app)
+                        //create new file
+                            .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                chai.request(app)
+                                    .get('/api/snippet-overview/' + fakeSnippetId)
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        res.body.should.be.a('object');
+                                        res.body.should.have.property('displayName');
+                                        res.body.displayName.should.equal(fakeSnippet.displayName);
+                                        res.body.should.have.property('description');
+                                        res.body.description.should.equal(fakeSnippet.description);
+                                        res.body.readme.should.equal('# Mocha Display Name\nMocha Readme');
+                                        res.body.files.should.be.a('array'); //TODO: right now the files are returned as blobs.  Do we need to return as something else?
+                                        done();
+                                    })
+                            });
+                    });
+            });
+    });
+
     it('should create a rating on /rating/:snippetId POST', function(done) {
-        //nock.recorder.rec({});
-        // mockDataCreateRating();
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
@@ -298,8 +320,6 @@ describe("REST API Tests", function() {
     });
 
     it('should update a rating on /rating/:snippetId PUT', function(done) {
-        //nock.recorder.rec({});
-        // mockDataUpdateRating();
         var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
@@ -316,8 +336,6 @@ describe("REST API Tests", function() {
     });
 
     it('should get an average rating for the snippet on /rating/:snippetId GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataAverageRating();
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
@@ -338,8 +356,6 @@ describe("REST API Tests", function() {
     });
 
     it('should get a users rating for a snippet on /rating/:snippetId/:user GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataUserRating();
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
@@ -363,8 +379,6 @@ describe("REST API Tests", function() {
     });
 
     it('should get a list of snippets average ratings /ratings/:listOfIds GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataAllAverageRatings();
         var ids = encodeURIComponent(fakeSnippetRating.snippetId + "," + fakeSnippetRating3.snippetId);
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
@@ -399,8 +413,6 @@ describe("REST API Tests", function() {
     });
 
     it('should get a 0 rating if one does not exist for the snippet on /rating/:snippetId GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataDefaultRating();
         chai.request(app)
             .get('/api/rating/fakesnippet')
             .end(function (err, res) {
@@ -410,9 +422,7 @@ describe("REST API Tests", function() {
             })
     });
 
-    it('should add a repo file on /snippet-detail/:snippetId/:fileName POST', function(done) {
-        //nock.recorder.rec({});
-        // mockDataAddFile();
+    it('should add a file on /snippet-detail/:snippetId/:fileName POST', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -423,53 +433,50 @@ describe("REST API Tests", function() {
                     .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
-                        chai.request(app)
+                        //TODO Get the file to make sure it was there
+                        // chai.request(app)
                             //get overview to assure file was created
-                            .get('/api/snippet-overview/' + fakeSnippetId)
-                            .end(function (err, res) {
-                                res.should.have.status(200);
-                                res.body.files.should.be.a('array');
-                                res.body.files[1].should.equal(fakeFileName);
+                            // .get('/api/snippet-overview/' + fakeSnippetId)
+                            // .end(function (err, res) {
+                            //     res.should.have.status(200);
+                            //     res.body.files.should.be.a('array');
+                            //     res.body.files[1].should.equal(fakeFileName);
                                 done();
-                            })
+                            // })
                     });
             });
     });
 
-    // not able to test a file upload as the "attach" doesn't seem to send
-    // the file so it is recognized by the code in api.js.
-    xit('should upload and add a repo file on /snippet-detail/:snippetId POST', function(done) {
-        // nock.recorder.rec({});
-        // mockDataUploadFile();
-        var uploadedFileName = "readme";
+    it('should upload and add a file on /snippet-detail/:snippetId POST', function(done) {
+        var fileName = 'readme';
+        var filePath = 'tests/backend-unit-tests/';
         // var boundary = Math.random();
-        // chai.request(app)
+        chai.request(app)
             //create the initial snippet
-            // .post('/api/snippet')
-            // .send(fakeSnippet)
-            // .end(function(err, res) {
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function(err, res) {
                 chai.request(app)
                     //upload a new file
                     .post('/api/snippet-detail/' + fakeSnippetId)
-                    .attach('file', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
+                    // .attach('file', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
+                    .attach('file', filePath + fileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
-                        // chai.request(app)
+                        chai.request(app)
                             //verify file contents
-                            // .get('/api/snippet-detail/' + fakeSnippetId + "/" + uploadedFileName)
-                            // .end(function (err, res) {
-                            //     res.should.have.status(200);
+                            .get('/api/snippet-detail/' + fakeSnippetId + "/" + fileName)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
                                 // file should start with a # sign
-                                // res.body.should.match(/#.*/);
+                                res.body.should.match(/#.*/);
                                 done();
-                            // });
+                            });
                     });
-            // });
+            });
     });
 
-    xit('should update contents of a repo file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
-        //nock.recorder.rec({});
-        // mockDataUpdateFile();
+    it('should update contents of a file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
         var fakeFileContents = "Sample data to write to file";
         chai.request(app)
             //create the initial snippet
@@ -487,7 +494,7 @@ describe("REST API Tests", function() {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[1].should.equal(fakeFileName);
+                                res.body.files[0].should.equal(fakeFileName);
                                 chai.request(app)
                                     //update file contents
                                     .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
@@ -508,29 +515,35 @@ describe("REST API Tests", function() {
             });
     });
 
-    xit('should get contents of a repo file on /snippet-detail/:snippetId/:fileName GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataGetFile();
+    it('should get contents of a file on /snippet-detail/:snippetId/:fileName GET', function(done) {
+        var fileName = 'readme';
+        var filePath = 'tests/backend-unit-tests/';
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
             .end(function(err, res) {
                 chai.request(app)
-                    //verify file contents
-                    .get('/api/snippet-detail/' + fakeSnippetId + "/README.md")
+                //upload a new file
+                    .post('/api/snippet-detail/' + fakeSnippetId)
+                    // .attach('file', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
+                    .attach('file', filePath + fileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
-                        // README.md file should start with a # sign
-                        res.body.should.match(/#.*/);
-                        done();
+                        chai.request(app)
+                        //verify file contents
+                            .get('/api/snippet-detail/' + fakeSnippetId + "/" + fileName)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                // file should start with a # sign
+                                res.body.should.match(/#.*/);
+                                done();
+                            });
                     });
             });
     });
 
-    xit('should delete a repo file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
-        //nock.recorder.rec({});
-        // mockDataDeleteFile();
+    it('should delete a file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
         chai.request(app)
             //create the initial snippet
             .post('/api/snippet')
@@ -570,8 +583,6 @@ describe("REST API Tests", function() {
     });
 
     xit('should return html given marked-down readme data on /snippet-detail/:snippetId/readme/format PUT', function(done) {
-        //nock.recorder.rec({});
-        // mockDataMarkedHtml();
         var fakeReadmeData = "# Title\n## Subtitle";
         chai.request(app)
             .put('/api/snippet-detail/' + fakeSnippetId + '/readme/format')

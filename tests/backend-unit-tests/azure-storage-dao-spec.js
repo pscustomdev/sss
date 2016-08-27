@@ -3,6 +3,7 @@ console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
 
 var azureStorage = require('../../db/azure-storage-dao');
 var uuid = require('node-uuid');
+var fs = require('fs');
 var expect = require("chai").expect;
 
 describe("Azure Storage Dao", function() {
@@ -44,14 +45,89 @@ describe("Azure Storage Dao", function() {
     });
 
 
-    it('should add a file to a container', function (done) {
+    it('should add a text file to a container', function (done) {
         azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             var content = "Mocha file content";
-            azureStorage.addFile(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 done();
             })
+        });
+    });
+
+    it('should be able to read a blobs text from a file', function (done) {
+        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            var content = "Mocha file content";
+            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                azureStorage.getBlobToText(fakeSnippetId, fakeFileName, function(err, result) {
+                    expect(result).to.be.eql(content);
+                    done();
+                });
+            })
+        });
+    });
+
+    it('should update a text file in a container', function (done) {
+        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            var content = "Mocha file content";
+            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                content += "New Content";
+                azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+                    expect(response.isSuccessful).to.be.eql(true);
+                    azureStorage.getBlobToText(fakeSnippetId, fakeFileName, function(err, result) {
+                        expect(result).to.be.eql(content);
+                    });
+                    done();
+                });
+            })
+        });
+    });
+
+    it('should add a streamed file to a container', function (done) {
+        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            var content = "Mocha file content";
+            var fileName = "readme";
+            var path = "tests/backend-unit-tests/" + fileName;
+            var stream = fs.createReadStream(path);
+            var stats = fs.statSync(path)
+            var fileSize = stats['size'];
+            azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                done();
+            })
+        });
+    });
+
+    it('should update a streamed file in a container', function (done) {
+        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            var content = "Mocha file content";
+            var fileName = "readme";
+            var path = "tests/backend-unit-tests/" + fileName;
+            var stream = fs.createReadStream(path);
+            var stats = fs.statSync(path);
+            var fileSize = stats['size'];
+            azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                var updatedFileName = "testDataFile";
+                var path = "tests/backend-unit-tests/" + updatedFileName;
+                var stream = fs.createReadStream(path);
+                var stats = fs.statSync(path);
+                var fileSize = stats['size'];
+                //we need to pass in the same fileName because we are wanting to update the original file with the updated file
+                azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
+                    expect(response.isSuccessful).to.be.eql(true);
+                    //TODO we should get the file and verify the new contents.
+
+                    done();
+                });
+            });
         });
     });
 
@@ -66,7 +142,7 @@ describe("Azure Storage Dao", function() {
             azureStorage.addFile(fakeSnippetId, fakeFileName, content, function(err, result, response) {
                 azureStorage.addFile(fakeSnippetId, fakeFileName2, content2, function(err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
-                    azureStorage.getContainerContents(fakeSnippetId, function (err, result, response) {
+                    azureStorage.getListOfContainerContents(fakeSnippetId, function (err, result, response) {
                         expect(response.isSuccessful).to.be.eql(true);
                         expect(result.entries).isArray;
                         expect(result.entries[0].name).to.be.eql(fakeFileName);

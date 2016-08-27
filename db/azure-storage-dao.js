@@ -25,7 +25,8 @@ exports.deleteContainer = function (container, next) {
     });
 };
 
-exports.addFile = function (container, fileName, content, next) {
+//It is the same call to add/update a file
+exports.addUpdateFileByText = function (container, fileName, content, next) {
     //create the container/snippet if needed then add the file to the container
     blobSvc.createContainerIfNotExists(container.toLowerCase(), {publicAccessLevel : 'blob'}, function(err, result, response){
         if (err) {
@@ -40,8 +41,24 @@ exports.addFile = function (container, fileName, content, next) {
         // blobSvc.createBlockBlobFromLocalFile('mycontainer', 'myblob', 'test.txt', function(error, result, response){
 
         //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-
         blobSvc.createBlockBlobFromText(container.toLowerCase(), fileName, content, function(err, result, response){
+            if (err) {
+                return next(err);
+            }
+            next(err, result, response);
+        });
+    });
+};
+
+
+//It is the same call to add/update a file
+exports.addUpdateFileByStream = function (container, fileName, stream, len, next) {
+    //create the container/snippet if needed then add the file to the container
+    blobSvc.createContainerIfNotExists(container.toLowerCase(), {publicAccessLevel : 'blob'}, function(err, result, response){
+        if (err) {
+            return next(err);
+        }
+        blobSvc.createBlockBlobFromStream(container.toLowerCase(), fileName, stream, len, function(err, result, response){
             if (err) {
                 return next(err);
             }
@@ -60,8 +77,9 @@ exports.deleteFile = function (container, fileName, next) {
     });
 };
 
+
 //list blobs in a container/snippet
-exports.getContainerContents = function (container, next) {
+exports.getListOfContainerContents = function (container, next) {
     blobSvc.listBlobsSegmented(container.toLowerCase(), null, function (err, result, response) {
         if (err) {
             return next(err);
@@ -69,6 +87,16 @@ exports.getContainerContents = function (container, next) {
         // result.entries contains the entries
         // If not all blobs were returned, result.continuationToken has the continuation token.
         next(err, result, response);
+    });
+};
+
+//get blob text in a container/snippet
+exports.getBlobToText = function (container, blobName, next) {
+    blobSvc.getBlobToText(container.toLowerCase(), blobName, function (err, response) {
+        if (err) {
+            return next(err);
+        }
+        next(err, response);
     });
 };
 

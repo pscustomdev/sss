@@ -560,7 +560,7 @@ describe("REST API Tests", function() {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[1].should.equal(fakeFileName);
+                                res.body.files[0].should.equal(fakeFileName);
                                 chai.request(app)
                                     //delete the file
                                     .delete('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
@@ -572,7 +572,7 @@ describe("REST API Tests", function() {
                                             .end(function (err, res) {
                                                 res.should.have.status(200);
                                                 res.body.files.should.be.a('array');
-                                                res.body.files.should.have.length(1);
+                                                res.body.files.should.have.length(0);
                                                 done();
                                             });
 
@@ -582,21 +582,21 @@ describe("REST API Tests", function() {
             });
     });
 
-    xit('should return html given marked-down readme data on /snippet-detail/:snippetId/readme/format PUT', function(done) {
-        var fakeReadmeData = "# Title\n## Subtitle";
+    it('should return html given marked-down readme data on /snippet-detail/:snippetId/readme/format PUT', function(done) {
+        var fakeReadmeData = '# Title\n## Subtitle <img src="blah.jpg">';
         chai.request(app)
             .put('/api/snippet-detail/' + fakeSnippetId + '/readme/format')
             .send({content: fakeReadmeData})
             .end(function(err, res) {
                 res.should.have.status(200);
                 res.body.should.match(/\<h1.*/);
+                //we will check to see if it rewrote the img url and added sssblog.  We might want to enhance this a bit.
+                res.body.should.contain('sssblob');
                 done();
             });
     });
 
     xit('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataSearch();
         chai.request(app)
             // use a search term for existing snippets since creating a new snippet
             // is not immediately searchable

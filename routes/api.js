@@ -10,19 +10,10 @@ module.exports = function(app) {
     var marked = require("marked");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
-    var github = require('../db/github-dao');
     var azureStorage = require('../db/azure-storage-dao');
     var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
-
-    // limit file upload to 512k which is a github limit
-    // api_routes.use(busboy({
-    //     immediate: true,
-    //     limits: {
-    //         fileSize: 512 * 1024
-    //     }
-    // }));
 
     // get a list of all snippets
     api_routes.get('/snippets',
@@ -127,11 +118,10 @@ module.exports = function(app) {
                         snippet.isOwner = true;
                     }
 
-                    // replace <img src="image.jpg"> with a full path to the image on github
-                    //TODO set imgURLPrefix when we have files/images in the azure blob
-                    //             var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-                    //             b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
-                    //             retObj.readme = marked(b);
+                    // replace <img src="image.jpg"> with a full path to the image on azure
+                    var imgUrlPrefix = "https://sssblob.blob.core.windows.net/" +req.params.snippetId + "/";
+                    b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
+                    snippet.readme = marked(b);
                     res.json(snippet);
                 });
             });
@@ -210,8 +200,8 @@ module.exports = function(app) {
     api_routes.put('/snippet-detail/:snippetId/readme/format',
         function (req, res) {
             var b = req.body.content;
-            // replace <img src="image.jpg"> with a full path to the image on github
-            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
+            // replace <img src="image.jpg"> with a full path to the image on azure
+            var imgUrlPrefix = "https://sssblob.blob.core.windows.net/" +req.params.snippetId + "/";
             b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
 
             res.json(marked(b));
@@ -223,7 +213,7 @@ module.exports = function(app) {
         function (req, res) {
             var searchTerms = req.query.q;
             console.log("searchTerm: " + searchTerms);
-            github.searchCode(searchTerms, function (err, repos) {
+            // github.searchCode(searchTerms, function (err, repos) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
@@ -275,20 +265,20 @@ module.exports = function(app) {
                         });
                     })(i);
                 }
-            });
+            // });
         }
     );
 
-    api_routes.get('/snippet-search/:repoOwner/:repoName',
-        function (req, res) {
-            github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
-                if (err) {
-                    return res.status(500).json({error: 'Error getting commits: ' + err.message});
-                }
-                res.json(commits);
-            });
-        }
-    );
+    // api_routes.get('/snippet-search/:repoOwner/:repoName',
+    //     function (req, res) {
+    //         github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
+    //             if (err) {
+    //                 return res.status(500).json({error: 'Error getting commits: ' + err.message});
+    //             }
+    //             res.json(commits);
+    //         });
+    //     }
+    // );
 
     api_routes.get('/rating/:snippetId',
         function (req, res) {

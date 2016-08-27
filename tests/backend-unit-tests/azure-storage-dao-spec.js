@@ -139,8 +139,8 @@ describe("Azure Storage Dao", function() {
         azureStorage.createContainer(fakeSnippetId, function(err, result, response){
             expect(response.isSuccessful).to.be.eql(true);
             //add two files so we can read them
-            azureStorage.addFile(fakeSnippetId, fakeFileName, content, function(err, result, response) {
-                azureStorage.addFile(fakeSnippetId, fakeFileName2, content2, function(err, result, response) {
+            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+                azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName2, content2, function(err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
                     azureStorage.getListOfContainerContents(fakeSnippetId, function (err, result, response) {
                         expect(response.isSuccessful).to.be.eql(true);
@@ -166,7 +166,7 @@ describe("Azure Storage Dao", function() {
         azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             var content = "Mocha file content";
-            azureStorage.addFile(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.deleteFile(fakeSnippetId, fakeFileName, function(err, result){
                     expect(result.isSuccessful).to.be.eql(true);

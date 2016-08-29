@@ -118,6 +118,7 @@ module.exports = function(app) {
                         snippet.isOwner = true;
                     }
 
+                    var b = snippet.readme;
                     // replace <img src="image.jpg"> with a full path to the image on azure
                     var imgUrlPrefix = "https://sssblob.blob.core.windows.net/" +req.params.snippetId + "/";
                     b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);

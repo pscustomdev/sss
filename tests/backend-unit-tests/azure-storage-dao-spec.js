@@ -7,172 +7,156 @@ var fs = require('fs');
 var expect = require("chai").expect;
 
 describe("Azure Storage Dao", function() {
-    var fakeSnippetId = "MochaTestRepo";
-    var fakeSnippetDesc = "Mocha Description";
-    var fakeSnippetDisplayName = "Mocha Display Name";
-    var fakeSnippetReadme = "Mocha Readme";
-    var fakeSnippet = {
-        _id: fakeSnippetId,
-        description: fakeSnippetDesc,
-        displayName: fakeSnippetDisplayName,
-        readme: fakeSnippetReadme
-    };
+    var folderName = "MochaTestFolder";
     var fakeFileName = "MochaTestFile";
 
+    //Create the default container if it doesn't exist.
+    var DEFAULT_CONTAINER = "sss-snippet-container";
+    azureStorage.createContainer(DEFAULT_CONTAINER, function(err, result, response){});
 
     beforeEach(function(done) {
         //cleanup fake repo
-       azureStorage.deleteContainer(fakeSnippetId, function (err, result) {
-           //create a new snippetId since the old one is deleting and takes some time
-           fakeSnippetId = uuid.v1();
+       azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
            done();
         });
     }, 5000);
 
     afterEach(function(done) {
-        azureStorage.deleteContainer(fakeSnippetId, function (err, result) {
+        azureStorage.deleteFile(folderName, fakeFileName, function (err, result) {
             done();
         });
     }, 5000);
 
-    it('should create a container with the snippetId', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response){
+
+    it('should add a text file to a virtual folder', function (done) {
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            // expect(result.created).to.be.eql(true);
             done();
-        });
-
+        })
     });
 
-
-    it('should add a text file to a container', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+    it('should be able to read a blobs text from a blob', function (done) {
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
-                expect(response.isSuccessful).to.be.eql(true);
+            azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
+                expect(result).to.be.eql(content);
                 done();
-            })
-        });
-    });
-
-    it('should be able to read a blobs text from a file', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
-            expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
-                expect(response.isSuccessful).to.be.eql(true);
-                azureStorage.getBlobToText(fakeSnippetId, fakeFileName, function(err, result) {
-                    expect(result).to.be.eql(content);
-                    done();
-                });
-            })
-        });
+            });
+        })
     });
 
     it('should update a text file in a container', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+            content += "New Content";
+            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
-                content += "New Content";
-                azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
-                    expect(response.isSuccessful).to.be.eql(true);
-                    azureStorage.getBlobToText(fakeSnippetId, fakeFileName, function(err, result) {
-                        expect(result).to.be.eql(content);
-                    });
+                azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
+                    expect(result).to.be.eql(content);
                     done();
                 });
-            })
-        });
+            });
+        })
     });
 
     it('should add a streamed file to a container', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+        var content = "Mocha file content";
+        var fileName = "readme";
+        var path = "tests/backend-unit-tests/" + fileName;
+        var stream = fs.createReadStream(path);
+        var stats = fs.statSync(path)
+        var fileSize = stats['size'];
+        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            var fileName = "readme";
-            var path = "tests/backend-unit-tests/" + fileName;
-            var stream = fs.createReadStream(path);
-            var stats = fs.statSync(path)
-            var fileSize = stats['size'];
-            azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
-                expect(response.isSuccessful).to.be.eql(true);
-                done();
-            })
-        });
+            done();
+        })
     });
 
     it('should update a streamed file in a container', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
+        var content = "Mocha file content";
+        var fileName = "readme";
+        var path = "tests/backend-unit-tests/" + fileName;
+        var stream = fs.createReadStream(path);
+        var stats = fs.statSync(path);
+        var fileSize = stats['size'];
+        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            var fileName = "readme";
-            var path = "tests/backend-unit-tests/" + fileName;
+            var updatedFileName = "testDataFile";
+            var path = "tests/backend-unit-tests/" + updatedFileName;
             var stream = fs.createReadStream(path);
             var stats = fs.statSync(path);
             var fileSize = stats['size'];
-            azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
+            //we need to pass in the same fileName because we are wanting to update the original file with the updated file
+            azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
-                var updatedFileName = "testDataFile";
-                var path = "tests/backend-unit-tests/" + updatedFileName;
-                var stream = fs.createReadStream(path);
-                var stats = fs.statSync(path);
-                var fileSize = stats['size'];
-                //we need to pass in the same fileName because we are wanting to update the original file with the updated file
-                azureStorage.addUpdateFileByStream(fakeSnippetId, fileName, stream, fileSize, function(err, result, response) {
-                    expect(response.isSuccessful).to.be.eql(true);
-                    //TODO we should get the file and verify the new contents.
-
+                azureStorage.getBlobToText(folderName, fileName, function(err, result){
+                    expect(result).to.contain("file test");
                     done();
                 });
             });
         });
     });
 
-    it('should get a container contents', function (done) {
+    it('should get a list of files in a virtual folder', function (done) {
         //create the container
+        var fakeFileName = "MochaTestFile";
         var fakeFileName2 = "MochaTestFile2";
         var content = "Mocha file content";
         var content2 = "Mocha file content2";
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response){
+        //add two files so we can read them
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function (err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            //add two files so we can read them
-            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
-                azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName2, content2, function(err, result, response) {
-                    expect(response.isSuccessful).to.be.eql(true);
-                    azureStorage.getListOfContainerContents(fakeSnippetId, function (err, result, response) {
-                        expect(response.isSuccessful).to.be.eql(true);
-                        expect(result.entries).isArray;
-                        expect(result.entries[0].name).to.be.eql(fakeFileName);
-                        expect(result.entries[1].name).to.be.eql(fakeFileName2);
-                        done();
-                    });
-                });
-            })
-        });
-    });
-
-    it('should delete a container with the snippetId', function (done) {
-        azureStorage.deleteContainer(fakeSnippetId, function(err, result, response){
-            expect(response.isSuccessful).to.be.eql(true);
-            done();
-        });
-
-    });
-
-    it('should delete a file from a container', function (done) {
-        azureStorage.createContainer(fakeSnippetId, function(err, result, response) {
-            expect(response.isSuccessful).to.be.eql(true);
-            var content = "Mocha file content";
-            azureStorage.addUpdateFileByText(fakeSnippetId, fakeFileName, content, function(err, result, response) {
+            azureStorage.addUpdateFileByText(folderName, fakeFileName2, content2, function (err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
-                azureStorage.deleteFile(fakeSnippetId, fakeFileName, function(err, result){
-                    expect(result.isSuccessful).to.be.eql(true);
+                azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                    expect(response.isSuccessful).to.be.eql(true);
+                    expect(result.entries).isArray;
+                    expect(result.entries[0].name).to.be.eql(fakeFileName);
+                    expect(result.entries[1].name).to.be.eql(fakeFileName2);
                     done();
                 });
-            })
-        });
+            });
+        })
+    });
+
+    it('should delete a folder', function (done) {
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            content += "New Content";
+            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
+                    expect(result).to.be.eql(content);
+                    azureStorage.deleteFolder(folderName, function(err, result, response){
+                        expect(response.isSuccessful).to.be.eql(true);
+                        //Get folder and make sure it's empty
+                        azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                            expect(response.isSuccessful).to.be.eql(true);
+                            expect(result.entries[0]).isUndefined;
+                            done();
+                        });
+                    });
+                });
+            });
+        })
+    });
+
+    it('should delete a file from a folder', function (done) {
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            azureStorage.deleteFile(folderName, fakeFileName, function(err, result){
+                expect(result.isSuccessful).to.be.eql(true);
+                azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                    expect(response.isSuccessful).to.be.eql(true);
+                    expect(result.entries[0]).isUndefined;
+                    done();
+                });
+            });
+        })
     });
 });

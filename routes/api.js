@@ -98,7 +98,7 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
                 }
                 //Get file list once we are putting files
-                azureStorage.getListOfContainerContents(req.params.snippetId, function(err, result, response) {
+                azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
                     if(!err){     //if files have been uploaded.
                         //we only need the names of the files
                         var fileNames = _.pluck(result.entries, 'name');
@@ -269,17 +269,6 @@ module.exports = function(app) {
             // });
         }
     );
-
-    // api_routes.get('/snippet-search/:repoOwner/:repoName',
-    //     function (req, res) {
-    //         github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
-    //             if (err) {
-    //                 return res.status(500).json({error: 'Error getting commits: ' + err.message});
-    //             }
-    //             res.json(commits);
-    //         });
-    //     }
-    // );
 
     api_routes.get('/rating/:snippetId',
         function (req, res) {

@@ -37,31 +37,12 @@ describe("REST API Tests", function() {
     var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
-    /**********************************
-
-     I M P O R T A N T:
-     The github api was unpredictable for these tests and would fail intermittently.  We don't
-     know if this was because of caching or a slow backend that would not recognize newly
-     created repos or files.
-
-     To get around the issue, we record the github data on a test, then mock the github http
-     calls for testing.
-
-     1) Run a single test with the following at the beginning of the test:
-     nock.recorder.rec({});
-     2) Create a function (e.g. mockDataxxxxx()) and copy the code generated in the log
-     into the function (removing all non-code)
-     3) Replace all instances of "access_token":xxxxx with "access_token":apiToken
-     4) Comment out the call above to record the data, and call the newly created function.
-
-     **********************************/
-
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
     beforeEach(function(done) {
         // cleanup fake repo
 
-        azureStorage.deleteContainer(fakeSnippetId, function (err, result) {
+        azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippetRating(fakeSnippetRating, function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
@@ -75,7 +56,7 @@ describe("REST API Tests", function() {
     }, 5000);
 
     afterEach(function(done) {
-        azureStorage.deleteContainer(fakeSnippetId, function (err, result) {
+        azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippet(fakeSnippetId + "2", function (err, result) {
                     db.removeSnippetRating(fakeSnippetRating, function (err, result) {
@@ -265,7 +246,7 @@ describe("REST API Tests", function() {
                         //Should start with <h1
                         res.body.readme.should.match(/<h1.*/);
                         res.body.readme.should.contain("Mocha Display Name");
-                        should.not.exist(res.body.files);
+                        should.not.exist(res.body.files[0]);
                         done();
                     })
             });
@@ -437,16 +418,16 @@ describe("REST API Tests", function() {
                     .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
-                        //TODO Get the file to make sure it was there
-                        // chai.request(app)
-                            //get overview to assure file was created
-                            // .get('/api/snippet-overview/' + fakeSnippetId)
-                            // .end(function (err, res) {
-                            //     res.should.have.status(200);
-                            //     res.body.files.should.be.a('array');
-                            //     res.body.files[1].should.equal(fakeFileName);
+                        //Get the file to make sure it was there
+                        chai.request(app)
+                            // get overview to assure file was created
+                            .get('/api/snippet-overview/' + fakeSnippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.files.should.be.a('array');
+                                res.body.files[0].should.equal(fakeFileName);
                                 done();
-                            // })
+                            })
                     });
             });
     });
@@ -463,7 +444,6 @@ describe("REST API Tests", function() {
                 chai.request(app)
                     //upload a new file
                     .post('/api/snippet-detail/' + fakeSnippetId)
-                    // .attach('file', fs.readFileSync('tests/backend-unit-tests/readme'), uploadedFileName)
                     .attach('file', filePath + fileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
@@ -616,8 +596,6 @@ describe("REST API Tests", function() {
     });
 
     it('should return the authenticated user /authenticated-user GET', function(done) {
-        //nock.recorder.rec({});
-        // mockDataGetAuthenticatedUser();
         chai.request(app)
             //create the initial snippet
             .get('/api/authenticated-user')

@@ -94,7 +94,7 @@ module.exports = function() {
 
     passport.deserializeUser(function(profile, done) {
         console.log("deserializeUser id: " + profile.id);
-        db.findUser({id:profile.id}, function(err, user) {
+        db.findUser(profile.id, function(err, user) {
             if (!err) {
                 done (null, user);
             } else {

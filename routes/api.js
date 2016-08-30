@@ -56,7 +56,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -68,7 +68,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -80,7 +80,7 @@ module.exports = function(app) {
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
-                    return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
+                    return res.status(500).json({error: 'Error removing snippet to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -96,7 +96,7 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippet(req.params.snippetId, function (err, snippet) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving snippet from database: ' + err.message});
                 }
                 //Get file list once we are putting files
                 azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
@@ -106,7 +106,6 @@ module.exports = function(app) {
                         snippet.files = fileNames;
                     }
                     snippet._id = req.params.snippetId;
-                    // retObj.displayName = repo ? repo.displayName : req.params.snippetId;
                     snippet.owner = snippet.owner || "unknown";
                     snippet.postedOn = snippet.postedOn || "unknown";
                     // determine if the current user is the owner
@@ -144,7 +143,7 @@ module.exports = function(app) {
         }
     );
 
-    // upload and add a repo file
+    // upload and add a snippet file
     api_routes.post('/snippet-detail/:snippetId', restrict,
         function (req, res) {
             var busboy = new Busboy({ headers: req.headers });
@@ -161,7 +160,7 @@ module.exports = function(app) {
         }
     );
 
-    // update contents of a repo file
+    // update contents of a snippet file
     api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
             var content =req.body.content || " ";
@@ -174,7 +173,7 @@ module.exports = function(app) {
         }
     );
 
-    // get contents of a repo file
+    // get contents of a snippet file
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
             azureStorage.getBlobToText(req.params.snippetId, req.params.fileName, function(err, content) {
@@ -186,7 +185,7 @@ module.exports = function(app) {
         }
     );
 
-    // delete a repo file
+    // delete a snippet file
     api_routes.delete('/snippet-detail/:snippetId/:fileName', restrict,
         function (req, res) {
             azureStorage.deleteFile(req.params.snippetId,req.params.fileName, function(err, content) {
@@ -228,11 +227,9 @@ module.exports = function(app) {
                 }
                 var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
                 results.forEach(function(result){
-                    //TODO populate text_matches with an array where the search terms matched the text.
-
                     db.getSnippet(result.snippetId, function (err, snippet) {
                         if (err) {
-                            return res.status(500).json({error: 'Error retrieving repository from database'});
+                            return res.status(500).json({error: 'Error retrieving snippet from database'});
                         }
                         gotSnippetsNum++;
 
@@ -243,15 +240,20 @@ module.exports = function(app) {
                         results = results.filter(function(entry) {
                             var previous;
 
-                            // Have we seen this repository before?
-                            if (seen.hasOwnProperty(entry.snippetId)) {
+                            //TODO merger @search.highlights instead of just having the one.
+                            // Have we seen this snippet before?
+                            // if (seen.hasOwnProperty(entry.snippetId)) {
                                 // Yes, grab it and add its text matches to it
-                                previous = seen[entry.snippetId];
-                                previous.text_matches.push(entry.text_matches[0]);
+                                // previous = seen[entry.snippetId];
+                                // previous.text_matches.push(entry.text_matches[0]);
+                                //TODO make this so these aren't hardcoded values.
+                                // previous["@search"].highlights.description.push(entry.hightlights.description);
+                                // previous["@search"].highlights.readme.push(entry.hightlights.readme);
+                                // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
 
                                 // Don't keep this entry, we've merged it into the previous one
-                                return false;
-                            }
+                                // return false;
+                            // }
                             // Remember that we've seen it
                             seen[entry.snippetId] = entry;
 

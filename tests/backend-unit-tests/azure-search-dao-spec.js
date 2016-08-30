@@ -17,6 +17,7 @@ describe("Azure Search Dao", function() {
         azureSearch.searchSnippets(searchTerms, function(err, results) {
             // results.should.contain("mocha");
             results.should.be.a('array');
+            //Check if the @search.highlights exists
             done();
         })
     });

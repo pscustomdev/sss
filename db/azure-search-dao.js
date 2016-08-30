@@ -8,9 +8,11 @@ var snippetIndex = "sssdb-index";
 
 
 exports.searchSnippets = function (searchTerms, next) {
+    var highlightedFields = "readme,description,displayName";
     var url = azureSearchUrl +
         "/indexes/" + snippetIndex +
         "/docs?search=" + encodeURIComponent(searchTerms) +
+        "&highlight=" + highlightedFields +
         "&api-version=2015-02-28" +
         "&searchMode=all";
 

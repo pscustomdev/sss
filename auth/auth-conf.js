@@ -1,40 +1,32 @@
 var cfg = require('../config.js');
+var authConfLocal = require('../auth/auth-conf-local.js');
 
-//This is so we can set environment variables for the tokens in prod and not have them checked into git
-var githubApiToken =  "";
-var githubClientID = "";
-var githubClientSecret =  "";
+//Take environment variables first and if that doesn't work then go local.
+
+//GITHUB
+var githubApiToken =  (process.env.GithubApiToken) ? process.env.GithubApiToken : authConfLocal.github_api.token;
+var githubClientID =  (process.env.GithubClientID) ? process.env.GithubClientID : authConfLocal.github_api.clientID;
+var githubClientSecret =  (process.env.GithubClientSecret) ? process.env.GithubClientSecret : authConfLocal.github.clientSecret;
 var githubCallbackURL = "";
-var googleClientID = "";
-var googleClientSecret =  "";
+
+//GOOGLE
+var googleClientID =  (process.env.GoogleClientID) ? process.env.GoogleClientID : authConfLocal.google.clientID;
+var googleClientSecret =  (process.env.GoogleClientSecret) ? process.env.GoogleClientSecret : authConfLocal.google.clientSecret;
 var googleCallbackURL = "";
-var mongoUri = "";
-var azureBlobStorageKey = "";
-var azureSearchKey = "";
+
+//AZURE
+var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.AzureBlobStorageKey : authConfLocal.azure.blobStorage.key;
+var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
+
+//MONGO
+var mongoUri =  (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
-    githubApiToken = process.env.GithubApiToken;
-    githubClientID = process.env.GithubClientID;
-    githubClientSecret = process.env.GithubClientSecret;
     githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";
-    googleClientID = process.env.GoogleClientID;
-    googleClientSecret = process.env.GoogleClientSecret;
     googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
-    mongoUri = process.env.MongoUri;
-    azureBlobStorageKey  = process.env.AzureBlobStorageKey;
-    azureSearchKey  = process.env.AzureSearchKey;
 } else {
-    var authConfLocal = require('../auth/auth-conf-local.js');
-    githubApiToken =  authConfLocal.github_api.token;
-    githubClientID = authConfLocal.github.clientID;
-    githubClientSecret =  authConfLocal.github.clientSecret;
     githubCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
-    googleClientID = authConfLocal.google.clientID;
-    googleClientSecret =  authConfLocal.google.clientSecret;
     googleCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
-    mongoUri =  authConfLocal.mongo.uri;
-    azureBlobStorageKey = authConfLocal.azure.blobStorage.key;
-    azureSearchKey = authConfLocal.azure.search.key;
 }
 
 module.exports = {

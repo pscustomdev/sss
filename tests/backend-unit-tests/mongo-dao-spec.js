@@ -58,10 +58,11 @@ describe("Mongo Dao", function() {
     }, 5000);
     
     it('should return error if user already exists', function (done) {
-        db.addUser(fakeUser, function(){});
-        db.addUser(fakeUser, function(err, users){
-            expect(err.message).contain("duplicate key error");
-            done();
+        db.addUser(fakeUser, function(err, users) {
+            db.addUser(fakeUser, function(err, users) {
+                expect(err.message).contain("duplicate key error");
+                done();
+            });
         });
     });
 

@@ -11,6 +11,7 @@ module.exports = function(app) {
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');
+    var azureSearch = require('../db/azure-search-dao');
     var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
@@ -213,60 +214,57 @@ module.exports = function(app) {
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
-            console.log("searchTerm: " + searchTerms);
-            // github.searchCode(searchTerms, function (err, repos) {
+            azureSearch.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
                 // this pattern is helpful if you need to make async calls within a loop
                 // but you cannot return until all async calls have completed
-                var numItems = repos.items.length;
-                var ctr = 0;
-                if (numItems == 0) {
+                // var numItems = results.length;
+                // var ctr = 0;
+                if (results.length == 0) {  //no results so just return
                     return res.json({});
                 }
-                for(var i in repos.items) {
-                    (function(idx) {
-                        var repoId = repos.items[idx].repository.name;
-                        db.getSnippet(repoId, function (err, repo) {
-                            if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository from database'});
+                var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
+                results.forEach(function(result){
+                    //TODO populate text_matches with an array where the search terms matched the text.
+
+                    db.getSnippet(result.snippetId, function (err, snippet) {
+                        if (err) {
+                            return res.status(500).json({error: 'Error retrieving repository from database'});
+                        }
+                        gotSnippetsNum++;
+
+                        result.displayName = snippet ? snippet.displayName : snippetId;
+                        result.postedBy = snippet ? snippet.owner : "unknown";
+                        result.postedOn = snippet ? snippet.postedOn : "unknown";
+                        var seen = {};
+                        results = results.filter(function(entry) {
+                            var previous;
+
+                            // Have we seen this repository before?
+                            if (seen.hasOwnProperty(entry.snippetId)) {
+                                // Yes, grab it and add its text matches to it
+                                previous = seen[entry.snippetId];
+                                previous.text_matches.push(entry.text_matches[0]);
+
+                                // Don't keep this entry, we've merged it into the previous one
+                                return false;
                             }
-                            repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
-                            repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
-                            repos.items[idx].repository.postedOn = repo ? repo.postedOn : "unknown";
-                            // do not return from the function until the last db call has returned
-                            if (ctr == numItems - 1) {
-                                //combine the text matches of any duplicate results
-                                var seen = {};
-                                repos.items = repos.items.filter(function(entry) {
-                                    var previous;
+                            // Remember that we've seen it
+                            seen[entry.snippetId] = entry;
 
-                                    // Have we seen this repository before?
-                                    if (seen.hasOwnProperty(entry.repository.full_name)) {
-                                        // Yes, grab it and add its text matches to it
-                                        previous = seen[entry.repository.full_name];
-                                        previous.text_matches.push(entry.text_matches[0]);
-
-                                        // Don't keep this entry, we've merged it into the previous one
-                                        return false;
-                                    }
-                                    // Remember that we've seen it
-                                    seen[entry.repository.full_name] = entry;
-
-                                    // Keep this one, we'll merge any others that match into it
-                                    return true;
-                                });
-                                //reset the count
-                                repos.total_count=repos.items.length;
-                                res.json(repos);
-                            }
-                            ctr++;
+                            // Keep this one, we'll merge any others that match into it
+                            return true;
                         });
-                    })(i);
-                }
-            // });
+                        if(gotSnippetsNum == results.length){
+                            results.total_count = results.length;
+                            res.json(results);
+                        }
+                    });
+                });
+            });
         }
     );
 

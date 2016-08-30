@@ -50,6 +50,7 @@
     "passport-github": ">= 0.0.0",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
+    "request": "^2.74.0",
     "serve-favicon": "^2.3.0",
     "underscore": "^1.8.3"
   },

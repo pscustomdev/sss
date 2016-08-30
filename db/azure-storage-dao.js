@@ -1,7 +1,7 @@
 var azure = require('azure-storage');
 var auth_config = require('../auth/auth-conf');
 
-var blobSvc = azure.createBlobService('sssblob', auth_config.azureBlobStorage.key);
+var blobSvc = azure.createBlobService('sssblob', auth_config.azure.blobStorage.key);
 
 var DEFAULT_CONTAINER = "sss-snippet-files";
 

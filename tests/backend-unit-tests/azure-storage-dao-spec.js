@@ -1,5 +1,5 @@
 'use strict';
-console.log("**** (Backend Unit Testing [MOCHA]: 'github-dao-spec') ****");
+console.log("**** (Backend Unit Testing [MOCHA]: 'azure-storage-dao-spec') ****");
 
 var azureStorage = require('../../db/azure-storage-dao');
 var uuid = require('node-uuid');

@@ -580,17 +580,15 @@ describe("REST API Tests", function() {
             });
     });
 
-    xit('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
+    it('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
         chai.request(app)
             // use a search term for existing snippets since creating a new snippet
             // is not immediately searchable
-            .get('/api/snippet-search?q=idm')
+            .get('/api/snippet-search?q=mocha')
             .end(function(err, res) {
                 res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('items');
-                res.body.items.should.a('array');
-                res.body.items[0].name.should.equal("README.md");
+                res.body.should.be.a('array');
+                // res.body.name.should.equal("README.md");
                 done();
             });
     });

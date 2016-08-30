@@ -10,6 +10,7 @@ var googleClientSecret =  "";
 var googleCallbackURL = "";
 var mongoUri = "";
 var azureBlobStorageKey = "";
+var azureSearchKey = "";
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     githubApiToken = process.env.GithubApiToken;
@@ -21,6 +22,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
     mongoUri = process.env.MongoUri;
     azureBlobStorageKey  = process.env.AzureBlobStorageKey;
+    azureSearchKey  = process.env.AzureSearchKey;
 } else {
     var authConfLocal = require('../auth/auth-conf-local.js');
     githubApiToken =  authConfLocal.github_api.token;
@@ -32,6 +34,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     googleCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
     mongoUri =  authConfLocal.mongo.uri;
     azureBlobStorageKey = authConfLocal.azure.blobStorage.key;
+    azureSearchKey = authConfLocal.azure.search.key;
 }
 
 module.exports = {
@@ -52,7 +55,12 @@ module.exports = {
     mongo: {
         uri: mongoUri
     },
-    azureBlobStorage: {
-        key: azureBlobStorageKey
+    azure: {
+        blobStorage: {
+            key: azureBlobStorageKey
+        },
+        search: {
+            key: azureSearchKey
+        }
     }
 };

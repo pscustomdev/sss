@@ -587,7 +587,7 @@ describe("REST API Tests", function() {
             .get('/api/snippet-search?q=mocha')
             .end(function(err, res) {
                 res.should.have.status(200);
-                res.body.should.be.a('array');
+                res.body.items.should.be.a('array');
                 // res.body.name.should.equal("README.md");
                 done();
             });

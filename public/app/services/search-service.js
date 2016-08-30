@@ -60,7 +60,7 @@
                         vm.searchResults.inProgress = false;
                         vm.pagination.totalItems = vm.searchResults.total_count;
 
-                        highlightSearchTerms(vm.searchResults.items);
+                        //highlightSearchTerms(vm.searchResults.items);
                         updateMetaData(vm.searchResults.items);
                     }
                 );
@@ -97,9 +97,6 @@
 
         function updateRating(snippets) {
             //copy the repository name to the snippetId so we can merge the two arrays.
-            _.each(snippets, function(snippet){
-                snippet.snippetId = snippet.repository.name;
-            });
             var ids = _.pluck(snippets, "snippetId");
             $nodeServices.getSnippetsRatingsByArray(ids).then(
                 function(result) {

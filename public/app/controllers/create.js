@@ -47,7 +47,7 @@
 
         $scope.cancelCreate = function() {
             $state.go('search', {});
-        }
+        };
 
         $scope.aceLoaded = function(_editor){
             var _session = _editor.getSession();

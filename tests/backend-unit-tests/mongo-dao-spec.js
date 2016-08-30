@@ -57,6 +57,21 @@ describe("Mongo Dao", function() {
 
     }, 5000);
     
+    xit('should create an index', function (done) {
+        db.createIndex("snippets",{"description":"text"}, function(result){
+            done();
+        })
+    });
+
+    it('should find some snippets based on the index', function (done) {
+        db.searchSnippets("Mocha", function(err, results){
+            expect(results).to.be.an("array");
+            // expect(result).contains("Mocha");
+            done();
+        })
+    });
+
+
     it('should return error if user already exists', function (done) {
         db.addUser(fakeUser, function(err, users) {
             db.addUser(fakeUser, function(err, users) {

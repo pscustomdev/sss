@@ -72,11 +72,11 @@ exports.addUpdateSnippet = function (snippet, next) {
 exports.getSnippet = function (id, next) {
     db.collection('snippets').findOne({snippetId: id},
         function (err, result) {
-            if (err) {
-                console.warn(err.message);  // returns error if no matching object found
-                next(err, null);
+            if (result) {
+                next(err, result);
+            } else {
+                next("Snippet not found");
             }
-            next(err, result);
         }
     );
 };
@@ -195,6 +195,37 @@ exports.getSnippetRatingByUser = function (userRating, next) {
             }
         }
     );
+};
+
+exports.createIndex = function (collection, index, next ) {
+    db.createIndex(collection,{index:"text"},
+        function(err, result){
+            next(err, result)
+        }
+    );
+};
+
+exports.searchSnippets = function (searchTerms, next) {
+    db.collection('snippets').find({
+        $or: [{
+                description: {
+                    $regex: new RegExp(searchTerms),
+                    $options: 'i'
+                }
+            },{
+                readme: {
+                    $regex: new RegExp(searchTerms),
+                    $options: 'i'
+                }
+            }, {
+                displayName: {
+                    $regex: new RegExp(searchTerms),
+                    $options: 'i'
+                }
+            }]
+    }).toArray(function (err, results) {
+        next(err, results);
+    });
 };
 
 //TingoDB doesn't support aggregate function so we have to average it ourselves.

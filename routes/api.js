@@ -99,12 +99,13 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving snippet from database: ' + err.message});
                 }
                 //Get file list once we are putting files
-                azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
-                    if(!err){     //if files have been uploaded.
+                //TODO get Files
+                // azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
+                //     if(!err){     //if files have been uploaded.
                         //we only need the names of the files
-                        var fileNames = _.pluck(result.entries, 'name');
-                        snippet.files = fileNames;
-                    }
+                        // var fileNames = _.pluck(result.entries, 'name');
+                        // snippet.files = fileNames;
+                    // }
                     snippet._id = req.params.snippetId;
                     snippet.owner = snippet.owner || "unknown";
                     snippet.postedOn = snippet.postedOn || "unknown";
@@ -124,7 +125,7 @@ module.exports = function(app) {
                     b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
                     snippet.readme = marked(b);
                     res.json(snippet);
-                });
+                // });
             });
         }
     );
@@ -213,59 +214,78 @@ module.exports = function(app) {
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
-            azureSearch.searchSnippets(searchTerms, function (err, results) {
+            // azureSearch.searchSnippets(searchTerms, function (err, results) {
+            db.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
                 // this pattern is helpful if you need to make async calls within a loop
                 // but you cannot return until all async calls have completed
-                // var numItems = results.length;
-                // var ctr = 0;
                 if (results.length == 0) {  //no results so just return
                     return res.json({});
                 }
-                var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
+
                 results.forEach(function(result){
-                    db.getSnippet(result.snippetId, function (err, snippet) {
-                        if (err) {
-                            return res.status(500).json({error: 'Error retrieving snippet from database'});
-                        }
-                        gotSnippetsNum++;
-
-                        result.displayName = snippet ? snippet.displayName : snippetId;
-                        result.postedBy = snippet ? snippet.owner : "unknown";
-                        result.postedOn = snippet ? snippet.postedOn : "unknown";
-                        var seen = {};
-                        results = results.filter(function(entry) {
-                            var previous;
-
-                            //TODO merger @search.highlights instead of just having the one.
-                            // Have we seen this snippet before?
-                            // if (seen.hasOwnProperty(entry.snippetId)) {
-                                // Yes, grab it and add its text matches to it
-                                // previous = seen[entry.snippetId];
-                                // previous.text_matches.push(entry.text_matches[0]);
-                                //TODO make this so these aren't hardcoded values.
-                                // previous["@search"].highlights.description.push(entry.hightlights.description);
-                                // previous["@search"].highlights.readme.push(entry.hightlights.readme);
-                                // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
-
-                                // Don't keep this entry, we've merged it into the previous one
-                                // return false;
-                            // }
-                            // Remember that we've seen it
-                            seen[entry.snippetId] = entry;
-
-                            // Keep this one, we'll merge any others that match into it
-                            return true;
-                        });
-                        if(gotSnippetsNum == results.length){
-                            results.total_count = results.length;
-                            res.json(results);
-                        }
-                    });
+                    result.postedBy = result ? result.owner : "unknown";
+                    result.postedOn = result ? result.postedOn : "unknown";
                 });
+
+                var retObj = {
+                    items: results,
+                    total_count : results.length
+                };
+                res.json(retObj);
+                // var ctr = 0;
+                // var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
+                // results.forEach(function(result){
+                //     if(!result.snippetId) {
+                //         return;
+                //     }
+                //     db.getSnippet(result.snippetId, function (err, snippet) {
+                //         if (err) {
+                //             //TODO there is a bug here...if we have two results and we error on the first we will return the status
+                //             // then the second will cause another error and try to return the status again causing a header changed error.
+                //             return res.status(500).json({error: 'Error retrieving snippet from database'});
+                //         }
+                //         gotSnippetsNum++;
+                //
+                //         result.displayName = snippet ? snippet.displayName : snippet.snippetId;
+                //         result.postedBy = snippet ? snippet.owner : "unknown";
+                //         result.postedOn = snippet ? snippet.postedOn : "unknown";
+                //         var seen = {};
+                //         results = results.filter(function(entry) {
+                //             // var previous;
+                //
+                //             //TODO merger @search.highlights instead of just having the one.
+                //             // Have we seen this snippet before?
+                //             // if (seen.hasOwnProperty(entry.snippetId)) {
+                //                 // Yes, grab it and add its text matches to it
+                //                 // previous = seen[entry.snippetId];
+                //                 // previous.text_matches.push(entry.text_matches[0]);
+                //                 //TODO make this so these aren't hardcoded values.
+                //                 // previous["@search"].highlights.description.push(entry.hightlights.description);
+                //                 // previous["@search"].highlights.readme.push(entry.hightlights.readme);
+                //                 // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
+                //
+                //                 // Don't keep this entry, we've merged it into the previous one
+                //                 // return false;
+                //             // }
+                //             // Remember that we've seen it
+                //             seen[entry.snippetId] = entry;
+                //
+                //             // Keep this one, we'll merge any others that match into it
+                //             return true;
+                //         });
+                //         if(gotSnippetsNum == results.length){
+                //             var retObj = {
+                //                 items: results,
+                //                 total_count : results.length
+                //             };
+                //             res.json(retObj);
+                //         }
+                //     });
+                // });
             });
         }
     );

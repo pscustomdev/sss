@@ -4,8 +4,8 @@ var authConfLocal = require('../auth/auth-conf-local.js');
 //Take environment variables first and if that doesn't work then go local.
 
 //GITHUB
-var githubApiToken =  (process.env.GithubApiToken) ? process.env.GithubApiToken : authConfLocal.github_api.token;
-var githubClientID =  (process.env.GithubClientID) ? process.env.GithubClientID : authConfLocal.github_api.clientID;
+var githubApiToken =  (process.env.GithubApiToken) ? process.env.GithubApiToken : authConfLocal.github.token;
+var githubClientID =  (process.env.GithubClientID) ? process.env.GithubClientID : authConfLocal.github.clientID;
 var githubClientSecret =  (process.env.GithubClientSecret) ? process.env.GithubClientSecret : authConfLocal.github.clientSecret;
 var githubCallbackURL = "";
 
@@ -19,7 +19,7 @@ var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.Azure
 var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
 
 //MONGO
-var mongoUri =  (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
+var mongoUri = (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";
@@ -33,9 +33,7 @@ module.exports = {
     github: {
         clientID: githubClientID,
         clientSecret: githubClientSecret,
-        callbackURL: githubCallbackURL
-    },
-    github_api: {
+        callbackURL: githubCallbackURL,
         username: 'pscustomdev-sss',
         token: githubApiToken
     },

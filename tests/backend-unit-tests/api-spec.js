@@ -14,19 +14,12 @@ var should = require("chai").should();
 var passportStub = require("passport-stub");
 var nock = require("nock");
 
-var apiToken = "";
-if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
-    apiToken = process.env.GithubApiToken;
-} else {
-    var authConfLocal = require('../../auth/auth-conf-local.js');
-    apiToken = authConfLocal.github_api.token;
-}
-
 chai.use(chaiHttp);
 passportStub.install(app);
 
 describe("REST API Tests", function() {
-    var fakeSnippetId = uuid.v4();
+    // var fakeSnippetId = uuid.v4();
+    var fakeSnippetId = "MochaSnippet";
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";
     var fakeSnippetReadme = "Mocha Readme";
@@ -39,39 +32,25 @@ describe("REST API Tests", function() {
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
+    if (process.env.NODE_ENV == 'production') {
+        return;
+    }
+
     beforeEach(function(done) {
         // cleanup fake repo
-
         azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
-            db.removeSnippet(fakeSnippetId, function (err, result) {
-                db.removeSnippetRating(fakeSnippetRating, function (err, result) {
-                    db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                        db.removeSnippetRating(fakeSnippetRating3, function (err, result) {
-                            done();
-                        });
-                    });
+            db.removeAllSnippets(function(err, result){
+                db.removeAllRatings(function (err, result) {
+                    if (err) console.log(err);
+                    done();
                 });
             });
         });
     }, 5000);
 
     afterEach(function(done) {
-        azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
-            db.removeSnippet(fakeSnippetId, function (err, result) {
-                db.removeSnippet(fakeSnippetId + "2", function (err, result) {
-                    db.removeSnippetRating(fakeSnippetRating, function (err, result) {
-                        db.removeSnippetRating(fakeSnippetRating2, function (err, result) {
-                            db.removeSnippetRating(fakeSnippetRating3, function (err, result) {
-                                //Create a new snippetID because a delete takes a second and when automating tests it's too fast before we create again
-                                fakeSnippetId = uuid.v4();
-                                fakeSnippet._id = fakeSnippetId;
-                                done();
-                            });
-                        });
-                    });
-                });
-            });
-        });
+        //Doing so many operations on each test is killing the cost of azure so we're going to limit to cleaning up just beforeEach test.
+        done();
     }, 5000);
 
 
@@ -588,7 +567,6 @@ describe("REST API Tests", function() {
             .end(function(err, res) {
                 res.should.have.status(200);
                 res.body.items.should.be.a('array');
-                // res.body.name.should.equal("README.md");
                 done();
             });
     });

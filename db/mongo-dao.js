@@ -22,6 +22,18 @@ exports.removeUser = function (user, next) {
     });
 };
 
+exports.removeAllUsers = function (next) {
+    db.collection('users').remove(
+        function (err, result) {
+            if (err) {
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};
+
 exports.findUsers = function (queryObject, next) {
     db.collection("users").find(queryObject).toArray(function (err, users) {
         if (err) {
@@ -103,6 +115,18 @@ exports.getSnippetsByOwner = function (owner, next) {
 
 exports.removeSnippet = function (id, next) {
     db.collection('snippets').remove({snippetId: id},
+        function (err, result) {
+            if (err) {
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};
+
+exports.removeAllSnippets = function (next) {
+    db.collection('snippets').remove(
         function (err, result) {
             if (err) {
                 console.warn(err.message);  // returns error if no matching object found
@@ -197,36 +221,63 @@ exports.getSnippetRatingByUser = function (userRating, next) {
     );
 };
 
+exports.removeAllRatings = function (next) {
+    db.collection('ratings').remove(
+        function (err, result) {
+            if (err) {
+                console.warn(err.message);  // returns error if no matching object found
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};
+
 exports.createIndex = function (collection, index, next ) {
-    db.createIndex(collection,{index:"text"},
+    // db.createIndex(collection,{index:"text"},
+    db.createIndex("snippets",{"description":"text"},
         function(err, result){
             next(err, result)
         }
     );
 };
 
-exports.searchSnippets = function (searchTerms, next) {
-    db.collection('snippets').find({
-        $or: [{
-                description: {
-                    $regex: new RegExp(searchTerms),
-                    $options: 'i'
-                }
-            },{
-                readme: {
-                    $regex: new RegExp(searchTerms),
-                    $options: 'i'
-                }
-            }, {
-                displayName: {
-                    $regex: new RegExp(searchTerms),
-                    $options: 'i'
-                }
-            }]
-    }).toArray(function (err, results) {
-        next(err, results);
-    });
-};
+
+//This is how you'd use $text for a search after creating an index.
+// exports.searchSnippets = function (searchTerms, next) {
+//     // db.collection('snippets').find({$text: {$search: "mocha"}}, {score: {$meta: "textScore"}}).sort({score:{$meta:"textScore"}});
+//     // db.collection('snippets').find({$text: {$search: "fakeDescription"}}, {score: {$meta: "textScore"}}).sort({score:{$meta:"textScore"}}).toArray(function (err, results) {
+//     db.collection('snippets').find({$text: {$search: "fakeDescription"}}).toArray(function (err, results) {
+//             next(err, results)
+//         }
+//     );
+//
+// };
+
+
+//This is how you'd use $regex to search for a snippet
+// exports.searchSnippets = function (searchTerms, next) {
+//     db.collection('snippets').find({
+//         $or: [{
+//                 description: {
+//                     $regex: new RegExp(searchTerms),
+//                     $options: 'i'
+//                 }
+//             },{
+//                 readme: {
+//                     $regex: new RegExp(searchTerms),
+//                     $options: 'i'
+//                 }
+//             }, {
+//                 displayName: {
+//                     $regex: new RegExp(searchTerms),
+//                     $options: 'i'
+//                 }
+//             }]
+//     }).toArray(function (err, results) {
+//         next(err, results);
+//     });
+// };
 
 //TingoDB doesn't support aggregate function so we have to average it ourselves.
 function calcAvgRatingForSnippet(snippetRatings){

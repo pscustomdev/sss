@@ -100,12 +100,12 @@ module.exports = function(app) {
                 }
                 //Get file list once we are putting files
                 //TODO get Files
-                // azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
-                //     if(!err){     //if files have been uploaded.
-                        //we only need the names of the files
-                        // var fileNames = _.pluck(result.entries, 'name');
-                        // snippet.files = fileNames;
-                    // }
+                azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
+                    if(!err){     //if files have been uploaded.
+                        // we only need the names of the files
+                        var fileNames = _.pluck(result.entries, 'name');
+                        snippet.files = fileNames;
+                    }
                     snippet._id = req.params.snippetId;
                     snippet.owner = snippet.owner || "unknown";
                     snippet.postedOn = snippet.postedOn || "unknown";
@@ -125,7 +125,7 @@ module.exports = function(app) {
                     b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
                     snippet.readme = marked(b);
                     res.json(snippet);
-                // });
+                });
             });
         }
     );
@@ -214,8 +214,8 @@ module.exports = function(app) {
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
-            // azureSearch.searchSnippets(searchTerms, function (err, results) {
-            db.searchSnippets(searchTerms, function (err, results) {
+            azureSearch.searchSnippets(searchTerms, function (err, results) {
+            // db.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }

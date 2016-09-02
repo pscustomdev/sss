@@ -72,13 +72,16 @@
 
             <div class="row">
                 <div class="col-md-9">
-                    <div data-ng-repeat="text_match in item.text_matches"
+                    <div data-ng-repeat="highlight in item['@search.highlights']"
                          show-more-directive>
                         <div class="row">
                             <div class="col-md-12">
                                 <article>
-                                    <div data-ng-repeat="match in text_match.matches">
-                                        <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(match.highlit_fragment))"></div>
+                                    <div data-ng-repeat="(key, hits) in highlight">
+                                        <h4 class="text-capitalize">{{key}}:</h4>
+                                        <div data-ng-repeat="hit in hits">
+                                            <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(hit))"></div>
+                                        </div>
                                     </div>
                                 </article>
                             </div>

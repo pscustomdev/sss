@@ -36,8 +36,8 @@
         $scope.ratingOptions = {
             //ratedFill: '#337ab7',
             readOnly: false,
-            halfStar: true
-            //starWidth: "20px"
+            halfStar: true,
+            starWidth: "20px"
         };
         var disqusUrl = 'http://www.softwaresnippetsearch.com/#!/search/results/snippet-overview/' + $scope.snippetId;
         $scope.disqusConfig = {

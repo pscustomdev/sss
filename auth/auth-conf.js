@@ -7,50 +7,54 @@ var authConfLocal = require('../auth/auth-conf-local.js');
 var githubApiToken =  (process.env.GithubApiToken) ? process.env.GithubApiToken : authConfLocal.github.token;
 var githubClientID =  (process.env.GithubClientID) ? process.env.GithubClientID : authConfLocal.github.clientID;
 var githubClientSecret =  (process.env.GithubClientSecret) ? process.env.GithubClientSecret : authConfLocal.github.clientSecret;
-var githubCallbackURL = "";
+var githubCallbackUrl = "";
 
 //GOOGLE
 var googleClientID =  (process.env.GoogleClientID) ? process.env.GoogleClientID : authConfLocal.google.clientID;
 var googleClientSecret =  (process.env.GoogleClientSecret) ? process.env.GoogleClientSecret : authConfLocal.google.clientSecret;
-var googleCallbackURL = "";
+var googleCallbackUrl = "";
 
 //AZURE
 var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.AzureBlobStorageKey : authConfLocal.azure.blobStorage.key;
+var azureBlobStorageName =  (process.env.AzureBlobStorageName) ? process.env.AzureBlobStorageName : authConfLocal.azure.blobStorage.name;
 var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
+var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.Url;
 
 //MONGO
 var mongoUri = (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
-    githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";
-    googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
+    githubCallbackUrl = "http://www.softwaresnippetsearch.com/auth/github/callback";
+    googleCallbackUrl = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this Url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
 } else {
-    githubCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
-    googleCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
+    githubCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
+    googleCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
 }
 
 module.exports = {
     github: {
         clientID: githubClientID,
         clientSecret: githubClientSecret,
-        callbackURL: githubCallbackURL,
+        callbackUrl: githubCallbackUrl,
         username: 'pscustomdev-sss',
         token: githubApiToken
     },
     google: {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
-        callbackURL: googleCallbackURL
+        callbackUrl: googleCallbackUrl
     },
     mongo: {
         uri: mongoUri
     },
     azure: {
         blobStorage: {
-            key: azureBlobStorageKey
+            key: azureBlobStorageKey,
+            name: azureBlobStorageName
         },
         search: {
-            key: azureSearchKey
+            key: azureSearchKey,
+            Url: azureSearchUrl
         }
     }
 };

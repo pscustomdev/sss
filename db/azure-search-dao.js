@@ -2,7 +2,7 @@ var auth_config = require('../auth/auth-conf');
 var request = require('request');
 
 
-var azureSearchUrl = "https://sss-search.search.windows.net";
+var azureSearchUrl = auth_config.azure.search.url;
 var fileIndex = "sss-snippet-files-index";
 var snippetIndex = "sssdb-index";
 

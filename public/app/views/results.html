@@ -68,17 +68,20 @@
         <div data-ng-repeat="item in $searchService.searchResults.items.slice((($searchService.pagination.currentPage-1)*$searchService.pagination.itemsPerPage), (($searchService.pagination.currentPage)*$searchService.pagination.itemsPerPage))"
              show-more-directive>
 
-            <h2><a ui-sref="search.results.overview({ snippetId: '{{item.repository.name}}'})">{{item.repository.displayName}}</a></h2>
+            <h2><a ui-sref="search.results.overview({ snippetId: '{{item.snippetId}}'})">{{item.displayName}}</a></h2>
 
             <div class="row">
                 <div class="col-md-9">
-                    <div data-ng-repeat="text_match in item.text_matches"
+                    <div data-ng-repeat="highlight in item['@search.highlights']"
                          show-more-directive>
                         <div class="row">
                             <div class="col-md-12">
                                 <article>
-                                    <div data-ng-repeat="match in text_match.matches">
-                                        <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(match.highlit_fragment))"></div>
+                                    <div data-ng-repeat="(key, hits) in highlight">
+                                        <h4 class="text-capitalize">{{key}}:</h4>
+                                        <div data-ng-repeat="hit in hits">
+                                            <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(hit))"></div>
+                                        </div>
                                     </div>
                                 </article>
                             </div>
@@ -91,8 +94,8 @@
                         <div>Score: {{item.score}}</div>
                         <!--<div>Last updated (last commit date)</div>-->
                         <!--<div>nnnn views (track in Mongo)</div>-->
-                        <div>Posted on: {{item.repository.postedOn | date:'short'}}</div>
-                        <div>Posted by: {{item.repository.postedBy}}</div>
+                        <div>Posted on: {{item.postedOn | date:'short'}}</div>
+                        <div>Posted by: {{item.postedBy}}</div>
                         <br/><br/><br/>
                     </article>
                 </div>

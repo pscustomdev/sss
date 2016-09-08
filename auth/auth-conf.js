@@ -1,52 +1,60 @@
 var cfg = require('../config.js');
+var authConfLocal = require('../auth/auth-conf-local.js');
 
-//This is so we can set environment variables for the tokens in prod and not have them checked into git
-var githubApiToken =  "";
-var githubClientID = "";
-var githubClientSecret =  "";
-var githubCallbackURL = "";
-var googleClientID = "";
-var googleClientSecret =  "";
-var googleCallbackURL = "";
-var mongoUri = "";
+//Take environment variables first and if that doesn't work then go local.
+
+//GITHUB
+var githubApiToken =  (process.env.GithubApiToken) ? process.env.GithubApiToken : authConfLocal.github.token;
+var githubClientID =  (process.env.GithubClientID) ? process.env.GithubClientID : authConfLocal.github.clientID;
+var githubClientSecret =  (process.env.GithubClientSecret) ? process.env.GithubClientSecret : authConfLocal.github.clientSecret;
+var githubCallbackUrl = "";
+
+//GOOGLE
+var googleClientID =  (process.env.GoogleClientID) ? process.env.GoogleClientID : authConfLocal.google.clientID;
+var googleClientSecret =  (process.env.GoogleClientSecret) ? process.env.GoogleClientSecret : authConfLocal.google.clientSecret;
+var googleCallbackUrl = "";
+
+//AZURE
+var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.AzureBlobStorageKey : authConfLocal.azure.blobStorage.key;
+var azureBlobStorageName =  (process.env.AzureBlobStorageName) ? process.env.AzureBlobStorageName : authConfLocal.azure.blobStorage.name;
+var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
+var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.Url;
+
+//MONGO
+var mongoUri = (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
-    githubApiToken = process.env.GithubApiToken;
-    githubClientID = process.env.GithubClientID;
-    githubClientSecret = process.env.GithubClientSecret;
-    githubCallbackURL = "http://www.softwaresnippetsearch.com/auth/github/callback";
-    googleClientID = process.env.GoogleClientID;
-    googleClientSecret = process.env.GoogleClientSecret;
-    googleCallbackURL = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
-    mongoUri = process.env.MongoUri;
+    githubCallbackUrl = "http://www.softwaresnippetsearch.com/auth/github/callback";
+    googleCallbackUrl = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this Url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
 } else {
-    var authConfLocal = require('../auth/auth-conf-local.js');
-    githubApiToken =  authConfLocal.github_api.token;
-    githubClientID = authConfLocal.github.clientID;
-    githubClientSecret =  authConfLocal.github.clientSecret;
-    githubCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
-    googleClientID = authConfLocal.google.clientID;
-    googleClientSecret =  authConfLocal.google.clientSecret;
-    googleCallbackURL = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
-    mongoUri =  authConfLocal.mongo.uri;
+    githubCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
+    googleCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
 }
 
 module.exports = {
     github: {
         clientID: githubClientID,
         clientSecret: githubClientSecret,
-        callbackURL: githubCallbackURL
-    },
-    github_api: {
+        callbackUrl: githubCallbackUrl,
         username: 'pscustomdev-sss',
         token: githubApiToken
     },
     google: {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
-        callbackURL: googleCallbackURL
+        callbackUrl: googleCallbackUrl
     },
     mongo: {
         uri: mongoUri
+    },
+    azure: {
+        blobStorage: {
+            key: azureBlobStorageKey,
+            name: azureBlobStorageName
+        },
+        search: {
+            key: azureSearchKey,
+            Url: azureSearchUrl
+        }
     }
 };

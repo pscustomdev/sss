@@ -21,47 +21,51 @@ describe("Mongo Dao", function() {
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     beforeEach(function(done) {
+        //We don't want to remove all data in prod
+        if (process.env.NODE_ENV == 'production') {
+            return;
+        }
         //cleanup fake user
-        db.removeUser(fakeUser, function (err, data) {
-            db.removeSnippet(fakeSnippet._id, function(err, result){
-                db.removeSnippet(fakeSnippet2._id, function(err, result){
-                    db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
-                        db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
-                            db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
-                                if (err) console.log(err);
-                                done();
-                            });
-                        });
-                    });
+        db.removeAllUsers(function (err, data) {
+            db.removeAllSnippets(function(err, result){
+                db.removeAllRatings(function (err, result) {
+                    if (err) console.log(err);
+                    done();
                 });
             });
         });
     }, 5000);
 
     afterEach(function(done) {
-        //cleanup fake user and snippets
-        db.removeUser(fakeUser, function (err, data) {
-            db.removeSnippet(fakeSnippet._id, function(err, result){
-                db.removeSnippet(fakeSnippet2._id, function(err, result){
-                    db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
-                        db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
-                            db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
-                                if (err) console.log(err);
-                                done();
-                            });
-                        });
-                    });
-                });
-            });
-        });
-
+        //Doing so many operations on each test is killing the cost of azure so we're going to limit to cleaning up just beforeEach test.
+        done()
     }, 5000);
     
-    it('should return error if user already exists', function (done) {
-        db.addUser(fakeUser, function(){});
-        db.addUser(fakeUser, function(err, users){
-            expect(err.message).contain("duplicate key error");
+    xit('should create an index', function (done) {
+        db.createIndex("snippets",{"description":"text"}, function(result){
             done();
+        })
+    });
+
+    //We don't need this test if we are using azure search, solr or elasticsearch
+    xit('should find some snippets based on the index', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            db.searchSnippets("Fake", function(err, results){
+                expect(results).to.be.an("array");
+                // expect(result).contains("Mocha");
+                done();
+            })
+        });
+    });
+
+
+    it('should return error if user already exists', function (done) {
+        db.addUser(fakeUser, function(err, users) {
+            db.addUser(fakeUser, function(err, users) {
+                expect(err.message).contain("duplicate key error");
+                done();
+            });
         });
     });
 
@@ -125,6 +129,18 @@ describe("Mongo Dao", function() {
                 expect(result.description).to.be.eql(fakeSnippet.description);
                 done();
             })
+        });
+    });
+
+    it('should be able to remove all snippets in the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            db.removeAllSnippets(function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(err).to.be.eql("Snippet not found");
+                    done();
+                });
+            });
         });
     });
 

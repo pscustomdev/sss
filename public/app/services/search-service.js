@@ -44,26 +44,42 @@
         };
 
         vm.submitSearch = function (searchTerms) { // Search function
+
             vm.searchResults = {};
             vm.searchResults.total_count = 0;
             vm.searchResults.inProgress = true;
             if (searchTerms && searchTerms !== "") {
                 vm.searchTerms = searchTerms;
 
-                $nodeServices.searchCode(searchTerms).then(
-                    function (response) {
-                        vm.userSearched = true;
-                        vm.searchResults = response;
-                        if (!response.total_count) {
-                            vm.searchResults.total_count = 0;
-                        }
-                        vm.searchResults.inProgress = false;
-                        vm.pagination.totalItems = vm.searchResults.total_count;
+                $nodeServices.searchCode(searchTerms).then(function (response) {
+                     //filter out all the data type and the display Name since we don't want to show those on the UI.
+                    _.each(response.items, function(r){
+                        var newArray = [];
+                         _.each(r['@search.highlights'], function(item, k){
+                            if(!k.includes("data.type") && k != 'displayName'){
+                                var obj= {};
+                                // Change the em to mark because we use bootstrap for styling
+                                _.each(item, function(s, k){
+                                    s = s.replace(/<em>/g, "<mark>");
+                                    s = s.replace(/<\/em>/g, "</mark>");
+                                    item[k] = s;
+                                });
+                                obj[k] = item;
+                                newArray.push(obj);
+                            }
+                        });
+                        r['@search.highlights'] = newArray;
+                    });
 
-                        highlightSearchTerms(vm.searchResults.items);
-                        updateMetaData(vm.searchResults.items);
+                    vm.userSearched = true;
+                    vm.searchResults.items = response.items;
+                    if (!response.total_count) {
+                        vm.searchResults.total_count = 0;
                     }
-                );
+                    vm.searchResults.inProgress = false;
+                    vm.pagination.totalItems = vm.searchResults.total_count;
+                    updateMetaData(vm.searchResults.items);
+                });
             }
         };
 
@@ -75,20 +91,6 @@
             return $('<x>').html(content).find("img").remove().end().html();
         };
 
-        // Inject html to add highlighting of returned results
-        function highlightSearchTerms(hits) {
-            if (!hits) { return; }
-            hits.forEach(function(hit) {
-                hit.text_matches.forEach(function(hit_text_match) {
-                    hit_text_match.matches.reverse().forEach(function (match) {
-                        match['highlit_fragment'] = hit_text_match.fragment;
-                        match['highlit_fragment'] = match['highlit_fragment'].substr(0, match.indices[1]) + "</mark><code>" + match['highlit_fragment'].substr(match.indices[1]) + "</code>";
-                        match['highlit_fragment'] = "<code>" + match['highlit_fragment'].substr(0, match.indices[0]) + "</code><mark>" + match['highlit_fragment'].substr(match.indices[0]);
-                    });
-                });
-            });
-        }
-
         function updateMetaData(snippets) {
             updateRating(snippets);
             // updateViewsCount(snippets);
@@ -97,9 +99,6 @@
 
         function updateRating(snippets) {
             //copy the repository name to the snippetId so we can merge the two arrays.
-            _.each(snippets, function(snippet){
-                snippet.snippetId = snippet.repository.name;
-            });
             var ids = _.pluck(snippets, "snippetId");
             $nodeServices.getSnippetsRatingsByArray(ids).then(
                 function(result) {

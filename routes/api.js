@@ -1,34 +1,31 @@
+var _ = require('underscore');
+var authConfLocal = require('../auth/auth-conf-local.js');
+
 // Routes starting with "/api"
 module.exports = function(app) {
     var express = require('express');
     var bodyParser = require('body-parser');
-    var busboy = require('connect-busboy');
+    // var busboy = require('connect-busboy');
+    var Busboy = require('busboy');
     var fs = require('fs');
     var marked = require("marked");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
-    var github = require('../db/github-dao');
+    var azureStorage = require('../db/azure-storage-dao');
+    var azureSearch = require('../db/azure-search-dao');
     var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
 
-    // limit file upload to 512k which is a github limit
-    api_routes.use(busboy({
-        immediate: true,
-        limits: {
-            fileSize: 512 * 1024
-        }
-    }));
-
     // get a list of all snippets
     api_routes.get('/snippets',
         function (req, res) {
-            github.getRepos(function (err, repos) {
+            db.getSnippets(req.params.owner, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving repositories: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
-                res.json(repos);
-            });
+                res.json(results);
+            })
         }
     );
 
@@ -44,31 +41,25 @@ module.exports = function(app) {
     );
 
     // get information about a snippet
-    //TODO This is not implemented
-    //api_routes.get('/snippet',
-    //    function (req, res) {
-    //        github.getRepo(function (err, repo) {
-    //            if (err) {
-    //                return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-    //            }
-    //            res.json(repo);
-    //        });
-    //    }
-    //);
+    api_routes.get('/snippet/:snippetId',
+       function (req, res) {
+            db.getSnippet(req.params.snippetId, function(err, snippet) {
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving snippet: ' + err.message});
+                }
+                res.json(snippet);
+            })
+       }
+    );
 
     // create snippet (post)
     api_routes.post('/snippet', restrict,
         function (req, res) {
-            github.createRepo(req.body, function (err, repo) {
+            db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
                 }
-                db.addUpdateSnippet(req.body, function (err) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                    }
-                });
-                res.json(repo);
+                res.json("");
             });
         }
     );
@@ -76,16 +67,11 @@ module.exports = function(app) {
     // update snippet data such as display name and description (put)
     api_routes.put('/snippet/:snippetId', restrict,
         function (req, res) {
-            github.updateRepo(req.body, function (err, repo) {
+            db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error creating repository on GitHub: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
                 }
-                db.addUpdateSnippet(req.body, function (err) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error adding repository to database: ' + err.message});
-                    }
-                });
-                res.json(repo);
+                res.json("");
             });
         }
     );
@@ -95,12 +81,7 @@ module.exports = function(app) {
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
-                    return res.status(500).json({error: 'Error removing repository to database: ' + err.message});
-                }
-            });
-            github.deleteRepo(req.params.snippetId, function (err, content) {
-                if (err) {
-                    return res.status(500).json({error: 'Error deleting repository: ' + err.message});
+                    return res.status(500).json({error: 'Error removing snippet to database: ' + err.message});
                 }
                 res.json("");
             });
@@ -114,135 +95,78 @@ module.exports = function(app) {
     // * db data such as owner and display name
     api_routes.get('/snippet-overview/:snippetId',
         function (req, res) {
-            var retObj = {};
-            db.getSnippet(req.params.snippetId, function (err, contents) {
+            db.getSnippet(req.params.snippetId, function (err, snippet) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving snippet from database: ' + err.message});
                 }
-                retObj = contents;
-                github.getRepoContents(req.params.snippetId, function (err, contents) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error retrieving repository contents: ' + err.message});
+                //Get file list once we are putting files
+                //TODO get Files
+                azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
+                    if(!err){     //if files have been uploaded.
+                        // we only need the names of the files
+                        var fileNames = _.pluck(result.entries, 'name');
+                        snippet.files = fileNames;
                     }
-                    retObj = contents;
-
-                    //sort contents.files with README.md at the top of the list
-                    var readMeIdx = retObj.files.indexOf("README.md");
-                    if (readMeIdx > -1) {
-                        // preface with a space so it will sort at the top
-                        retObj.files[readMeIdx] = " README.md";
+                    snippet._id = req.params.snippetId;
+                    snippet.owner = snippet.owner || "unknown";
+                    snippet.postedOn = snippet.postedOn || "unknown";
+                    // determine if the current user is the owner
+                    snippet.isOwner = false;
+                    // if logged in as the admin user
+                    if(req.user && req.user.username === "pscustomdev-sss"){
+                        snippet.isOwner = true;
                     }
-                    // sort - ignore case
-                    retObj.files.sort(function(a,b) {
-                        return a.toLowerCase().localeCompare(b.toLowerCase());
-                    });
-                    if (readMeIdx > -1) {
-                        // strip the leading space
-                        retObj.files[0] = "README.md";
+                    if (req.user && snippet.owner == req.user.username) {
+                        snippet.isOwner = true;
                     }
 
-                    retObj._id = req.params.snippetId;
-                    // get the description
-                    github.getRepo(req.params.snippetId, function (err, repo) {
-                        if (err) {
-                            return res.status(500).json({error: 'Error retrieving repository: ' + err.message});
-                        }
-                        retObj.description = repo.description;
-
-                        // get the readme
-                        github.getReadme(req.params.snippetId, function (err, readmeobj) {
-                            if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository readme: ' + err.message});
-                            }
-                            var b = new Buffer(readmeobj.content, 'base64').toString();
-                            // replace <img src="image.jpg"> with a full path to the image on github
-                            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
-                            b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
-                            retObj.readme = marked(b);
-
-                            // get display name from database
-                            db.getSnippet(req.params.snippetId, function (err, repo) {
-                                if (err) {
-                                    return res.status(500).json({error: 'Error retrieving repository from database: ' + err.message});
-                                }
-                                retObj.displayName = repo ? repo.displayName : req.params.snippetId;
-                                retObj.owner = repo ? repo.owner : "unknown";
-                                retObj.postedOn = repo ? repo.postedOn : "unknown";
-                                // determine if the current user is the owner
-                                retObj.isOwner = false;
-                                // if logged in as the admin user
-                                if(req.user && req.user.username === "pscustomdev-sss"){
-                                    retObj.isOwner = true;
-                                }
-                                if (req.user && retObj.owner == req.user.username) {
-                                    retObj.isOwner = true;
-                                }
-                                res.json(retObj);
-                            });
-
-                        });
-                    });
+                    var b = snippet.readme;
+                    // replace <img src="image.jpg"> with a full path to the image on azure
+                    var imgUrlPrefix = "https://" + authConfLocal.azure.blobStorage.name + ".blob.core.windows.net/" +req.params.snippetId + "/";
+                    b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
+                    snippet.readme = marked(b);
+                    res.json(snippet);
                 });
             });
         }
     );
 
-    // add a repo file
+    // add a snippet file
     api_routes.post('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
-            // base64 encode content
-            var content = new Buffer(req.body.content ? req.body.content : " ").toString('base64');
-            github.addRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+            req.body.content = req.body.content || " "; //we need to at least have a space as content or it won't save a file.
+            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, req.body.content, function (err, content){
                 if (err) {
                     return res.status(500).json({error: 'Error creating file: ' + err.message});
                 }
                 res.json({});
-            });
+            })
+
         }
     );
 
-    // upload and add a repo file
+    // upload and add a snippet file
     api_routes.post('/snippet-detail/:snippetId', restrict,
         function (req, res) {
-            var snippetId = req.params.snippetId;
-            req.pipe(req.busboy);
-            req.busboy.on('file', function(fieldname, file, filename) {
+            var busboy = new Busboy({ headers: req.headers });
+            busboy.on('file', function(fieldname, file, filename) {
                 var filesize = Number(req.headers['content-length']) * 2;
-                var content = new Uint8Array(filesize);
-                var offset = 0;
-                var cnt = 0;
-                // read data from file in buffers
-                file.on('data', function(data) {
-                    // only process the even number packets
-                    // I don't know why the data is sent this way from angular-file-upload
-                    if (cnt == 0 || cnt % 2 == 0) {
-                        content.set(data, offset);
-                        offset += data.length;
+                azureStorage.addUpdateFileByStream(req.params.snippetId, filename, file, filesize, function(err, result) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error creating file: ' + err.message});
                     }
-                    cnt++;
-                });
-                // once file read is complete, add the file to the snippet
-                file.on('end', function() {
-                    content = content.slice(0, offset);
-                    // base64 encode file data
-                    content = new Buffer(content).toString('base64');
-                    github.addRepoFile(req.params.snippetId, filename, content, function (err, content) {
-                        if (err) {
-                            return res.status(500).json({error: 'Error creating file: ' + err.message});
-                        }
-                        res.json({});
-                    });
+                    res.json({});
                 });
             });
+            req.pipe(busboy);
         }
     );
 
-    // update contents of a repo file
+    // update contents of a snippet file
     api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
-            // base64 encode content (if empty, save a space since github won't allow empty content)
-            var content = new Buffer(req.body.content || " ").toString('base64');
-            github.updateRepoFile(req.params.snippetId, req.params.fileName, content, function (err, content) {
+            var content =req.body.content || " ";
+            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, function (err, content){
                 if (err) {
                     return res.status(500).json({error: 'Error updating file: ' + err.message});
                 }
@@ -251,22 +175,22 @@ module.exports = function(app) {
         }
     );
 
-    // get contents of a repo file
+    // get contents of a snippet file
     api_routes.get('/snippet-detail/:snippetId/:fileName',
         function (req, res) {
-            github.getRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
+            azureStorage.getBlobToText(req.params.snippetId, req.params.fileName, function(err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving file: ' + err.message});
                 }
                 res.json(content);
-            });
+            })
         }
     );
 
-    // delete a repo file
+    // delete a snippet file
     api_routes.delete('/snippet-detail/:snippetId/:fileName', restrict,
         function (req, res) {
-            github.deleteRepoFile(req.params.snippetId, req.params.fileName, function (err, content) {
+            azureStorage.deleteFile(req.params.snippetId,req.params.fileName, function(err, content) {
                 if (err) {
                     return res.status(500).json({error: 'Error deleting file: ' + err.message});
                 }
@@ -279,8 +203,8 @@ module.exports = function(app) {
     api_routes.put('/snippet-detail/:snippetId/readme/format',
         function (req, res) {
             var b = req.body.content;
-            // replace <img src="image.jpg"> with a full path to the image on github
-            var imgUrlPrefix = "https://raw.githubusercontent.com/sss-storage/"+req.params.snippetId+"/master/";
+            // replace <img src="image.jpg"> with a full path to the image on azure
+            var imgUrlPrefix = "https://" + authConfLocal.azure.blobStorage.name + ".blob.core.windows.net/" +req.params.snippetId + "/";
             b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
 
             res.json(marked(b));
@@ -291,70 +215,78 @@ module.exports = function(app) {
     api_routes.get('/snippet-search',
         function (req, res) {
             var searchTerms = req.query.q;
-            console.log("searchTerm: " + searchTerms);
-            github.searchCode(searchTerms, function (err, repos) {
+            azureSearch.searchSnippets(searchTerms, function (err, results) {
+            // db.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
                 // this pattern is helpful if you need to make async calls within a loop
                 // but you cannot return until all async calls have completed
-                var numItems = repos.items.length;
-                var ctr = 0;
-                if (numItems == 0) {
+                if (results.length == 0) {  //no results so just return
                     return res.json({});
                 }
-                for(var i in repos.items) {
-                    (function(idx) {
-                        var repoId = repos.items[idx].repository.name;
-                        db.getSnippet(repoId, function (err, repo) {
-                            if (err) {
-                                return res.status(500).json({error: 'Error retrieving repository from database'});
-                            }
-                            repos.items[idx].repository.displayName = repo ? repo.displayName : repoId;
-                            repos.items[idx].repository.postedBy = repo ? repo.owner : "unknown";
-                            repos.items[idx].repository.postedOn = repo ? repo.postedOn : "unknown";
-                            // do not return from the function until the last db call has returned
-                            if (ctr == numItems - 1) {
-                                //combine the text matches of any duplicate results
-                                var seen = {};
-                                repos.items = repos.items.filter(function(entry) {
-                                    var previous;
 
-                                    // Have we seen this repository before?
-                                    if (seen.hasOwnProperty(entry.repository.full_name)) {
-                                        // Yes, grab it and add its text matches to it
-                                        previous = seen[entry.repository.full_name];
-                                        previous.text_matches.push(entry.text_matches[0]);
+                results.forEach(function(result){
+                    result.postedBy = result ? result.owner : "unknown";
+                    result.postedOn = result ? result.postedOn : "unknown";
+                });
 
-                                        // Don't keep this entry, we've merged it into the previous one
-                                        return false;
-                                    }
-                                    // Remember that we've seen it
-                                    seen[entry.repository.full_name] = entry;
-
-                                    // Keep this one, we'll merge any others that match into it
-                                    return true;
-                                });
-                                //reset the count
-                                repos.total_count=repos.items.length;
-                                res.json(repos);
-                            }
-                            ctr++;
-                        });
-                    })(i);
-                }
-            });
-        }
-    );
-
-    api_routes.get('/snippet-search/:repoOwner/:repoName',
-        function (req, res) {
-            github.getCommits(req.params.repoOwner, req.params.repoName, function (err, commits) {
-                if (err) {
-                    return res.status(500).json({error: 'Error getting commits: ' + err.message});
-                }
-                res.json(commits);
+                var retObj = {
+                    items: results,
+                    total_count : results.length
+                };
+                res.json(retObj);
+                // var ctr = 0;
+                // var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
+                // results.forEach(function(result){
+                //     if(!result.snippetId) {
+                //         return;
+                //     }
+                //     db.getSnippet(result.snippetId, function (err, snippet) {
+                //         if (err) {
+                //             //TODO there is a bug here...if we have two results and we error on the first we will return the status
+                //             // then the second will cause another error and try to return the status again causing a header changed error.
+                //             return res.status(500).json({error: 'Error retrieving snippet from database'});
+                //         }
+                //         gotSnippetsNum++;
+                //
+                //         result.displayName = snippet ? snippet.displayName : snippet.snippetId;
+                //         result.postedBy = snippet ? snippet.owner : "unknown";
+                //         result.postedOn = snippet ? snippet.postedOn : "unknown";
+                //         var seen = {};
+                //         results = results.filter(function(entry) {
+                //             // var previous;
+                //
+                //             //TODO merger @search.highlights instead of just having the one.
+                //             // Have we seen this snippet before?
+                //             // if (seen.hasOwnProperty(entry.snippetId)) {
+                //                 // Yes, grab it and add its text matches to it
+                //                 // previous = seen[entry.snippetId];
+                //                 // previous.text_matches.push(entry.text_matches[0]);
+                //                 //TODO make this so these aren't hardcoded values.
+                //                 // previous["@search"].highlights.description.push(entry.hightlights.description);
+                //                 // previous["@search"].highlights.readme.push(entry.hightlights.readme);
+                //                 // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
+                //
+                //                 // Don't keep this entry, we've merged it into the previous one
+                //                 // return false;
+                //             // }
+                //             // Remember that we've seen it
+                //             seen[entry.snippetId] = entry;
+                //
+                //             // Keep this one, we'll merge any others that match into it
+                //             return true;
+                //         });
+                //         if(gotSnippetsNum == results.length){
+                //             var retObj = {
+                //                 items: results,
+                //                 total_count : results.length
+                //             };
+                //             res.json(retObj);
+                //         }
+                //     });
+                // });
             });
         }
     );

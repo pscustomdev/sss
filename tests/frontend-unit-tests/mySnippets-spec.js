@@ -2,14 +2,12 @@ console.log("**** (Frontend Unit Testing [KARMA]: 'node-services-spec') ****");
 
 describe('mySnippets Controller', function() {
     var $httpBackend, createController;
-    beforeEach(module('app'));
+    beforeEach(module('app.mySnippets'));
 
     beforeEach(inject(function ($injector) {
         $httpBackend = $injector.get('$httpBackend');
         // Get hold of a scope (i.e. the root scope)
         $rootScope = $injector.get('$rootScope');
-
-        $nodeServices = $injector.get('$nodeServices');
 
         $controller = $injector.get('$controller');
         scope = $rootScope.$new();

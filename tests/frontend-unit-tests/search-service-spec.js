@@ -46,11 +46,11 @@ describe('SSS Search Service', function() {
             $httpBackend.flush();
         });
 
-        it('should return a response that includes a "highlit_fragment" attribute', function() {
+        xit('should return a response that includes a "highlit_fragment" attribute', function() {
             ($searchService.searchResults.items[0].text_matches[0].matches[0]).should.have.property('highlit_fragment');
         });
 
-        it('should return a response that includes a rating', function() {
+        xit('should return a response that includes a rating', function() {
             ($searchService.searchResults.items[0].rating).should.equal(mockRatingsResponse[0].rating);
         });
 

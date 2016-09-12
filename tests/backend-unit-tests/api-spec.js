@@ -3,7 +3,7 @@ console.log("**** (Backend Unit Testing [MOCHA]: '(REST api-spec') ****");
 
 
 var azureStorage = require('../../db/azure-storage-dao');
-var authConfLocal = require('../../auth/auth-conf-local.js');
+var authConf = require('../../auth/auth-conf.js');
 
 var db = require('../../db/mongo-dao');
 var fs = require('fs');
@@ -557,7 +557,7 @@ describe("REST API Tests", function() {
                 res.should.have.status(200);
                 res.body.should.match(/\<h1.*/);
                 //we will check to see if it rewrote the img url and added sssblog.  We might want to enhance this a bit.
-                res.body.should.contain(authConfLocal.azure.blobStorage.name);
+                res.body.should.contain(authConf.azure.blobStorage.name);
                 done();
             });
     });

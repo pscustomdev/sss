@@ -233,7 +233,7 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
-                // get display name from the database for each hit
+
                 if (!results || results.length == 0) {  //no results so just return
                     return res.json({});
                 }

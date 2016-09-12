@@ -59,7 +59,7 @@
 
         // get all snippets by owner
         function getSnippetsByOwner(owner) {
-            return $http.get('/api/snippets/' + owner)
+            return $http.get('/api/snippets?owner=' + owner)
                 .then(function(response) {
                         return response.data;
                     },

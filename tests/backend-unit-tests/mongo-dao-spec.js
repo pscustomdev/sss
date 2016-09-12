@@ -26,11 +26,13 @@ describe("Mongo Dao", function() {
             return;
         }
         //cleanup fake user
-        db.removeAllUsers(function (err, data) {
-            db.removeAllSnippets(function(err, result){
-                db.removeAllRatings(function (err, result) {
-                    if (err) console.log(err);
-                    done();
+        db.removeUser(fakeUser, function (err, data) {
+            db.removeSnippet(fakeSnippet._id, function(err, result){
+                db.removeSnippet(fakeSnippet2._id, function(err, result){
+                    db.removeAllRatings(function (err, result) {
+                        if (err) console.log(err);
+                        done();
+                    });
                 });
             });
         });

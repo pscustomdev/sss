@@ -93,8 +93,8 @@ exports.getSnippet = function (id, next) {
     );
 };
 
-exports.getSnippets = function (owner, next) {
-    db.collection('snippets').find().sort({displayName: -1}).toArray(function (err, results) {
+exports.getSnippets = function (snippetIds, next) {
+    db.collection('snippets').find({snippetId: {$in: snippetIds}}).toArray(function (err, results) {
         if (results && results[0]) {
             next(err, results);
         } else {

@@ -17,10 +17,11 @@ module.exports = function(app) {
 
     var textParser = bodyParser.text();
 
-    // get a list of all snippets
-    api_routes.get('/snippets',
+    // get a list of all snippets with these ids
+    api_routes.get('/snippets/:snippetIds',
         function (req, res) {
-            db.getSnippets(req.params.owner, function(err, results){
+            var sIds = decodeURIComponent(req.params.snippetIds).split(",");
+            db.getSnippets(sIds, function(err, results){
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
@@ -29,9 +30,22 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippets/:owner',
+    //Get snippets by owner (we might want to make this more generic so they could get snippets by any attr)
+    api_routes.get('/snippets',
         function (req, res) {
-            db.getSnippetsByOwner(req.params.owner, function(err, results){
+            db.getSnippetsByOwner(req.query.owner, function(err, results){
+                if (err) {
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                }
+                res.json(results);
+            })
+        }
+    );
+
+    //Get snippets by owner
+    api_routes.get('/snippets',
+        function (req, res) {
+            db.getSnippetsByOwner(req.query.owner, function(err, results){
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
                 }
@@ -216,80 +230,59 @@ module.exports = function(app) {
         function (req, res) {
             var searchTerms = req.query.q;
             azureSearch.searchSnippets(searchTerms, function (err, results) {
-            // db.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + err.message});
                 }
                 // get display name from the database for each hit
-                // this pattern is helpful if you need to make async calls within a loop
-                // but you cannot return until all async calls have completed
-                if (results.length == 0) {  //no results so just return
+                if (!results || results.length == 0) {  //no results so just return
                     return res.json({});
                 }
 
-                results.forEach(function(result){
-                    result.postedBy = result ? result.owner : "unknown";
-                    result.postedOn = result ? result.postedOn : "unknown";
+                //Get a list of all the snippets who don't have a displayname
+                var noDisplayNames = _.filter(results, function(snippet){
+                    return !snippet.displayName
                 });
 
-                var retObj = {
-                    items: results,
-                    total_count : results.length
-                };
-                res.json(retObj);
-                // var ctr = 0;
-                // var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
-                // results.forEach(function(result){
-                //     if(!result.snippetId) {
-                //         return;
-                //     }
-                //     db.getSnippet(result.snippetId, function (err, snippet) {
-                //         if (err) {
-                //             //TODO there is a bug here...if we have two results and we error on the first we will return the status
-                //             // then the second will cause another error and try to return the status again causing a header changed error.
-                //             return res.status(500).json({error: 'Error retrieving snippet from database'});
-                //         }
-                //         gotSnippetsNum++;
-                //
-                //         result.displayName = snippet ? snippet.displayName : snippet.snippetId;
-                //         result.postedBy = snippet ? snippet.owner : "unknown";
-                //         result.postedOn = snippet ? snippet.postedOn : "unknown";
-                //         var seen = {};
-                //         results = results.filter(function(entry) {
-                //             // var previous;
-                //
-                //             //TODO merger @search.highlights instead of just having the one.
-                //             // Have we seen this snippet before?
-                //             // if (seen.hasOwnProperty(entry.snippetId)) {
-                //                 // Yes, grab it and add its text matches to it
-                //                 // previous = seen[entry.snippetId];
-                //                 // previous.text_matches.push(entry.text_matches[0]);
-                //                 //TODO make this so these aren't hardcoded values.
-                //                 // previous["@search"].highlights.description.push(entry.hightlights.description);
-                //                 // previous["@search"].highlights.readme.push(entry.hightlights.readme);
-                //                 // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
-                //
-                //                 // Don't keep this entry, we've merged it into the previous one
-                //                 // return false;
-                //             // }
-                //             // Remember that we've seen it
-                //             seen[entry.snippetId] = entry;
-                //
-                //             // Keep this one, we'll merge any others that match into it
-                //             return true;
-                //         });
-                //         if(gotSnippetsNum == results.length){
-                //             var retObj = {
-                //                 items: results,
-                //                 total_count : results.length
-                //             };
-                //             res.json(retObj);
-                //         }
-                //     });
-                // });
+               var snippetIdsWithoutDisplayName =  _.pluck(noDisplayNames, 'snippetId');
+
+                if(snippetIdsWithoutDisplayName) {
+                    //Get all the snippets from the db so we can get the display names
+                    db.getSnippets(snippetIdsWithoutDisplayName, function (err, snippets) {
+                        //TODO
+                        //Go through each of the snippets that don't have a display name and add the displayName to them.
+                        _.each(results, function (s, i) {
+                            if(s && !s.displayName) {
+                                var found = _.findWhere(snippets, {snippetId:s.snippetId});
+                                if (found){
+                                    s.displayName = found.displayName || found.snippetId;
+                                } else {
+                                    //This should never happen but if it does we don't want to display the file in the
+                                    // search results since it doesn't have a snippet with it. So we delete it.
+                                    results.splice(i, 1);
+                                }
+                            }
+                        });
+                        returnSnippetSearch(res, results);
+                    });
+                }  else {
+                    returnSnippetSearch(res, results);
+                }
             });
         }
     );
+
+    function returnSnippetSearch(res, results) {
+        results.forEach(function(result){
+            result.postedBy = result ? result.owner : "unknown";
+            result.postedOn = result ? result.postedOn : "unknown";
+        });
+
+        var retObj = {
+            items: results,
+            total_count : results.length
+        };
+        res.json(retObj);
+    }
 
     api_routes.get('/rating/:snippetId',
         function (req, res) {

@@ -48,9 +48,9 @@ describe('SSS Node Services', function() {
         $nodeServices.getCurrentUser();
     });
 
-    it('getSnippetsByOwner() should call api/snippets/:owner GET', function() {
+    it('getSnippetsByOwner() should call api/snippets?owner=owner GET', function() {
         var owner = "owner";
-        $httpBackend.expectGET('/api/snippets/' + owner).respond();
+        $httpBackend.expectGET('/api/snippets?owner=' + owner).respond();
         $nodeServices.getSnippetsByOwner(owner);
     });
 

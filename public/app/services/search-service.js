@@ -52,6 +52,12 @@
                 vm.searchTerms = searchTerms;
 
                 $nodeServices.searchCode(searchTerms).then(function (response) {
+                    //None found
+                    if(!response) {
+                        vm.searchResults.inProgress = false;
+                        vm.pagination.totalItems = 0;
+                        return;
+                    }
                      //filter out all the data type and the display Name since we don't want to show those on the UI.
                     _.each(response.items, function(r){
                         var newArray = [];
@@ -73,9 +79,7 @@
 
                     vm.userSearched = true;
                     vm.searchResults.items = response.items;
-                    if (!response.total_count) {
-                        vm.searchResults.total_count = 0;
-                    }
+                    vm.searchResults.total_count = response.items.length;
                     vm.searchResults.inProgress = false;
                     vm.pagination.totalItems = vm.searchResults.total_count;
                     updateMetaData(vm.searchResults.items);

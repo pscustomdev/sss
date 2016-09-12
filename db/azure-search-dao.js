@@ -46,7 +46,7 @@ exports.searchSnippets = function (searchTerms, next) {
                 //Get all the snippets from the db so we can get the display names
                 db.getSnippets(snippetIdsWithoutDisplayName, function (err, snippets) {
                     if(err) {
-                        return next(err, "");
+                        return next(err, []);
                     }
 
                     //Go through each of the snippets that don't have a display name and add the displayName to them.

@@ -1,5 +1,6 @@
 var auth_config = require('../auth/auth-conf');
 var request = require('request');
+var db = require('../db/mongo-dao');
 var _ = require('underscore');
 
 var azureSearchUrl = auth_config.azure.search.url;
@@ -34,7 +35,38 @@ exports.searchSnippets = function (searchTerms, next) {
                     snippetResults.push(fileResult)
                 }
             });
-            next(err, snippetResults);
+            //Get a list of all the snippets who don't have a displayname
+            var noDisplayNames = _.filter(snippetResults, function(snippet){
+                return !snippet.displayName
+            });
+
+            var snippetIdsWithoutDisplayName =  _.pluck(noDisplayNames, 'snippetId');
+
+            if(snippetIdsWithoutDisplayName) {
+                //Get all the snippets from the db so we can get the display names
+                db.getSnippets(snippetIdsWithoutDisplayName, function (err, snippets) {
+                    if(err) {
+                        return next(err, "");
+                    }
+
+                    //Go through each of the snippets that don't have a display name and add the displayName to them.
+                    _.each(snippetResults, function (s, i) {
+                        if(s && !s.displayName) {
+                            var found = _.findWhere(snippets, {snippetId:s.snippetId});
+                            if (found){
+                                s.displayName = found.displayName || found.snippetId;
+                            } else {
+                                //This should never happen but if it does we don't want to display the file in the
+                                // search results since it doesn't have a snippet with it. So we delete it.
+                                snippetResults.splice(i, 1);
+                            }
+                        }
+                    });
+                    next(err, snippetResults);
+                });
+            } else {
+                next(err, snippetResults);
+            }
         })
     })
 };

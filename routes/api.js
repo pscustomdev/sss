@@ -238,51 +238,19 @@ module.exports = function(app) {
                     return res.json({});
                 }
 
-                //Get a list of all the snippets who don't have a displayname
-                var noDisplayNames = _.filter(results, function(snippet){
-                    return !snippet.displayName
+                results.forEach(function(result){
+                    result.postedBy = result ? result.owner : "unknown";
+                    result.postedOn = result ? result.postedOn : "unknown";
                 });
 
-               var snippetIdsWithoutDisplayName =  _.pluck(noDisplayNames, 'snippetId');
-
-                if(snippetIdsWithoutDisplayName) {
-                    //Get all the snippets from the db so we can get the display names
-                    db.getSnippets(snippetIdsWithoutDisplayName, function (err, snippets) {
-                        //TODO
-                        //Go through each of the snippets that don't have a display name and add the displayName to them.
-                        _.each(results, function (s, i) {
-                            if(s && !s.displayName) {
-                                var found = _.findWhere(snippets, {snippetId:s.snippetId});
-                                if (found){
-                                    s.displayName = found.displayName || found.snippetId;
-                                } else {
-                                    //This should never happen but if it does we don't want to display the file in the
-                                    // search results since it doesn't have a snippet with it. So we delete it.
-                                    results.splice(i, 1);
-                                }
-                            }
-                        });
-                        returnSnippetSearch(res, results);
-                    });
-                }  else {
-                    returnSnippetSearch(res, results);
-                }
+                var retObj = {
+                    items: results,
+                    total_count : results.length
+                };
+                res.json(retObj);
             });
         }
     );
-
-    function returnSnippetSearch(res, results) {
-        results.forEach(function(result){
-            result.postedBy = result ? result.owner : "unknown";
-            result.postedOn = result ? result.postedOn : "unknown";
-        });
-
-        var retObj = {
-            items: results,
-            total_count : results.length
-        };
-        res.json(retObj);
-    }
 
     api_routes.get('/rating/:snippetId',
         function (req, res) {

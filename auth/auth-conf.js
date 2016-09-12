@@ -18,7 +18,7 @@ var googleCallbackUrl = "";
 var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.AzureBlobStorageKey : authConfLocal.azure.blobStorage.key;
 var azureBlobStorageName =  (process.env.AzureBlobStorageName) ? process.env.AzureBlobStorageName : authConfLocal.azure.blobStorage.name;
 var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
-var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.Url;
+var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.url;
 
 //MONGO
 var mongoUri = (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
@@ -54,7 +54,7 @@ module.exports = {
         },
         search: {
             key: azureSearchKey,
-            Url: azureSearchUrl
+            url: azureSearchUrl
         }
     }
 };

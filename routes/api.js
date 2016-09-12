@@ -214,7 +214,7 @@ module.exports = function(app) {
     );
 
     // return html given some marked-down readme content
-    api_routes.put('/snippet-detail/:snippetId/readme/format',
+    api_routes.put('/snippet-detail/:snippetId/readme/format', restrict,
         function (req, res) {
             var b = req.body.content;
             // replace <img src="image.jpg"> with a full path to the image on azure
@@ -282,7 +282,7 @@ module.exports = function(app) {
     );
 
     // create or update snippet rating (POST)
-    api_routes.post('/rating/:snippetId',
+    api_routes.post('/rating/:snippetId', restrict,
         function (req, res) {
             db.addUpdateSnippetRating(req.body, function (err) {
                 if (err) {

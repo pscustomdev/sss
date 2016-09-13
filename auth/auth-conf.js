@@ -21,7 +21,13 @@ var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey 
 var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.url;
 
 //MONGO
+//This is for DEV
 var mongoUri = (process.env.MongoUri) ? process.env.MongoUri : authConfLocal.mongo.uri;
+
+//Won't use authConfLocal for anything but dev so we don't tax azure too much except to test or prod.
+if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
+    mongoUri = process.env.MongoUri;
+}
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
     githubCallbackUrl = "http://www.softwaresnippetsearch.com/auth/github/callback";

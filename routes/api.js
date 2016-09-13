@@ -214,7 +214,7 @@ module.exports = function(app) {
     );
 
     // return html given some marked-down readme content
-    api_routes.put('/snippet-detail/:snippetId/readme/format', restrict,
+    api_routes.put('/snippet-detail/:snippetId/readme/format',
         function (req, res) {
             var b = req.body.content;
             // replace <img src="image.jpg"> with a full path to the image on azure

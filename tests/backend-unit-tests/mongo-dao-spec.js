@@ -26,7 +26,7 @@ describe("Mongo Dao", function() {
             return;
         }
         //cleanup fake user
-        db.removeAllUsers(function (err, data) {
+        db.removeUser(fakeUser, function (err, data) {
             db.removeAllSnippets(function(err, result){
                 db.removeAllRatings(function (err, result) {
                     if (err) console.log(err);

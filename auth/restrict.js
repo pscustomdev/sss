@@ -4,7 +4,12 @@ module.exports = function(req, res, next) {
     if (req.isAuthenticated()) {
 
         //if add then we don't need to check for the owner
-        if(req.url === "/snippet" && req.method==="POST") {
+        if(req.url === "/snippet" && req.method === "POST") {
+            return next();
+        }
+
+        //If we are Posting a rating we don't need to be the owner.
+        if(req.url.startsWith("/rating") && req.method === "POST") {
             return next();
         }
 

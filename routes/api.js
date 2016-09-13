@@ -225,56 +225,6 @@ module.exports = function(app) {
                     total_count : results.length
                 };
                 res.json(retObj);
-                // var ctr = 0;
-                // var gotSnippetsNum = 0; //Used to tell if we got all the snippets from the db;
-                // results.forEach(function(result){
-                //     if(!result.snippetId) {
-                //         return;
-                //     }
-                //     db.getSnippet(result.snippetId, function (err, snippet) {
-                //         if (err) {
-                //             //TODO there is a bug here...if we have two results and we error on the first we will return the status
-                //             // then the second will cause another error and try to return the status again causing a header changed error.
-                //             return res.status(500).json({error: 'Error retrieving snippet from database'});
-                //         }
-                //         gotSnippetsNum++;
-                //
-                //         result.displayName = snippet ? snippet.displayName : snippet.snippetId;
-                //         result.postedBy = snippet ? snippet.owner : "unknown";
-                //         result.postedOn = snippet ? snippet.postedOn : "unknown";
-                //         var seen = {};
-                //         results = results.filter(function(entry) {
-                //             // var previous;
-                //
-                //             //TODO merger @search.highlights instead of just having the one.
-                //             // Have we seen this snippet before?
-                //             // if (seen.hasOwnProperty(entry.snippetId)) {
-                //                 // Yes, grab it and add its text matches to it
-                //                 // previous = seen[entry.snippetId];
-                //                 // previous.text_matches.push(entry.text_matches[0]);
-                //                 //TODO make this so these aren't hardcoded values.
-                //                 // previous["@search"].highlights.description.push(entry.hightlights.description);
-                //                 // previous["@search"].highlights.readme.push(entry.hightlights.readme);
-                //                 // previous["@search"].highlights.displayName.push(entry.hightlights.displayName);
-                //
-                //                 // Don't keep this entry, we've merged it into the previous one
-                //                 // return false;
-                //             // }
-                //             // Remember that we've seen it
-                //             seen[entry.snippetId] = entry;
-                //
-                //             // Keep this one, we'll merge any others that match into it
-                //             return true;
-                //         });
-                //         if(gotSnippetsNum == results.length){
-                //             var retObj = {
-                //                 items: results,
-                //                 total_count : results.length
-                //             };
-                //             res.json(retObj);
-                //         }
-                //     });
-                // });
             });
         }
     );

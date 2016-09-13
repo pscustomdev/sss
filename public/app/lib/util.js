@@ -72,3 +72,12 @@ $(document).ready(function() {
     });
 });
 
+
+var formatReadme = function (text) {
+    var b = marked(text);
+    // replace <img src="image.jpg"> with a full path to the image on azure
+    //TODO How do we make this change to the azure test server when we are in testing env?
+    var imgUrlPrefix = "https://sssblob.blob.core.windows.net/" +req.params.snippetId + "/";
+    b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
+    return b;
+}

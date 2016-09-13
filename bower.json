@@ -24,7 +24,8 @@
     "underscore": "~1.8.3",
     "bootstrap-social": "~5.0.0",
     "angular-rating-yo": "~1.0.0",
-    "angular-utils-disqus": "~1.0.0"
+    "angular-utils-disqus": "~1.0.0",
+    "marked": "~0.3.6"
   },
   "overrides": {
     "ace-builds": {

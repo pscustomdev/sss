@@ -17,6 +17,7 @@ var googleCallbackUrl = "";
 //AZURE
 var azureBlobStorageKey =  (process.env.AzureBlobStorageKey) ? process.env.AzureBlobStorageKey : authConfLocal.azure.blobStorage.key;
 var azureBlobStorageName =  (process.env.AzureBlobStorageName) ? process.env.AzureBlobStorageName : authConfLocal.azure.blobStorage.name;
+var azureBlobStorageUrl =  (process.env.AzureBlobStorageUrl) ? process.env.AzureBlobStorageUrl : authConfLocal.azure.blobStorage.url;
 var azureSearchKey =  (process.env.AzureSearchKey) ? process.env.AzureSearchKey : authConfLocal.azure.search.key;
 var azureSearchUrl =  (process.env.AzureSearchUrl) ? process.env.AzureSearchUrl : authConfLocal.azure.search.Url;
 
@@ -50,7 +51,8 @@ module.exports = {
     azure: {
         blobStorage: {
             key: azureBlobStorageKey,
-            name: azureBlobStorageName
+            name: azureBlobStorageName,
+            url: azureBlobStorageUrl
         },
         search: {
             key: azureSearchKey,

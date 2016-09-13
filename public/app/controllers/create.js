@@ -63,11 +63,7 @@
         // format the marked down readme to html for preview
         $scope.formatReadme = function() {
             $scope.formData.readme = $scope.formData.readme || "";
-            $nodeServices.formatReadme({content: $scope.formData.readme}).then(
-                function(data) {
-                    $scope.formData.formattedReadme = data.data;
-                }
-            );
+            $scope.formData.formattedReadme = formatReadme($scope.formData.readme);
         }
     }
 }());

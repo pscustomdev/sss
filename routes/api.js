@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var authConfLocal = require('../auth/auth-conf-local.js');
+var authConf = require('../auth/auth-conf.js');
 
 // Routes starting with "/api"
 module.exports = function(app) {
@@ -122,7 +122,7 @@ module.exports = function(app) {
 
                     var b = snippet.readme;
                     // replace <img src="image.jpg"> with a full path to the image on azure
-                    var imgUrlPrefix = "https://" + authConfLocal.azure.blobStorage.name + ".blob.core.windows.net/" +req.params.snippetId + "/";
+                    var imgUrlPrefix = authConf.azure.blobStorage.url + req.params.snippetId + "/";
                     b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
                     snippet.readme = marked(b);
                     res.json(snippet);
@@ -196,18 +196,6 @@ module.exports = function(app) {
                 }
                 res.json(content);
             });
-        }
-    );
-
-    // return html given some marked-down readme content
-    api_routes.put('/snippet-detail/:snippetId/readme/format',
-        function (req, res) {
-            var b = req.body.content;
-            // replace <img src="image.jpg"> with a full path to the image on azure
-            var imgUrlPrefix = "https://" + authConfLocal.azure.blobStorage.name + ".blob.core.windows.net/" +req.params.snippetId + "/";
-            b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
-
-            res.json(marked(b));
         }
     );
 

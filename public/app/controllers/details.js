@@ -106,7 +106,8 @@
 
         // format the marked down readme to html for preview
         $scope.formatReadme = function() {
-            $scope.formattedReadme = formatReadme($scope.content);
+            var content = marked($scope.content);
+            $scope.formattedReadme = replaceImageTag(content);
         }
 
     }

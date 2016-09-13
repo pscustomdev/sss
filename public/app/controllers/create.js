@@ -63,7 +63,8 @@
         // format the marked down readme to html for preview
         $scope.formatReadme = function() {
             $scope.formData.readme = $scope.formData.readme || "";
-            $scope.formData.formattedReadme = formatReadme($scope.formData.readme);
+            var content = marked($scope.formData.readme);
+            $scope.formData.formattedReadme = replaceImageTag(content);
         }
     }
 }());

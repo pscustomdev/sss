@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'xeditable', 'angularFileUpload'])
+    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'app.$searchService', 'xeditable', 'angularFileUpload', 'ui.ace'])
         .config(['$stateProvider', StateProvider])
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', 'editableOptions', 'FileUploader'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', '$searchService', 'editableOptions', 'FileUploader'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,12 +20,16 @@
         });
     }
 
-    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions, FileUploader) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, $searchService, editableOptions, FileUploader) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.snippetOverview = {};
         $scope.snippetOverview.isOwner = false;
         $scope.fileContent = "";
+        $scope.content = "";
+        $scope.origContent = "";
         $scope.confirmDelete = false;
+        $scope.editReadme = true;
+
         $scope.avgRatingOptions = {
             ratedFill: '#337ab7',
             readOnly: true,
@@ -70,6 +74,17 @@
             }
         };
 
+        $scope.aceLoaded = function(_editor){
+            var _session = _editor.getSession();
+            var _renderer = _editor.renderer;
+
+            _session.setMode('ace/mode/markdown');
+            _session.setUndoManager(new ace.UndoManager());
+
+            // height adjusted dynamically in util.js
+            $(window).resize();
+        };
+
         editableOptions.theme = 'bs3';
         var count = 0;
 
@@ -90,6 +105,9 @@
                             },1500);
                         } else {
                             $scope.snippetOverview = overview;
+                            $scope.content = overview.readme;
+                            $scope.origContent = overview.readme;
+                            $scope.formattedReadme = formatReadme(overview.readme);
                         }
                     }
                 );
@@ -142,6 +160,38 @@
             });
         };
 
+        $scope.saveReadme = function() {
+            // if not modified, no need to save
+            if ($scope.content == $scope.origContent) {
+                // $state.go(overviewPage, {});
+                $scope.editReadme = false;
+            } else {
+                alert("save readme");
+                $scope.editReadme = false;
+            }
+            // $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
+            //     function() {
+            //         $state.go(overviewPage, {});
+            //     }
+            // )
+        };
+
+        $scope.cancelEdit = function() {
+            // if data has been modified, verify cancel
+            if ($scope.content != $scope.origContent) {
+                // display modal to confim cancel
+                $scope.confirmCancel = false;
+                $("#cancelEditModal").modal();
+                $("#cancelEditModal").on('hidden.bs.modal', function() {
+                    if ($scope.confirmCancel) {
+                        $scope.editReadme = false;
+                    }
+                });
+            } else {
+                $scope.editReadme = false;
+            }
+        };
+
         // focus the input field when the new file dialog is shown
         $("#fileNameModal").on('shown.bs.modal', function() {
             $("#newFileName").focus();
@@ -157,5 +207,10 @@
             $state.reload();
         };
 
+        // format the marked down readme to html for preview
+        var formatReadme = function(content) {
+            content = marked(content);
+            return content;
+        }
     }
 }());

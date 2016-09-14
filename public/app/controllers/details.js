@@ -56,6 +56,8 @@
             var _renderer = _editor.renderer;
 
             // autodetect file type by extension
+            //TODO there is a problem here if there isn't a file extension.  We should assume txt or something in that case.
+
             var fileComps = ($scope.fileName ? $scope.fileName.toLowerCase().split(".") : ['txt']);
             var mode = fileComps[fileComps.length - 1];
             switch (mode) {

@@ -120,11 +120,6 @@ module.exports = function(app) {
                         snippet.isOwner = true;
                     }
 
-                    var b = snippet.readme;
-                    // replace <img src="image.jpg"> with a full path to the image on azure
-                    var imgUrlPrefix = authConf.azure.blobStorage.url + req.params.snippetId + "/";
-                    b = b.replace(/<img src=\"/g,"<img src=\"" + imgUrlPrefix);
-                    snippet.readme = marked(b);
                     res.json(snippet);
                 });
             });

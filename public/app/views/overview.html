@@ -46,8 +46,8 @@
             </ul>
         </div>
         <div class="panel panel-info">
-            <div class="panel-heading">ReadMe
-                <span ng-show="snippetOverview.isOwner && editReadme == false" ng-click='editReadme = true;redrawAce()' class="glyphicon glyphicon-pencil pull-right" title="Edit Readme" style="color:darkblue; cursor:pointer;"></span>
+            <div class="panel-heading"><span role="button" ng-click="editReadme = true;redrawAce()">ReadMe</span>
+                <span ng-show="snippetOverview.isOwner && editReadme == false" ng-click='editReadme = true;redrawAce()' role="button" class="glyphicon glyphicon-pencil pull-right" title="Edit Readme" style="color:darkblue;"></span>
             </div>
             <div ng-show="!editReadme" class="panel-body" ng-bind-html="formattedReadme"></div>
 

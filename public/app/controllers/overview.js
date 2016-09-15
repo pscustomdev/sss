@@ -166,6 +166,10 @@
             });
         };
 
+        $scope.formatReadmeForPreview = function() {
+            $scope.formattedReadme = formatReadme($scope.readme);
+        };
+
         $scope.saveReadme = function() {
             // if not modified, no need to save
             if ($scope.readme == $scope.origReadme) {
@@ -188,6 +192,8 @@
                 $("#cancelEditModal").on('hidden.bs.modal', function() {
                     if ($scope.confirmCancel) {
                         $scope.editReadme = false;
+                        $scope.formattedReadme = formatReadme($scope.origReadme);
+                        $scope.readme = $scope.origReadme;
                         $scope.$apply();
                     }
                 });

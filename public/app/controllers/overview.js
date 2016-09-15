@@ -25,10 +25,10 @@
         $scope.snippetOverview = {};
         $scope.snippetOverview.isOwner = false;
         $scope.fileContent = "";
-        $scope.content = "";
-        $scope.origContent = "";
+        $scope.readme = "";
+        $scope.origReadme = "";
         $scope.confirmDelete = false;
-        $scope.editReadme = true;
+        $scope.editReadme = false;
 
         $scope.avgRatingOptions = {
             ratedFill: '#337ab7',
@@ -83,6 +83,12 @@
 
             // height adjusted dynamically in util.js
             $(window).resize();
+
+            //This has to happen otherwise ACE won't show the content since we were at an ng-hide when it was first rendered
+            $scope.redrawAce = function() {
+                _editor.resize();
+                _editor.renderer.updateFull()
+            };
         };
 
         editableOptions.theme = 'bs3';
@@ -105,8 +111,8 @@
                             },1500);
                         } else {
                             $scope.snippetOverview = overview;
-                            $scope.content = overview.readme;
-                            $scope.origContent = overview.readme;
+                            $scope.readme = overview.readme;
+                            $scope.origReadme = overview.readme;
                             $scope.formattedReadme = formatReadme(overview.readme);
                         }
                     }
@@ -124,10 +130,10 @@
             )
         };
 
-        // update the display name and description
+
+        // update the display name, readme and description
         $scope.updateSnippet = function() {
             $scope.snippetOverview.owner = $rootScope.currentUser.username;
-            //TODO update my rating here.
             $nodeServices.updateSnippet($scope.snippetOverview).then (
                 function() {}
             )
@@ -162,29 +168,27 @@
 
         $scope.saveReadme = function() {
             // if not modified, no need to save
-            if ($scope.content == $scope.origContent) {
+            if ($scope.readme == $scope.origReadme) {
                 // $state.go(overviewPage, {});
                 $scope.editReadme = false;
             } else {
-                alert("save readme");
+                $scope.origReadme = $scope.readme;
+                $scope.updateSnippet();
+                $scope.formattedReadme = formatReadme($scope.readme);
                 $scope.editReadme = false;
             }
-            // $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
-            //     function() {
-            //         $state.go(overviewPage, {});
-            //     }
-            // )
         };
 
         $scope.cancelEdit = function() {
             // if data has been modified, verify cancel
-            if ($scope.content != $scope.origContent) {
+            if ($scope.readme != $scope.origReadme) {
                 // display modal to confim cancel
                 $scope.confirmCancel = false;
                 $("#cancelEditModal").modal();
                 $("#cancelEditModal").on('hidden.bs.modal', function() {
                     if ($scope.confirmCancel) {
                         $scope.editReadme = false;
+                        $scope.$apply();
                     }
                 });
             } else {

@@ -47,13 +47,11 @@
         </div>
         <div class="panel panel-info">
             <div class="panel-heading">ReadMe
-                <span ng-show="snippetOverview.isOwner && editReadme == false" ng-click='editReadme = true' class="glyphicon glyphicon-pencil pull-right" title="Edit Readme" style="color:darkblue; cursor:pointer;"></span>
+                <span ng-show="snippetOverview.isOwner && editReadme == false" ng-click='editReadme = true;redrawAce()' class="glyphicon glyphicon-pencil pull-right" title="Edit Readme" style="color:darkblue; cursor:pointer;"></span>
             </div>
             <div ng-show="!editReadme" class="panel-body" ng-bind-html="formattedReadme"></div>
 
-            <!--This has to use ng-if or the ace editor doesn't render correctly-->
-            <!--<div ng-if="editReadme">-->
-            <div ng-if="editReadme">
+            <div ng-show="editReadme">
                 <ul class="nav nav-tabs">
                     <li class="nav active">
                         <a data-target="#create_readme_ace" data-toggle="tab">Edit</a>
@@ -63,8 +61,8 @@
                     <!--</li>-->
                 </ul>
                 <div class="tab-content">
-                    <div id="create_readme_ace" class="edit_readme tab-pane fade in active" ui-ace ="{ onLoad:aceLoaded }" ng-model="content"></div>
-                    <!--<div id="create_readme_pre" class="create_readme tab-pane fade well" style="overflow: auto; background: rgb(255,255,255); " ng-bind-html="$searchService.trustHtmlSnippet(formattedReadme)"></div>-->
+                    <div id="create_readme_ace" class="edit_readme tab-pane fade in active" ui-ace ="{ onLoad:aceLoaded }" ng-model="readme"></div>
+                    <div id="create_readme_pre" class="create_readme tab-pane fade well" style="overflow: auto; background: rgb(255,255,255); " ng-bind-html="$searchService.trustHtmlSnippet(formattedReadme)"></div>
                 </div>
             </div>
             <!-- lower set of buttons -->

@@ -1,5 +1,8 @@
 var cfg = require('../config.js');
-var authConfLocal = require('../auth/auth-conf-local.js');
+var authConfLocal = "";
+if (process.env.NODE_ENV != 'production' && process.env.NODE_ENV != 'testing') {
+    authConfLocal = require('../auth/auth-conf-local.js');
+}
 
 //Take environment variables first and if that doesn't work then go local.
 

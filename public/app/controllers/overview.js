@@ -219,7 +219,7 @@
 
         // format the marked down readme to html for preview
         var formatReadme = function(content) {
-            content = marked(content);
+            content = marked(content || '');
             return content;
         }
     }

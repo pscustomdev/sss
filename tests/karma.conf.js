@@ -23,6 +23,7 @@ module.exports = function(config) {
       'public/bower/angular-file-upload/dist/angular-file-upload.js',
       'public/bower/ace-builds/src-min-noconflict/ace.js',
       'public/bower/angular-ui-ace/ui-ace.min.js',
+      'public/bower/marked/lib/marked.js',
 
       // Libs Needed for testing and they need to be after the dependent libs or you'll get an error
       'node_modules/chai/chai.js',

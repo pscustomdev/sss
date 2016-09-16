@@ -10,7 +10,7 @@ module.exports = function() {
     passport.use(new GithubStrategy({
             clientID: auth_conf.github.clientID,
             clientSecret: auth_conf.github.clientSecret,
-            callbackURL: auth_conf.github.callbackURL
+            callbackURL: auth_conf.github.callbackUrl
         },
         function(accessToken, refreshToken, profile, done) {
             db.findUser({ id: profile.id }, function(err, user) {
@@ -35,7 +35,7 @@ module.exports = function() {
 
             clientID        : auth_conf.google.clientID,
             clientSecret    : auth_conf.google.clientSecret,
-            callbackURL     : auth_conf.google.callbackURL,
+            callbackURL     : auth_conf.google.callbackUrl,
 
         },
         function(token, refreshToken, profile, done) {

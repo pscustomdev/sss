@@ -42,18 +42,6 @@ module.exports = function(app) {
         }
     );
 
-    //Get snippets by owner
-    api_routes.get('/snippets',
-        function (req, res) {
-            db.getSnippetsByOwner(req.query.owner, function(err, results){
-                if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
-                }
-                res.json(results);
-            })
-        }
-    );
-
     // get information about a snippet
     api_routes.get('/snippet/:snippetId',
        function (req, res) {

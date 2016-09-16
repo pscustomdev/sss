@@ -62,14 +62,13 @@ exports.findUser = function (id, next) {
 };
 
 exports.addUpdateSnippet = function (snippet, next) {
-    var readmeContent = "# " + snippet.displayName + "\n" + snippet.readme;
     db.collection("snippets").update({snippetId: snippet._id}, {
             snippetId: snippet._id,
             owner: snippet.owner,
             displayName: snippet.displayName,
             postedOn: Date.now(),
             description: snippet.description,
-            readme: readmeContent
+            readme: snippet.readme
         }, {upsert: true},
         function (err, object) {
             if (err) {

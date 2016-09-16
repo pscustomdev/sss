@@ -37,8 +37,15 @@
 
         $scope.createSnippet = function() {
             var uuid = generateUUID();
+            var snippet = {
+                _id: uuid,
+                displayName: $scope.formData.displayName,
+                description: $scope.formData.description,
+                owner: $rootScope.currentUser.username,
+                readme: $scope.formData.readme
+            };
 
-            $nodeServices.addSnippet({_id: uuid, displayName: $scope.formData.displayName, description: $scope.formData.description, owner: $rootScope.currentUser.username, readme: $scope.formData.readme}).then(
+            $nodeServices.addSnippet(snippet).then(
                 function () {
                     $state.go('search.results.overview', { snippetId: uuid});
                 }
@@ -63,11 +70,8 @@
         // format the marked down readme to html for preview
         $scope.formatReadme = function() {
             $scope.formData.readme = $scope.formData.readme || "";
-            $nodeServices.formatReadme({content: $scope.formData.readme}).then(
-                function(data) {
-                    $scope.formData.formattedReadme = data.data;
-                }
-            );
+            var content = marked($scope.formData.readme);
+            $scope.formData.formattedReadme = replaceImageTag(content);
         }
     }
 }());

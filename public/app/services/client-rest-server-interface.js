@@ -25,7 +25,6 @@
             addFile: addFile,
             updateFile: updateFile,
             deleteFile: deleteFile,
-            formatReadme: formatReadme
         };
 
         //Make sure to add the function into the return statement.
@@ -189,20 +188,6 @@
             return $http.delete('/api/snippet-detail/' + snippetId + "/" + fileName)
                 .then(function(response) {
                         return response.data;
-                    },
-                    function(reason) {
-                        $log.debug(JSON.stringify(reason));
-                    })
-                .catch(function(err) {
-                    $log.debug(JSON.stringify(err));
-                });
-        }
-
-        // format the marked-down readme content has html for the preview function
-        function formatReadme(snippetId, content) {
-            return $http.put('/api/snippet-detail/' + snippetId + '/readme/format', content)
-                .then(function(response) {
-                        return response;
                     },
                     function(reason) {
                         $log.debug(JSON.stringify(reason));

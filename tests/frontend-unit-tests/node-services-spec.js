@@ -115,15 +115,6 @@ describe('SSS Node Services', function() {
         $nodeServices.deleteFile(snippetId, fileName);
     });
 
-    it('formatReadme() should call /api/snippet-detail/:snippetId/readme/format PUT', function() {
-        var snippetId = "mockSnippetId";
-        var content = "This is readme content";
-        $httpBackend.expectPUT('/api/snippet-detail/' + snippetId + "/readme/format", content, function(headers) {
-            return headers['Accept'] === 'application/json, text/plain, */*';
-        }).respond();
-        $nodeServices.formatReadme(snippetId, content);
-    });
-
     it('getSnippetRating() should call api/rating/:snippetId GET', function() {
         var snippetId = "MochaTestRepo";
         $httpBackend.expectGET('/api/rating/' + snippetId).respond();

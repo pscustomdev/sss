@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'xeditable', 'angularFileUpload'])
+    angular.module('app.overview', ['ui.router', 'ui.router.breadcrumbs', 'ngAnimate', 'ui.bootstrap', 'app.$nodeServices', 'app.$searchService', 'xeditable', 'angularFileUpload', 'ui.ace'])
         .config(['$stateProvider', StateProvider])
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', 'editableOptions', 'FileUploader'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', '$searchService', 'editableOptions', 'FileUploader'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,12 +20,16 @@
         });
     }
 
-    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, editableOptions, FileUploader) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, $searchService, editableOptions, FileUploader) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.snippetOverview = {};
         $scope.snippetOverview.isOwner = false;
         $scope.fileContent = "";
+        $scope.readme = "";
+        $scope.origReadme = "";
         $scope.confirmDelete = false;
+        $scope.editReadme = false;
+
         $scope.avgRatingOptions = {
             ratedFill: '#337ab7',
             readOnly: true,
@@ -70,6 +74,23 @@
             }
         };
 
+        $scope.aceLoaded = function(_editor){
+            var _session = _editor.getSession();
+            var _renderer = _editor.renderer;
+
+            _session.setMode('ace/mode/markdown');
+            _session.setUndoManager(new ace.UndoManager());
+
+            // height adjusted dynamically in util.js
+            $(window).resize();
+
+            //This has to happen otherwise ACE won't show the content since we were at an ng-hide when it was first rendered
+            $scope.redrawAce = function() {
+                _editor.resize();
+                _editor.renderer.updateFull()
+            };
+        };
+
         editableOptions.theme = 'bs3';
         var count = 0;
 
@@ -90,6 +111,9 @@
                             },1500);
                         } else {
                             $scope.snippetOverview = overview;
+                            $scope.readme = overview.readme;
+                            $scope.origReadme = overview.readme;
+                            $scope.formattedReadme = formatReadme(overview.readme);
                         }
                     }
                 );
@@ -106,10 +130,10 @@
             )
         };
 
-        // update the display name and description
+
+        // update the display name, readme and description
         $scope.updateSnippet = function() {
             $scope.snippetOverview.owner = $rootScope.currentUser.username;
-            //TODO update my rating here.
             $nodeServices.updateSnippet($scope.snippetOverview).then (
                 function() {}
             )
@@ -142,6 +166,42 @@
             });
         };
 
+        $scope.formatReadmeForPreview = function() {
+            $scope.formattedReadme = formatReadme($scope.readme);
+        };
+
+        $scope.saveReadme = function() {
+            // if not modified, no need to save
+            if ($scope.readme == $scope.origReadme) {
+                // $state.go(overviewPage, {});
+                $scope.editReadme = false;
+            } else {
+                $scope.origReadme = $scope.readme;
+                $scope.updateSnippet();
+                $scope.formattedReadme = formatReadme($scope.readme);
+                $scope.editReadme = false;
+            }
+        };
+
+        $scope.cancelEdit = function() {
+            // if data has been modified, verify cancel
+            if ($scope.readme != $scope.origReadme) {
+                // display modal to confim cancel
+                $scope.confirmCancel = false;
+                $("#cancelEditModal").modal();
+                $("#cancelEditModal").on('hidden.bs.modal', function() {
+                    if ($scope.confirmCancel) {
+                        $scope.editReadme = false;
+                        $scope.formattedReadme = formatReadme($scope.origReadme);
+                        $scope.readme = $scope.origReadme;
+                        $scope.$apply();
+                    }
+                });
+            } else {
+                $scope.editReadme = false;
+            }
+        };
+
         // focus the input field when the new file dialog is shown
         $("#fileNameModal").on('shown.bs.modal', function() {
             $("#newFileName").focus();
@@ -157,5 +217,10 @@
             $state.reload();
         };
 
+        // format the marked down readme to html for preview
+        var formatReadme = function(content) {
+            content = marked(content || '');
+            return content;
+        }
     }
 }());

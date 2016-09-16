@@ -31,7 +31,7 @@ describe('mySnippets Controller', function() {
         $httpBackend.flush();
     });
 
-    it('should set $scope.noSnippet to a default', function() {
+    xit('should set $scope.noSnippet to a default', function() {
         $controller('MySnippetsController', {'$scope' : scope });
         expect(scope.noSnippet).to.equal("No Snippets Found");
     });

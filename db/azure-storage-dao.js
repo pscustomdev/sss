@@ -92,7 +92,26 @@ exports.getListOfFilesInFolder = function (folder, next) {
 };
 
 //get blob text in a container/snippet
+// or return a url for binary files
 exports.getBlobToText = function (folder, blobName, next) {
+    var isBinary = false;
+    // check for known binary files
+    var filename = blobName.toLowerCase();
+    if (filename.endsWith("png") ||
+        filename.endsWith("gif") ||
+        filename.endsWith("jpg") ||
+        filename.endsWith("jpeg") ||
+        filename.endsWith("bmp")
+    ) {
+        isBinary = true;
+    }
+
+    if (isBinary) {
+        // return url to the binary file
+        next(null, auth_config.azure.blobStorage.url + "/" + folder + "/" + blobName);
+        return;
+    }
+
     blobSvc.getBlobToText(DEFAULT_CONTAINER, folder + "/" + blobName, function (err, response) {
         if (err) {
             return next(err);

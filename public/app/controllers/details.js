@@ -55,13 +55,16 @@
             var _session = _editor.getSession();
             var _renderer = _editor.renderer;
 
-            // autodetect file type by extension
-            //TODO there is a problem here if there isn't a file extension.  We should assume txt or something in that case.
-
-            var fileComps = ($scope.fileName ? $scope.fileName.toLowerCase().split(".") : ['txt']);
+            // autodetect file type by extension, if none default to text
+            var fileComps = ($scope.fileName ? $scope.fileName.toLowerCase().split(".") : ['text']);
             var mode = fileComps[fileComps.length - 1];
+            // if no extension, default to text
+            if (fileComps.length == 1) {
+                mode = "text";
+            }
             switch (mode) {
                 case 'xsl': mode = 'xml'; break;
+                case 'js': mode = 'javascript'; break;
                 case 'md': mode = 'markdown'; $scope.isMarkdown = true; break;
             }
             _session.setMode('ace/mode/' + mode);

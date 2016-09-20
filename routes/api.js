@@ -8,7 +8,6 @@ module.exports = function(app) {
     // var busboy = require('connect-busboy');
     var Busboy = require('busboy');
     var fs = require('fs');
-    var marked = require("marked");
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');

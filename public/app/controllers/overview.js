@@ -219,8 +219,11 @@
 
         // format the marked down readme to html for preview
         var formatReadme = function(content) {
-            content = marked(content || '');
-            return content;
+            // replace <img src="image.jpg"> with a full path to the image on azure
+            var imgUrl = $scope.snippetOverview.imageUrlPrefix + "/" +$scope.snippetId + "/";
+            content = content.replace(/<img src=\"/g,"<img src=\"" + imgUrl);
+
+            return marked(content || '');
         }
     }
 }());

@@ -101,7 +101,6 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving snippet from database: ' + err.message});
                 }
                 //Get file list once we are putting files
-                //TODO get Files
                 azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
                     if(!err){     //if files have been uploaded.
                         // we only need the names of the files
@@ -111,6 +110,7 @@ module.exports = function(app) {
                     snippet._id = req.params.snippetId;
                     snippet.owner = snippet.owner || "unknown";
                     snippet.postedOn = snippet.postedOn || "unknown";
+                    snippet.imageUrlPrefix = authConf.azure.blobStorage.url;
                     // determine if the current user is the owner
                     snippet.isOwner = false;
                     // if logged in as the admin user

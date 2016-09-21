@@ -51,6 +51,9 @@
             <div ng-show="!editReadme" class="panel-body" ng-bind-html="formattedReadme"></div>
 
             <div ng-show="editReadme">
+                <div class="form-group">
+                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#markupHelpModal">README Markdown Help</button>
+                </div>
                 <ul class="nav nav-tabs">
                     <li class="nav active">
                         <a data-target="#create_readme_ace" data-toggle="tab">Edit</a>

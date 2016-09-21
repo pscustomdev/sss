@@ -177,6 +177,7 @@
                 $scope.editReadme = false;
             } else {
                 $scope.origReadme = $scope.readme;
+                $scope.snippetOverview.readme = $scope.readme;
                 $scope.updateSnippet();
                 $scope.formattedReadme = formatReadme($scope.readme);
                 $scope.editReadme = false;

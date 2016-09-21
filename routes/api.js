@@ -22,7 +22,7 @@ module.exports = function(app) {
             var sIds = decodeURIComponent(req.params.snippetIds).split(",");
             db.getSnippets(sIds, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
                 res.json(results);
             })
@@ -34,7 +34,7 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippetsByOwner(req.query.owner, function(err, results){
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
                 res.json(results);
             })
@@ -46,7 +46,7 @@ module.exports = function(app) {
        function (req, res) {
             db.getSnippet(req.params.snippetId, function(err, snippet) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving snippet: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving snippet: ' + (err.message || err)});
                 }
                 res.json(snippet);
             })
@@ -58,7 +58,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + (err.message || err)});
                 }
                 res.json("");
             });
@@ -70,7 +70,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippet(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding snippet to database: ' + err.message});
+                    return res.status(500).json({error: 'Error adding snippet to database: ' + (err.message || err)});
                 }
                 res.json("");
             });
@@ -82,7 +82,7 @@ module.exports = function(app) {
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
-                    return res.status(500).json({error: 'Error removing snippet to database: ' + err.message});
+                    return res.status(500).json({error: 'Error removing snippet to database: ' + (err.message || err)});
                 }
                 res.json("");
             });
@@ -98,7 +98,7 @@ module.exports = function(app) {
         function (req, res) {
             db.getSnippet(req.params.snippetId, function (err, snippet) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving snippet from database: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving snippet from database: ' + (err.message || err)});
                 }
                 //Get file list once we are putting files
                 azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
@@ -133,7 +133,7 @@ module.exports = function(app) {
             req.body.content = req.body.content || " "; //we need to at least have a space as content or it won't save a file.
             azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, req.body.content, function (err, content){
                 if (err) {
-                    return res.status(500).json({error: 'Error creating file: ' + err.message});
+                    return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
                 }
                 res.json({});
             })
@@ -149,7 +149,7 @@ module.exports = function(app) {
                 var filesize = Number(req.headers['content-length']) * 2;
                 azureStorage.addUpdateFileByStream(req.params.snippetId, filename, file, filesize, function(err, result) {
                     if (err) {
-                        return res.status(500).json({error: 'Error creating file: ' + err.message});
+                        return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
                     }
                     res.json({});
                 });
@@ -164,7 +164,7 @@ module.exports = function(app) {
             var content =req.body.content || " ";
             azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, function (err, content){
                 if (err) {
-                    return res.status(500).json({error: 'Error updating file: ' + err.message});
+                    return res.status(500).json({error: 'Error updating file: ' + (err.message || err)});
                 }
                 res.json({});
             });
@@ -176,7 +176,7 @@ module.exports = function(app) {
         function (req, res) {
             azureStorage.getBlobToText(req.params.snippetId, req.params.fileName, function(err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error retrieving file: ' + err.message});
+                    return res.status(500).json({error: 'Error retrieving file: ' + (err.message || err)});
                 }
                 res.json(content);
             })
@@ -188,7 +188,7 @@ module.exports = function(app) {
         function (req, res) {
             azureStorage.deleteFile(req.params.snippetId,req.params.fileName, function(err, content) {
                 if (err) {
-                    return res.status(500).json({error: 'Error deleting file: ' + err.message});
+                    return res.status(500).json({error: 'Error deleting file: ' + (err.message || err)});
                 }
                 res.json(content);
             });
@@ -201,7 +201,7 @@ module.exports = function(app) {
             var searchTerms = req.query.q;
             azureSearch.searchSnippets(searchTerms, function (err, results) {
                 if (err) {
-                    return res.status(500).json({error: 'Error searching: ' + err.message});
+                    return res.status(500).json({error: 'Error searching: ' + (err.message || err)});
                 }
 
                 if (!results || results.length == 0) {  //no results so just return
@@ -256,7 +256,7 @@ module.exports = function(app) {
         function (req, res) {
             db.addUpdateSnippetRating(req.body, function (err) {
                 if (err) {
-                    return res.status(500).json({error: 'Error adding rating to database: ' + err.message});
+                    return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
                 }
                 res.json({});
             });

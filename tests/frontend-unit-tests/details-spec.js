@@ -49,7 +49,6 @@ describe('SSS Views', function() {
             expect($scope.snippetId).to.equal($stateParams.snippetId);
             expect($scope.fileName).to.equal($stateParams.fileName);
             expect($scope.isOwner).to.equal($stateParams.isOwner);
-            expect($scope.isMarkdown).to.equal(false);
             expect($scope.content).to.equal("");
             $httpBackend.flush();
         });

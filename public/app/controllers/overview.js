@@ -50,13 +50,21 @@
             disqus_url: disqusUrl
         };
 
-        $nodeServices.getSnippetRatingByUser({snippetId: $scope.snippetId, user:$rootScope.currentUser.username}).then(
-            function(userRating) {
-                if(userRating){
-                    $scope.userRating = userRating.rating;
-                }
+        // watch for $rootScope.currentUser to be populated before getting the snippet rating for the user
+        $rootScope.$watch('currentUser', function(user) {
+            if (user) {
+                $nodeServices.getSnippetRatingByUser({
+                    snippetId: $scope.snippetId,
+                    user: user.username
+                }).then(
+                    function (userRating) {
+                        if (userRating) {
+                            $scope.userRating = userRating.rating;
+                        }
+                    }
+                );
             }
-        );
+        });
 
         $nodeServices.getSnippetRating($scope.snippetId).then(
             function(result) {
@@ -95,29 +103,20 @@
         var count = 0;
 
         function getOverview(snippetId) {
-            // retry getting the snippet 5 times
-            // this is necessary because sometimes the api will return a null overview when a snippet
-            // was just created and is not yet available to the api
-            if (count < 5) {
-                count++;
-                $nodeServices.getSnippetOverview(snippetId).then(
-                    function (overview) {
-                        if (!overview) {
-                            setTimeout(function() {
-                                console.log("Error getting snippet.  Retry #" + count + "...");
-                                $scope.snippetOverview.description = (count < 4)?"":"Snippet content not found. Please refresh the page to try again.";
-                                $scope.snippetOverview.displayName = (count < 4)?"":"Not Found";
-                                getOverview(snippetId);
-                            },1500);
-                        } else {
-                            $scope.snippetOverview = overview;
-                            $scope.readme = overview.readme;
-                            $scope.origReadme = overview.readme;
-                            $scope.formattedReadme = formatReadme(overview.readme);
-                        }
+            $nodeServices.getSnippetOverview(snippetId).then(
+                function (overview) {
+                    if (!overview) {
+                        console.log("Error getting snippet.");
+                        $scope.snippetOverview.description = "Snippet is in index but is not in database";
+                        $scope.snippetOverview.displayName = "Snippet Not Found";
+                    } else {
+                        $scope.snippetOverview = overview;
+                        $scope.readme = overview.readme;
+                        $scope.origReadme = overview.readme;
+                        $scope.formattedReadme = formatReadme(overview.readme);
                     }
-                );
-            }
+                }
+            );
         }
         getOverview($scope.snippetId);
 

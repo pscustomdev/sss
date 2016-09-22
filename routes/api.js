@@ -24,6 +24,9 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
+                if (!results || !results[0]) {
+                    return res.status(404).json({error: 'Snippet(s) not found'});
+                }
                 res.json(results);
             })
         }
@@ -36,6 +39,9 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
+                if (!results || !results[0]) {
+                    return res.status(404).json({error: 'No snippets found for user'});
+                }
                 res.json(results);
             })
         }
@@ -47,6 +53,9 @@ module.exports = function(app) {
             db.getSnippet(req.params.snippetId, function(err, snippet) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving snippet: ' + (err.message || err)});
+                }
+                if (!snippet) {
+                    return res.status(404).json({error: 'Snippet not found'});
                 }
                 res.json(snippet);
             })
@@ -100,12 +109,20 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error retrieving snippet from database: ' + (err.message || err)});
                 }
+                if (!snippet) {
+                    return res.status(404).json({error: 'Snippet not found'});
+                }
                 //Get file list once we are putting files
                 azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {
-                    if(!err){     //if files have been uploaded.
+                    if (err) {
+                        return res.status(500).json({error: 'Error retrieving snippet file(s) from database: ' + (err.message || err)});
+                    }
+                    if(result){     //if files have been uploaded.
                         // we only need the names of the files
                         var fileNames = _.pluck(result.entries, 'name');
                         snippet.files = fileNames;
+                    } else {
+                        snippet.files = [];
                     }
                     snippet._id = req.params.snippetId;
                     snippet.owner = snippet.owner || "unknown";
@@ -203,11 +220,9 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error searching: ' + (err.message || err)});
                 }
-
-                if (!results || results.length == 0) {  //no results so just return
+                if (!results || !results[0]) {  //no results so just return
                     return res.json({});
                 }
-
                 results.forEach(function(result){
                     result.postedBy = result ? result.owner : "unknown";
                     result.postedOn = result ? result.postedOn : "unknown";
@@ -225,6 +240,9 @@ module.exports = function(app) {
     api_routes.get('/rating/:snippetId',
         function (req, res) {
             db.getSnippetRatingsAvg(req.params.snippetId, function (err, ratingAvg) {
+                if (err) {
+                    return res.status(500).json({error: 'Error: ' + (err.message || err)});
+                }
                 res.json(ratingAvg);
             });
         }
@@ -234,6 +252,9 @@ module.exports = function(app) {
         function (req, res) {
             var sIds = decodeURIComponent(req.params.snippetIds).split(",");
             db.getSnippetsRatingsAvg(sIds, function (err, ratings) {
+                if (err) {
+                    return res.status(500).json({error: 'Error: ' + (err.message || err)});
+                }
                 res.json(ratings);
             });
         }
@@ -246,6 +267,9 @@ module.exports = function(app) {
                 rater:req.params.user
             };
             db.getSnippetRatingByUser(userRating, function (err, rating) {
+                if (err) {
+                    return res.status(500).json({error: 'Error: ' + (err.message || err)});
+                }
                 res.json(rating);
             });
         }

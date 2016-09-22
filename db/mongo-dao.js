@@ -26,7 +26,7 @@ exports.removeAllUsers = function (next) {
     db.collection('users').remove(
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -39,26 +39,19 @@ exports.findUsers = function (queryObject, next) {
         if (err) {
             console.warn(err.message);
             next(err, null);
-        } else {
-            if (users) {
-                next(err, users);
-            } else {
-                next("No user(s) found");
-            }
         }
+        next(err, users);
     });
 };
 
 exports.findUser = function (id, next) {
-    db.collection("users").findOne({id: id},
-        function (err, user) {
-            if (user) {
-                next(err, user);
-            } else {
-                next("User not found");
-            }
+    db.collection("users").findOne({id: id}, function (err, user) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
-    );
+        next(err, user);
+    });
 };
 
 exports.addUpdateSnippet = function (snippet, next) {
@@ -83,32 +76,32 @@ exports.addUpdateSnippet = function (snippet, next) {
 exports.getSnippet = function (id, next) {
     db.collection('snippets').findOne({snippetId: id},
         function (err, result) {
-            if (result) {
-                next(err, result);
-            } else {
-                next("Snippet not found");
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
             }
+            next(err, result);
         }
     );
 };
 
 exports.getSnippets = function (snippetIds, next) {
     db.collection('snippets').find({snippetId: {$in: snippetIds}}).toArray(function (err, results) {
-        if (results && results[0]) {
-            next(err, results);
-        } else {
-            next("Snippets not found");
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
+        next(err, results);
     });
 };
 
 exports.getSnippetsByOwner = function (owner, next) {
     db.collection('snippets').find({owner: owner}).sort({displayName: -1}).toArray(function (err, results) {
-        if (results && results[0]) {
-            next(err, results);
-        } else {
-            next("Snippets not found");
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
+        next(err, results);
     });
 };
 
@@ -116,7 +109,7 @@ exports.removeSnippet = function (id, next) {
     db.collection('snippets').remove({snippetId: id},
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -128,7 +121,7 @@ exports.removeAllSnippets = function (next) {
     db.collection('snippets').remove(
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -166,12 +159,11 @@ exports.updateSnippetRating = function (rating, next) {
 
 exports.getSnippetRatings = function (id, next) {
     db.collection('ratings').find({snippetId: id}).toArray(function (err, results) {
-        if (results && results.length > 0) {
-            next(err, results);
-        } else {
+        if (err) {
             console.warn(err.message);
-            next("No ratings found");
+            next(err, null);
         }
+        next(err, results);
     });
 };
 
@@ -179,7 +171,7 @@ exports.removeSnippetRating = function (id, next) {
     db.collection('ratings').remove({snippetId: id},
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -189,6 +181,10 @@ exports.removeSnippetRating = function (id, next) {
 
 exports.getSnippetRatingsAvg = function (id, next) {
     db.collection('ratings').find({snippetId: id}).toArray(function (err, ratings) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
         next(err, calcAvgRatingForSnippet(ratings));
     });
 };
@@ -196,6 +192,13 @@ exports.getSnippetRatingsAvg = function (id, next) {
 exports.getSnippetsRatingsAvg = function (snippetIds, next) {
     var returnedRatings = [];
     db.collection('ratings').find({snippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        if (!ratings || !ratings[0]) {
+            ratings = [];
+        }
         var ratingsGrouped = _.groupBy(ratings, 'snippetId');
         _.each(ratingsGrouped, function (ratings) {
             returnedRatings.push({
@@ -211,11 +214,14 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
 exports.getSnippetRatingByUser = function (userRating, next) {
     db.collection('ratings').findOne(userRating,
         function (err, result) {
-            if (result) {
-                next(err, result);
-            } else {
-                next("Rating not found");
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
             }
+            if (!result) {
+                result = 0;
+            }
+            next(err, result);
         }
     );
 };
@@ -224,7 +230,7 @@ exports.removeAllRatings = function (next) {
     db.collection('ratings').remove(
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -233,9 +239,12 @@ exports.removeAllRatings = function (next) {
 };
 
 exports.createIndex = function (collection, index, next ) {
-    // db.createIndex(collection,{index:"text"},
     db.createIndex("snippets",{"description":"text"},
         function(err, result){
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
             next(err, result)
         }
     );
@@ -281,7 +290,7 @@ exports.createIndex = function (collection, index, next ) {
 //TingoDB doesn't support aggregate function so we have to average it ourselves.
 function calcAvgRatingForSnippet(snippetRatings){
     var avg = 0;
-    if (snippetRatings && snippetRatings.length > 0) {
+    if (snippetRatings && snippetRatings[0]) {
         var ratings = _.pluck(snippetRatings, 'rating'); //get an array of only the ratings
         var sum = ratings.reduce(function (a, b) {
             return a + b;

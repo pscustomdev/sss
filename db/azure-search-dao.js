@@ -13,9 +13,15 @@ exports.searchSnippets = function (searchTerms, next) {
     var highlightedFields = "readme,description,displayName";
     //Call to get snippets from mongo
     searchSnippets(snippetIndex, searchTerms, highlightedFields, function(err, snippetResults){
+        if (err) {
+            next(err, null);
+        }
         highlightedFields = "content";
         //Call to get any matching files from the blob storage.
         searchSnippets(fileIndex, searchTerms, highlightedFields, function(err, filesResults){
+            if (err) {
+                next(err, null);
+            }
             //Combine snippet and file search results
             _.each(filesResults, function(fileResult){
                 //Extract the snippetId from the metadata_storage_path so we know which snippet the file is for.
@@ -42,7 +48,7 @@ exports.searchSnippets = function (searchTerms, next) {
 
             var snippetIdsWithoutDisplayName =  _.pluck(noDisplayNames, 'snippetId');
 
-            if(snippetIdsWithoutDisplayName) {
+            if(snippetIdsWithoutDisplayName && snippetIdsWithoutDisplayName.length) {
                 //Get all the snippets from the db so we can get the display names
                 db.getSnippets(snippetIdsWithoutDisplayName, function (err, snippets) {
                     if(err) {

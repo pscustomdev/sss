@@ -25,7 +25,7 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
                 if (!results || !results[0]) {
-                    return res.status(404).json({error: 'Snippet(s) not found'});
+                    return res.status(204).json({error: 'Snippet(s) not found'});
                 }
                 res.json(results);
             })
@@ -40,7 +40,7 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
                 }
                 if (!results || !results[0]) {
-                    return res.status(404).json({error: 'No snippets found for user'});
+                    return res.status(204).json({error: 'No snippets found for user'});
                 }
                 res.json(results);
             })
@@ -55,7 +55,7 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving snippet: ' + (err.message || err)});
                 }
                 if (!snippet) {
-                    return res.status(404).json({error: 'Snippet not found'});
+                    return res.status(204).json({error: 'Snippet not found'});
                 }
                 res.json(snippet);
             })
@@ -110,7 +110,7 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error retrieving snippet from database: ' + (err.message || err)});
                 }
                 if (!snippet) {
-                    return res.status(404).json({error: 'Snippet not found'});
+                    return res.status(204).json({error: 'Snippet not found'});
                 }
                 //Get file list once we are putting files
                 azureStorage.getListOfFilesInFolder(req.params.snippetId, function(err, result, response) {

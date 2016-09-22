@@ -33,7 +33,8 @@ exports.searchSnippets = function (searchTerms, next) {
                 var snippetResult =  _.findWhere(snippetResults, {snippetId:fileSnippetId});
                 //If it is then add the highlights with the filename to @search.highlights.
                 //If not then add the snippet with the file and @searchhighlights
-                if(snippetResult) {
+                // search.highlights will not be set when searching for *
+                if(snippetResult && snippetResult['@search.highlights'] && fileResult['@search.highlights']) {
                     var fileName = fileResult.metadata_storage_name;
                     snippetResult['@search.highlights'][fileName] = fileResult['@search.highlights'].content;
                 } else {

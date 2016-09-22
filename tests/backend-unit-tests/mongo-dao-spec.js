@@ -134,7 +134,8 @@ describe("Mongo Dao", function() {
         });
     });
 
-    it('should be able to remove all snippets in the database', function (done) {
+    //WARNING:  This will clear all snippets from the database
+    xit('should be able to remove all snippets in the database', function (done) {
         db.addUpdateSnippet(fakeSnippet, function(err, msg){
             expect(msg.result.ok).to.be.eql(1);
             db.removeAllSnippets(function(err, result) {

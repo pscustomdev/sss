@@ -28,12 +28,10 @@
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
         $scope.isOwner = $stateParams.isOwner;
-        $scope.isMarkdown = false;
         $scope.showEditor = false;
         $scope.confirmCancel = false;
         $scope.content = "";
         $scope.origContent = "";
-        $scope.formattedReadme = "";
         var overviewPage = "search.results.overview";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
@@ -65,7 +63,6 @@
             switch (mode) {
                 case 'xsl': mode = 'xml'; break;
                 case 'js': mode = 'javascript'; break;
-                case 'md': mode = 'markdown'; $scope.isMarkdown = true; break;
             }
             _session.setMode('ace/mode/' + mode);
             _session.setUndoManager(new ace.UndoManager());
@@ -108,12 +105,6 @@
                 $state.go(overviewPage, {});
             }
         };
-
-        // format the marked down readme to html for preview
-        $scope.formatReadme = function() {
-            var content = marked($scope.content);
-            $scope.formattedReadme = replaceImageTag(content);
-        }
 
     }
 }());

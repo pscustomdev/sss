@@ -119,5 +119,7 @@ describe('SSS Views', function() {
         it('upload complete should be defined', function() {
              $scope.uploadComplete.should.be.defined;
         });
+
+
     });
 });

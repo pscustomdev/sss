@@ -5,9 +5,8 @@ var _ = require('underscore');
 
 var azureSearchUrl = auth_config.azure.search.url;
 
-var fileIndex = "sssblob-index";
-// var snippetIndex = "sssblob-index";
 var snippetIndex = "sssdb-index";
+var fileIndex    = "sssblob-index";
 
 exports.searchSnippets = function (searchTerms, next) {
     var highlightedFields = "readme,description,displayName";
@@ -109,5 +108,43 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
         //TODO Now we need to search the files and see what we get back.
         next(err, results);
     });
+};
 
+// run an indexer where indexType is: db | file
+exports.runIndexer = function (indexType, next) {
+    var index = "";
+    if (indexType == "db") { index = snippetIndex; }
+    if (indexType == "file") { index = fileIndex; }
+    index += "er";
+
+    var url = azureSearchUrl +
+        "/indexers/" + index + "/run?&api-version=2015-02-28";
+
+    var headers = {'api-key': auth_config.azure.search.key};
+
+    var options = {
+        url: url,
+        headers: headers,
+        withCredentials: false
+    };
+
+    request.post(options, function(err, response, _body){
+        if (err) {
+            console.warn(err.message);
+            next(err, err.message);
+        }
+        if (response.statusCode == 202) {
+            return next(null, "");
+        }
+        var body = {};
+        if (_body.length > 0) {
+            body = JSON.parse(_body);
+        }
+        if(body && body.error && body.error.message){
+            console.warn(body.error.message);
+            next(body.error, body.error.message);
+        } else {
+            next(err, "");
+        }
+    });
 };

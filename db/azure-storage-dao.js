@@ -16,6 +16,7 @@ exports.createContainer = function (container, next) {
     });
 };
 
+// delete all files for a snippet (folder name is the snippet id)
 exports.deleteFolder = function (folder, next) {
     //container names have to be lowercase
     blobSvc.listBlobsSegmentedWithPrefix(DEFAULT_CONTAINER, folder, null, function (err, blobs, response) {
@@ -44,8 +45,10 @@ exports.deleteFolder = function (folder, next) {
 
 //It is the same call to add/update a file
 exports.addUpdateFileByText = function (folder, fileName, content, next) {
+    var metaDeleteBlobValue = content==="deleted=true"?"true":"false";
+
     //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, function(err, result, response){
+    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, {metadata: {deleted:metaDeleteBlobValue}},function (err, result, response) {
         if (err) {
             return next(err);
         }
@@ -73,7 +76,6 @@ exports.deleteFile = function (folder, fileName, next) {
         next(err, result);
     });
 };
-
 
 //list blobs in a folder in the default container
 exports.getListOfFilesInFolder = function (folder, next) {

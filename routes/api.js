@@ -294,5 +294,17 @@ module.exports = function(app) {
         }
     );
 
+    // run the azure search indexers where indexType is: db | file
+    api_routes.get('/indexer/:indexType',
+        function (req, res) {
+            azureSearch.runIndexer(req.params.indexType, function (err, results) {
+                if (err) {
+                    return res.status(500).json({error: 'Error running indexer ('+req.params.indexType+'): ' + (err.message || err)});
+                }
+                res.json({});
+            });
+        }
+    );
+
     app.use('/api', api_routes);
 };

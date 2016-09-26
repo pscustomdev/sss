@@ -61,7 +61,8 @@ exports.addUpdateSnippet = function (snippet, next) {
             displayName: snippet.displayName,
             postedOn: Date.now(),
             description: snippet.description,
-            readme: snippet.readme
+            readme: snippet.readme,
+            deleted: snippet.deleted != "true" ? "false" : snippet.deleted
         }, {upsert: true},
         function (err, object) {
             if (err) {
@@ -105,6 +106,8 @@ exports.getSnippetsByOwner = function (owner, next) {
     });
 };
 
+// Delete the snippet from the collection
+// TODO Should also call deleteFolder() is azure-storage-dao to remove all snippet files
 exports.removeSnippet = function (id, next) {
     db.collection('snippets').remove({snippetId: id},
         function (err, result) {
@@ -117,6 +120,8 @@ exports.removeSnippet = function (id, next) {
     );
 };
 
+// WARNING: This will remove the entire snippet collection
+// TODO When doing this, we should also delete all folders in the blob storage
 exports.removeAllSnippets = function (next) {
     db.collection('snippets').remove(
         function (err, result) {

@@ -26,4 +26,18 @@ describe("Azure Search Dao", function() {
 
     });
 
+    it('should run the db indexer', function (done) {
+        azureSearch.runIndexer("db", function(err, results) {
+            results.should.be.empty;
+            done();
+        })
+    });
+
+    it('should run the file indexer', function (done) {
+        azureSearch.runIndexer("file", function(err, results) {
+            results.should.be.empty;
+            done();
+        })
+    });
+
 });

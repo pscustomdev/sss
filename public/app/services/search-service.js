@@ -58,6 +58,10 @@
                         vm.pagination.totalItems = 0;
                         return;
                     }
+
+                    if (!response.items) {
+                        response.items = [];
+                    }
                      //filter out all the data type and the display Name since we don't want to show those on the UI.
                     _.each(response.items, function(r){
                         var newArray = [];

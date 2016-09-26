@@ -153,4 +153,14 @@ describe('SSS Node Services', function() {
         $nodeServices.addUpdateSnippetRating(rating);
     });
 
+    it('runDBIndexer() should call api/indexer/db GET', function() {
+        $httpBackend.expectGET('/api/indexer/db').respond();
+        $nodeServices.runDBIndexer();
+    });
+
+    it('runFileIndexer() should call api/indexer/file GET', function() {
+        $httpBackend.expectGET('/api/indexer/file').respond();
+        $nodeServices.runFileIndexer();
+    });
+
 });

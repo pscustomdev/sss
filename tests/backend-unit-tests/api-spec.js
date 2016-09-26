@@ -560,11 +560,29 @@ describe("REST API Tests", function() {
 
     it('should return the authenticated user /authenticated-user GET', function(done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .get('/api/authenticated-user')
             .end(function(err, res) {
                 res.should.have.status(200);
                 //TODO figure out how to authenticate so we can get the actual user.
+                done();
+            });
+    });
+
+    it('should start the db indexer /indexer/db GET', function(done) {
+        chai.request(app)
+            .get('/api/indexer/db')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            });
+    });
+
+    it('should start the file indexer /indexer/file GET', function(done) {
+        chai.request(app)
+            .get('/api/indexer/file')
+            .end(function(err, res) {
+                res.should.have.status(200);
                 done();
             });
     });

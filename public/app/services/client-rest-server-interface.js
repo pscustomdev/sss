@@ -20,11 +20,15 @@
             addSnippet: addSnippet,
             addUpdateSnippetRating: addUpdateSnippetRating,
             updateSnippet: updateSnippet,
+            markSnippet: markSnippet,
             deleteSnippet: deleteSnippet,
             getFile: getFile,
             addFile: addFile,
             updateFile: updateFile,
+            markFile: markFile,
             deleteFile: deleteFile,
+            runDBIndexer: runDBIndexer,
+            runFileIndexer: runFileIndexer
         };
 
         //Make sure to add the function into the return statement.
@@ -110,6 +114,24 @@
                 });
         }
 
+        // mark snippet for deletion
+        function markSnippet(snippetId, files) {
+            // mark all files in the snippet as deleted
+            _.each(files, function(file) {
+                markFile(snippetId, file);
+            });
+            return $http.put('/api/snippet/' + snippetId, {_id:snippetId, deleted:"true"})
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
         function deleteSnippet(snippetId) {
             return $http.delete('/api/snippet/' + snippetId)
                 .then(function(response) {
@@ -171,6 +193,22 @@
         function updateFile(snippetId, fileName, content) {
             var data = {};
             data.content = content;
+            return $http.put('/api/snippet-detail/' + snippetId + "/" + fileName, data)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+        // mark a file for deletion in a snippet
+        function markFile(snippetId, fileName) {
+            var data = {};
+            data.content = "deleted=true";
             return $http.put('/api/snippet-detail/' + snippetId + "/" + fileName, data)
                 .then(function(response) {
                         return response.data;
@@ -268,6 +306,34 @@
         // add a rating for a snippet
         function addUpdateSnippetRating(rating) {
             return $http.post('/api/rating/' + rating.snippetId, rating)
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+        // run azure db indexer
+        function runDBIndexer() {
+            return $http.get('/api/indexer/db')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+        // run azure file indexer
+        function runFileIndexer() {
+            return $http.get('/api/indexer/file')
                 .then(function(response) {
                         return response.data;
                     },

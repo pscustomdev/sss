@@ -4,7 +4,7 @@
             <div class="btn-group pull-right">
                 <div>
                     <button ng-show="snippetOverview.isOwner && !confirmDelete" class="btn btn-warning" type="button" ng-click="confirmDelete = true" >Delete Snippet</button>
-                    <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet(snippetId)" >Perform Delete</button>
+                    <button ng-show="confirmDelete" class="btn btn-danger" type="button" ng-click="deleteSnippet()" >Perform Delete</button>
                     <button ng-show="confirmDelete" class="btn btn-default" type="button" ng-click="confirmDelete = false" >Cancel Delete</button>
                 </div>
                 <div ng-show="!snippetOverview.isOwner"><small>Your Rating:</small></div>

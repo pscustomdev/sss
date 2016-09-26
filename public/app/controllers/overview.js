@@ -120,15 +120,15 @@
         }
         getOverview($scope.snippetId);
 
-        $scope.deleteSnippet = function(snippetId) {
-            $nodeServices.deleteSnippet(snippetId).then (
+        // mark a snippet for deletion
+        $scope.deleteSnippet = function() {
+            $nodeServices.markSnippet($scope.snippetId, $scope.snippetOverview.files).then (
                 function() {
                     // redirect to the search page
                     $state.go('search', {});
                 }
             )
         };
-
 
         // update the display name, readme and description
         $scope.updateSnippet = function() {
@@ -154,7 +154,7 @@
             $("#fileDeleteModal").modal();
             $("#fileDeleteModal").on('hidden.bs.modal', function() {
                 if ($scope.confirmDelete) {
-                    $nodeServices.deleteFile($scope.snippetId, fileName).then (
+                    $nodeServices.markFile($scope.snippetId, fileName).then (
                         function() {
                             // refresh the overview page
                             $state.reload();

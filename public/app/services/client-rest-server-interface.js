@@ -145,6 +145,22 @@
                 });
         }
 
+
+        // cleanup (delete) all marked snippets and files
+        function cleanupMarkedSnippetsFiles() {
+            return $http.delete('/api/cleanup-marked-snippets-files')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+
         // get overview information about a snippet
         function getSnippetOverview(snippetId) {
             return $http.get('/api/snippet-overview/' + snippetId)

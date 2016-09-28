@@ -81,6 +81,7 @@
 
             $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
                 function() {
+                    $nodeServices.runFileIndexer();
                     $state.go(overviewPage, {});
                 }
             )

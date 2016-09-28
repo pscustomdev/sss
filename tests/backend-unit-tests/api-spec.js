@@ -546,6 +546,16 @@ describe("REST API Tests", function() {
             });
     });
 
+    //TODO write a better test
+    it('should delete all snippets and files marked for deletion DELETE', function(done) {
+        chai.request(app)
+            .delete('/api/cleanup-marked-snippets-files')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            });
+    });
+
     xit('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
         chai.request(app)
             // use a search term for existing snippets since creating a new snippet

@@ -124,6 +124,8 @@
         $scope.deleteSnippet = function() {
             $nodeServices.markSnippet($scope.snippetId, $scope.snippetOverview.files).then (
                 function() {
+                    $nodeServices.runDBIndexer();
+                    $nodeServices.runFileIndexer();
                     // redirect to the search page
                     $state.go('search', {});
                 }
@@ -134,7 +136,9 @@
         $scope.updateSnippet = function() {
             $scope.snippetOverview.owner = $rootScope.currentUser.username;
             $nodeServices.updateSnippet($scope.snippetOverview).then (
-                function() {}
+                function() {
+                    $nodeServices.runDBIndexer();
+                }
             )
         };
 
@@ -142,6 +146,7 @@
             var content = "";
             $nodeServices.addFile($scope.snippetId, fileName, content).then (
                 function() {
+                    $nodeServices.runFileIndexer();
                     // refresh the overview page
                     $state.reload();
                 }
@@ -156,6 +161,7 @@
                 if ($scope.confirmDelete) {
                     $nodeServices.markFile($scope.snippetId, fileName).then (
                         function() {
+                            $nodeServices.runFileIndexer();
                             // refresh the overview page
                             $state.reload();
                         }
@@ -214,6 +220,7 @@
 
         // refresh the overview page when upload is complete
         $scope.uploadComplete = function() {
+            $nodeServices.runFileIndexer();
             $state.reload();
         };
 

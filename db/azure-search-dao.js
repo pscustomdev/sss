@@ -110,18 +110,52 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
     });
 };
 
+// *** INDEXING FUNCTIONS ***
+var indexersScheduled = [];
+var indexerIntervalMins = 10;
+
 // run an indexer where indexType is: db | file
 exports.runIndexer = function (indexType, next) {
-    var index = "";
-    if (indexType == "db") { index = snippetIndex; }
-    if (indexType == "file") { index = fileIndex; }
-    index += "er";
+    var indexer = "";
+    if (indexType == "db") {
+        indexer = snippetIndex;
+    }
+    if (indexType == "file") {
+        indexer = fileIndex;
+    }
+    indexer += "er";  // we name the indexer the same as the index with the "er" at the end
 
-    var url = azureSearchUrl +
-        "/indexers/" + index + "/run?&api-version=2015-02-28";
+    scheduleIndexer(indexer);
+    next(null, "");
+};
 
+// schedule the indexer to run in indexerIntervalMins minutes if it is not already scheduled
+// if an error occurs indicating that it has run recently, schedule it again
+function scheduleIndexer(indexer) {
+    // if the index has already been scheduled, ignore the request
+    if (_.contains(indexersScheduled, indexer)) { return; }
+
+    console.info(new Date().toLocaleTimeString() + ": Scheduling indexer to run in " + indexerIntervalMins + " minutes: " + indexer);
+    indexersScheduled.push(indexer);
+    // schedule the indexer run for indexerIntervalMins minutes
+    setTimeout(function() {
+        performIndexing(indexer, function(err, result) {
+            // result that is not empty indicates it has run recently so reschedule it
+            if (result && result.length > 0 && result.indexOf("indexer")) {
+                console.info("Warning running indexer: " + indexer + "; rescheduling. (" + err.message + " :: " + result + ")");
+                indexersScheduled = _.without(indexersScheduled, indexer);
+                scheduleIndexer(indexer);
+            } else {
+                indexersScheduled = _.without(indexersScheduled, indexer);
+                console.info(new Date().toLocaleTimeString() + ": Indexer completed: " + indexer);
+            }
+        });
+    },1000*60*indexerIntervalMins);
+}
+
+function performIndexing(indexer, next) {
+    var url = azureSearchUrl + "/indexers/" + indexer + "/run?&api-version=2015-02-28";
     var headers = {'api-key': auth_config.azure.search.key};
-
     var options = {
         url: url,
         headers: headers,
@@ -147,4 +181,4 @@ exports.runIndexer = function (indexType, next) {
             next(err, "");
         }
     });
-};
+}

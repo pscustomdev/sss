@@ -43,6 +43,44 @@ exports.deleteFolder = function (folder, next) {
     });
 };
 
+exports.deleteFile = function (folder, fileName, next) {
+    //Delete a blob from a container
+    blobSvc.deleteBlob(DEFAULT_CONTAINER, folder + "/" + fileName, function(err, result){
+        if (err) {
+            return next(err);
+        }
+        next(err, result);
+    });
+};
+
+//TODO create a function to delete a blob so it can be called below
+//TODO test in api-spec.js
+
+// delete all marked files with metadata "deleted" = "true"
+exports.cleanupFiles = function (next) {
+    var err = null;
+    blobSvc.listBlobsSegmented(DEFAULT_CONTAINER, null, {include: "metadata"}, function(err, result) {
+        result.entries.forEach(function(entry){
+            // only delete files that have been marked
+            if (entry.metadata && entry.metadata.deleted == "true") {
+                var nameComp = entry.name.split("/");
+                //TODO this call is not working from called from here
+                exports.deleteFile(nameComp[0], nameComp[1], function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                    }
+                    next(err, "");
+                });
+            }
+        });
+        //TODO if there is a continuation token keep getting them.
+        // result.entries contains the entries
+        // If not all blobs were returned, result.continuationToken has the continuation token.
+
+        next(err, "");
+    });
+};
+
 //It is the same call to add/update a file
 exports.addUpdateFileByText = function (folder, fileName, content, next) {
     var metaDeleteBlobValue = content==="deleted=true"?"true":"false";
@@ -67,29 +105,24 @@ exports.addUpdateFileByStream = function (folder, fileName, stream, len, next) {
     });
 };
 
-exports.deleteFile = function (folder, fileName, next) {
-    //Delete a blob from a container
-    blobSvc.deleteBlob(DEFAULT_CONTAINER, folder + "/" + fileName, function(err, result){
-        if (err) {
-            return next(err);
-        }
-        next(err, result);
-    });
-};
-
 //list blobs in a folder in the default container
 exports.getListOfFilesInFolder = function (folder, next) {
-    blobSvc.listBlobsSegmentedWithPrefix(DEFAULT_CONTAINER, folder, null, function (err, result, response) {
+    blobSvc.listBlobsSegmentedWithPrefix(DEFAULT_CONTAINER, folder, null, {include: "metadata"}, function (err, result, response) {
+        var fileList = {};
+        fileList.entries = [];
         if (err) {
             return next(err);
         }
         result.entries.forEach(function(entry){
-            entry.name = entry.name.replace(folder + "/",''); //remove the folder name prefix
+            // only include files that have not been deleted
+            if (!entry.metadata || entry.metadata.deleted != "true") {
+                fileList.entries.push({name: entry.name.replace(folder + "/",'')});
+            }
         });
         //TODO if there is a continuation token keep getting them.
         // result.entries contains the entries
         // If not all blobs were returned, result.continuationToken has the continuation token.
-        next(err, result, response);
+        next(err, fileList, response);
     });
 };
 
@@ -103,7 +136,10 @@ exports.getBlobToText = function (folder, blobName, next) {
         filename.endsWith("gif") ||
         filename.endsWith("jpg") ||
         filename.endsWith("jpeg") ||
-        filename.endsWith("bmp")
+        filename.endsWith("bmp") ||
+        filename.endsWith("tar") ||
+        filename.endsWith("gz") ||
+        filename.endsWith("zip")
     ) {
         isBinary = true;
     }

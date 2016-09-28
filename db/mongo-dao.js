@@ -4,6 +4,7 @@ var auth_conf = require('../auth/auth-conf');
 var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
+var azureStorage = require('../db/azure-storage-dao');
 
 exports.addUser = function (profile, next) {
     db.collection("users").find({id: profile.id}).toArray(function (err, users) {
@@ -107,7 +108,6 @@ exports.getSnippetsByOwner = function (owner, next) {
 };
 
 // Delete the snippet from the collection
-// TODO Should also call deleteFolder() is azure-storage-dao to remove all snippet files
 exports.removeSnippet = function (id, next) {
     db.collection('snippets').remove({snippetId: id},
         function (err, result) {
@@ -115,7 +115,13 @@ exports.removeSnippet = function (id, next) {
                 console.warn(err.message);
                 next(err, null);
             }
-            next(err, result);
+            // remove all snippet files
+            azureStorage.deleteFolder(id, function(err, result) {
+                if (err) {
+                    console.warn(err.message);
+                }
+                next(err, "");
+            });
         }
     );
 };
@@ -132,6 +138,30 @@ exports.removeAllSnippets = function (next) {
             next(err, result);
         }
     );
+};
+
+// delete all marked snippets and related files
+exports.cleanupSnippets = function (next) {
+    // iterate through all soft deleted snippets
+    db.collection('snippets').find({deleted: "true"}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        results.forEach(function(snippet){
+            exports.removeSnippet(snippet.snippetId, function(err, result) {
+                if (err) {
+                    console.warn(err.message);
+                }
+                exports.removeSnippetRating(snippet.snippetId, function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                    }
+                });
+            });
+        });
+        next(err, "");
+    });
 };
 
 exports.addUpdateSnippetRating = function (rating, next) {

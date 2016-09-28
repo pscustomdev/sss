@@ -159,4 +159,12 @@ describe("Azure Storage Dao", function() {
             });
         })
     });
+
+    //TODO write a better test to mark a file and verify it got deleted
+    it('should cleanup (delete) all marked files from a folder', function (done) {
+        azureStorage.cleanupFiles(function(err, result) {
+            done();
+        });
+    });
+
 });

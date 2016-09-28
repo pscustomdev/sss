@@ -50,6 +50,8 @@
                     $state.go('search.results.overview', { snippetId: uuid});
                 }
             );
+
+            $nodeServices.runDBIndexer();
         };
 
         $scope.cancelCreate = function() {

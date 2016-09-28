@@ -13,6 +13,14 @@ module.exports = function(req, res, next) {
             return next();
         }
 
+        //cleanup function must be done as pscustomdev-sss
+        if (req.url.startsWith("/cleanup")) {
+            // if (req.user.username != "pscustomdev-sss") {
+            //     return res.status(401).json({error: 'Must be admin user to run cleanup'});
+            // }
+            return next();
+        }
+
         //check for the owner since only they can modify, delete, etc.
         var snippetSplit = req.url.split("/");
         var snippetId;
@@ -38,7 +46,7 @@ module.exports = function(req, res, next) {
                 }
             });
         } else {
-            return res.status(500).json({error: 'Malformed URL unable to find Snippet ID: ' + err.message});
+            return res.status(500).json({error: 'Malformed URL: unable to find Snippet ID to determine ownership'});
         }
     } else {
         req.session.returnTo = req.baseUrl + req.url;  // This sets the 'returnTo' session parameter to the current destination url, which passport respects after a successful login

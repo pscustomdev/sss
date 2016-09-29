@@ -37,7 +37,6 @@
     <script src="/app/lib/util.js"></script>
     <script src="/app/lib/ui-router-breadcrumbs.js"></script>
 
-    {{#if settings.development}}
         <script src="/app/services/client-rest-server-interface.js"></script>
         <script src="/app/services/search-service.js"></script>
         <script src="/app/controllers/search.js"></script>
@@ -49,9 +48,6 @@
         <script src="/app/controllers/login.js"></script>
         <script src="/app/controllers/sss.js"></script>
         <script src="/app/app.js"></script>
-    {{else}}  <!--we don't need the above in prod since we concat and uglify them all into sss.min.js-->
-        <script src="/app/sss.min.js"></script>
-    {{/if}}
 
 
 </head>

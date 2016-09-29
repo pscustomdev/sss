@@ -46,4 +46,8 @@ Indexer:
 	Track deletions: Checked
 	Soft delete column: deleted
 	Delete marker value: true
-
+	Advanced options: 
+		Excluded extensions: 
+			Max failed items: 999
+			Max failed items per batch: 999
+			Excluded extensions: .jpg,.jpeg,.png,.gif,.bmp,.zip,.gz,.tar 

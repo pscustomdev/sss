@@ -13,7 +13,7 @@ module.exports = function() {
             callbackURL: auth_conf.github.callbackUrl
         },
         function(accessToken, refreshToken, profile, done) {
-            db.findUser({ id: profile.id }, function(err, user) {
+            db.findUser(profile.id, function(err, user) {
                 if (err) {              // Log errors, if any
                     console.log(err);
                 }
@@ -45,7 +45,7 @@ module.exports = function() {
             process.nextTick(function() {
 
                 // try to find the user based on their google id
-                db.findUser({ 'id' : profile.id }, function(err, user) {
+                db.findUser(profile.id, function(err, user) {
                     if (err) {              // Log errors, if any
                         console.log(err);
                     }

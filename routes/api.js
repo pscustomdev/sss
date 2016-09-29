@@ -101,25 +101,25 @@ module.exports = function(app) {
     // delete all marked (soft deleted) snippets and files
     api_routes.delete('/cleanup-marked-snippets-files', restrict,
         function (req, res) {
-            var error = null;
-            // cleanup (deleted) marked snippets and all related files first
-            db.cleanupSnippets(function (err, result){
-                if (err) {
-                    console.warn(err.message);
-                    error = err;
-                }
-                // then cleanup marked files that remain after cleaning up snippets and related files
+            // var error = null;
+            // // cleanup (deleted) marked snippets and all related files first
+            // db.cleanupSnippets(function (err, result){
+            //     if (err) {
+            //         console.warn(err.message);
+            //         error = err;
+            //     }
+            //     // then cleanup marked files that remain after cleaning up snippets and related files
                 azureStorage.cleanupFiles(function (err, result){
-                    if (err) {
-                        console.warn(err.message);
-                        error = err;
-                    }
-                    if (error) {
-                        return res.status(500).json({error: 'Error cleaning up snippets and/or files: ' + (err.message || err)});
-                    }
+                    // if (err) {
+                    //     console.warn(err.message);
+                    //     error = err;
+                    // }
+                    // if (error) {
+                    //     return res.status(500).json({error: 'Error cleaning up snippets and/or files: ' + (err.message || err)});
+                    // }
                     res.json("");
                 });
-            });
+            // });
         }
     );
 

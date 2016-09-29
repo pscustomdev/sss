@@ -9,6 +9,7 @@ var expect = require("chai").expect;
 describe("Azure Storage Dao", function() {
     var folderName = "MochaTestFolder";
     var fakeFileName = "MochaTestFile";
+    var fakeFileName2 = "MochaTestFile2";
 
     //Create the default container if it doesn't exist.
     var DEFAULT_CONTAINER = "sss-snippet-container";
@@ -16,14 +17,18 @@ describe("Azure Storage Dao", function() {
 
     beforeEach(function(done) {
         //cleanup fake repo
-       azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
-           done();
+        azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
+            azureStorage.deleteFile(folderName, fakeFileName2 , function (err, result) {
+                done();
+            });
         });
     }, 5000);
 
     afterEach(function(done) {
-        azureStorage.deleteFile(folderName, fakeFileName, function (err, result) {
-            done();
+        azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
+            azureStorage.deleteFile(folderName, fakeFileName2 , function (err, result) {
+                done();
+            });
         });
     }, 5000);
 
@@ -160,11 +165,30 @@ describe("Azure Storage Dao", function() {
         })
     });
 
-    //TODO write a better test to mark a file and verify it got deleted
     it('should cleanup (delete) all marked files from a folder', function (done) {
-        azureStorage.cleanupFiles(function(err, result) {
-            done();
-        });
+        var content = "Mocha file content";
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+            expect(response.isSuccessful).to.be.eql(true);
+            azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                expect(response.isSuccessful).to.be.eql(true);
+                expect(result.entries[0].name).to.be.eql(fakeFileName);
+                // mark file for deletion
+                azureStorage.addUpdateFileByText(folderName, fakeFileName, "deleted=true", function(err, result, response) {
+                    expect(response.isSuccessful).to.be.eql(true);
+                    azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                        expect(response.isSuccessful).to.be.eql(true);
+                        expect(result.entries[0]).isUndefined;
+                        azureStorage.cleanupFiles(function(err, result) {
+                            azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
+                                expect(response.isSuccessful).to.be.eql(true);
+                                expect(result.entries[0].name).isUndefined;
+                                done();
+                            });
+                        });
+                    });
+                });
+            })
+        })
     });
 
 });

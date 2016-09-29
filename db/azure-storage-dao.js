@@ -53,35 +53,44 @@ exports.deleteFile = function (folder, fileName, next) {
     });
 };
 
-//TODO create a function to delete a blob so it can be called below
-//TODO test in api-spec.js
-
 // delete all marked files with metadata "deleted" = "true"
 exports.cleanupFiles = function (next) {
     var err = null;
     blobSvc.listBlobsSegmented(DEFAULT_CONTAINER, null, {include: "metadata"}, function(err, result) {
+        if (err) {
+            next(err, "");
+        }
+
+        var files = [];
         result.entries.forEach(function(entry){
             // only delete files that have been marked
             if (entry.metadata && entry.metadata.deleted == "true") {
-                var nameComp = entry.name.split("/");
-                //TODO this call is not working from called from here
-                exports.deleteFile(nameComp[0], nameComp[1], function(err, result) {
+                files.push(entry.name);
+            }
+        });
+
+        if (files.length > 0) {
+            files.forEach(function(file) {
+                var nameComp = file.split("/");
+                exports.deleteFile(nameComp[0], nameComp[1], function (err, result) {
                     if (err) {
                         console.warn(err.message);
                     }
                     next(err, "");
                 });
-            }
-        });
+            })
+        } else {
+            next(null, "");
+        }
+
         //TODO if there is a continuation token keep getting them.
         // result.entries contains the entries
         // If not all blobs were returned, result.continuationToken has the continuation token.
-
-        next(err, "");
     });
 };
 
 //It is the same call to add/update a file
+//if the content is "deleted=true" the file is marked for deletion
 exports.addUpdateFileByText = function (folder, fileName, content, next) {
     var metaDeleteBlobValue = content==="deleted=true"?"true":"false";
 

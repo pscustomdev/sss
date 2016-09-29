@@ -548,6 +548,13 @@ describe("REST API Tests", function() {
 
     //TODO write a better test
     it('should delete all snippets and files marked for deletion DELETE', function(done) {
+        //TODO create snippet and file
+        //TODO mark the file and verify it is marked
+        //TODO create another snippet and file
+        //TODO make the snippet as deleted
+        //TODO run cleanup and assure:
+        //     * the first marked file has been deleted
+        //     * the second snippet and the file folder has been deleted
         chai.request(app)
             .delete('/api/cleanup-marked-snippets-files')
             .end(function(err, res) {

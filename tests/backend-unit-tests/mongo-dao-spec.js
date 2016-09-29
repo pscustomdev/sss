@@ -21,6 +21,10 @@ describe("Mongo Dao", function() {
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     beforeEach(function(done) {
+        done()
+    }, 5000);
+
+    afterEach(function(done) {
         //We don't want to remove all data in prod
         if (process.env.NODE_ENV == 'production') {
             return;
@@ -36,11 +40,6 @@ describe("Mongo Dao", function() {
                 });
             });
         });
-    }, 5000);
-
-    afterEach(function(done) {
-        //Doing so many operations on each test is killing the cost of azure so we're going to limit to cleaning up just beforeEach test.
-        done()
     }, 5000);
     
     xit('should create an index', function (done) {

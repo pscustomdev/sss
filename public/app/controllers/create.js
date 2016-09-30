@@ -6,7 +6,7 @@
         .controller('CreateController', CreateController);
 
     StateProvider.$inject = ['$stateProvider'];
-    CreateController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices'];
+    CreateController.$inject = ['$scope', '$rootScope', '$state', '$nodeServices', 'growl'];
 
     function StateProvider($stateProvider) {
         $stateProvider.state('search.create', {
@@ -22,9 +22,10 @@
         });
     }
 
-    function CreateController($scope, $rootScope, $state, $nodeServices) {
+    function CreateController($scope, $rootScope, $state, $nodeServices, growl) {
         $scope.formData = {};
         $scope.rawView = true;
+        var indexMessage = "It may take up to 15 minutes for your new snippet to be searchable.";
 
         //if they aren't logged in then send them to the login page.
         $nodeServices.getCurrentUser().then(
@@ -47,11 +48,11 @@
 
             $nodeServices.addSnippet(snippet).then(
                 function () {
+                    $nodeServices.runDBIndexer();
+                    growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
                     $state.go('search.results.overview', { snippetId: uuid});
                 }
             );
-
-            $nodeServices.runDBIndexer();
         };
 
         $scope.cancelCreate = function() {

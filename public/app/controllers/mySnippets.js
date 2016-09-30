@@ -32,14 +32,17 @@
             }
         );
 
-        $scope.noSnippet = "No Snippets Found";
+        $scope.searchInProgress = true;
+        $scope.noResultsFound = false;
         $rootScope.$watch('currentUser', function(user) {
             if (user) {
                 $nodeServices.getSnippetsByOwner($rootScope.currentUser.username).then(
                     function (data) {
+                        $scope.searchInProgress = false;
                         if (data) {
                             $scope.mySnippets = data;
-                            $scope.noSnippet = "";
+                        } else {
+                            $scope.noResultsFound = true;
                         }
                     }
                 );

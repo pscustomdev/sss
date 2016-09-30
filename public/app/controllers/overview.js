@@ -5,7 +5,7 @@
         .controller('OverviewController', OverviewController);
 
     StateProvider.$inject = ['$stateProvider'];
-    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', '$searchService', 'editableOptions', 'FileUploader'];
+    OverviewController.$inject = ['$scope', '$rootScope', '$nodeServices', '$stateParams', '$state', '$searchService', 'editableOptions', 'FileUploader', 'growl'];
 
     function StateProvider(stateProvider) {
         stateProvider.state('search.results.overview', {
@@ -20,7 +20,7 @@
         });
     }
 
-    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, $searchService, editableOptions, FileUploader) {
+    function OverviewController($scope, $rootScope, $nodeServices, $stateParams, $state, $searchService, editableOptions, FileUploader, growl) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.snippetOverview = {};
         $scope.snippetOverview.isOwner = false;
@@ -29,6 +29,7 @@
         $scope.origReadme = "";
         $scope.confirmDelete = false;
         $scope.editReadme = false;
+        var indexMessage = "It may take up to 15 minutes for your changes to be searchable.";
 
         $scope.avgRatingOptions = {
             ratedFill: '#337ab7',
@@ -126,6 +127,7 @@
                 function() {
                     $nodeServices.runDBIndexer();
                     $nodeServices.runFileIndexer();
+                    growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
                     // redirect to the search page
                     $state.go('search', {});
                 }
@@ -138,6 +140,7 @@
             $nodeServices.updateSnippet($scope.snippetOverview).then (
                 function() {
                     $nodeServices.runDBIndexer();
+                    growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
                 }
             )
         };
@@ -146,7 +149,6 @@
             var content = "";
             $nodeServices.addFile($scope.snippetId, fileName, content).then (
                 function() {
-                    $nodeServices.runFileIndexer();
                     // refresh the overview page
                     $state.reload();
                 }
@@ -162,6 +164,7 @@
                     $nodeServices.markFile($scope.snippetId, fileName).then (
                         function() {
                             $nodeServices.runFileIndexer();
+                            growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
                             // refresh the overview page
                             $state.reload();
                         }
@@ -221,6 +224,7 @@
         // refresh the overview page when upload is complete
         $scope.uploadComplete = function() {
             $nodeServices.runFileIndexer();
+            growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
             $state.reload();
         };
 

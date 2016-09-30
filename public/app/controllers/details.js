@@ -5,7 +5,7 @@
         .controller('DetailsController', DetailsController);
 
     StateProvider.$inject = ['$stateProvider'];
-    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams', '$state'];
+    DetailsController.$inject = ['$scope', '$nodeServices', '$stateParams', '$state', 'growl'];
 
     function StateProvider($stateProvider) {
         $stateProvider.state('search.results.overview.details', {
@@ -24,7 +24,7 @@
         });
     }
 
-    function DetailsController($scope, $nodeServices, $stateParams, $state) {
+    function DetailsController($scope, $nodeServices, $stateParams, $state, growl) {
         $scope.snippetId = $stateParams.snippetId;
         $scope.fileName = $stateParams.fileName;
         $scope.isOwner = $stateParams.isOwner;
@@ -32,6 +32,8 @@
         $scope.confirmCancel = false;
         $scope.content = "";
         $scope.origContent = "";
+        var indexMessage = "It may take up to 15 minutes for your changes to be searchable.";
+
         var overviewPage = "search.results.overview";
 
         $nodeServices.getFile($scope.snippetId, $scope.fileName).then (
@@ -82,6 +84,7 @@
             $nodeServices.updateFile($scope.snippetId, $scope.fileName, $scope.content).then (
                 function() {
                     $nodeServices.runFileIndexer();
+                    growl.info(indexMessage,{ttl: 5000, disableCountDown: true});
                     $state.go(overviewPage, {});
                 }
             )

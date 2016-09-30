@@ -25,18 +25,11 @@ describe("Mongo Dao", function() {
     }, 5000);
 
     afterEach(function(done) {
-        //We don't want to remove all data in prod
-        if (process.env.NODE_ENV == 'production') {
-            return;
-        }
         //cleanup fake user
         db.removeUser(fakeUser, function (err, data) {
             db.removeSnippet(fakeSnippet._id, function(err, result){
                 db.removeSnippet(fakeSnippet2._id, function(err, result){
-                    db.removeAllRatings(function (err, result) {
-                        if (err) console.log(err);
-                        done();
-                    });
+                    done();
                 });
             });
         });

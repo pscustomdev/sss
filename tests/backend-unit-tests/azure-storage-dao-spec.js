@@ -16,19 +16,12 @@ describe("Azure Storage Dao", function() {
     azureStorage.createContainer(DEFAULT_CONTAINER, function(err, result, response){});
 
     beforeEach(function(done) {
-        //cleanup fake repo
-        azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
-            azureStorage.deleteFile(folderName, fakeFileName2 , function (err, result) {
-                done();
-            });
-        });
+        done();
     }, 5000);
 
     afterEach(function(done) {
-        azureStorage.deleteFile(folderName, fakeFileName , function (err, result) {
-            azureStorage.deleteFile(folderName, fakeFileName2 , function (err, result) {
-                done();
-            });
+        azureStorage.deleteFolder(folderName, function (err, result) {
+            done();
         });
     }, 5000);
 

@@ -119,8 +119,15 @@ exports.removeSnippet = function (id, next) {
             azureStorage.deleteFolder(id, function(err, result) {
                 if (err) {
                     console.warn(err.message);
+                    next(err, null);
                 }
-                next(err, "");
+                exports.removeSnippetRating(id, function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                        next(err, null);
+                    }
+                    next(err, "");
+                });
             });
         }
     );
@@ -148,19 +155,18 @@ exports.cleanupSnippets = function (next) {
             console.warn(err.message);
             next(err, null);
         }
-        results.forEach(function(snippet){
-            exports.removeSnippet(snippet.snippetId, function(err, result) {
-                if (err) {
-                    console.warn(err.message);
-                }
-                exports.removeSnippetRating(snippet.snippetId, function(err, result) {
+        if (results && results.length > 0) {
+            results.forEach(function(snippet){
+                exports.removeSnippet(snippet.snippetId, function(err, result) {
                     if (err) {
                         console.warn(err.message);
                     }
+                    next(err, "");
                 });
             });
-        });
-        next(err, "");
+        } else {
+            next(err, "");
+        }
     });
 };
 
@@ -178,19 +184,6 @@ exports.addUpdateSnippetRating = function (rating, next) {
         }
     );
 };
-
-exports.updateSnippetRating = function (rating, next) {
-    db.collection("ratings").update({snippetId: rating.snippetId, rater: rating.rater, rating: rating.rating},
-        function (err, object) {
-            if (err) {
-                console.warn(err.message);
-                next(err, null);
-            }
-            next(err, object);
-        }
-    );
-};
-
 
 exports.getSnippetRatings = function (id, next) {
     db.collection('ratings').find({snippetId: id}).toArray(function (err, results) {
@@ -261,6 +254,7 @@ exports.getSnippetRatingByUser = function (userRating, next) {
     );
 };
 
+// WARNING: This removes all ratings
 exports.removeAllRatings = function (next) {
     db.collection('ratings').remove(
         function (err, result) {

@@ -19,18 +19,32 @@ var nock = require("nock");
 chai.use(chaiHttp);
 passportStub.install(app);
 
-describe("REST API Tests", function() {
+describe("REST API Tests", function () {
     // var fakeSnippetId = uuid.v4();
     var fakeSnippetId = "MochaSnippet";
     var fakeSnippetDesc = "Mocha Description";
     var fakeSnippetDisplayName = "Mocha Display Name";
     var fakeSnippetReadme = "Mocha Readme";
     var fakeSnippetOwner = "fakeOwner";
-    var fakeSnippet = {_id: fakeSnippetId, description: fakeSnippetDesc, displayName: fakeSnippetDisplayName, readme: fakeSnippetReadme, owner: fakeSnippetOwner};
+    var fakeSnippet = {
+        _id: fakeSnippetId,
+        description: fakeSnippetDesc,
+        displayName: fakeSnippetDisplayName,
+        readme: fakeSnippetReadme,
+        owner: fakeSnippetOwner
+    };
+    var fakeSnippet2 = {
+        _id: fakeSnippetId + "2",
+        description: fakeSnippetDesc + "2",
+        displayName: fakeSnippetDisplayName + "2",
+        readme: fakeSnippetReadme + "2",
+        owner: fakeSnippetOwner
+    };
     var fakeFileName = "MochaTestFile";
-    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
-    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
-    var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
+    var fakeFileName2 = "MochaTestFile2";
+    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater: "testOwner", rating: 5};
+    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater: "testOwner2", rating: 1.5};
+    var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater: "whoever", rating: 1.5};
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
@@ -38,31 +52,27 @@ describe("REST API Tests", function() {
         return;
     }
 
-    beforeEach(function(done) {
+    beforeEach(function (done) {
+        done();
+    }, 5000);
+
+    afterEach(function (done) {
         // cleanup fake repo
         azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
-            db.removeSnippet(fakeSnippetId, function(err, result){
-                db.removeAllRatings(function (err, result) {
-                    if (err) console.log(err);
+            db.removeSnippet(fakeSnippetId, function (err, result) {
+                db.removeSnippet(fakeSnippet2._id, function (err, result) {
                     done();
                 });
             });
         });
     }, 5000);
 
-    afterEach(function(done) {
-        //Doing so many operations on each test is killing the cost of azure so we're going to limit to cleaning up just beforeEach test.
-        done();
-    }, 5000);
-
-
-    it('should get a list of all snippets on /snippets/:ids GET', function(done) {
-        var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
+    it('should get a list of all snippets on /snippets/:ids GET', function (done) {
         var ids = encodeURIComponent(fakeSnippetId + "," + fakeSnippet2._id);
         chai.request(app)
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .post('/api/snippet')
                     .send(fakeSnippet2)
@@ -82,42 +92,41 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a list of snippets by owner on /snippets?owner=fakeSnippetOwner GET', function(done) {
-        var fakeSnippet2 = {_id: fakeSnippetId + "2", description: fakeSnippetDesc + "2", displayName: fakeSnippetDisplayName + "2", readme: fakeSnippetReadme + "2", owner: fakeSnippetOwner};
+    it('should get a list of snippets by owner on /snippets?owner=fakeSnippetOwner GET', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .post('/api/snippet')
-                        .send(fakeSnippet2)
-                        .end(function (err, res) {
-                            chai.request(app)
-                                .get('/api/snippets?owner=' + fakeSnippetOwner)
-                                .end(function (err, res) {
-                                    expect(res.status).to.eql(200);
-                                    res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
-                                    res.body[0].should.have.property("displayName");
-                                    // res.body[0].displayName.should.equal(fakeSnippet2.displayName); //Order could change so we need to see how to deal with that before enabling this.
-                                    res.body[0].should.have.property("owner");
-                                    // res.body[0].owner.should.equal(fakeSnippetOwner);
-                                    res.body[1].should.have.property("displayName");
-                                    // res.body[1].displayName.should.equal(fakeSnippet.displayName);
-                                    res.body[1].should.have.property("owner");
-                                    // res.body[1].owner.should.equal(fakeSnippetOwner);
-                                    done();
-                                });
-                        });
+                    .send(fakeSnippet2)
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .get('/api/snippets?owner=' + fakeSnippetOwner)
+                            .end(function (err, res) {
+                                expect(res.status).to.eql(200);
+                                res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
+                                res.body[0].should.have.property("displayName");
+                                // res.body[0].displayName.should.equal(fakeSnippet2.displayName); //Order could change so we need to see how to deal with that before enabling this.
+                                res.body[0].should.have.property("owner");
+                                // res.body[0].owner.should.equal(fakeSnippetOwner);
+                                res.body[1].should.have.property("displayName");
+                                // res.body[1].displayName.should.equal(fakeSnippet.displayName);
+                                res.body[1].should.have.property("owner");
+                                // res.body[1].owner.should.equal(fakeSnippetOwner);
+                                done();
+                            });
+                    });
 
             });
     });
 
-    it('should create a snippet on /snippet POST', function(done) {
+    it('should create a snippet on /snippet POST', function (done) {
         chai.request(app)
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res){
+            .end(function (err, res) {
                 res.should.have.status(200);
                 db.getSnippet(fakeSnippetId, function (err, result) {
                     expect(result.displayName).to.be.eql(fakeSnippet.displayName);
@@ -126,18 +135,18 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a snippet on /snippet/:snippetId GET', function(done) {
+    it('should get a snippet on /snippet/:snippetId GET', function (done) {
         chai.request(app)
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res){
+            .end(function (err, res) {
                 res.should.have.status(200);
                 db.getSnippet(fakeSnippetId, function (err, result) {
                     expect(result.displayName).to.be.eql(fakeSnippet.displayName);
                 });
                 chai.request(app)
                     .get('/api/snippet/' + fakeSnippetId)
-                    .end(function(err, res){
+                    .end(function (err, res) {
                         console.log("res: " + res);
                         expect(res.status).to.eql(200);
                         res.body.should.be.a('object');
@@ -154,23 +163,23 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should update snippet data on /snippet PUT', function(done) {
+    it('should update snippet data on /snippet PUT', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res){
+            .end(function (err, res) {
                 res.should.have.status(200);
                 //update the snippet with a new desc
                 fakeSnippet.description = "blah";
                 chai.request(app)
                     .put('/api/snippet/' + fakeSnippetId)
                     .send(fakeSnippet)
-                    .end(function(err, res){
+                    .end(function (err, res) {
                         res.should.have.status(200);
                         chai.request(app)
                             .get('/api/snippet/' + fakeSnippetId)
-                            .end(function(err, res){
+                            .end(function (err, res) {
                                 console.log("res: " + res);
                                 expect(res.status).to.eql(200);
                                 res.body.should.be.a('object');
@@ -184,12 +193,12 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should delete a snippet on /snippet DELETE', function(done) {
+    it('should delete a snippet on /snippet DELETE', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res){
+            .end(function (err, res) {
                 //lets make sure it exists in the db before deleting it
                 db.getSnippet(fakeSnippetId, function (err, result) {
                     expect(result.displayName).to.be.eql(fakeSnippet.displayName);
@@ -208,12 +217,12 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET even if no files have been uploaded', function(done) {
+    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET even if no files have been uploaded', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .get('/api/snippet-overview/' + fakeSnippetId)
                     .end(function (err, res) {
@@ -234,17 +243,17 @@ describe("REST API Tests", function() {
     });
 
 
-    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function(done) {
+    it('should get data required for the snippet overview on /snippet-overview/:snippetId GET', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                 //create the initial snippet
                     .post('/api/snippet')
                     .send(fakeSnippet)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         chai.request(app)
                         //create new file
                             .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
@@ -269,11 +278,11 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should create a rating on /rating/:snippetId POST', function(done) {
+    it('should create a rating on /rating/:snippetId POST', function (done) {
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .get('/api/rating/' + fakeSnippetRating.snippetId)
                     .end(function (err, res) {
@@ -284,12 +293,12 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should update a rating on /rating/:snippetId PUT', function(done) {
-        var modifiedRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:4};
+    it('should update a rating on /rating/:snippetId PUT', function (done) {
+        var modifiedRating = {snippetId: "MochaTestRepo", rater: "testOwner", rating: 4};
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(modifiedRating)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .get('/api/rating/' + fakeSnippetRating.snippetId)
                     .end(function (err, res) {
@@ -300,15 +309,15 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get an average rating for the snippet on /rating/:snippetId GET', function(done) {
+    it('should get an average rating for the snippet on /rating/:snippetId GET', function (done) {
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .post('/api/rating/' + fakeSnippetRating2.snippetId)
                     .send(fakeSnippetRating2)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         chai.request(app)
                             .get('/api/rating/' + fakeSnippetRating.snippetId)
                             .end(function (err, res) {
@@ -320,15 +329,15 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a users rating for a snippet on /rating/:snippetId/:user GET', function(done) {
+    it('should get a users rating for a snippet on /rating/:snippetId/:user GET', function (done) {
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .post('/api/rating/' + fakeSnippetRating2.snippetId)
                     .send(fakeSnippetRating2)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         chai.request(app)
                             .get('/api/rating/' + fakeSnippetRating.snippetId + '/' + fakeSnippetRating.rater)
                             .end(function (err, res) {
@@ -343,20 +352,20 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a list of snippets average ratings /ratings/:listOfIds GET', function(done) {
+    it('should get a list of snippets average ratings /ratings/:listOfIds GET', function (done) {
         var ids = encodeURIComponent(fakeSnippetRating.snippetId + "," + fakeSnippetRating3.snippetId);
         chai.request(app)
             .post('/api/rating/' + fakeSnippetRating.snippetId)
             .send(fakeSnippetRating)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                     .post('/api/rating/' + fakeSnippetRating2.snippetId)
                     .send(fakeSnippetRating2)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         chai.request(app)
                             .post('/api/rating/' + fakeSnippetRating3.snippetId)
                             .send(fakeSnippetRating3)
-                            .end(function(err, res) {
+                            .end(function (err, res) {
                                 chai.request(app)
                                     .get('/api/ratings/' + ids)
                                     .end(function (err, res) {
@@ -377,7 +386,7 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get a 0 rating if one does not exist for the snippet on /rating/:snippetId GET', function(done) {
+    it('should get a 0 rating if one does not exist for the snippet on /rating/:snippetId GET', function (done) {
         chai.request(app)
             .get('/api/rating/fakesnippet')
             .end(function (err, res) {
@@ -387,20 +396,20 @@ describe("REST API Tests", function() {
             })
     });
 
-    it('should add a file on /snippet-detail/:snippetId/:fileName POST', function(done) {
+    it('should add a file on /snippet-detail/:snippetId/:fileName POST', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
-                    //create new file
+                //create new file
                     .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         //Get the file to make sure it was there
                         chai.request(app)
-                            // get overview to assure file was created
+                        // get overview to assure file was created
                             .get('/api/snippet-overview/' + fakeSnippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
@@ -412,23 +421,23 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should upload and add a file on /snippet-detail/:snippetId POST', function(done) {
+    it('should upload and add a file on /snippet-detail/:snippetId POST', function (done) {
         var fileName = 'readme';
         var filePath = 'tests/backend-unit-tests/';
         // var boundary = Math.random();
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
-                    //upload a new file
+                //upload a new file
                     .post('/api/snippet-detail/' + fakeSnippetId)
                     .attach('file', filePath + fileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         chai.request(app)
-                            //verify file contents
+                        //verify file contents
                             .get('/api/snippet-detail/' + fakeSnippetId + "/" + fileName)
                             .end(function (err, res) {
                                 res.should.have.status(200);
@@ -440,33 +449,33 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should update contents of a file on /snippet-detail/:snippetId/:fileName PUT', function(done) {
+    it('should update contents of a file on /snippet-detail/:snippetId/:fileName PUT', function (done) {
         var fakeFileContents = "Sample data to write to file";
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
-                    //create new file
+                //create new file
                     .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         chai.request(app)
-                            //get overview to assure file was created
+                        //get overview to assure file was created
                             .get('/api/snippet-overview/' + fakeSnippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
                                 res.body.files[0].should.equal(fakeFileName);
                                 chai.request(app)
-                                    //update file contents
+                                //update file contents
                                     .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
                                     .send({content: fakeFileContents})
                                     .end(function (err, res) {
                                         res.should.have.status(200);
                                         chai.request(app)
-                                            //verify file contents
+                                        //verify file contents
                                             .get('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
                                             .end(function (err, res) {
                                                 res.should.have.status(200);
@@ -479,14 +488,14 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should get contents of a file on /snippet-detail/:snippetId/:fileName GET', function(done) {
+    it('should get contents of a file on /snippet-detail/:snippetId/:fileName GET', function (done) {
         var fileName = 'readme';
         var filePath = 'tests/backend-unit-tests/';
         chai.request(app)
         //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
                 //upload a new file
                     .post('/api/snippet-detail/' + fakeSnippetId)
@@ -507,31 +516,31 @@ describe("REST API Tests", function() {
             });
     });
 
-    it('should delete a file on /snippet-detail/:snippetId/:fileName DELETE', function(done) {
+    it('should delete a file on /snippet-detail/:snippetId/:fileName DELETE', function (done) {
         chai.request(app)
-            //create the initial snippet
+        //create the initial snippet
             .post('/api/snippet')
             .send(fakeSnippet)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 chai.request(app)
-                    //create new file
+                //create new file
                     .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
                     .end(function (err, res) {
                         res.should.have.status(200);
                         chai.request(app)
-                            //get overview to assure file was created
+                        //get overview to assure file was created
                             .get('/api/snippet-overview/' + fakeSnippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
                                 res.body.files[0].should.equal(fakeFileName);
                                 chai.request(app)
-                                    //delete the file
+                                //delete the file
                                     .delete('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
                                     .end(function (err, res) {
                                         res.should.have.status(200);
                                         chai.request(app)
-                                            //get overview to assure file is gone
+                                        //get overview to assure file is gone
                                             .get('/api/snippet-overview/' + fakeSnippetId)
                                             .end(function (err, res) {
                                                 res.should.have.status(200);
@@ -546,59 +555,145 @@ describe("REST API Tests", function() {
             });
     });
 
-    //TODO write a better test
-    it('should delete all snippets and files marked for deletion DELETE', function(done) {
-        //TODO create snippet and file
-        //TODO mark the file and verify it is marked
-        //TODO create another snippet and file
-        //TODO make the snippet as deleted
-        //TODO run cleanup and assure:
-        //     * the first marked file has been deleted
-        //     * the second snippet and the file folder has been deleted
+    it('should cleanup (delete) a snippet marked for deletion (and delete the file folder and the ratings) DELETE', function (done) {
+        var fakeRating = {snippetId: fakeSnippetId, rater: "testOwner", rating: 5};
         chai.request(app)
-            .delete('/api/cleanup-marked-snippets-files')
-            .end(function(err, res) {
-                res.should.have.status(200);
-                done();
+        //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function (err, res) {
+                chai.request(app)
+                // add a rating
+                    .post('/api/rating/' + fakeRating.snippetId)
+                    .send(fakeRating)
+                    .end(function (err, res) {
+                        chai.request(app)
+                        //create new file
+                            .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                chai.request(app)
+                                //get overview to assure file was created
+                                    .get('/api/snippet-overview/' + fakeSnippetId)
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        res.body.files.should.be.a('array');
+                                        res.body.files[0].should.equal(fakeFileName);
+                                        //update the snippet to mark it for deletion
+                                        var fakeData = JSON.parse(JSON.stringify(fakeSnippet));
+                                        fakeData.deleted = "true";
+                                        chai.request(app)
+                                            .put('/api/snippet/' + fakeSnippetId)
+                                            .send(fakeData)
+                                            .end(function (err, res) {
+                                                res.should.have.status(200);
+                                                chai.request(app)
+                                                // cleanup (delete) the snippet marked for deletion
+                                                    .delete('/api/cleanup-marked-snippets-files')
+                                                    .end(function (err, res) {
+                                                        res.should.have.status(200);
+                                                        chai.request(app)
+                                                        //get overview to assure snippet is gone
+                                                            .get('/api/snippet-overview/' + fakeSnippetId)
+                                                            .end(function (err, res) {
+                                                                res.should.have.status(204);
+                                                                // verify the files folder is empty
+                                                                azureStorage.getListOfFilesInFolder(fakeSnippetId, function (err, result) {
+                                                                    result.entries.should.have.length(0);
+                                                                    db.getSnippetRatings(fakeSnippetId, function (err, result) {
+                                                                        result.should.have.length(0);
+                                                                        done();
+                                                                    });
+                                                                });
+                                                            });
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
             });
     });
 
-    xit('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function(done) {
+    it('should cleanup (delete) a file in a snippet marked for deletion DELETE', function (done) {
         chai.request(app)
-            // use a search term for existing snippets since creating a new snippet
-            // is not immediately searchable
+        //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function (err, res) {
+                chai.request(app)
+                //create new file
+                    .post('/api/snippet-detail/' + fakeSnippetId + '/' + fakeFileName)
+                    .end(function (err, res) {
+                        res.should.have.status(200);
+                        chai.request(app)
+                        //get overview to assure file was created
+                            .get('/api/snippet-overview/' + fakeSnippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.files.should.be.a('array');
+                                res.body.files[0].should.equal(fakeFileName);
+                                chai.request(app)
+                                //update file contents to mark the file for deletion
+                                    .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
+                                    .send({content: "deleted=true"})
+                                    .end(function (err, res) {
+                                        res.should.have.status(200);
+                                        chai.request(app)
+                                            .delete('/api/cleanup-marked-snippets-files')
+                                            .end(function (err, res) {
+                                                res.should.have.status(200);
+                                                chai.request(app)
+                                                //get overview to assure file is gone
+                                                    .get('/api/snippet-overview/' + fakeSnippetId)
+                                                    .end(function (err, res) {
+                                                        res.should.have.status(200);
+                                                        res.body.files.should.be.a('array');
+                                                        res.body.files.should.have.length(0);
+                                                        done();
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
+            });
+    });
+
+    xit('should search all snippets and return result on /snippet-search with searchTerms = req.query.q GET', function (done) {
+        chai.request(app)
+        // use a search term for existing snippets since creating a new snippet
+        // is not immediately searchable
             .get('/api/snippet-search?q=taco')
-            .end(function(err, res) {
+            .end(function (err, res) {
                 res.should.have.status(200);
                 res.body.items.should.be.a('array');
                 done();
             });
     });
 
-    it('should return the authenticated user /authenticated-user GET', function(done) {
+    it('should return the authenticated user /authenticated-user GET', function (done) {
         chai.request(app)
         //create the initial snippet
             .get('/api/authenticated-user')
-            .end(function(err, res) {
+            .end(function (err, res) {
                 res.should.have.status(200);
                 //TODO figure out how to authenticate so we can get the actual user.
                 done();
             });
     });
 
-    it('should start the db indexer /indexer/db GET', function(done) {
+    it('should start the db indexer /indexer/db GET', function (done) {
         chai.request(app)
             .get('/api/indexer/db')
-            .end(function(err, res) {
+            .end(function (err, res) {
                 res.should.have.status(200);
                 done();
             });
     });
 
-    it('should start the file indexer /indexer/file GET', function(done) {
+    it('should start the file indexer /indexer/file GET', function (done) {
         chai.request(app)
             .get('/api/indexer/file')
-            .end(function(err, res) {
+            .end(function (err, res) {
                 res.should.have.status(200);
                 done();
             });

@@ -167,7 +167,7 @@ function performIndexing(indexer, next) {
             console.warn(err.message);
             next(err, err.message);
         }
-        if (response.statusCode == 202) {
+        if (response && response.statusCode == 202) {
             return next(null, "");
         }
         var body = {};

@@ -39,29 +39,23 @@ module.exports = function() {
 
         },
         function(token, refreshToken, profile, done) {
-
-            // make the code asynchronous
-            // User.findOne won't fire until we have all our data back from Google
-            process.nextTick(function() {
-
-                // try to find the user based on their google id
-                db.findUser(profile.id, function(err, user) {
-                    if (err) {              // Log errors, if any
-                        console.log(err);
-                    }
-                    if (!err && user) {     // No Error and found a User, just continue
-                        done(null, user);
-                    } else {                // Have an Error OR didn't find a User, save User to local database
-                        // if the user isnt in our database, create a new user
-                        // set all of the relevant information
-                        profile.username = profile.emails[0].value; // pull the first email
-                        profile.name = profile.displayName;
-                        profile.email = profile.emails[0].value; // pull the first email
-                        profile.provider = "google";
-                        profile.token = token;
-                        createUser(profile, done);
-                    }
-                });
+            // try to find the user based on their google id
+            db.findUser(profile.id, function(err, user) {
+                if (err) {              // Log errors, if any
+                    console.log(err);
+                }
+                if (!err && user) {     // No Error and found a User, just continue
+                    done(null, user);
+                } else {                // Have an Error OR didn't find a User, save User to local database
+                    // if the user isnt in our database, create a new user
+                    // set all of the relevant information
+                    profile.username = profile.emails[0].value; // pull the first email
+                    profile.name = profile.displayName;
+                    profile.email = profile.emails[0].value; // pull the first email
+                    profile.provider = "google";
+                    profile.token = token;
+                    createUser(profile, done);
+                }
             });
 
         }));

@@ -4,6 +4,7 @@ var auth_conf = require('../auth/auth-conf');
 var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
+var azureStorage = require('../db/azure-storage-dao');
 
 exports.addUser = function (profile, next) {
     db.collection("users").find({id: profile.id}).toArray(function (err, users) {
@@ -26,7 +27,7 @@ exports.removeAllUsers = function (next) {
     db.collection('users').remove(
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -39,26 +40,19 @@ exports.findUsers = function (queryObject, next) {
         if (err) {
             console.warn(err.message);
             next(err, null);
-        } else {
-            if (users) {
-                next(err, users);
-            } else {
-                next("No user(s) found");
-            }
         }
+        next(err, users);
     });
 };
 
 exports.findUser = function (id, next) {
-    db.collection("users").findOne({id: id},
-        function (err, user) {
-            if (user) {
-                next(err, user);
-            } else {
-                next("User not found");
-            }
+    db.collection("users").findOne({id: id}, function (err, user) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
-    );
+        next(err, user);
+    });
 };
 
 exports.addUpdateSnippet = function (snippet, next) {
@@ -68,7 +62,8 @@ exports.addUpdateSnippet = function (snippet, next) {
             displayName: snippet.displayName,
             postedOn: Date.now(),
             description: snippet.description,
-            readme: snippet.readme
+            readme: snippet.readme,
+            deleted: snippet.deleted != "true" ? "false" : snippet.deleted
         }, {upsert: true},
         function (err, object) {
             if (err) {
@@ -83,52 +78,68 @@ exports.addUpdateSnippet = function (snippet, next) {
 exports.getSnippet = function (id, next) {
     db.collection('snippets').findOne({snippetId: id},
         function (err, result) {
-            if (result) {
-                next(err, result);
-            } else {
-                next("Snippet not found");
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
             }
+            next(err, result);
         }
     );
 };
 
-exports.getSnippets = function (owner, next) {
-    db.collection('snippets').find().sort({displayName: -1}).toArray(function (err, results) {
-        if (results && results[0]) {
-            next(err, results);
-        } else {
-            next("Snippets not found");
+exports.getSnippets = function (snippetIds, next) {
+    db.collection('snippets').find({snippetId: {$in: snippetIds}}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
+        next(err, results);
     });
 };
 
 exports.getSnippetsByOwner = function (owner, next) {
     db.collection('snippets').find({owner: owner}).sort({displayName: -1}).toArray(function (err, results) {
-        if (results && results[0]) {
-            next(err, results);
-        } else {
-            next("Snippets not found");
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
         }
+        next(err, results);
     });
 };
 
+// Delete the snippet from the collection
 exports.removeSnippet = function (id, next) {
     db.collection('snippets').remove({snippetId: id},
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
-            next(err, result);
+            // remove all snippet files
+            azureStorage.deleteFolder(id, function(err, result) {
+                if (err) {
+                    console.warn(err.message);
+                    next(err, null);
+                }
+                exports.removeSnippetRating(id, function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                        next(err, null);
+                    }
+                    next(err, "");
+                });
+            });
         }
     );
 };
 
+// WARNING: This will remove the entire snippet collection
+// TODO When doing this, we should also delete all folders in the blob storage
 exports.removeAllSnippets = function (next) {
     db.collection('snippets').remove(
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -136,50 +147,64 @@ exports.removeAllSnippets = function (next) {
     );
 };
 
-exports.addUpdateSnippetRating = function (rating, next) {
-    db.collection("ratings").update({
-            snippetId: rating.snippetId,
-            rater: rating.rater
-        }, {snippetId: rating.snippetId, rater: rating.rater, rating: rating.rating}, {upsert: true},
-        function (err, object) {
-            if (err) {
-                console.warn(err.message);
-                next(err, null);
-            }
-            next(err, object);
-        }
-    );
-};
-
-exports.updateSnippetRating = function (rating, next) {
-    db.collection("ratings").update({snippetId: rating.snippetId, rater: rating.rater, rating: rating.rating},
-        function (err, object) {
-            if (err) {
-                console.warn(err.message);
-                next(err, null);
-            }
-            next(err, object);
-        }
-    );
-};
-
-
-exports.getSnippetRatings = function (id, next) {
-    db.collection('ratings').find({snippetId: id}).toArray(function (err, results) {
-        if (results && results.length > 0) {
-            next(err, results);
-        } else {
+// delete all marked snippets and related files
+exports.cleanupSnippets = function (next) {
+    // iterate through all soft deleted snippets
+    db.collection('snippets').find({deleted: "true"}).toArray(function (err, results) {
+        if (err) {
             console.warn(err.message);
-            next("No ratings found");
+            next(err, null);
+        }
+        if (results && results.length > 0) {
+            results.forEach(function(snippet){
+                exports.removeSnippet(snippet.snippetId, function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                    }
+                    next(err, "");
+                });
+            });
+        } else {
+            next(err, "");
         }
     });
 };
 
+exports.addUpdateSnippetRating = function (rating, next) {
+    db.collection("snippets").update({
+            ratingSnippetId: rating.snippetId,
+            rater: rating.rater
+        }, {ratingSnippetId: rating.snippetId, rater: rating.rater, rating: rating.rating}, {upsert: true},
+        function (err, object) {
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
+            next(err, object);
+        }
+    );
+};
+
+exports.getSnippetRatings = function (id, next) {
+    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        //We are going to populate the snippetId with the ratingsSnippetId so all downstream calls will work.
+        //We do this because we are now combining snippets and ratings collections.
+        _.each(results, function(result) {
+            result.snippetId = result.ratingSnippetId
+        });
+        next(err, results);
+    });
+};
+
 exports.removeSnippetRating = function (id, next) {
-    db.collection('ratings').remove({snippetId: id},
+    db.collection('snippets').remove({ratingSnippetId: id},
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
             next(err, result);
@@ -188,18 +213,29 @@ exports.removeSnippetRating = function (id, next) {
 };
 
 exports.getSnippetRatingsAvg = function (id, next) {
-    db.collection('ratings').find({snippetId: id}).toArray(function (err, ratings) {
+    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, ratings) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
         next(err, calcAvgRatingForSnippet(ratings));
     });
 };
 
 exports.getSnippetsRatingsAvg = function (snippetIds, next) {
     var returnedRatings = [];
-    db.collection('ratings').find({snippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
-        var ratingsGrouped = _.groupBy(ratings, 'snippetId');
+    db.collection('snippets').find({ratingSnippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        if (!ratings || !ratings[0]) {
+            ratings = [];
+        }
+        var ratingsGrouped = _.groupBy(ratings, 'ratingSnippetId');
         _.each(ratingsGrouped, function (ratings) {
             returnedRatings.push({
-                snippetId: ratings[0].snippetId,
+                snippetId: ratings[0].ratingSnippetId,
                 rating: calcAvgRatingForSnippet(ratings)
             });
         });
@@ -209,34 +245,20 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
 };
 
 exports.getSnippetRatingByUser = function (userRating, next) {
-    db.collection('ratings').findOne(userRating,
-        function (err, result) {
-            if (result) {
-                next(err, result);
-            } else {
-                next("Rating not found");
-            }
-        }
-    );
-};
-
-exports.removeAllRatings = function (next) {
-    db.collection('ratings').remove(
+    //We do this because we combined the ratings and snippets collection
+    userRating.ratingSnippetId = userRating.snippetId;
+    delete userRating.snippetId;
+    db.collection('snippets').findOne(userRating,
         function (err, result) {
             if (err) {
-                console.warn(err.message);  // returns error if no matching object found
+                console.warn(err.message);
                 next(err, null);
             }
+            if (!result) {
+                result = 0;
+            }
+            result.snippetId = result.ratingSnippetId;
             next(err, result);
-        }
-    );
-};
-
-exports.createIndex = function (collection, index, next ) {
-    // db.createIndex(collection,{index:"text"},
-    db.createIndex("snippets",{"description":"text"},
-        function(err, result){
-            next(err, result)
         }
     );
 };
@@ -281,7 +303,7 @@ exports.createIndex = function (collection, index, next ) {
 //TingoDB doesn't support aggregate function so we have to average it ourselves.
 function calcAvgRatingForSnippet(snippetRatings){
     var avg = 0;
-    if (snippetRatings && snippetRatings.length > 0) {
+    if (snippetRatings && snippetRatings[0]) {
         var ratings = _.pluck(snippetRatings, 'rating'); //get an array of only the ratings
         var sum = ratings.reduce(function (a, b) {
             return a + b;

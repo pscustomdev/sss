@@ -4,6 +4,7 @@ var auth_conf = require('../auth/auth-conf');
 var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
+var azureStorage = require('../db/azure-storage-dao');
 
 exports.addUser = function (profile, next) {
     db.collection("users").find({id: profile.id}).toArray(function (err, users) {
@@ -228,8 +229,8 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
             console.warn(err.message);
             next(err, null);
         }
-        if (!snippets || !snippets[0]) {
-            snippets = [];
+        if (!ratings || !ratings[0]) {
+            ratings = [];
         }
         var ratingsGrouped = _.groupBy(ratings, 'snippetId');
         _.each(ratingsGrouped, function (ratings) {

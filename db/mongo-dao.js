@@ -232,10 +232,10 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
         if (!ratings || !ratings[0]) {
             ratings = [];
         }
-        var ratingsGrouped = _.groupBy(ratings, 'snippetId');
+        var ratingsGrouped = _.groupBy(ratings, 'ratingSnippetId');
         _.each(ratingsGrouped, function (ratings) {
             returnedRatings.push({
-                ratingSnippetId: ratings[0].snippetId,
+                snippetId: ratings[0].ratingSnippetId,
                 rating: calcAvgRatingForSnippet(ratings)
             });
         });

@@ -5,7 +5,7 @@ var db = require('../../db/mongo-dao');
 var expect = require('chai').expect;
 
 describe("Mongo Dao", function() {
-    
+
     var fakeUser = {
         id:123,
         firstName: "fakeFirst",
@@ -21,31 +21,19 @@ describe("Mongo Dao", function() {
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
 
     beforeEach(function(done) {
-        //We don't want to remove all data in prod
-        if (process.env.NODE_ENV == 'production') {
-            return;
-        }
+        done()
+    }, 5000);
+
+    afterEach(function(done) {
         //cleanup fake user
         db.removeUser(fakeUser, function (err, data) {
-            db.removeAllSnippets(function(err, result){
-                db.removeAllRatings(function (err, result) {
-                    if (err) console.log(err);
+            db.removeSnippet(fakeSnippet._id, function(err, result){
+                db.removeSnippet(fakeSnippet2._id, function(err, result){
                     done();
                 });
             });
         });
     }, 5000);
-
-    afterEach(function(done) {
-        //Doing so many operations on each test is killing the cost of azure so we're going to limit to cleaning up just beforeEach test.
-        done()
-    }, 5000);
-    
-    xit('should create an index', function (done) {
-        db.createIndex("snippets",{"description":"text"}, function(result){
-            done();
-        })
-    });
 
     //We don't need this test if we are using azure search, solr or elasticsearch
     xit('should find some snippets based on the index', function (done) {
@@ -132,18 +120,6 @@ describe("Mongo Dao", function() {
         });
     });
 
-    it('should be able to remove all snippets in the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, msg){
-            expect(msg.result.ok).to.be.eql(1);
-            db.removeAllSnippets(function(err, result) {
-                db.getSnippet(fakeSnippet._id, function (err, result) {
-                    expect(err).to.be.eql("Snippet not found");
-                    done();
-                });
-            });
-        });
-    });
-
     it('should be able to update a snippet in the database', function (done) {
         db.addUpdateSnippet(fakeSnippet, function(err, msg){
             expect(msg.result.ok).to.be.eql(1);
@@ -177,6 +153,71 @@ describe("Mongo Dao", function() {
                     done();
                 });
             });
+        });
+    });
+
+    //WARNING:  This will clear all snippets from the database
+    xit('should be able to remove all snippets in the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            db.removeAllSnippets(function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(err).to.be.eql("Snippet not found");
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should be able to remove a snippet in the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            fakeSnippet.displayName = "blah";
+            fakeSnippet.deleted = "true";
+            db.addUpdateSnippet(fakeSnippet, function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(result.deleted).to.be.eql("true");
+                    db.removeSnippet(fakeSnippet._id, function(err, result) {
+                        db.getSnippet(fakeSnippet._id, function (err, result) {
+                            expect(result).to.be.eql(null);
+                            done();
+                        });
+                    })
+                })
+            })
+        });
+    });
+
+    it('should be able to mark a snippet for deletion in the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            fakeSnippet.displayName = "blah";
+            fakeSnippet.deleted = "true";
+            db.addUpdateSnippet(fakeSnippet, function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(result.deleted).to.be.eql("true");
+                    done();
+                })
+            })
+        });
+    });
+
+    it('should be able to cleanup (delete) marked snippets in the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            fakeSnippet.displayName = "blah";
+            fakeSnippet.deleted = "true";
+            db.addUpdateSnippet(fakeSnippet, function(err, result) {
+                db.getSnippet(fakeSnippet._id, function (err, result) {
+                    expect(result.deleted).to.be.eql("true");
+                    db.cleanupSnippets(function(err, result) {
+                        db.getSnippet(fakeSnippet._id, function (err, result) {
+                            expect(result).to.be.eql(null);
+                            done();
+                        });
+                    })
+                })
+            })
         });
     });
 

@@ -34,12 +34,6 @@ describe("Mongo Dao", function() {
             });
         });
     }, 5000);
-    
-    xit('should create an index', function (done) {
-        db.createIndex("snippets",{"description":"text"}, function(result){
-            done();
-        })
-    });
 
     //We don't need this test if we are using azure search, solr or elasticsearch
     xit('should find some snippets based on the index', function (done) {

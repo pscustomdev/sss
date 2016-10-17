@@ -5,7 +5,7 @@ var db = require('../../db/mongo-dao');
 var expect = require('chai').expect;
 
 describe("Mongo Dao", function() {
-    
+
     var fakeUser = {
         id:123,
         firstName: "fakeFirst",

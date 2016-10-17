@@ -171,10 +171,10 @@ exports.cleanupSnippets = function (next) {
 };
 
 exports.addUpdateSnippetRating = function (rating, next) {
-    db.collection("ratings").update({
-            snippetId: rating.snippetId,
+    db.collection("snippets").update({
+            ratingSnippetId: rating.snippetId,
             rater: rating.rater
-        }, {snippetId: rating.snippetId, rater: rating.rater, rating: rating.rating}, {upsert: true},
+        }, {ratingSnippetId: rating.snippetId, rater: rating.rater, rating: rating.rating}, {upsert: true},
         function (err, object) {
             if (err) {
                 console.warn(err.message);
@@ -186,17 +186,22 @@ exports.addUpdateSnippetRating = function (rating, next) {
 };
 
 exports.getSnippetRatings = function (id, next) {
-    db.collection('ratings').find({snippetId: id}).toArray(function (err, results) {
+    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);
         }
+        //We are going to populate the snippetId with the ratingsSnippetId so all downstream calls will work.
+        //We do this because we are now combining snippets and ratings collections.
+        _.each(results, function(result) {
+            result.snippetId = result.ratingSnippetId
+        });
         next(err, results);
     });
 };
 
 exports.removeSnippetRating = function (id, next) {
-    db.collection('ratings').remove({snippetId: id},
+    db.collection('snippets').remove({ratingSnippetId: id},
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -208,7 +213,7 @@ exports.removeSnippetRating = function (id, next) {
 };
 
 exports.getSnippetRatingsAvg = function (id, next) {
-    db.collection('ratings').find({snippetId: id}).toArray(function (err, ratings) {
+    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, ratings) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -219,7 +224,7 @@ exports.getSnippetRatingsAvg = function (id, next) {
 
 exports.getSnippetsRatingsAvg = function (snippetIds, next) {
     var returnedRatings = [];
-    db.collection('ratings').find({snippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
+    db.collection('snippets').find({ratingSnippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -227,10 +232,10 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
         if (!ratings || !ratings[0]) {
             ratings = [];
         }
-        var ratingsGrouped = _.groupBy(ratings, 'snippetId');
+        var ratingsGrouped = _.groupBy(ratings, 'ratingSnippetId');
         _.each(ratingsGrouped, function (ratings) {
             returnedRatings.push({
-                snippetId: ratings[0].snippetId,
+                snippetId: ratings[0].ratingSnippetId,
                 rating: calcAvgRatingForSnippet(ratings)
             });
         });
@@ -240,7 +245,10 @@ exports.getSnippetsRatingsAvg = function (snippetIds, next) {
 };
 
 exports.getSnippetRatingByUser = function (userRating, next) {
-    db.collection('ratings').findOne(userRating,
+    //We do this because we combined the ratings and snippets collection
+    userRating.ratingSnippetId = userRating.snippetId;
+    delete userRating.snippetId;
+    db.collection('snippets').findOne(userRating,
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -249,32 +257,8 @@ exports.getSnippetRatingByUser = function (userRating, next) {
             if (!result) {
                 result = 0;
             }
+            result.snippetId = result.ratingSnippetId;
             next(err, result);
-        }
-    );
-};
-
-// WARNING: This removes all ratings
-exports.removeAllRatings = function (next) {
-    db.collection('ratings').remove(
-        function (err, result) {
-            if (err) {
-                console.warn(err.message);
-                next(err, null);
-            }
-            next(err, result);
-        }
-    );
-};
-
-exports.createIndex = function (collection, index, next ) {
-    db.createIndex("snippets",{"description":"text"},
-        function(err, result){
-            if (err) {
-                console.warn(err.message);
-                next(err, null);
-            }
-            next(err, result)
         }
     );
 };

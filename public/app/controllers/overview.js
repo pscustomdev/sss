@@ -114,7 +114,9 @@
                         $scope.snippetOverview = overview;
                         $scope.readme = overview.readme;
                         $scope.origReadme = overview.readme;
-                        $scope.formattedReadme = formatReadme(overview.readme);
+                        if(overview.readme){
+                            $scope.formattedReadme = formatReadme(overview.readme);
+                        }
                     }
                 }
             );

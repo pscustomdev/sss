@@ -5,26 +5,27 @@ var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
 var azureStorage = require('../db/azure-storage-dao');
+var userCollectionName = "sessions";
 
 exports.addUser = function (profile, next) {
-    db.collection("users").find({id: profile.id}).toArray(function (err, users) {
+    db.collection(userCollectionName).find({id: profile.id}).toArray(function (err, users) {
         if (err) {
             next(err, null);
         }
-        db.collection("users").insert(profile, {}, function (err, results) {
+        db.collection(userCollectionName).insert(profile, {}, function (err, results) {
             next(err, results);
         });
     });
 };
 
 exports.removeUser = function (user, next) {
-    db.collection("users").remove({email: user.email}, function (err) {
+    db.collection(userCollectionName).remove({email: user.email}, function (err) {
         next(err);
     });
 };
 
 exports.removeAllUsers = function (next) {
-    db.collection('users').remove(
+    db.collection(userCollectionName).remove(
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -36,7 +37,7 @@ exports.removeAllUsers = function (next) {
 };
 
 exports.findUsers = function (queryObject, next) {
-    db.collection("users").find(queryObject).toArray(function (err, users) {
+    db.collection(userCollectionName).find(queryObject).toArray(function (err, users) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -46,7 +47,7 @@ exports.findUsers = function (queryObject, next) {
 };
 
 exports.findUser = function (id, next) {
-    db.collection("users").findOne({id: id}, function (err, user) {
+    db.collection(userCollectionName).findOne({id: id}, function (err, user) {
         if (err) {
             console.warn(err.message);
             next(err, null);

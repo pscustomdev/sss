@@ -91,9 +91,14 @@ module.exports = function(app) {
         function (req, res) {
             db.removeSnippet(req.params.snippetId, function (err){
                 if (err) {
-                    return res.status(500).json({error: 'Error removing snippet to database: ' + (err.message || err)});
+                    console.warn(err.message);
                 }
-                res.json("");
+                azureStorage.deleteFolder(req.params.snippetId, function(err, result) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error removing snippet files from blob storage: ' + (err.message || err)});
+                    }
+                    res.json("");
+                });
             });
         }
     );
@@ -108,16 +113,22 @@ module.exports = function(app) {
                     console.warn(err.message);
                     error = err;
                 }
-                // then cleanup marked files that remain after cleaning up snippets and related files
-                azureStorage.cleanupFiles(function (err, result){
+                azureStorage.deleteFolders(result.removedSnippets, function(err, result) {
                     if (err) {
                         console.warn(err.message);
                         error = err;
                     }
-                    if (error) {
-                        return res.status(500).json({error: 'Error cleaning up snippets and/or files: ' + (err.message || err)});
-                    }
-                    res.json("");
+                    // then cleanup marked files that remain after cleaning up snippets and related files
+                    azureStorage.cleanupFiles(function (err, result) {
+                        if (err) {
+                            console.warn(err.message);
+                            error = err;
+                        }
+                        if (error) {
+                            return res.status(500).json({error: 'Error cleaning up snippets and/or files: ' + (err.message || err)});
+                        }
+                        res.json("");
+                    });
                 });
             });
         }

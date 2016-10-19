@@ -4,7 +4,6 @@ var auth_conf = require('../auth/auth-conf');
 var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
-var azureStorage = require('../db/azure-storage-dao');
 var userCollectionName = "sessions";
 
 exports.addUser = function (profile, next) {
@@ -116,19 +115,12 @@ exports.removeSnippet = function (id, next) {
                 console.warn(err.message);
                 next(err, null);
             }
-            // remove all snippet files
-            azureStorage.deleteFolder(id, function(err, result) {
+            exports.removeSnippetRating(id, function(err, result) {
                 if (err) {
                     console.warn(err.message);
                     next(err, null);
                 }
-                exports.removeSnippetRating(id, function(err, result) {
-                    if (err) {
-                        console.warn(err.message);
-                        next(err, null);
-                    }
-                    next(err, "");
-                });
+                next(err, "");
             });
         }
     );
@@ -156,17 +148,19 @@ exports.cleanupSnippets = function (next) {
             console.warn(err.message);
             next(err, null);
         }
+        var removedSnippets = "";
         if (results && results.length > 0) {
+            removedSnippets = _.pluck(results, "snippetId");
             results.forEach(function(snippet){
                 exports.removeSnippet(snippet.snippetId, function(err, result) {
                     if (err) {
                         console.warn(err.message);
                     }
-                    next(err, "");
+                    next(err, {"removedSnippets": removedSnippets});
                 });
             });
         } else {
-            next(err, "");
+            next(err, {"removedSnippets": removedSnippets});
         }
     });
 };

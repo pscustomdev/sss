@@ -16,6 +16,23 @@ exports.createContainer = function (container, next) {
     });
 };
 
+exports.deleteFolders = function (folders, next) {
+    if(folders){
+        folders.forEach(function(folder){
+            exports.deleteFolder(folder, function(err, result) {
+                if (err) {
+                    console.warn(err.message);
+                }
+                next(err, "");
+            })
+        })
+    } else {
+        var err = null; //no errors so return null.
+        next(err, "");
+    }
+};
+
+
 // delete all files for a snippet (folder name is the snippet id)
 exports.deleteFolder = function (folder, next) {
     //container names have to be lowercase

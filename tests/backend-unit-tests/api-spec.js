@@ -61,7 +61,13 @@ describe("REST API Tests", function () {
         azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippet(fakeSnippet2._id, function (err, result) {
-                    done();
+                    db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
+                        db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
+                            db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
+                                done();
+                            });
+                        });
+                    });
                 });
             });
         });

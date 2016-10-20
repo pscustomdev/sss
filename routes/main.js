@@ -1,5 +1,5 @@
 // Routes starting with "/"
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
     var express = require('express');
     var main_routes = express.Router();
     var restrict = require('../auth/restrict');
@@ -14,7 +14,8 @@ module.exports = function(app, passport) {
                 isAuthenticated: req.isAuthenticated()
             };
             res.render('layout', vm);
-        });
+        }
+    );
     main_routes.get('/ping',    // a convenience test route
         restrict,
         function (req, res) {
@@ -30,7 +31,7 @@ module.exports = function(app, passport) {
             }
         ));
     main_routes.get('/auth/google',
-        passport.authenticate('google',{ scope : ['profile', 'email'] }));
+        passport.authenticate('google', {scope: ['profile', 'email']}));
     main_routes.get('/auth/google/callback',
         passport.authenticate('google', {
                 successReturnToOrRedirect: '/',
@@ -45,8 +46,9 @@ module.exports = function(app, passport) {
     main_routes.get('/logout',
         function (req, res) {
             req.logout();
-            req.session.destroy();
-            res.redirect('/');
+            req.session.destroy(function() {
+                res.redirect('/');
+            });
         });
 
     app.use('/', main_routes);

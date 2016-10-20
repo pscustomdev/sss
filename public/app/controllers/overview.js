@@ -30,6 +30,7 @@
         $scope.confirmDelete = false;
         $scope.editReadme = false;
         var indexMessage = "It may take up to 15 minutes for your changes to be searchable.";
+        var fileLimitExceededMessage = "An uploaded file must not exceed 10M in size.";
 
         $scope.avgRatingOptions = {
             ratedFill: '#337ab7',
@@ -219,9 +220,16 @@
         });
 
         // file uploader
-        $scope.uploader = new FileUploader({
+        var uploader = $scope.uploader = new FileUploader({
             url: '/api/snippet-detail/' + $scope.snippetId
         });
+
+        uploader.onAfterAddingFile = function(item) {
+            if(item.file.size > 10000000) {
+                growl.info(fileLimitExceededMessage, {ttl: 5000, disableCountDown: true});
+                uploader.removeFromQueue(item);
+            }
+        };
 
         // refresh the overview page when upload is complete
         $scope.uploadComplete = function() {

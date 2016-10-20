@@ -38,6 +38,15 @@ exports.searchSnippets = function (searchTerms, next) {
                     snippetResult['@search.highlights'][fileName] = fileResult['@search.highlights'].content;
                 } else {
                     fileResult.snippetId = fileSnippetId;
+                    var decodedFilename = decodeURI(fileResult.metadata_storage_name);  //So we don't see the %20 and so on from the URL.
+                    //copy the data from content to the filename so we can see it on the UI as the filename instead of a generic "content" tag
+                    if(fileResult['@search.highlights'] && fileResult['@search.highlights'].content){
+                        fileResult['@search.highlights'][decodedFilename] = fileResult['@search.highlights'].content;
+                        delete fileResult['@search.highlights'].content;
+                    } else {
+                        fileResult['@search.highlights'] = {};
+                        fileResult['@search.highlights'][decodedFilename] = ["Highlights are not available for binary files."];
+                    }
                     snippetResults.push(fileResult)
                 }
             });
@@ -59,8 +68,11 @@ exports.searchSnippets = function (searchTerms, next) {
                     _.each(snippetResults, function (s, i) {
                         if(s && !s.displayName) {
                             var found = _.findWhere(snippets, {snippetId:s.snippetId});
+                            //We are going to assume if there isn't a displayName we also need to add the postedOn and postedBy
                             if (found){
                                 s.displayName = found.displayName || found.snippetId;
+                                s.postedOn = found.postedOn || "unknown";
+                                s.owner = found.owner || "unknown";
                             } else {
                                 //This should never happen but if it does we don't want to display the file in the
                                 // search results since it doesn't have a snippet with it. So we delete it.

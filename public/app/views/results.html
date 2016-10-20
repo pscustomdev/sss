@@ -69,7 +69,7 @@
              show-more-directive>
 
             <h2><a ui-sref="search.results.overview({ snippetId: '{{item.snippetId}}'})">{{item.displayName}}</a></h2>
-
+            <div ng-if = "item['@search.highlights'].length == 0">Hit was found in the snippet name.</div>
             <div class="row">
                 <div class="col-md-9">
                     <div data-ng-repeat="highlight in item['@search.highlights']"
@@ -78,7 +78,7 @@
                             <div class="col-md-12">
                                 <article>
                                     <div data-ng-repeat="(key, hits) in highlight">
-                                        <h4 class="text-capitalize">{{key}}:</h4>
+                                        <h4>{{key}}:</h4>
                                         <div data-ng-repeat="hit in hits">
                                             <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(hit))"></div>
                                         </div>

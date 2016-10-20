@@ -29,7 +29,7 @@
         $scope.origReadme = "";
         $scope.confirmDelete = false;
         $scope.editReadme = false;
-        var indexMessage = "It may take up to 15 minutes for your changes to be searchable.";
+        var indexMessage = "It may take up to 5 minutes for your changes to be searchable.";
         var fileLimitExceededMessage = "An uploaded file must not exceed 10M in size.";
 
         $scope.avgRatingOptions = {
@@ -240,6 +240,7 @@
 
         // format the marked down readme to html for preview
         var formatReadme = function(content) {
+            if (!content) { content = "" };
             // replace <img src="image.jpg"> with a full path to the image on azure
             var imgUrl = $scope.snippetOverview.imageUrlPrefix + "/" +$scope.snippetId + "/";
             content = content.replace(/<img src=\"/g,"<img src=\"" + imgUrl);

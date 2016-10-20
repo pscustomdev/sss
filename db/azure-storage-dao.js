@@ -162,10 +162,7 @@ exports.getBlobToText = function (folder, blobName, next) {
         filename.endsWith("gif") ||
         filename.endsWith("jpg") ||
         filename.endsWith("jpeg") ||
-        filename.endsWith("bmp") ||
-        filename.endsWith("tar") ||
-        filename.endsWith("gz") ||
-        filename.endsWith("zip")
+        filename.endsWith("bmp")
     ) {
         isBinary = true;
     }

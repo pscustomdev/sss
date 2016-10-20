@@ -32,7 +32,7 @@
         $scope.confirmCancel = false;
         $scope.content = "";
         $scope.origContent = "";
-        var indexMessage = "It may take up to 15 minutes for your changes to be searchable.";
+        var indexMessage = "It may take up to 5 minutes for your changes to be searchable.";
 
         var overviewPage = "search.results.overview";
 

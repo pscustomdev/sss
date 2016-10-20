@@ -25,7 +25,7 @@
     function CreateController($scope, $rootScope, $state, $nodeServices, growl) {
         $scope.formData = {};
         $scope.rawView = true;
-        var indexMessage = "It may take up to 15 minutes for your new snippet to be searchable.";
+        var indexMessage = "It may take up to 5 minutes for your new snippet to be searchable.";
 
         //if they aren't logged in then send them to the login page.
         $nodeServices.getCurrentUser().then(

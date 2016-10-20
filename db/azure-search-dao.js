@@ -112,7 +112,7 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
 
 // *** INDEXING FUNCTIONS ***
 var indexersScheduled = [];
-var indexerIntervalMins = 10;
+var indexerIntervalMins = 5;
 
 // run an indexer where indexType is: db | file
 exports.runIndexer = function (indexType, next) {

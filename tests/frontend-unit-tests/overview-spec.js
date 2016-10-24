@@ -4,8 +4,9 @@ console.log("**** (Frontend Unit Testing [KARMA]: 'overview-view-spec') ****");
 describe('SSS Views', function() {
     describe('Overview-View', function(){
         beforeEach(module('app.overview'));
+        beforeEach(module('angular-growl'));
 
-        var $scope, $rootScope, $nodeServices, $stateParams, $httpBackend, $controller;
+        var $scope, $rootScope, $nodeServices, $stateParams, $httpBackend, $controller, growl;
         var fakeSnippetId = "fakeSnippetId";
 
         beforeEach(inject(function($injector) {

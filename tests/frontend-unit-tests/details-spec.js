@@ -3,8 +3,9 @@ console.log("**** (Frontend Unit Testing [KARMA]: 'details-view-spec') ****");
 describe('SSS Views', function() {
     describe('Details-Controller', function() {
         beforeEach(module('app.details'));
+        beforeEach(module('angular-growl'));
 
-        var $scope, $nodeServices, $stateParams, $httpBackend, $controller, createCotnroller;
+        var $scope, $nodeServices, $stateParams, $httpBackend, $controller;
 
         beforeEach(inject(function($injector) {
             $scope = $injector.get('$rootScope').$new();  // Create a new child scope or $rootScope

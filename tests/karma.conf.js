@@ -21,6 +21,7 @@ module.exports = function(config) {
       'public/bower/bootstrap/js/tab.js',
       'public/bower/angular-xeditable/dist/js/xeditable.min.js',
       'public/bower/angular-file-upload/dist/angular-file-upload.js',
+      'public/bower/angular-growl-v2/build/angular-growl.min.js',
       'public/bower/ace-builds/src-min-noconflict/ace.js',
       'public/bower/angular-ui-ace/ui-ace.min.js',
       'public/bower/marked/lib/marked.js',
@@ -33,7 +34,7 @@ module.exports = function(config) {
       'public/bower/angular-sanitize/angular-sanitize.js',
 
       'public/app/**/*.js',  //include all app files
-      //'tests/frontend-unit-tests/**/*spec.js',            //ToDo: disabled until we can simplify these to the point of understanding
+      //'tests/frontend-unit-tests/**/*spec.js',            //ToDo: disabled until we can include all karma tests otherwise we include them one by one below
         'tests/frontend-unit-tests/node-services-spec.js',
         'tests/frontend-unit-tests/mySnippets-spec.js',
         'tests/frontend-unit-tests/details-spec.js',

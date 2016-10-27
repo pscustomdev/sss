@@ -228,5 +228,35 @@
     </div>
 </div>
 
+<!-- modal data for search help -->
+<div id="searchHelpModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Help</h4>
+            </div>
+            <div class="modal-body"><br/><br/>
+                <div class="well">
+                    <h3>Partial Word Searching</h3>
+                    <p>To perform a partial word search use the (*) wildcard. e.g. add* would match "add" or "adding"</p>
+                </div>
+                <div class="well">
+                    <h3>Boolean Operators</h3>
+                    <ul>
+                    <li>OR operator: |  e.g. add | modify would return results with "add" or "modify" in the content</li>
+                    <li>AND operator: & or + e.g. default behavior as it expects all words to be present in the content</li>
+                    <li>NOT operator: ! or -</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

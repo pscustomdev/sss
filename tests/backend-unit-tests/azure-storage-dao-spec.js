@@ -28,7 +28,7 @@ describe("Azure Storage Dao", function() {
 
     it('should add a text file to a virtual folder', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             done();
         })
@@ -36,7 +36,7 @@ describe("Azure Storage Dao", function() {
 
     it('should be able to read a blobs text from a blob', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
                 expect(result).to.be.eql(content);
@@ -47,10 +47,10 @@ describe("Azure Storage Dao", function() {
 
     it('should update a text file in a container', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             content += "New Content";
-            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
                     expect(result).to.be.eql(content);
@@ -65,9 +65,10 @@ describe("Azure Storage Dao", function() {
         var fileName = "readme";
         var path = "tests/backend-unit-tests/" + fileName;
         var stream = fs.createReadStream(path);
-        var stats = fs.statSync(path)
+        var stats = fs.statSync(path);
         var fileSize = stats['size'];
-        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
+        var metaData = { binaryFile: false, deleted: false };
+        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             done();
         })
@@ -80,7 +81,8 @@ describe("Azure Storage Dao", function() {
         var stream = fs.createReadStream(path);
         var stats = fs.statSync(path);
         var fileSize = stats['size'];
-        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
+        var metaData = { binaryFile: false, deleted: false };
+        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             var updatedFileName = "testDataFile";
             var path = "tests/backend-unit-tests/" + updatedFileName;
@@ -88,7 +90,7 @@ describe("Azure Storage Dao", function() {
             var stats = fs.statSync(path);
             var fileSize = stats['size'];
             //we need to pass in the same fileName because we are wanting to update the original file with the updated file
-            azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, function(err, result, response) {
+            azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.getBlobToText(folderName, fileName, function(err, result){
                     expect(result).to.contain("file test");
@@ -105,9 +107,9 @@ describe("Azure Storage Dao", function() {
         var content = "Mocha file content";
         var content2 = "Mocha file content2";
         //add two files so we can read them
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function (err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function (err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
-            azureStorage.addUpdateFileByText(folderName, fakeFileName2, content2, function (err, result, response) {
+            azureStorage.addUpdateFileByText(folderName, fakeFileName2, content2, {}, function (err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
@@ -122,10 +124,10 @@ describe("Azure Storage Dao", function() {
 
     it('should delete a folder', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             content += "New Content";
-            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+            azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.getBlobToText(folderName, fakeFileName, function(err, result) {
                     expect(result).to.be.eql(content);
@@ -145,7 +147,7 @@ describe("Azure Storage Dao", function() {
 
     it('should delete a file from a folder', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             azureStorage.deleteFile(folderName, fakeFileName, function(err, result){
                 expect(result.isSuccessful).to.be.eql(true);
@@ -160,13 +162,13 @@ describe("Azure Storage Dao", function() {
 
     it('should cleanup (delete) all marked files from a folder', function (done) {
         var content = "Mocha file content";
-        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, function(err, result, response) {
+        azureStorage.addUpdateFileByText(folderName, fakeFileName, content, {}, function(err, result, response) {
             expect(response.isSuccessful).to.be.eql(true);
             azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
                 expect(result.entries[0]).to.not.be.undefined;
                 // mark file for deletion
-                azureStorage.addUpdateFileByText(folderName, fakeFileName, "deleted=true", function(err, result, response) {
+                azureStorage.addUpdateFileByText(folderName, fakeFileName, "deleted=true", {}, function(err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
                     azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                         expect(response.isSuccessful).to.be.eql(true);

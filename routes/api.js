@@ -1,5 +1,42 @@
 var _ = require('underscore');
 var authConf = require('../auth/auth-conf.js');
+var isBinaryFile = require("isbinaryfile");
+
+function generateMetaData(fileName, content, fileBuffer, fileSize) {
+    "use strict";
+
+    var metaData = {};
+    metaData.fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+    switch (metaData.fileExtension) {
+        case "bmp":
+        case "gif":
+        case "jpg":
+        case "jpeg":
+        case "png":
+            metaData.viewable = true;
+            break;
+        default:
+            metaData.viewable = false;
+    }
+
+    switch (metaData.fileExtension) {
+        case "txt":
+            metaData.editable = true;
+            break;
+        default:
+            metaData.editable = false;
+    }
+
+    if (content) {
+        metaData.deleted = (content === "deleted=true" ? "true" : "false"); // if the content is "deleted=true" the file is marked for deletion
+    } else {
+        metaData.deleted = false;
+        metaData.binary = isBinaryFile.sync(fileBuffer, fileSize);
+    }
+
+    return metaData;
+}
 
 // Routes starting with "/api"
 module.exports = function(app) {
@@ -183,8 +220,10 @@ module.exports = function(app) {
     // add a snippet file
     api_routes.post('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
-            req.body.content = req.body.content || " "; //we need to at least have a space as content or it won't save a file.
-            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, req.body.content, function (err, content){
+            var content = req.body.content || " "; // we need to at least have a space as content or it won't save a file.
+            var metaData = generateMetaData(req.params.fileName, content);
+
+            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, metaData, function (err, content){
                 if (err) {
                     return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
                 }
@@ -198,15 +237,30 @@ module.exports = function(app) {
     api_routes.post('/snippet-detail/:snippetId', restrict,
         function (req, res) {
             var busboy = new Busboy({ headers: req.headers });
-            busboy.on('file', function(fieldname, file, filename) {
-                var filesize = Number(req.headers['content-length']) * 2;
-                azureStorage.addUpdateFileByStream(req.params.snippetId, filename, file, filesize, function(err, result) {
-                    if (err) {
-                        return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
-                    }
-                    res.json({});
+
+            busboy.on('file', function(fieldName, file, fileName, encoding, mimetype) {
+                var metaData = {};
+                var fileSize = Number(req.headers['content-length']) * 2;
+                var fileBuffer = new Buffer('');
+
+                file.on('data', function(data) {
+                    console.log('File [' + fileName + '] uploaded ' + data.length + ' bytes');
+                    fileBuffer = Buffer.concat([fileBuffer, data]);
+                    metaData = generateMetaData(fileName, null, fileBuffer, fileSize);
                 });
+
+                file.on('end', function() {
+                    azureStorage.addUpdateFileByText(req.params.snippetId, fileName, fileBuffer, metaData, function(err, result) {
+                        if (err) {
+                            return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
+                        }
+                        res.json({});
+                    });
+                    console.log('File [' + fileName + '] upload finished.');
+                });
+
             });
+
             req.pipe(busboy);
         }
     );
@@ -214,8 +268,10 @@ module.exports = function(app) {
     // update contents of a snippet file
     api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
-            var content =req.body.content || " ";
-            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, function (err, content){
+            var content = req.body.content || " "; // we need to at least have a space as content or it won't save a file.
+            var metaData = { deleted: (content === "deleted=true" ? "true" : "false") }; // if the content is "deleted=true" the file is marked for deletion
+
+            azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, metaData, function (err, content){
                 if (err) {
                     return res.status(500).json({error: 'Error updating file: ' + (err.message || err)});
                 }

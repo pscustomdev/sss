@@ -107,12 +107,9 @@ exports.cleanupFiles = function (next) {
 };
 
 //It is the same call to add/update a file
-//if the content is "deleted=true" the file is marked for deletion
-exports.addUpdateFileByText = function (folder, fileName, content, next) {
-    var metaDeleteBlobValue = content==="deleted=true"?"true":"false";
-
+exports.addUpdateFileByText = function (folder, fileName, content, metaData, next) {
     //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, {metadata: {deleted:metaDeleteBlobValue}},function (err, result, response) {
+    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, { metaData: metaData }, function (err, result, response) {
         if (err) {
             return next(err);
         }
@@ -122,8 +119,9 @@ exports.addUpdateFileByText = function (folder, fileName, content, next) {
 
 
 //It is the same call to add/update a file
-exports.addUpdateFileByStream = function (folder, fileName, stream, len, next) {
-    blobSvc.createBlockBlobFromStream(DEFAULT_CONTAINER, folder + "/" + fileName, stream, len, function(err, result, response){
+exports.addUpdateFileByStream = function (folder, fileName, stream, len, metaData, next) {
+    //The result returned by these methods contains information on the operation, such as the ETag of the blob.
+    blobSvc.createBlockBlobFromStream(DEFAULT_CONTAINER, folder + "/" + fileName, stream, len, { metaData: metaData }, function (err, result, response){
         if (err) {
             return next(err);
         }

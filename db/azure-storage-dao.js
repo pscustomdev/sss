@@ -109,7 +109,7 @@ exports.cleanupFiles = function (next) {
 //It is the same call to add/update a file
 exports.addUpdateFileByText = function (folder, fileName, content, metaData, next) {
     //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, { metaData: metaData }, function (err, result, response) {
+    blobSvc.createBlockBlobFromText(DEFAULT_CONTAINER, folder + "/" + fileName, content, { metadata: metaData }, function (err, result, response) {
         if (err) {
             return next(err);
         }
@@ -121,7 +121,7 @@ exports.addUpdateFileByText = function (folder, fileName, content, metaData, nex
 //It is the same call to add/update a file
 exports.addUpdateFileByStream = function (folder, fileName, stream, len, metaData, next) {
     //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-    blobSvc.createBlockBlobFromStream(DEFAULT_CONTAINER, folder + "/" + fileName, stream, len, { metaData: metaData }, function (err, result, response){
+    blobSvc.createBlockBlobFromStream(DEFAULT_CONTAINER, folder + "/" + fileName, stream, len, { metadata: metaData }, function (err, result, response){
         if (err) {
             return next(err);
         }
@@ -140,6 +140,14 @@ exports.getListOfFilesInFolder = function (folder, next) {
         result.entries.forEach(function(entry){
             // only include files that have not been deleted
             if (!entry.metadata || entry.metadata.deleted != "true") {
+                /* TODO instead of filenames only, this needs to be an object as follows:
+                 {  name: filename
+                    editable:
+                    viewable:
+                 }
+                    Then in api.js line 195, include this metadata in the files array
+                    Then in overview.html, consume this metadata to know which icon to show
+                */
                 fileList.entries.push({name: entry.name.replace(folder + "/",'')});
             }
         });

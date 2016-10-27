@@ -192,6 +192,7 @@ module.exports = function(app) {
                     }
                     if(result){     //if files have been uploaded.
                         // we only need the names of the files
+                        //TODO we must include the names and the metadata in the file array
                         var fileNames = _.pluck(result.entries, 'name');
                         snippet.files = fileNames;
                     } else {

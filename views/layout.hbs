@@ -239,15 +239,20 @@
             <div class="modal-body"><br/><br/>
                 <div class="well">
                     <h3>Partial Word Searching</h3>
-                    <p>To perform a partial word search use the (*) wildcard. e.g. add* would match "add" or "adding"</p>
+                    <p>To perform a partial word search use the (*) wildcard. e.g. "add*" would match "add" or "adding".  Wildcards are valid only as a suffix.</p>
                 </div>
                 <div class="well">
                     <h3>Boolean Operators</h3>
+                    Multiple search terms assume AND logic, meaning that all words must be in the same file.  You can force OR logic as shown below:
                     <ul>
-                    <li>OR operator: |  e.g. add | modify would return results with "add" or "modify" in the content</li>
-                    <li>AND operator: & or + e.g. default behavior as it expects all words to be present in the content</li>
-                    <li>NOT operator: ! or -</li>
+                    <li>OR operator: |  e.g. "add | modify" would return all files with "add" or "modify" in them</li>
+                    <li>AND operator: + e.g. "add + modify" (default behavior) returns files that contain both "add" and "modify"</li>
+                    <li>NOT operator: - e.g. "add -modify" (no space between the minus sign and the word) would find all files with "add" but not contain "modify"</li>
                     </ul>
+                </div>
+                <div class="well">
+                    <h3>Phrase Operator</h3>
+                    <p>Search for an exact string by enclosing the terms in " ".  e.g. "modify object" would match that exact string in any file.</p>
                 </div>
 
             </div>

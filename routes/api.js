@@ -3,36 +3,32 @@ var authConf = require('../auth/auth-conf.js');
 var isBinaryFile = require("isbinaryfile");
 
 function generateMetaData(fileName, content, fileBuffer, fileSize) {
-    "use strict";
-
     var metaData = {};
     metaData.fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+    metaData.binary = isBinaryFile.sync(fileBuffer, fileSize);
 
-    switch (metaData.fileExtension) {
-        case "bmp":
-        case "gif":
-        case "jpg":
-        case "jpeg":
-        case "png":
-            metaData.viewable = true;
-            break;
-        default:
-            metaData.viewable = false;
+    if (metaData.binary) {
+        metaData.editable = false;
+        metaData.viewable = false;
+        switch (metaData.fileExtension) {
+            case "bmp":
+            case "gif":
+            case "jpg":
+            case "jpeg":
+            case "png":
+                metaData.viewable = true;
+                break;
+        }
     }
-
-    switch (metaData.fileExtension) {
-        case "txt":
-            metaData.editable = true;
-            break;
-        default:
-            metaData.editable = false;
+    else {
+        metaData.editable = true;
+        metaData.viewable = true;
     }
 
     if (content) {
         metaData.deleted = (content === "deleted=true" ? "true" : "false"); // if the content is "deleted=true" the file is marked for deletion
     } else {
         metaData.deleted = false;
-        metaData.binary = isBinaryFile.sync(fileBuffer, fileSize);
     }
 
     return metaData;
@@ -190,11 +186,8 @@ module.exports = function(app) {
                     if (err) {
                         return res.status(500).json({error: 'Error retrieving snippet file(s) from database: ' + (err.message || err)});
                     }
-                    if(result){     //if files have been uploaded.
-                        // we only need the names of the files
-                        //TODO we must include the names and the metadata in the file array
-                        var fileNames = _.pluck(result.entries, 'name');
-                        snippet.files = fileNames;
+                    if(result){     //if files exist
+                        snippet.files = result;
                     } else {
                         snippet.files = [];
                     }

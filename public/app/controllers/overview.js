@@ -127,7 +127,7 @@
         // mark a snippet for deletion
         $scope.deleteSnippet = function() {
             $nodeServices.markSnippet($scope.snippetId, $scope.snippetOverview.files).then (
-                function() {
+                    function() {
                     $nodeServices.runDBIndexer();
                     $nodeServices.runFileIndexer();
                     growl.info(indexMessage,{ttl: 5000, disableCountDown: true});

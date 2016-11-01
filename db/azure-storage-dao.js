@@ -132,23 +132,18 @@ exports.addUpdateFileByStream = function (folder, fileName, stream, len, metaDat
 //list blobs in a folder in the default container
 exports.getListOfFilesInFolder = function (folder, next) {
     blobSvc.listBlobsSegmentedWithPrefix(DEFAULT_CONTAINER, folder, null, {include: "metadata"}, function (err, result, response) {
-        var fileList = {};
-        fileList.entries = [];
+        var fileList = [];
         if (err) {
             return next(err);
         }
         result.entries.forEach(function(entry){
             // only include files that have not been deleted
             if (!entry.metadata || entry.metadata.deleted != "true") {
-                /* TODO instead of filenames only, this needs to be an object as follows:
-                 {  name: filename
-                    editable:
-                    viewable:
-                 }
-                    Then in api.js line 195, include this metadata in the files array
-                    Then in overview.html, consume this metadata to know which icon to show
-                */
-                fileList.entries.push({name: entry.name.replace(folder + "/",'')});
+                var fileObj = {};
+                fileObj.name = entry.name.replace(folder + "/",'');
+                fileObj.editable = entry.metadata.editable;
+                fileObj.viewable = entry.metadata.viewable;
+                fileList.push(fileObj);
             }
         });
         //TODO if there is a continuation token keep getting them.
@@ -161,29 +156,43 @@ exports.getListOfFilesInFolder = function (folder, next) {
 //get blob text in a container/snippet
 // or return a url for binary files
 exports.getBlobToText = function (folder, blobName, next) {
-    var isBinary = false;
-    // check for known binary files
-    var filename = blobName.toLowerCase();
-    if (filename.endsWith("png") ||
-        filename.endsWith("gif") ||
-        filename.endsWith("jpg") ||
-        filename.endsWith("jpeg") ||
-        filename.endsWith("bmp")
-    ) {
-        isBinary = true;
-    }
+    // //TODO get rid of this code and use metadata instead
+    // var isBinary = false;
+    // // check for known binary files
+    // var filename = blobName.toLowerCase();
+    // if (filename.endsWith("png") ||
+    //     filename.endsWith("gif") ||
+    //     filename.endsWith("jpg") ||
+    //     filename.endsWith("jpeg") ||
+    //     filename.endsWith("bmp")
+    // ) {
+    //     isBinary = true;
+    // }
+    //
+    // if (isBinary) {
+    //     // return url to the binary file
+    //     next(null, auth_config.azure.blobStorage.url + "/" + folder + "/" + blobName);
+    //     return;
+    // }
 
-    if (isBinary) {
-        // return url to the binary file
-        next(null, auth_config.azure.blobStorage.url + "/" + folder + "/" + blobName);
-        return;
-    }
-
-    blobSvc.getBlobToText(DEFAULT_CONTAINER, folder + "/" + blobName, function (err, response) {
+    blobSvc.getBlobMetadata(DEFAULT_CONTAINER, folder + "/" + blobName, function (err, response) {
         if (err) {
             return next(err);
         }
-        next(err, response);
+        if (response.metadata &&
+            response.metadata.editable == "false" &&
+            response.metadata.viewable == "true") {
+            next(null, auth_config.azure.blobStorage.url + "/" + folder + "/" + blobName);
+            return;
+        }
+        else {
+            blobSvc.getBlobToText(DEFAULT_CONTAINER, folder + "/" + blobName, function (err, response) {
+                if (err) {
+                    return next(err);
+                }
+                next(err, response);
+            });
+        }
     });
 };
 

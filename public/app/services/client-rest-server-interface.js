@@ -118,7 +118,7 @@
         function markSnippet(snippetId, files) {
             // mark all files in the snippet as deleted
             _.each(files, function(file) {
-                markFile(snippetId, file);
+                markFile(snippetId, file.name);
             });
             return $http.put('/api/snippet/' + snippetId, {_id:snippetId, deleted:"true"})
                 .then(function(response) {

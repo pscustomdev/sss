@@ -5,7 +5,11 @@ var isBinaryFile = require("isbinaryfile");
 function generateMetaData(fileName, content, fileBuffer, fileSize) {
     var metaData = {};
     metaData.fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-    metaData.binary = isBinaryFile.sync(fileBuffer, fileSize);
+    if (fileBuffer) {
+        metaData.binary = isBinaryFile.sync(fileBuffer, fileSize);
+    } else {
+        metaData.binary = false;
+    }
 
     if (metaData.binary) {
         metaData.editable = false;
@@ -22,7 +26,7 @@ function generateMetaData(fileName, content, fileBuffer, fileSize) {
     }
     else {
         metaData.editable = true;
-        metaData.viewable = true;
+        metaData.viewable = false;
     }
 
     if (content) {
@@ -223,7 +227,6 @@ module.exports = function(app) {
                 }
                 res.json({});
             })
-
         }
     );
 

@@ -141,8 +141,8 @@ exports.getListOfFilesInFolder = function (folder, next) {
             if (!entry.metadata || entry.metadata.deleted != "true") {
                 var fileObj = {};
                 fileObj.name = entry.name.replace(folder + "/",'');
-                fileObj.editable = entry.metadata.editable;
-                fileObj.viewable = entry.metadata.viewable;
+                fileObj.editable = entry.metadata.editable == 'true';
+                fileObj.viewable = entry.metadata.viewable == 'true';
                 fileList.push(fileObj);
             }
         });
@@ -156,25 +156,6 @@ exports.getListOfFilesInFolder = function (folder, next) {
 //get blob text in a container/snippet
 // or return a url for binary files
 exports.getBlobToText = function (folder, blobName, next) {
-    // //TODO get rid of this code and use metadata instead
-    // var isBinary = false;
-    // // check for known binary files
-    // var filename = blobName.toLowerCase();
-    // if (filename.endsWith("png") ||
-    //     filename.endsWith("gif") ||
-    //     filename.endsWith("jpg") ||
-    //     filename.endsWith("jpeg") ||
-    //     filename.endsWith("bmp")
-    // ) {
-    //     isBinary = true;
-    // }
-    //
-    // if (isBinary) {
-    //     // return url to the binary file
-    //     next(null, auth_config.azure.blobStorage.url + "/" + folder + "/" + blobName);
-    //     return;
-    // }
-
     blobSvc.getBlobMetadata(DEFAULT_CONTAINER, folder + "/" + blobName, function (err, response) {
         if (err) {
             return next(err);

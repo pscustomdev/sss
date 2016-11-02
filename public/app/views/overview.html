@@ -37,11 +37,12 @@
             <strong ng-show="!snippetOverview.displayName">Loading...</strong>
             <ul class="list-group">
                 <li ng-repeat="file in snippetOverview.files" class="list-group-item">
-                    <a ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })">{{file.name}}</a>
+                    <span ng-show="!file.viewable && !file.editable">{{file.name}}</span>
+                    <a ng-show="file.viewable || file.editable" ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })">{{file.name}}</a>
                     <span ng-show="snippetOverview.isOwner" ng-click="deleteFile(file.name)" class="glyphicon glyphicon-trash pull-right" style="color:darkblue; cursor:pointer; margin-left: 10px;"></span>
-                    <span ng-show="snippetOverview.isOwner" ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })" class="glyphicon glyphicon-pencil pull-right" title="Edit file" style="color:darkblue; cursor:pointer; margin-left: 10px;"></span>
-                    <span ng-show="!snippetOverview.isOwner" ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })" class="glyphicon glyphicon-eye-open pull-right" title="View file" style="color:darkblue; cursor:pointer; margin-left: 10px;"></span>
-                    <a ng-href="{{snippetOverview.imageUrlPrefix}}/{{snippetId}}/{{file.name}}"class="glyphicon glyphicon-save pull-right" title="Download file" style="color:darkblue; cursor:pointer;"></a>
+                    <a ng-href="{{snippetOverview.imageUrlPrefix}}/{{snippetId}}/{{file.name}}"class="glyphicon glyphicon-save pull-right" title="Download file" style="color:darkblue; cursor:pointer; margin-left: 10px;"></a>
+                    <span ng-show="snippetOverview.isOwner && file.editable" ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })" class="glyphicon glyphicon-pencil pull-right" title="Edit file" style="color:darkblue; cursor:pointer; margin-left: 10px;"></span>
+                    <span ng-show="!snippetOverview.isOwner || file.viewable" ui-sref="search.results.overview.details({ snippetId: '{{snippetId}}', fileName: '{{file.name}}', isOwner: {{snippetOverview.isOwner}} })" class="glyphicon glyphicon-eye-open pull-right" title="View file" style="color:darkblue; cursor:pointer; margin-left: 10px;"></span>
                 </li>
             </ul>
         </div>

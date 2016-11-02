@@ -117,18 +117,6 @@ exports.addUpdateFileByText = function (folder, fileName, content, metaData, nex
     });
 };
 
-
-//It is the same call to add/update a file
-exports.addUpdateFileByStream = function (folder, fileName, stream, len, metaData, next) {
-    //The result returned by these methods contains information on the operation, such as the ETag of the blob.
-    blobSvc.createBlockBlobFromStream(DEFAULT_CONTAINER, folder + "/" + fileName, stream, len, { metadata: metaData }, function (err, result, response){
-        if (err) {
-            return next(err);
-        }
-        next(err, result, response);
-    });
-};
-
 //list blobs in a folder in the default container
 exports.getListOfFilesInFolder = function (folder, next) {
     blobSvc.listBlobsSegmentedWithPrefix(DEFAULT_CONTAINER, folder, null, {include: "metadata"}, function (err, result, response) {

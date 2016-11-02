@@ -60,46 +60,6 @@ describe("Azure Storage Dao", function() {
         })
     });
 
-    it('should add a streamed file to a container', function (done) {
-        var content = "Mocha file content";
-        var fileName = "readme";
-        var path = "tests/backend-unit-tests/" + fileName;
-        var stream = fs.createReadStream(path);
-        var stats = fs.statSync(path);
-        var fileSize = stats['size'];
-        var metaData = { binaryFile: false, deleted: false };
-        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
-            expect(response.isSuccessful).to.be.eql(true);
-            done();
-        })
-    });
-
-    it('should update a streamed file in a container', function (done) {
-        var content = "Mocha file content";
-        var fileName = "readme";
-        var path = "tests/backend-unit-tests/" + fileName;
-        var stream = fs.createReadStream(path);
-        var stats = fs.statSync(path);
-        var fileSize = stats['size'];
-        var metaData = { binaryFile: false, deleted: false };
-        azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
-            expect(response.isSuccessful).to.be.eql(true);
-            var updatedFileName = "testDataFile";
-            var path = "tests/backend-unit-tests/" + updatedFileName;
-            var stream = fs.createReadStream(path);
-            var stats = fs.statSync(path);
-            var fileSize = stats['size'];
-            //we need to pass in the same fileName because we are wanting to update the original file with the updated file
-            azureStorage.addUpdateFileByStream(folderName, fileName, stream, fileSize, metaData, function(err, result, response) {
-                expect(response.isSuccessful).to.be.eql(true);
-                azureStorage.getBlobToText(folderName, fileName, function(err, result){
-                    expect(result).to.contain("file test");
-                    done();
-                });
-            });
-        });
-    });
-
     it('should get a list of files in a virtual folder', function (done) {
         //create the container
         var fakeFileName = "MochaTestFile";

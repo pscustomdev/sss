@@ -73,9 +73,9 @@ describe("Azure Storage Dao", function() {
                 expect(response.isSuccessful).to.be.eql(true);
                 azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
-                    expect(result.entries).isArray;
-                    expect(result.entries[0].name).to.be.eql(fakeFileName);
-                    expect(result.entries[1].name).to.be.eql(fakeFileName2);
+                    expect(result).isArray;
+                    expect(result[0].name).to.be.eql(fakeFileName);
+                    expect(result[1].name).to.be.eql(fakeFileName2);
                     done();
                 });
             });
@@ -126,17 +126,17 @@ describe("Azure Storage Dao", function() {
             expect(response.isSuccessful).to.be.eql(true);
             azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                 expect(response.isSuccessful).to.be.eql(true);
-                expect(result.entries[0]).to.not.be.undefined;
+                expect(result[0].name).to.not.be.undefined;
                 // mark file for deletion
-                azureStorage.addUpdateFileByText(folderName, fakeFileName, "deleted=true", {}, function(err, result, response) {
+                azureStorage.addUpdateFileByText(folderName, fakeFileName, "deleted=true", {deleted:true}, function(err, result, response) {
                     expect(response.isSuccessful).to.be.eql(true);
                     azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                         expect(response.isSuccessful).to.be.eql(true);
-                        expect(result.entries[0]).to.be.undefined;
+                        expect(result[0]).to.be.undefined;
                         azureStorage.cleanupFiles(function(err, result) {
                             azureStorage.getListOfFilesInFolder(folderName, function (err, result, response) {
                                 expect(response.isSuccessful).to.be.eql(true);
-                                expect(result.entries[0]).to.be.undefined;
+                                expect(result[0]).to.be.undefined;
                                 done();
                             });
                         });

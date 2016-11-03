@@ -420,7 +420,7 @@ describe("REST API Tests", function () {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[0].should.equal(fakeFileName);
+                                res.body.files[0].name.should.equal(fakeFileName);
                                 done();
                             })
                     });
@@ -473,7 +473,7 @@ describe("REST API Tests", function () {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[0].should.equal(fakeFileName);
+                                res.body.files[0].name.should.equal(fakeFileName);
                                 chai.request(app)
                                 //update file contents
                                     .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
@@ -539,7 +539,7 @@ describe("REST API Tests", function () {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[0].should.equal(fakeFileName);
+                                res.body.files[0].name.should.equal(fakeFileName);
                                 chai.request(app)
                                 //delete the file
                                     .delete('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)
@@ -584,7 +584,7 @@ describe("REST API Tests", function () {
                                     .end(function (err, res) {
                                         res.should.have.status(200);
                                         res.body.files.should.be.a('array');
-                                        res.body.files[0].should.equal(fakeFileName);
+                                        res.body.files[0].name.should.equal(fakeFileName);
                                         //update the snippet to mark it for deletion
                                         var fakeData = JSON.parse(JSON.stringify(fakeSnippet));
                                         fakeData.deleted = "true";
@@ -637,7 +637,7 @@ describe("REST API Tests", function () {
                             .end(function (err, res) {
                                 res.should.have.status(200);
                                 res.body.files.should.be.a('array');
-                                res.body.files[0].should.equal(fakeFileName);
+                                res.body.files[0].name.should.equal(fakeFileName);
                                 chai.request(app)
                                 //update file contents to mark the file for deletion
                                     .put('/api/snippet-detail/' + fakeSnippetId + "/" + fakeFileName)

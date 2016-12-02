@@ -72,6 +72,9 @@
                                 _.each(item, function(s, k){
                                     s = s.replace(/<em>/g, "<mark>");
                                     s = s.replace(/<\/em>/g, "</mark>");
+                                    // replace img tags with a bogus tag that will be ignored by the html trust code
+                                    // as we do not want images in results
+                                    s = s.replace(/<img/g, "<noimg");
                                     item[k] = s;
                                 });
                                 obj[k] = item;
@@ -93,10 +96,6 @@
 
         vm.trustHtmlSnippet = function (html) {
             return $sce.trustAsHtml(html);
-        };
-
-        vm.stripImageTag = function (content) {
-            return $('<x>').html(content).find("img").remove().end().html();
         };
 
         function updateMetaData(snippets) {

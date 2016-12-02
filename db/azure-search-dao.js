@@ -9,6 +9,7 @@ var snippetIndex = "sssdb-index";
 var fileIndex    = "sssblob-index";
 
 exports.searchSnippets = function (searchTerms, next) {
+    searchTerms = generateSearchTerms(searchTerms);
     var highlightedFields = "readme,description,displayName";
     //Call to get snippets from mongo
     searchSnippets(snippetIndex, searchTerms, highlightedFields, function(err, snippetResults){
@@ -89,7 +90,6 @@ exports.searchSnippets = function (searchTerms, next) {
     })
 };
 
-
 function searchSnippets(index, searchTerms, highlightedFields, next) {
     // var highlightedFields = "readme,description,displayName";
     // var highlightedFields = "content";
@@ -98,7 +98,8 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
         "/docs?search=" + encodeURIComponent(searchTerms) +
         "&highlight=" + highlightedFields +
         "&api-version=2015-02-28" +
-        "&searchMode=all";
+        "&searchMode=all" +
+        "&queryType=full";
 
     var headers = {'api-key': auth_config.azure.search.key};
 
@@ -121,6 +122,60 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
         next(err, results);
     });
 };
+
+//since we are treating a snippet as a collection of database data and files, we must force an OR relationship
+//with the search terms otherwise results may be erroneously eliminated
+function generateSearchTerms(searchTerms) {
+    if (!searchTerms) {searchTerms = "";}
+    searchTerms = searchTerms.replace(/\s+/g, ' '); // strip duplicate spaces
+
+    //if search terms do not have operators || + && then separate them with ||
+    //and take quoted strings into account
+    var searchTermArray = searchTerms.split(" ");
+    var newSearchTerms = "";
+
+    var defOper = " || ";
+    var ctr = 0;
+    var cterm = {};
+    cterm.inQuote = false;
+    var nterm = {};
+    nterm.inQuote = false;
+
+    while(true) {
+        var insOper = defOper;
+        if (ctr >= searchTermArray.length) {break;}
+        cterm.term = searchTermArray[ctr];
+        nterm.term = (ctr + 1 >= searchTermArray.length)?"":searchTermArray[ctr+1];
+        cterm.isOperator = _.contains(["||","&&","+"],cterm.term);
+        nterm.isOperator = _.contains(["||","&&","+"],nterm.term);
+        // ignore extra whitespace
+        if (!cterm.term) {
+            ctr++;
+            continue;
+        }
+        // check for term within quotes
+        if (cterm.term.startsWith("\"")) { cterm.inQuote = true; }
+        if (cterm.inQuote) {
+            if (cterm.term.endsWith("\"")) { cterm.inQuote = false; }
+            if (cterm.inQuote || nterm.isOperator) {
+                insOper = " "
+            }
+            newSearchTerms += cterm.term + insOper;
+            ctr++;
+            continue;
+        }
+        // insert default operator if applicable
+        if (cterm.isOperator || nterm.isOperator || !nterm.term) {
+            insOper = " ";
+        }
+        newSearchTerms += cterm.term + insOper;
+        ctr++;
+    }
+
+    console.log("Orig srch terms : " + searchTerms);
+    console.log("New search terms: " + newSearchTerms);
+    return newSearchTerms.trim();
+}
 
 // *** INDEXING FUNCTIONS ***
 var indexersScheduled = [];

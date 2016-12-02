@@ -80,7 +80,7 @@
                                     <div data-ng-repeat="(key, hits) in highlight">
                                         <h4>{{key}}:</h4>
                                         <div data-ng-repeat="hit in hits">
-                                            <div ng-bind-html="$searchService.trustHtmlSnippet($searchService.stripImageTag(hit))"></div>
+                                            <div ng-bind-html="$searchService.trustHtmlSnippet(hit)"></div>
                                         </div>
                                     </div>
                                 </article>

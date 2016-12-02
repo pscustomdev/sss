@@ -266,7 +266,7 @@ module.exports = function(app) {
     api_routes.put('/snippet-detail/:snippetId/:fileName', restrict, textParser,
         function (req, res) {
             var content = req.body.content || " "; // we need to at least have a space as content or it won't save a file.
-            var metaData = { deleted: (content === "deleted=true" ? "true" : "false") }; // if the content is "deleted=true" the file is marked for deletion
+            var metaData = generateMetaData(req.params.fileName, content, null, null);
 
             azureStorage.addUpdateFileByText(req.params.snippetId, req.params.fileName, content, metaData, function (err, content){
                 if (err) {

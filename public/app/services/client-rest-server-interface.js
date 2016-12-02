@@ -252,7 +252,7 @@
         }
 
         function searchCode(searchTerms) {
-            return $http.get('/api/snippet-search?q=' + searchTerms)
+            return $http.get('/api/snippet-search?q=' + encodeURIComponent(searchTerms))
                 .then(function(response) {
                         return response.data;
                     },

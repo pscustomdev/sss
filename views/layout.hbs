@@ -245,16 +245,15 @@
                     <h3>Boolean Operators</h3>
                     Multiple search terms assume AND logic, meaning that all words must be in the same file.  You can force OR logic as shown below:
                     <ul>
-                    <li>OR operator: |  e.g. "add | modify" would return all files with "add" or "modify" in them</li>
-                    <li>AND operator: + e.g. "add + modify" (default behavior) returns files that contain both "add" and "modify"</li>
-                    <li>NOT operator: - e.g. "add -modify" (no space between the minus sign and the word) would find all files with "add" but not contain "modify"</li>
+                    <li>OR operator: ||<br>(e.g. "add || modify" would return all files with "add" or "modify" in them)</li>
+                    <li>AND operator: + or &&<br>(e.g. "add + modify" returns files that contain both "add" and "modify")</li>
+                    <li>NOT operator: - or !<br>(e.g. "add -modify" (no space between the minus or exclamation and the word) would find all files with "add" but not contain "modify")</li>
                     </ul>
                 </div>
                 <div class="well">
                     <h3>Phrase Operator</h3>
                     <p>Search for an exact string by enclosing the terms in " ".  e.g. "modify object" would match that exact string in any file.</p>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

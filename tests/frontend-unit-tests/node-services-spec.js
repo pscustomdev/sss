@@ -37,8 +37,8 @@ describe('SSS Node Services', function() {
     });
 
     it('searchCode() should call api/snippet-search?q=searchterms GET', function() {
-        var mockSnippetSearchTerms = "mock search terms";
-        var mockPayload = [mockSnippetSearchTerms];
+        var mockSnippetSearchTerms = "mocksearchterm";
+        //var mockPayload = [mockSnippetSearchTerms];
         $httpBackend.expectGET('/api/snippet-search?q=' + mockSnippetSearchTerms).respond();
         $nodeServices.searchCode(mockSnippetSearchTerms);
     });

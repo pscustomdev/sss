@@ -172,8 +172,8 @@ function generateSearchTerms(searchTerms) {
         ctr++;
     }
 
-    console.log("Orig srch terms : " + searchTerms);
-    console.log("New search terms: " + newSearchTerms);
+    //console.log("Orig srch terms : " + searchTerms);
+    //console.log("New search terms: " + newSearchTerms);
     return newSearchTerms.trim();
 }
 

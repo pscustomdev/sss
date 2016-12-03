@@ -55,6 +55,7 @@
     "request": "^2.74.0",
     "serve-favicon": "^2.3.0",
     "underscore": "^1.8.3",
+    "wait.for": "^0.6.6",
     "zip-stream": "^1.1.0"
   },
   "devDependencies": {

@@ -45,7 +45,6 @@ module.exports = function(app) {
     // var busboy = require('connect-busboy');
     var Busboy = require('busboy');
     var fs = require('fs');
-    var ZipStream = require('zip-stream');
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');
@@ -219,6 +218,9 @@ module.exports = function(app) {
     // download snippet as zip file
     api_routes.get('/snippet-download/:snippetId',
         function (req, res) {
+            var ZipStream = require('zip-stream');
+            var wait = require('wait.for');
+
             var snippetId = req.params.snippetId;
             res.writeHead(200, {
                 'Content-Type': 'application/zip',
@@ -233,22 +235,34 @@ module.exports = function(app) {
             // send the file to the page output.
             zip.pipe(res);
 
-            //TODO call an api to get the snippet contents as an array of file: and content:
+            //TODO call an api to get the snippet contents as an array of objects as:  file and content
             var snippetContent = [];
             snippetContent.push({name:'readme.md', content:'This is the readme content'});
-            snippetContent.push({name:'stuff.js', content:'function nthings(){ var this="that"}'});
+            snippetContent.push({name:'stuff.js', content:'function nthings(){ var this=undefined; }'});
 
             // create zip stream
             //TODO iterate through snippetContent and add the files to the zip
-            zip.entry('Some text to go in file 1.', { name: '1.txt' }, function(err, entry) {
+            //TODO it's a tricky problem as there could be any number of files and we need to call finish() after the end
+
+            //***sample code idea
+            // items.forEach(function (item) {
+            //     wait.for(function (next) {
+            //         var path = storage.getItemPath(req.Box, item);
+            //         var source = require('fs').createReadStream(path);
+            //         zip.entry(source, { name: item.name }, next);
+            //     })
+            // });
+            // zip.finalize();
+
+            zip.entry(snippetContent[0].content, { name: snippetContent[0].name }, function(err, entry) {
                 if (err) {
                     return res.status(500).json({error: 'Error adding file to archive: ' + (err.message || err)});
                 }
-                zip.entry('Some text to go in file 2.', { name: '2.txt' }, function(err, entry) {
+                zip.entry(snippetContent[1].content, { name: snippetContent[1].name  }, function(err, entry) {
                     if (err) {
                         return res.status(500).json({error: 'Error adding file to archive: ' + (err.message || err)});
                     }
-                    zip.finish();
+                    zip.finalize();
                 });
             });
         }

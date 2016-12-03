@@ -45,6 +45,7 @@ module.exports = function(app) {
     // var busboy = require('connect-busboy');
     var Busboy = require('busboy');
     var fs = require('fs');
+    var ZipStream = require('zip-stream');
     var api_routes = express.Router();
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');
@@ -210,6 +211,44 @@ module.exports = function(app) {
                     }
 
                     res.json(snippet);
+                });
+            });
+        }
+    );
+
+    // download snippet as zip file
+    api_routes.get('/snippet-download/:snippetId',
+        function (req, res) {
+            var snippetId = req.params.snippetId;
+            res.writeHead(200, {
+                'Content-Type': 'application/zip',
+                'Content-disposition': 'attachment; filename='+snippetId+'.zip'
+            });
+            var zip = new ZipStream();
+            zip.on('error', function(err, bytes) {
+                if (err) {
+                    return res.status(500).json({error: 'Error creating file: ' + (err.message || err)});
+                }
+            });
+            // send the file to the page output.
+            zip.pipe(res);
+
+            //TODO call an api to get the snippet contents as an array of file: and content:
+            var snippetContent = [];
+            snippetContent.push({name:'readme.md', content:'This is the readme content'});
+            snippetContent.push({name:'stuff.js', content:'function nthings(){ var this="that"}'});
+
+            // create zip stream
+            //TODO iterate through snippetContent and add the files to the zip
+            zip.entry('Some text to go in file 1.', { name: '1.txt' }, function(err, entry) {
+                if (err) {
+                    return res.status(500).json({error: 'Error adding file to archive: ' + (err.message || err)});
+                }
+                zip.entry('Some text to go in file 2.', { name: '2.txt' }, function(err, entry) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error adding file to archive: ' + (err.message || err)});
+                    }
+                    zip.finish();
                 });
             });
         }

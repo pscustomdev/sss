@@ -30,6 +30,7 @@
                 <div class="btn-group pull-right">
                     <button ng-show="snippetOverview.isOwner" class="btn btn-default" type="button" data-toggle="modal" data-target="#fileNameModal">Create New File</button>
                     <button ng-show="snippetOverview.isOwner" class="btn btn-default" type="button" data-toggle="modal" data-target="#fileUploadModal">File Upload</button>
+                    <a ng-href="/api/snippet-download/{{snippetId}}" class="btn btn-default" type="button">Download as zip</a>
                 </div>
             </div>
         </div>

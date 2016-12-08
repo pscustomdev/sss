@@ -70,11 +70,8 @@
             $(window).resize();
         };
 
-        // format the marked down readme to html for preview
-        $scope.formatReadme = function() {
-            $scope.formData.readme = $scope.formData.readme || "";
-            var content = marked($scope.formData.readme);
-            $scope.formData.formattedReadme = replaceImageTag(content);
-        }
+        $scope.formatReadmeForPreview = function() {
+            $scope.formData.formattedReadme = marked($scope.formData.readme || '');
+        };
     }
 }());

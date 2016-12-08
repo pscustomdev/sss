@@ -70,11 +70,12 @@
                                 var obj= {};
                                 // Change the em to mark because we use bootstrap for styling
                                 _.each(item, function(s, k){
-                                    s = s.replace(/<em>/g, "<mark>");
-                                    s = s.replace(/<\/em>/g, "</mark>");
+                                    s= encodeHtml(s);
+                                    s = s.replace(/&lt;em&gt;/g, "<mark>");
+                                    s = s.replace(/&lt;\/em&gt;/g, "</mark>");
                                     // replace img tags with a bogus tag that will be ignored by the html trust code
                                     // as we do not want images in results
-                                    s = s.replace(/<img/g, "<noimg");
+                                    s = s.replace(/&lt;img/g, "<noimg");
                                     item[k] = s;
                                 });
                                 obj[k] = item;

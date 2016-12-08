@@ -63,6 +63,10 @@ var mergeByProperty = function (arr1, arr2, prop) {
     });
 };
 
+var encodeHtml = function (str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+};
+
 $(document).ready(function() {
     $(window).resize(function() {
         var bodyheight = $(this).height();

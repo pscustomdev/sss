@@ -243,8 +243,24 @@
             if (!content) { content = "" };
             // replace <img src="image.jpg"> with a full path to the image on azure
             var imgUrl = $scope.snippetOverview.imageUrlPrefix + "/" +$scope.snippetId + "/";
-            content = content.replace(/<img src=\"/g,"<img src=\"" + imgUrl);
-
+            content = content.replace(/src=\"/g,"src=\"" + imgUrl);
+            // if img tag doesn't have a width element, set width to 100%
+            var startIdx = 0;
+            while (true) {
+                var idx = content.indexOf("<img", startIdx);
+                if (idx == -1) break;
+                // handle both > or /> tag ends
+                var endIdx = content.indexOf(">", idx);
+                var endIdx2 = content.indexOf("/>", idx);
+                if (endIdx == -1) break;
+                if (endIdx2 < endIdx) endIdx = endIdx2;
+                var imgElement = content.substring(idx, endIdx);
+                if (!imgElement.includes("width")) {
+                    imgElement += " width='100%' ";
+                    content = content.substring(0, idx - 1) + imgElement + content.substring(endIdx);
+                }
+                startIdx = endIdx;
+            }
             return marked(content || '');
         }
     }

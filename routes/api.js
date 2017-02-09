@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var authConf = require('../auth/auth-conf.js');
+var stats = require('../db/stats-dao.js');
 var isBinaryFile = require("isbinaryfile");
 
 function generateMetaData(fileName, content, fileBuffer, fileSize) {
@@ -36,6 +37,16 @@ function generateMetaData(fileName, content, fileBuffer, fileSize) {
     }
 
     return metaData;
+}
+
+function getSnippetRatingByUser(params, next){
+    var userRating = {
+        snippetId:params.snippetId,
+        rater:params.user
+    };
+    db.getSnippetRatingByUser(userRating, function (err, rating) {
+        next(err, rating);
+    });
 }
 
 // Routes starting with "/api"
@@ -351,16 +362,13 @@ module.exports = function(app) {
 
     api_routes.get('/rating/:snippetId/:user',
         function (req, res) {
-            var userRating = {
-                snippetId:req.params.snippetId,
-                rater:req.params.user
-            };
-            db.getSnippetRatingByUser(userRating, function (err, rating) {
+            getSnippetRatingByUser(req.params, function(err, rating){
                 if (err) {
                     return res.status(500).json({error: 'Error: ' + (err.message || err)});
                 }
                 res.json(rating);
             });
+
         }
     );
 
@@ -371,8 +379,39 @@ module.exports = function(app) {
                 if (err) {
                     return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
                 }
+                //BestContributor
+                getSnippetRatingByUser(req.params, function(err, currentRating){
+                    console.log("rating: " + req.body.rating);
+                    // var newRating = req.body.rating;
+                    // var weight = stats.weights.contributor[newRating];
+                    // var newRankDiff = newRating - currentRating;
+                    // var newRank = weight * newRankDiff;
+
+                    var newRating = req.body.rating;
+                    var newRankingWeight = stats.weights.contributor[newRating];
+                    var newRanking = newRating * newRankingWeight;
+                    var currentRankingWeight = stats.weights.contributor[currentRating];
+                    var currentRanking = currentRating * currentRankingWeight;
+
+                    var rankingDelta = newRanking - currentRanking;
+
+                    db.findUser(req.body.rater, function(err, user){
+                        if(err) {
+                            return res.status(500).json({error: 'Error adding ranking to user: ' + (err.message || err)});
+                        }
+                        var ranking = user.ranking ? user.ranking + rankingDelta : rankingDelta;
+                        //TODO Add/Update user but we will need a function in the db dao to do that.
+                    });
+                });
+
                 res.json({});
             });
+
+
+            // Check to see if this user has ranked this before
+            // calculate the rank the user is adding based on the weight
+            //  if user has ranked it add the difference, else add the new rank to this snippets rank value.
+
         }
     );
 

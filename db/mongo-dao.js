@@ -6,15 +6,17 @@ var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
 var userCollectionName = "sessions";
 
-exports.addUser = function (profile, next) {
-    db.collection(userCollectionName).find({id: profile.id}).toArray(function (err, users) {
-        if (err) {
-            next(err, null);
+exports.addUpdateUser = function (profile, next) {
+    //We first check to see if the user exists before we Add it.
+    db.collection(userCollectionName).update({id: profile.id}, profile, {upsert: true},
+        function (err, object) {
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
+            next(err, object);
         }
-        db.collection(userCollectionName).insert(profile, {}, function (err, results) {
-            next(err, results);
-        });
-    });
+    );
 };
 
 exports.removeUser = function (user, next) {

@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var authConf = require('../auth/auth-conf.js');
+var stats = require('../db/stats-dao.js');
 var isBinaryFile = require("isbinaryfile");
+var db = require('../db/mongo-dao');
 
 function generateMetaData(fileName, content, fileBuffer, fileSize) {
     var metaData = {};
@@ -38,6 +40,16 @@ function generateMetaData(fileName, content, fileBuffer, fileSize) {
     return metaData;
 }
 
+function getSnippetRatingByUser(params, next){
+    var userRating = {
+        snippetId:params.snippetId,
+        rater:params.user
+    };
+    db.getSnippetRatingByUser(userRating, function (err, rating) {
+        next(err, rating);
+    });
+}
+
 // Routes starting with "/api"
 module.exports = function(app) {
     var express = require('express');
@@ -49,7 +61,6 @@ module.exports = function(app) {
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');
     var azureSearch = require('../db/azure-search-dao');
-    var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
 
@@ -351,28 +362,72 @@ module.exports = function(app) {
 
     api_routes.get('/rating/:snippetId/:user',
         function (req, res) {
-            var userRating = {
-                snippetId:req.params.snippetId,
-                rater:req.params.user
-            };
-            db.getSnippetRatingByUser(userRating, function (err, rating) {
+            getSnippetRatingByUser(req.params, function(err, rating){
                 if (err) {
                     return res.status(500).json({error: 'Error: ' + (err.message || err)});
                 }
                 res.json(rating);
             });
+
         }
     );
 
     // create or update snippet rating (POST)
     api_routes.post('/rating/:snippetId', restrict,
         function (req, res) {
-            db.addUpdateSnippetRating(req.body, function (err) {
+            //BestContributor
+            //Look up the old rating if there was one
+            req.body.user = req.body.rater; //We have to look up by the user not the rater when we make this call
+            getSnippetRatingByUser(req.body, function(err, oldRating){
                 if (err) {
-                    return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
+                    return res.status(500).json({error: 'Error adding rating to database while getSnippetRatingByUser: ' + (err.message || err)});
                 }
-                res.json({});
+                if(oldRating == 0){
+                    oldRating = {
+                        rating : 0
+                    };
+
+                }
+                db.addUpdateSnippetRating(req.body, function (err) {
+                    if (err) {
+                        return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
+                    }
+
+                    //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
+                    var weight = stats.weights.contributor[Math.trunc(oldRating.rating)];
+                    var oldWeightedRating = weight * oldRating.rating;
+
+                    //Get the new ratings weight and * it by the new rating to get the newWeightedRating
+                    var newRating = req.body.rating;
+                    weight = stats.weights.contributor[Math.trunc(newRating)];
+                    var newWeightedRating = weight * newRating;
+
+                    //Add the rankingDelta to the user's ranking
+                    //We have to get the snippet so we know who the owner of the snippet that is being rated.
+                    db.getSnippet(req.body.snippetId, function(err, snippet) {
+                        //GET user so we can get the current ranking of the user
+                        db.findUsers({username:snippet.owner}, function (err, users) {
+                            //Since we are looking up by username and not userID we need to use findUsers instead of findUser.  Ideally we'd have the userId on the snippet.
+                            if (err || users.length != 1) {
+                                return res.status(500).json({error: 'Error adding ranking to user: ' + (err.message || err)});
+                            }
+                            var rankingDelta = newWeightedRating - oldWeightedRating;
+                            users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
+                            //write the new ranking to the user.
+                            db.addUpdateUser(users[0], function (err, result) {
+                                console.log("result" + result);
+                                res.json({});
+                            })
+                        });
+                    });
+                });
             });
+
+
+            // Check to see if this user has ranked this before
+            // calculate the rank the user is adding based on the weight
+            //  if user has ranked it add the difference, else add the new rank to this snippets rank value.
+
         }
     );
 

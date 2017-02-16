@@ -68,7 +68,7 @@ module.exports = function() {
              localCreation: Date(),
              password: profile.password
          };
-         db.addUser(user, function (err) {
+         db.addUpdateUser(user, function (err) {
              if (err) {
                  console.log(err);
              } else {

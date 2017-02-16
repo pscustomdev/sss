@@ -42,9 +42,15 @@ describe("REST API Tests", function () {
     };
     var fakeFileName = "MochaTestFile";
     var fakeFileName2 = "MochaTestFile2";
-    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater: "testOwner", rating: 5};
-    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater: "testOwner2", rating: 1.5};
+    var fakeSnippetRating = {snippetId: fakeSnippetId, rater: "testRater", rating: 5};
+    var fakeSnippetRating2 = {snippetId: fakeSnippetId, rater: "testRater2", rating: 3};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater: "whoever", rating: 1.5};
+
+    var fakeUser = {
+        id:123,
+        username:fakeSnippetOwner,
+        email: "fake@email.com"
+    };
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
 
@@ -64,7 +70,9 @@ describe("REST API Tests", function () {
                     db.removeSnippetRating(fakeSnippetRating.snippetId, function (err, result) {
                         db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
                             db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
-                                done();
+                                db.removeUser(fakeUser, function (err, result) {
+                                    done();
+                                });
                             });
                         });
                     });
@@ -297,6 +305,45 @@ describe("REST API Tests", function () {
                         done();
                     })
             });
+    });
+
+    it('should add a ratingRank to the user when a rating is updated on /rating/:snippetId POST', function (done) {
+        db.addUpdateUser(fakeUser,function(err, result) {
+            chai.request(app)
+                .post('/api/snippet')
+                .send(fakeSnippet)
+                .end(function (err, res) {
+                    chai.request(app)
+                        .post('/api/rating/' + fakeSnippetRating.snippetId)
+                        .send(fakeSnippetRating)
+                        .end(function (err, res) {
+                            expect(res).to.exist;
+                            db.findUsers({username: fakeUser.username}, function (err, users) {
+                                expect(users[0].ratingRank).equal(50);  //This is the first ranking
+                                chai.request(app)
+                                    .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second ranking
+                                    .send(fakeSnippetRating2)
+                                    .end(function (err, res) {
+                                        db.findUsers({username: fakeUser.username}, function (err, users) {
+                                            expect(users[0].ratingRank).equal(56);
+                                            fakeSnippetRating.rating = 1;
+                                            chai.request(app)
+                                                .post('/api/rating/' + fakeSnippetRating.snippetId)
+                                                .send(fakeSnippetRating)
+                                                .end(function (err, res) {
+                                                    db.findUsers({username: fakeUser.username}, function (err, users) {
+                                                        expect(users).to.exist;
+                                                        expect(users[0].ratingRank).equal(6);
+                                                        fakeSnippetRating.rating = 5;
+                                                        done();
+                                                    });
+                                                });
+                                        });
+                                    })
+                            });
+                        });
+                });
+        });
     });
 
     it('should update a rating on /rating/:snippetId PUT', function (done) {

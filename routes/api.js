@@ -405,11 +405,19 @@ module.exports = function(app) {
                     //Add the rankingDelta to the user's ranking
                     //We have to get the snippet so we know who the owner of the snippet that is being rated.
                     db.getSnippet(req.body.snippetId, function(err, snippet) {
+                        //There should always be a snippet
+                        if(!snippet){
+                            return res.status(500).json({error: 'Error adding ranking to user.  Snippet not found!'});
+                        }
                         //GET user so we can get the current ranking of the user
                         db.findUsers({username:snippet.owner}, function (err, users) {
                             //Since we are looking up by username and not userID we need to use findUsers instead of findUser.  Ideally we'd have the userId on the snippet.
-                            if (err || users.length != 1) {
+                            if (err) {
                                 return res.status(500).json({error: 'Error adding ranking to user: ' + (err.message || err)});
+                            }
+
+                            if (users.length != 1) {
+                                return res.status(500).json({error: 'Error adding ranking to user because user was not found!'});
                             }
                             var rankingDelta = newWeightedRating - oldWeightedRating;
                             users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;

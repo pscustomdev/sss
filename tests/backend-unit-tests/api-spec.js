@@ -347,18 +347,23 @@ describe("REST API Tests", function () {
     });
 
     it('should update a rating on /rating/:snippetId PUT', function (done) {
-        var modifiedRating = {snippetId: "MochaTestRepo", rater: "testOwner", rating: 4};
+        var modifiedRating = {snippetId: fakeSnippetId, rater: "testOwner", rating: 4};
         chai.request(app)
-            .post('/api/rating/' + fakeSnippetRating.snippetId)
-            .send(modifiedRating)
+            .post('/api/snippet')
+            .send(fakeSnippet)
             .end(function (err, res) {
                 chai.request(app)
-                    .get('/api/rating/' + fakeSnippetRating.snippetId)
+                    .post('/api/rating/' + fakeSnippetRating.snippetId)
+                    .send(modifiedRating)
                     .end(function (err, res) {
-                        res.should.have.status(200);
-                        res.body.should.equal(4);
-                        done();
-                    })
+                        chai.request(app)
+                            .get('/api/rating/' + fakeSnippetRating.snippetId)
+                            .end(function (err, res) {
+                                res.should.have.status(200);
+                                res.body.should.equal(4);
+                                done();
+                            })
+                    });
             });
     });
 
@@ -375,7 +380,7 @@ describe("REST API Tests", function () {
                             .get('/api/rating/' + fakeSnippetRating.snippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
-                                res.body.should.equal(3.25);
+                                res.body.should.equal(4);
                                 done();
                             });
                     });
@@ -427,7 +432,7 @@ describe("REST API Tests", function () {
                                         res.body[0].should.not.have.property("rater");
                                         res.body[0].snippetId.should.equal(fakeSnippetRating.snippetId);
                                         res.body[0].should.have.property("rating");
-                                        res.body[0].rating.should.equal(3.25);
+                                        res.body[0].rating.should.equal(4);
                                         res.body[0].should.have.property("snippetId");
                                         res.body[1].snippetId.should.equal(fakeSnippetRating3.snippetId);
                                         res.body[1].should.have.property("rating");

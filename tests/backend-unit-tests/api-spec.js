@@ -43,7 +43,7 @@ describe("REST API Tests", function () {
     var fakeFileName = "MochaTestFile";
     var fakeFileName2 = "MochaTestFile2";
     var fakeSnippetRating = {snippetId: fakeSnippetId, rater: "testRater", rating: 5};
-    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater: "testRater2", rating: 1.5};
+    var fakeSnippetRating2 = {snippetId: fakeSnippetId, rater: "testRater2", rating: 3};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater: "whoever", rating: 1.5};
 
     var fakeUser = {
@@ -319,9 +319,17 @@ describe("REST API Tests", function () {
                         .end(function (err, res) {
                             expect(res).to.exist;
                             db.findUsers({username: fakeUser.username}, function (err, users) {
-                                expect(users).to.exist;
                                 expect(users[0].ratingRank).equal(50);
-                                done();
+                                chai.request(app)
+                                    .post('/api/rating/' + fakeSnippetRating2.snippetId)
+                                    .send(fakeSnippetRating2)
+                                    .end(function (err, res) {
+                                        db.findUsers({username: fakeUser.username}, function (err, users) {
+                                            expect(users).to.exist;
+                                            expect(users[0].ratingRank).equal(56);
+                                            done();
+                                        });
+                                    })
                             });
                         });
                 });

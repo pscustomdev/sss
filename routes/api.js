@@ -375,19 +375,27 @@ module.exports = function(app) {
     // create or update snippet rating (POST)
     api_routes.post('/rating/:snippetId', restrict,
         function (req, res) {
-            db.addUpdateSnippetRating(req.body, function (err) {
+            //BestContributor
+            //Look up the old rating if there was one
+            req.body.user = req.body.rater; //We have to look up by the user not the rater when we make this call
+            getSnippetRatingByUser(req.body, function(err, oldRating){
                 if (err) {
-                    return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
+                    return res.status(500).json({error: 'Error adding rating to database while getSnippetRatingByUser: ' + (err.message || err)});
                 }
-                //BestContributor
-                //Look up the old rating if there was one
-                getSnippetRatingByUser(req.params, function(err, oldRating){
+                if(oldRating == 0){
+                    oldRating = {
+                        rating : 0
+                    };
+
+                }
+                db.addUpdateSnippetRating(req.body, function (err) {
                     if (err) {
-                        return res.status(500).json({error: 'Error adding rating to database while getSnippetRatingByUser: ' + (err.message || err)});
+                        return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
                     }
+
                     //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
-                    var weight = stats.weights.contributor[Math.trunc(oldRating)];
-                    var oldWeightedRating = weight * oldRating;
+                    var weight = stats.weights.contributor[Math.trunc(oldRating.rating)];
+                    var oldWeightedRating = weight * oldRating.rating;
 
                     //Get the new ratings weight and * it by the new rating to get the newWeightedRating
                     var newRating = req.body.rating;

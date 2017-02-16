@@ -47,26 +47,9 @@ describe("Mongo Dao", function() {
         });
     });
 
-
-    it('should return error if user already exists', function (done) {
-        db.addUser(fakeUser, function(err, users) {
-            db.addUser(fakeUser, function(err, users) {
-                expect(err.message).contain("duplicate key error");
-                done();
-            });
-        });
-    });
-
     it('should be able to add a user to the database', function (done) {
-        db.addUser(fakeUser, function(err, users){
-            if(users){
-                expect(users).to.exist;
-                expect(users.ops[0].firstName).equal("fakeFirst");
-                expect(users.ops[0].lastName).equal("fakeLast");
-                expect(users.ops[0].email).equal("fake@email.com");
-            } else {
-                expect(err.errmsg).contains("Error");
-            }
+        db.addUpdateUser(fakeUser, function(err, users){
+            expect(err).to.be.eql(null);
             var userEmail = {email: "fake@email.com"};
             db.findUsers(userEmail, function (err, users){
                 expect(users).to.exist;
@@ -78,7 +61,7 @@ describe("Mongo Dao", function() {
 
     it('should be able to remove a user from the database', function (done) {
         //create the user so we can remove it.
-        db.addUser(fakeUser, function(err, user){
+        db.addUpdateUser(fakeUser, function(err, user){
             db.removeUser(fakeUser, function (err, data) {
                 if (err) console.log(err);
                 var userEmail = {email: "fake@email.com"};
@@ -91,7 +74,7 @@ describe("Mongo Dao", function() {
     });
 
     it('should be able to find users in the the database', function (done) {
-        db.addUser(fakeUser, function(err, user) {
+        db.addUpdateUser(fakeUser, function(err, user) {
             db.findUsers({firstName: fakeUser.firstName}, function(err, results){
                 expect(results[0].lastName).to.be.eql(fakeUser.lastName);
                 done();
@@ -100,7 +83,7 @@ describe("Mongo Dao", function() {
     });
 
     it('should find a specific user in the database', function (done) {
-        db.addUser(fakeUser, function(err, user) {
+        db.addUpdateUser(fakeUser, function(err, user) {
             //var userId = user.ops[0]._id.id;
             db.findUser(fakeUser.id, function(err, result){
                 expect(result.lastName).to.be.eql(fakeUser.lastName);

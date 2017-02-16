@@ -2,6 +2,7 @@ var _ = require('underscore');
 var authConf = require('../auth/auth-conf.js');
 var stats = require('../db/stats-dao.js');
 var isBinaryFile = require("isbinaryfile");
+var db = require('../db/mongo-dao');
 
 function generateMetaData(fileName, content, fileBuffer, fileSize) {
     var metaData = {};
@@ -60,7 +61,6 @@ module.exports = function(app) {
     var restrict = require('../auth/restrict');
     var azureStorage = require('../db/azure-storage-dao');
     var azureSearch = require('../db/azure-search-dao');
-    var db = require('../db/mongo-dao');
 
     var textParser = bodyParser.text();
 
@@ -380,31 +380,39 @@ module.exports = function(app) {
                     return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
                 }
                 //BestContributor
-                getSnippetRatingByUser(req.params, function(err, currentRating){
-                    console.log("rating: " + req.body.rating);
-                    // var newRating = req.body.rating;
-                    // var weight = stats.weights.contributor[newRating];
-                    // var newRankDiff = newRating - currentRating;
-                    // var newRank = weight * newRankDiff;
+                //Look up the old rating if there was one
+                getSnippetRatingByUser(req.params, function(err, oldRating){
+                    if (err) {
+                        return res.status(500).json({error: 'Error adding rating to database while getSnippetRatingByUser: ' + (err.message || err)});
+                    }
+                    //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
+                    var weight = stats.weights.contributor[Math.trunc(oldRating)];
+                    var oldWeightedRating = weight * oldRating;
 
+                    //Get the new ratings weight and * it by the new rating to get the newWeightedRating
                     var newRating = req.body.rating;
-                    var newRankingWeight = stats.weights.contributor[newRating];
-                    var newRanking = newRating * newRankingWeight;
-                    var currentRankingWeight = stats.weights.contributor[currentRating];
-                    var currentRanking = currentRating * currentRankingWeight;
+                    weight = stats.weights.contributor[Math.trunc(newRating)];
+                    var newWeightedRating = weight * newRating;
 
-                    var rankingDelta = newRanking - currentRanking;
-
-                    db.findUser(req.body.rater, function(err, user){
-                        if(err) {
-                            return res.status(500).json({error: 'Error adding ranking to user: ' + (err.message || err)});
-                        }
-                        var ranking = user.ranking ? user.ranking + rankingDelta : rankingDelta;
-                        //TODO Add/Update user but we will need a function in the db dao to do that.
+                    //Add the rankingDelta to the user's ranking
+                    //We have to get the snippet so we know who the owner of the snippet that is being rated.
+                    db.getSnippet(req.body.snippetId, function(err, snippet) {
+                        //GET user so we can get the current ranking of the user
+                        db.findUsers({username:snippet.owner}, function (err, users) {
+                            //Since we are looking up by username and not userID we need to use findUsers instead of findUser.  Ideally we'd have the userId on the snippet.
+                            if (err || users.length != 1) {
+                                return res.status(500).json({error: 'Error adding ranking to user: ' + (err.message || err)});
+                            }
+                            var rankingDelta = newWeightedRating - oldWeightedRating;
+                            users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
+                            //write the new ranking to the user.
+                            db.addUpdateUser(users[0], function (err, result) {
+                                console.log("result" + result);
+                                res.json({});
+                            })
+                        });
                     });
                 });
-
-                res.json({});
             });
 
 

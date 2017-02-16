@@ -42,8 +42,8 @@ describe("REST API Tests", function () {
     };
     var fakeFileName = "MochaTestFile";
     var fakeFileName2 = "MochaTestFile2";
-    var fakeSnippetRating = {snippetId: "MochaTestRepo", rater: "testOwner", rating: 5};
-    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater: "testOwner2", rating: 1.5};
+    var fakeSnippetRating = {snippetId: fakeSnippetId, rater: "testRater", rating: 5};
+    var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater: "testRater2", rating: 1.5};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater: "whoever", rating: 1.5};
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
@@ -297,6 +297,32 @@ describe("REST API Tests", function () {
                         done();
                     })
             });
+    });
+
+    it('should add a ratingRank to the user when a rating is updated on /rating/:snippetId POST', function (done) {
+        var profile = {
+            id:123,
+            username:fakeSnippetOwner,
+            email: "fake@email.com"
+        };
+        db.addUpdateUser(profile,function(err, result) {
+            chai.request(app)
+                .post('/api/snippet')
+                .send(fakeSnippet)
+                .end(function (err, res) {
+                    chai.request(app)
+                        .post('/api/rating/' + fakeSnippetRating.snippetId)
+                        .send(fakeSnippetRating)
+                        .end(function (err, res) {
+                            expect(res).to.exist;
+                            db.findUsers({username: profile.username}, function (err, users) {
+                                expect(users).to.exist;
+                                expect(users[0].ratingRank).equal(50);
+                                done();
+                            });
+                        });
+                });
+        });
     });
 
     it('should update a rating on /rating/:snippetId PUT', function (done) {

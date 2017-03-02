@@ -9,6 +9,7 @@
     function apiFactory($http, $log) {
         return {
             getCurrentUser: getCurrentUser,
+            getUserRankings: getUserRankings,
             getSnippets: getSnippets,
             getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
@@ -37,6 +38,19 @@
             return $http.get("/api/authenticated-user")
                 .then(function (response) {
                         return response.data;
+                    },
+                    function (reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function (err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+        function getUserRankings() {
+            return $http.get("/api/users/rating-rank")
+                .then(function (response) {
+                        return response;
                     },
                     function (reason) {
                         $log.debug(JSON.stringify(reason));

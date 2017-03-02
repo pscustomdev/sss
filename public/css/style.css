@@ -54,3 +54,7 @@ body {
     padding:0 0px;
     left:-2px;
 }
+
+.table-panel {
+    padding:45px 15px 15px;
+}

@@ -67,6 +67,56 @@ exports.getUserRankings = function(next) {
     });
 };
 
+exports.addUpdateSnippetRank = function (snippet, next) {
+    db.collection("snippets").update({rankingSnippetId: snippet.rankingSnippetId}, {
+            rankingSnippetId: snippet.rankingSnippetId,
+            ratingRank: snippet.ratingRank
+        }, {upsert: true},
+        function (err, object) {
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
+            next(err, object);
+        }
+    );
+};
+
+exports.getSnippetRankings = function(next) {
+    db.collection("snippets").find().sort({ratingRank: -1}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        next(err, results);
+    });
+};
+
+exports.getSnippetRank = function (id, next) {
+    db.collection('snippets').findOne({rankingSnippetId: id},
+        function (err, result) {
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};
+
+// Delete the snippet from the collection
+exports.removeSnippetRank = function (id, next) {
+    db.collection('snippets').remove({rankingSnippetId: id},
+        function (err, result) {
+            if (err) {
+                console.warn(err.message);
+                next(err, null);
+            }
+            next(err, result);
+        }
+    );
+};
+
 exports.addUpdateSnippet = function (snippet, next) {
     db.collection("snippets").update({snippetId: snippet._id}, {
             snippetId: snippet._id,
@@ -132,7 +182,13 @@ exports.removeSnippet = function (id, next) {
                     console.warn(err.message);
                     next(err, null);
                 }
-                next(err, "");
+                exports.removeSnippetRank(id, function(err, result) {
+                    if (err) {
+                        console.warn(err.message);
+                        next(err, null);
+                    }
+                    next(err, "");
+                });
             });
         }
     );

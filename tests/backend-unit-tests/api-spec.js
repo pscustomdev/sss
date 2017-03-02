@@ -334,7 +334,7 @@ describe("REST API Tests", function () {
                             res.body.should.be.a('array');
                             //should return a sorted array
                             res.should.have.status(200);
-                            res.body[0].ratingRank.should.equal(45);
+                            res.body.should.contain(fakeUser);
                             done();
                         })
                 });
@@ -376,6 +376,31 @@ describe("REST API Tests", function () {
                                         });
                                     })
                             });
+                        });
+                });
+        });
+    });
+
+    //TODO this still needs to be implemented in the API.
+    it('should add a ratingRank to the snippet when a rating is updated on /rating/:snippetId POST', function (done) {
+        db.addUpdateUser(fakeUser,function(err, result) {
+            chai.request(app)
+                .post('/api/snippet')
+                .send(fakeSnippet)
+                .end(function (err, res) {
+                    chai.request(app)
+                        .post('/api/rating/' + fakeSnippetRating.snippetId)
+                        .send(fakeSnippetRating)
+                        .end(function (err, res) {
+                            chai.request(app)
+                                .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second ranking
+                                .send(fakeSnippetRating2)
+                                .end(function (err, res) {
+                                    db.getSnippetRankings(function (err, result) {
+                                        result.should.contain(fakeSnippetRating);
+                                        done();
+                                    });
+                                })
                         });
                 });
         });

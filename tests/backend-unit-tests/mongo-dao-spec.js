@@ -28,6 +28,8 @@ describe("Mongo Dao", function() {
     var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
     var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
+    var fakeSnippetRank = {rankingSnippetId: "MochaTestRepo", ratingRank:10};
+    var fakeSnippetRank2 = {rankingSnippetId: "MochaTestRepo2", ratingRank:25};
 
     beforeEach(function(done) {
         done()
@@ -39,7 +41,11 @@ describe("Mongo Dao", function() {
             db.removeUser(fakeUser2, function (err, data) {
                 db.removeSnippet(fakeSnippet._id, function (err, result) {
                     db.removeSnippet(fakeSnippet2._id, function (err, result) {
-                        done();
+                        db.removeSnippetRank(fakeSnippetRank.rankingSnippetId, function (err, result) {
+                            db.removeSnippetRank(fakeSnippetRank2.rankingSnippetId, function (err, result) {
+                                done();
+                            });
+                        });
                     });
                 });
             });
@@ -108,11 +114,7 @@ describe("Mongo Dao", function() {
             db.addUpdateUser(fakeUser2, function (err, user) {
                 db.getUserRankings(function (err, results) {
                     expect(results).to.be.an("array");
-                    for (var i = 0; i < results.length; i++) { //We don't know if there will be other users added so we look for the fakeuser
-                        if(results[i].id == 123) {
-                            expect(results[i].ratingRank).to.be.eql(20);
-                        }
-                    }
+                    expect(results).to.contain(fakeUser);
                     done();
                 })
             });
@@ -328,6 +330,42 @@ describe("Mongo Dao", function() {
                         done();
                     })
                 });
+            });
+        });
+    });
+
+    it('should be able to add a snippet rank to the database and then get it', function (done) {
+        db.addUpdateSnippetRank(fakeSnippetRank, function(err, msg){
+            expect(msg.result.ok).to.be.eql(1);
+            db.getSnippetRank(fakeSnippetRank.rankingSnippetId, function(err, result) {
+                expect(result.rankingSnippetId).to.be.eql(fakeSnippetRank.rankingSnippetId);
+                expect(result.ratingRank).to.be.eql(fakeSnippetRank.ratingRank);
+                done();
+            })
+        });
+    });
+
+    it('should get all snippet rankings', function (done) {
+        db.addUpdateSnippetRank(fakeSnippetRank, function(err, msg){
+            db.addUpdateSnippetRank(fakeSnippetRank2, function(err, msg){
+                db.getSnippetRankings(function (err, results) {
+                    expect(results).to.be.an("array");
+                    expect(results).to.contain(fakeSnippetRank);
+                    expect(results).to.contain(fakeSnippetRank2);
+                    done();
+                })
+            });
+        });
+    });
+
+    it('should remove a snippet ranking', function (done) {
+        db.addUpdateSnippetRank(fakeSnippetRank, function(err, msg){
+            db.removeSnippetRank(fakeSnippetRank.rankingSnippetId, function(err, msg){
+                db.getSnippetRankings(function (err, results) {
+                    expect(results).to.be.an("array");
+                    expect(results).to.not.contain(fakeSnippetRank);
+                    done();
+                })
             });
         });
     });

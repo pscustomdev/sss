@@ -57,6 +57,16 @@ exports.findUser = function (id, next) {
     });
 };
 
+exports.getUserRankings = function(next) {
+    db.collection(userCollectionName).find().sort({ratingRank: -1}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        next(err, results);
+    });
+};
+
 exports.addUpdateSnippet = function (snippet, next) {
     db.collection("snippets").update({snippetId: snippet._id}, {
             snippetId: snippet._id,

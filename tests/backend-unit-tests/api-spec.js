@@ -49,7 +49,20 @@ describe("REST API Tests", function () {
     var fakeUser = {
         id:123,
         username:fakeSnippetOwner,
-        email: "fake@email.com"
+        email: "fake@email.com",
+        ratingRank:20
+    };
+    var fakeUser2 = {
+        id:1232,
+        username:"fakeOwner2",
+        email: "fake2@email.com",
+        ratingRank:30
+    };
+    var fakeUser3 = {
+        id:1233,
+        username:"fakeOwner3",
+        email: "fake3@email.com" ,
+        ratingRank:45
     };
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
@@ -71,7 +84,11 @@ describe("REST API Tests", function () {
                         db.removeSnippetRating(fakeSnippetRating2.snippetId, function (err, result) {
                             db.removeSnippetRating(fakeSnippetRating3.snippetId, function (err, result) {
                                 db.removeUser(fakeUser, function (err, result) {
-                                    done();
+                                    db.removeUser(fakeUser2, function (err, result) {
+                                        db.removeUser(fakeUser3, function (err, result) {
+                                            done();
+                                        });
+                                    });
                                 });
                             });
                         });
@@ -305,6 +322,24 @@ describe("REST API Tests", function () {
                         done();
                     })
             });
+    });
+
+    it('should get all users ratingRanks on /users/rating-rank GET', function (done) {
+        db.addUpdateUser(fakeUser, function (err, result) {
+            db.addUpdateUser(fakeUser2, function (err, result) {
+                db.addUpdateUser(fakeUser3, function (err, result) {
+                    chai.request(app)
+                        .get('/api/users/rating-rank')
+                        .end(function (err, res) {
+                            res.body.should.be.a('array');
+                            //should return a sorted array
+                            res.should.have.status(200);
+                            res.body[0].ratingRank.should.equal(45);
+                            done();
+                        })
+                });
+            });
+        });
     });
 
     it('should add a ratingRank to the user when a rating is updated on /rating/:snippetId POST', function (done) {

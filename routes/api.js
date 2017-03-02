@@ -394,13 +394,11 @@ module.exports = function(app) {
                     }
 
                     //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
-                    var weight = stats.weights.contributor[Math.trunc(oldRating.rating)];
-                    var oldWeightedRating = weight * oldRating.rating;
+                    var oldRatingWeight = stats.weights.contributor[Math.trunc(oldRating.rating)];
 
                     //Get the new ratings weight and * it by the new rating to get the newWeightedRating
                     var newRating = req.body.rating;
-                    weight = stats.weights.contributor[Math.trunc(newRating)];
-                    var newWeightedRating = weight * newRating;
+                    var newRatingWeight = stats.weights.contributor[Math.trunc(newRating)];
 
                     //Add the rankingDelta to the user's ranking
                     //We have to get the snippet so we know who the owner of the snippet that is being rated.
@@ -419,7 +417,7 @@ module.exports = function(app) {
                             if (users.length != 1) {
                                 return res.status(500).json({error: 'Error adding ranking to user because user was not found!'});
                             }
-                            var rankingDelta = newWeightedRating - oldWeightedRating;
+                            var rankingDelta = newRatingWeight - oldRatingWeight;
                             users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
                             //write the new ranking to the user.
                             db.addUpdateUser(users[0], function (err, result) {

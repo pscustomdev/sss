@@ -354,21 +354,21 @@ describe("REST API Tests", function () {
                         .end(function (err, res) {
                             expect(res).to.exist;
                             db.findUsers({username: fakeUser.username}, function (err, users) {
-                                expect(users[0].ratingRank).equal(50);  //This is the first ranking
+                                expect(users[0].ratingRank).equal(30);  //This is the first ranking
                                 chai.request(app)
                                     .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second ranking
                                     .send(fakeSnippetRating2)
                                     .end(function (err, res) {
                                         db.findUsers({username: fakeUser.username}, function (err, users) {
-                                            expect(users[0].ratingRank).equal(56);
+                                            expect(users[0].ratingRank).equal(32);
                                             fakeSnippetRating.rating = 1;
                                             chai.request(app)
-                                                .post('/api/rating/' + fakeSnippetRating.snippetId)
+                                                .post('/api/rating/' + fakeSnippetRating.snippetId) //This change the rating
                                                 .send(fakeSnippetRating)
                                                 .end(function (err, res) {
                                                     db.findUsers({username: fakeUser.username}, function (err, users) {
                                                         expect(users).to.exist;
-                                                        expect(users[0].ratingRank).equal(6);
+                                                        expect(users[0].ratingRank).equal(22);
                                                         fakeSnippetRating.rating = 5;
                                                         done();
                                                     });

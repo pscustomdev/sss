@@ -108,8 +108,11 @@ describe("Mongo Dao", function() {
             db.addUpdateUser(fakeUser2, function (err, user) {
                 db.getUserRankings(function (err, results) {
                     expect(results).to.be.an("array");
-                    expect(results[0].ratingRank).to.be.eql(30);
-                    expect(results[1].ratingRank).to.be.eql(20);
+                    for (var i = 0; i < results.length; i++) { //We don't know if there will be other users added so we look for the fakeuser
+                        if(results[i].id == 123) {
+                            expect(results[i].ratingRank).to.be.eql(20);
+                        }
+                    }
                     done();
                 })
             });

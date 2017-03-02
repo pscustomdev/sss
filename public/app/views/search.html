@@ -26,7 +26,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="user in userRankings">
+                        <tr ng-repeat="user in userRankings | limitTo:5">
                             <th scope="row">{{$index + 1}}</th>
                             <td>{{user.name}}</td>
                         </tr>

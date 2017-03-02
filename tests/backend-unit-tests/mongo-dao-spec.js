@@ -11,7 +11,16 @@ describe("Mongo Dao", function() {
         firstName: "fakeFirst",
         lastName: "fakeLast",
         email: "fake@email.com",
-        password: "fakePassword"
+        password: "fakePassword",
+        ratingRank:20
+    };
+    var fakeUser2 = {
+        id:1232,
+        firstName: "fakeFirst2",
+        lastName: "fakeLast2",
+        email: "fake2@email.com",
+        password: "fake2Password",
+        ratingRank:30
     };
 
     var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
@@ -27,9 +36,11 @@ describe("Mongo Dao", function() {
     afterEach(function(done) {
         //cleanup fake user
         db.removeUser(fakeUser, function (err, data) {
-            db.removeSnippet(fakeSnippet._id, function(err, result){
-                db.removeSnippet(fakeSnippet2._id, function(err, result){
-                    done();
+            db.removeUser(fakeUser2, function (err, data) {
+                db.removeSnippet(fakeSnippet._id, function (err, result) {
+                    db.removeSnippet(fakeSnippet2._id, function (err, result) {
+                        done();
+                    });
                 });
             });
         });
@@ -89,6 +100,19 @@ describe("Mongo Dao", function() {
                 expect(result.lastName).to.be.eql(fakeUser.lastName);
                 done();
             })
+        });
+    });
+
+    it('should get all users rankings', function (done) {
+        db.addUpdateUser(fakeUser, function(err, user) {
+            db.addUpdateUser(fakeUser2, function (err, user) {
+                db.getUserRankings(function (err, results) {
+                    expect(results).to.be.an("array");
+                    expect(results[0].ratingRank).to.be.eql(30);
+                    expect(results[1].ratingRank).to.be.eql(20);
+                    done();
+                })
+            });
         });
     });
 

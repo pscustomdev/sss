@@ -431,6 +431,20 @@ module.exports = function(app) {
         }
     );
 
+
+
+    api_routes.get('/users/rating-rank',
+        //return the authenticated user
+        function (req, res) {
+            db.getUserRankings(function(err, result){
+                if (err) {
+                    return res.status(500).json({error: 'Error getting rankings from database: ' + (err.message || err)});
+                }
+                res.json(result);
+            });
+        }
+    );
+
     api_routes.get('/authenticated-user',
         //return the authenticated user
         function (req, res) {

@@ -88,11 +88,16 @@ module.exports = function(app) {
                 //TODO var = snippetIds
                 var snippetIds = _.pluck(results, "rankingSnippetId");
                 //TODO is what is snippetIds?  AN array or what does it need to pass in?
-                db.getSnippets(snippetIds, function(data){
+                db.getSnippets(snippetIds, function(err, data){
+                    if (err) {
+                        return res.status(500).json({error: 'Error getting snippets from database: ' + (err.message || err)});
+                    }
                     //Merge the names of the snippets from data into results
                     _.each(results, function (result){
-                        var found = _.findWhere(data, {snippetId: result.snippetId});
-                        result.displayName = found.displayName;
+                        var found = _.findWhere(data, {snippetId: result.rankingSnippetId});
+                        if(found){
+                            result.displayName = found.displayName;
+                        }
                     });
                     res.json(results);
                 })

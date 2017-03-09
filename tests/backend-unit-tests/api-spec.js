@@ -183,19 +183,33 @@ describe("REST API Tests", function () {
     });
 
     it('should get all snippets ratingRanks on /snippets/rating-rank GET', function (done) {
-        db.addUpdateSnippetRank(fakeSnippetRanking, function (err, result) {
-                db.addUpdateSnippetRank(fakeSnippetRanking2, function (err, result) {
-                    chai.request(app)
-                        .get('/api/snippets/rating-rank')
-                        .end(function (err, res) {
-                            res.body.should.be.a('array');
-                            //should return a sorted array
-                            res.should.have.status(200);
-                            res.body.should.contain(fakeSnippetRanking);
-                            res.body.should.contain(fakeSnippetRanking2);
-                            done();
-                        })
+        db.addUpdateSnippet(fakeSnippet, function (err, result) {
+            db.addUpdateSnippet(fakeSnippet2, function (err, result) {
+                db.addUpdateSnippetRank(fakeSnippetRanking, function (err, result) {
+                    db.addUpdateSnippetRank(fakeSnippetRanking2, function (err, result) {
+                        chai.request(app)
+                            .get('/api/snippets/rating-rank')
+                            .end(function (err, res) {
+                                res.body.should.be.a('array');
+                                //should return a sorted array
+                                res.should.have.status(200);
+                                var obj = {
+                                    rankingSnippetId : fakeSnippetRanking.rankingSnippetId,
+                                    ratingRank: 1,
+                                    displayName : fakeSnippet.displayName
+                                };
+                                res.body.should.contain(obj);
+                                var obj = {
+                                    rankingSnippetId : fakeSnippetRanking2.rankingSnippetId,
+                                    ratingRank: 25,
+                                    displayName : fakeSnippet2.displayName
+                                };
+                                res.body.should.contain(obj);
+                                done();
+                            })
+                    });
                 });
+            });
         });
     });
 

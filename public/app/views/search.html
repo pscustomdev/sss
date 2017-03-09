@@ -48,12 +48,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <pre ng-bind="snippetRankings | json"></pre>
                         <tr ng-repeat="snippet in snippetRankings | limitTo:5">
                             <th scope="row">{{$index + 1}}</th>
-                            <td></a>{{snippet.name}}</a></td>
-                            <td></a>{{snippet.snippetId}}</a></td>
-                            <!--<td><a href="./{{snippet.snippetId}}">{{snippet.name}}</a></td>-->
+                            <td><a href="./#!/search/results/snippet-overview/{{snippet.rankingSnippetId}}">{{snippet.displayName}}</a></td>
                         </tr>
                         </tbody>
                     </table>

@@ -5,6 +5,7 @@ var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
 var userCollectionName = "sessions";
+var LIMIT_NUM = 5;
 
 exports.addUpdateUser = function (profile, next) {
     //We first check to see if the user exists before we Add it.
@@ -83,8 +84,7 @@ exports.addUpdateSnippetRank = function (snippet, next) {
 };
 
 exports.getSnippetRankings = function(next) {
-    //TODO limit this to someNUm
-    db.collection("snippets").find().sort({ratingRank: -1}).toArray(function (err, results) {
+    db.collection("snippets").find().sort({ratingRank: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);

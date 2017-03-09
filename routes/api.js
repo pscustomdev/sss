@@ -393,21 +393,20 @@ module.exports = function(app) {
                         return res.status(500).json({error: 'Error adding rating to database: ' + (err.message || err)});
                     }
 
-                    //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
-                    var oldRatingWeight = stats.weights.contributor[Math.trunc(oldRating.rating)];
-
-                    //Get the new ratings weight and * it by the new rating to get the newWeightedRating
-                    var newRating = req.body.rating;
-                    var newRatingWeight = stats.weights.contributor[Math.trunc(newRating)];
-
-                    //Add the rankingDelta to the user's ranking
-                    //We have to get the snippet so we know who the owner of the snippet that is being rated.
+                    //We have to get the snippet so 1) we know who the owner of the snippet that is being rated for BEST Contributor and 2) so we have it's ratingRank for HighestRankedSnippet.
                     db.getSnippet(req.body.snippetId, function(err, snippet) {
-                        //There should always be a snippet
                         if(!snippet){
-                            return res.status(500).json({error: 'Error adding ranking to user.  Snippet not found!'});
+                            return res.status(500).json({error: 'Error adding ranking to user or snippet.  Snippet not found!'});
                         }
-                        //GET user so we can get the current ranking of the user
+                        //BEST CONTRIBUTOR Add the rankingDelta to the user's ranking
+                        //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
+                        var oldRatingWeight = stats.weights.contributor[Math.trunc(oldRating.rating)];
+
+                        //Get the new ratings weight and * it by the new rating to get the newWeightedRating
+                        var newRating = req.body.rating;
+                        var newRatingWeight = stats.weights.contributor[Math.trunc(newRating)];
+                        //There should always be a snippet
+                        //GET user so we can get the current ranking of the user //BEST CONTRIBUTOR
                         db.findUsers({username:snippet.owner}, function (err, users) {
                             //Since we are looking up by username and not userID we need to use findUsers instead of findUser.  Ideally we'd have the userId on the snippet.
                             if (err) {
@@ -421,8 +420,23 @@ module.exports = function(app) {
                             users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
                             //write the new ranking to the user.
                             db.addUpdateUser(users[0], function (err, result) {
-                                console.log("result" + result);
-                                res.json({});
+                                //HIGHEST RANKED SNIPPET Add the rankingDelta to the user's ranking
+                                //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
+                                var oldRatingWeight = stats.weights.snippet[Math.trunc(oldRating.rating)];
+
+                                //Get the new ratings weight and * it by the new rating to get the newWeightedRating
+                                var newRating = req.body.rating;
+                                var newRatingWeight = stats.weights.snippet[Math.trunc(newRating)];
+                                var rankingDelta = newRatingWeight - oldRatingWeight;
+                                var ratingRank = snippet.ratingRank ? snippet.ratingRank + rankingDelta : rankingDelta;
+                                var ratingRankObj = {
+                                    rankingSnippetId: snippet.snippetId,
+                                    ratingRank:ratingRank
+                                };
+                                db.addUpdateSnippetRank(ratingRankObj, function (err, result) {
+                                    console.log("result" + result);
+                                    res.json({});
+                                })
                             })
                         });
                     });

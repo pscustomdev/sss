@@ -71,12 +71,7 @@ describe("REST API Tests", function () {
         return;
     }
 
-    beforeEach(function (done) {
-        done();
-    }, 5000);
-
-    afterEach(function (done) {
-        // cleanup fake repo
+    function cleanup(done){
         azureStorage.deleteFolder(fakeSnippetId, function (err, result) {
             db.removeSnippet(fakeSnippetId, function (err, result) {
                 db.removeSnippet(fakeSnippet2._id, function (err, result) {
@@ -96,6 +91,14 @@ describe("REST API Tests", function () {
                 });
             });
         });
+    }
+    beforeEach(function (done) {
+        cleanup(done);
+    }, 5000);
+
+    afterEach(function (done) {
+        // cleanup fake repo
+        cleanup(done);
     }, 5000);
 
     it('should get a list of all snippets on /snippets/:ids GET', function (done) {
@@ -393,11 +396,15 @@ describe("REST API Tests", function () {
                         .send(fakeSnippetRating)
                         .end(function (err, res) {
                             chai.request(app)
-                                .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second ranking
+                                .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second rating
                                 .send(fakeSnippetRating2)
                                 .end(function (err, res) {
                                     db.getSnippetRankings(function (err, result) {
-                                        result.should.contain(fakeSnippetRating);
+                                        var obj = {
+                                            rankingSnippetId:fakeSnippetId,
+                                            ratingRank :1
+                                        };
+                                        result.should.contain(obj); //TODO This should be an array of snippets sorted by Rank.
                                         done();
                                     });
                                 })

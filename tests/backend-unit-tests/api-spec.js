@@ -384,7 +384,6 @@ describe("REST API Tests", function () {
         });
     });
 
-    //TODO this still needs to be implemented in the API.
     it('should add a ratingRank to the snippet when a rating is updated on /rating/:snippetId POST', function (done) {
         db.addUpdateUser(fakeUser,function(err, result) {
             chai.request(app)

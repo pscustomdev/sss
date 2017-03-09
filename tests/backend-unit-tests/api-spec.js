@@ -46,6 +46,16 @@ describe("REST API Tests", function () {
     var fakeSnippetRating2 = {snippetId: fakeSnippetId, rater: "testRater2", rating: 3};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater: "whoever", rating: 1.5};
 
+    var fakeSnippetRanking = {
+        rankingSnippetId:fakeSnippetId,
+        ratingRank :1
+    };
+
+    var fakeSnippetRanking2 = {
+        rankingSnippetId:fakeSnippet2._id,
+        ratingRank :25
+    };
+
     var fakeUser = {
         id:123,
         username:fakeSnippetOwner,
@@ -195,6 +205,23 @@ describe("REST API Tests", function () {
                         done();
                     });
             });
+    });
+
+    it('should get all snippets ratingRanks on /snippets/rating-rank GET', function (done) {
+        db.addUpdateSnippetRank(fakeSnippetRanking, function (err, result) {
+                db.addUpdateSnippetRank(fakeSnippetRanking2, function (err, result) {
+                    chai.request(app)
+                        .get('/api/snippets/rankings/rating-rank')
+                        .end(function (err, res) {
+                            res.body.should.be.a('array');
+                            //should return a sorted array
+                            res.should.have.status(200);
+                            res.body.should.contain(fakeSnippetRanking);
+                            res.body.should.contain(fakeSnippetRanking2);
+                            done();
+                        })
+                });
+        });
     });
 
     it('should update snippet data on /snippet PUT', function (done) {
@@ -399,11 +426,7 @@ describe("REST API Tests", function () {
                                 .send(fakeSnippetRating2)
                                 .end(function (err, res) {
                                     db.getSnippetRankings(function (err, result) {
-                                        var obj = {
-                                            rankingSnippetId:fakeSnippetId,
-                                            ratingRank :1
-                                        };
-                                        result.should.contain(obj); //TODO This should be an array of snippets sorted by Rank.
+                                        result.should.contain(fakeSnippetRanking); //This should be an array of snippets sorted by Rank.
                                         done();
                                     });
                                 })

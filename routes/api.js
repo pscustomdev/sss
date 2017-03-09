@@ -95,6 +95,18 @@ module.exports = function(app) {
         }
     );
 
+    api_routes.get('/snippets/rankings/rating-rank',
+        //return the authenticated user
+        function (req, res) {
+            db.getSnippetRankings(function(err, result){
+                if (err) {
+                    return res.status(500).json({error: 'Error getting snippet rankings from database: ' + (err.message || err)});
+                }
+                res.json(result);
+            });
+        }
+    );
+
     // get information about a snippet
     api_routes.get('/snippet/:snippetId',
        function (req, res) {

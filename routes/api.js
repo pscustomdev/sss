@@ -397,7 +397,7 @@ module.exports = function(app) {
     // Check to see if this user has ranked this before
     // calculate the rank the user is adding based on the weight
     //  if user has ranked it add the difference, else add the new rank to this snippets rank value.
-    function bestContributor(req, res, oldRating, next) {
+    function bestContributor(req, res, snippet, oldRating, next) {
         //BEST CONTRIBUTOR Add the rankingDelta to the user's ranking
         //Get the old rating's weight and * it by the oldRating to get the old rating's calculated weighted value
         var oldRatingWeight = stats.weights.contributor[Math.trunc(oldRating.rating)];
@@ -420,6 +420,9 @@ module.exports = function(app) {
             users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
             //write the new ranking to the user.
             db.addUpdateUser(users[0], function (err, result) {
+                if (err) {
+                    return res.status(500).json({error: 'Error updating ranking to user: ' + (err.message || err)});
+                }
                 next && next();
             })
         });
@@ -451,7 +454,7 @@ module.exports = function(app) {
                             return res.status(500).json({error: 'Error adding ranking to user or snippet.  Snippet not found!'});
                         }
 
-                        bestContributor(req, res, oldRating, function () {
+                        bestContributor(req, res, snippet, oldRating, function () {
                             highestRankedSnippet(req, res, snippet, oldRating, function() {
                                 res.json({});
                             });

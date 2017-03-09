@@ -35,27 +35,31 @@
                 </div>
             </div>
         </div>
-        <!--<div class="col-md-6">-->
-            <!--<div class="table-panel">-->
-                <!--<div class="panel panel-default">-->
-                    <!--<div class="panel-heading">Best Contributors</div>-->
-                    <!--<div class="panel-body"><p>These are cool people.</p></div>-->
-                    <!--<table class="table">-->
-                        <!--<thead>-->
-                        <!--<tr>-->
-                            <!--<th>#</th>-->
-                            <!--<th>Name</th>-->
-                        <!--</tr>-->
-                        <!--</thead>-->
-                        <!--<tbody>-->
-                        <!--<tr ng-repeat="user in userRankings">-->
-                            <!--<th scope="row">{{$index + 1}}</th>-->
-                            <!--<td>{{user.name}}</td>-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="col-md-6">
+            <div class="table-panel">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Highest Ranked Snippets</div>
+                    <div class="panel-body"><p>These are snippets who have the highest ranked snippets. Aren't they all cool?</p></div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <pre ng-bind="snippetRankings | json"></pre>
+                        <tr ng-repeat="snippet in snippetRankings | limitTo:5">
+                            <th scope="row">{{$index + 1}}</th>
+                            <td></a>{{snippet.name}}</a></td>
+                            <td></a>{{snippet.snippetId}}</a></td>
+                            <!--<td><a href="./{{snippet.snippetId}}">{{snippet.name}}</a></td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

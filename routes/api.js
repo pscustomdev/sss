@@ -64,22 +64,6 @@ module.exports = function(app) {
 
     var textParser = bodyParser.text();
 
-    // get a list of all snippets with these ids
-    api_routes.get('/snippets/:snippetIds',
-        function (req, res) {
-            var sIds = decodeURIComponent(req.params.snippetIds).split(",");
-            db.getSnippets(sIds, function(err, results){
-                if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
-                }
-                if (!results || !results[0]) {
-                    return res.status(204).json({error: 'Snippet(s) not found'});
-                }
-                res.json(results);
-            })
-        }
-    );
-
     //Get snippets by owner (we might want to make this more generic so they could get snippets by any attr)
     api_routes.get('/snippets',
         function (req, res) {
@@ -95,14 +79,23 @@ module.exports = function(app) {
         }
     );
 
-    api_routes.get('/snippets/rankings/rating-rank',
-        //return the authenticated user
+    api_routes.get('/snippets/rating-rank',
         function (req, res) {
-            db.getSnippetRankings(function(err, result){
+            db.getSnippetRankings(function(err, results){
                 if (err) {
                     return res.status(500).json({error: 'Error getting snippet rankings from database: ' + (err.message || err)});
                 }
-                res.json(result);
+                //TODO var = snippetIds
+                var snippetIds = _.pluck(results, "rankingSnippetId");
+                //TODO is what is snippetIds?  AN array or what does it need to pass in?
+                db.getSnippets(snippetIds, function(data){
+                    //Merge the names of the snippets from data into results
+                    _.each(results, function (result){
+                        var found = _.findWhere(data, {snippetId: result.snippetId});
+                        result.displayName = found.displayName;
+                    });
+                    res.json(results);
+                })
             });
         }
     );

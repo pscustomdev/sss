@@ -111,31 +111,6 @@ describe("REST API Tests", function () {
         cleanup(done);
     }, 5000);
 
-    it('should get a list of all snippets on /snippets/:ids GET', function (done) {
-        var ids = encodeURIComponent(fakeSnippetId + "," + fakeSnippet2._id);
-        chai.request(app)
-            .post('/api/snippet')
-            .send(fakeSnippet)
-            .end(function (err, res) {
-                chai.request(app)
-                    .post('/api/snippet')
-                    .send(fakeSnippet2)
-                    .end(function (err, res) {
-                        chai.request(app)
-                            .get('/api/snippets/' + ids)
-                            .end(function (err, res) {
-                                console.log("res: " + res);
-                                expect(res.status).to.eql(200);
-                                res.body.should.be.a('array');
-                                //Should check for the objects in the array but we'd need to check for postedOn timestamp and other tricky things right now so we'll do it later.
-                                // expect(res.body).to.contain(fakeSnippet);
-                                // expect(res.body).to.contain(fakeSnippet2);
-                                done();
-                            });
-                    });
-            });
-    });
-
     it('should get a list of snippets by owner on /snippets?owner=fakeSnippetOwner GET', function (done) {
         chai.request(app)
         //create the initial snippet
@@ -211,7 +186,7 @@ describe("REST API Tests", function () {
         db.addUpdateSnippetRank(fakeSnippetRanking, function (err, result) {
                 db.addUpdateSnippetRank(fakeSnippetRanking2, function (err, result) {
                     chai.request(app)
-                        .get('/api/snippets/rankings/rating-rank')
+                        .get('/api/snippets/rating-rank')
                         .end(function (err, res) {
                             res.body.should.be.a('array');
                             //should return a sorted array

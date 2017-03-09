@@ -83,6 +83,7 @@ exports.addUpdateSnippetRank = function (snippet, next) {
 };
 
 exports.getSnippetRankings = function(next) {
+    //TODO limit this to someNUm
     db.collection("snippets").find().sort({ratingRank: -1}).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
@@ -150,6 +151,7 @@ exports.getSnippet = function (id, next) {
 };
 
 exports.getSnippets = function (snippetIds, next) {
+    //TODO is what is snippetIds?  AN array or what does it need to pass in?
     db.collection('snippets').find({snippetId: {$in: snippetIds}}).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);

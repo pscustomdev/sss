@@ -28,6 +28,13 @@
                     $scope.userRankings = result.data;
                 }
             }
+        );
+        $nodeServices.getSnippetRankings().then(
+            function (result) {
+                if (result) {
+                    $scope.snippetRankings = result.data;
+                }
+            }
         )
     }
 }());

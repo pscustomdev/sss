@@ -10,6 +10,7 @@
         return {
             getCurrentUser: getCurrentUser,
             getUserRankings: getUserRankings,
+            getSnippetRankings: getSnippetRankings,
             getSnippets: getSnippets,
             getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
@@ -49,6 +50,19 @@
 
         function getUserRankings() {
             return $http.get("/api/users/rating-rank")
+                .then(function (response) {
+                        return response;
+                    },
+                    function (reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function (err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+
+        function getSnippetRankings() {
+            return $http.get("/api/snippets/rating-rank")
                 .then(function (response) {
                         return response;
                     },

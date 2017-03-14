@@ -52,18 +52,6 @@ describe("Mongo Dao", function() {
         });
     }, 5000);
 
-    //We don't need this test if we are using azure search, solr or elasticsearch
-    xit('should find some snippets based on the index', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, msg){
-            expect(msg.result.ok).to.be.eql(1);
-            db.searchSnippets("Fake", function(err, results){
-                expect(results).to.be.an("array");
-                // expect(result).contains("Mocha");
-                done();
-            })
-        });
-    });
-
     it('should be able to add a user to the database', function (done) {
         db.addUpdateUser(fakeUser, function(err, users){
             expect(err).to.be.eql(null);
@@ -85,6 +73,35 @@ describe("Mongo Dao", function() {
                 db.findUsers(userEmail, function (err, users){
                     expect(users[0]).to.not.exist;
                     done();
+                });
+            });
+        });
+    });
+
+    it('should be able to update a user from the database', function (done) {
+        //create the user so we can remove it.
+        db.addUpdateUser(fakeUser, function(err, user){
+            var obj = {
+                id:123,
+                firstName: "fakeFirst",
+                lastName: "fakeLast",
+                email: "fakeUpdated@email.com",
+                ratingRank:201
+            };
+            var userEmail = {email: fakeUser.email};
+            db.findUsers(userEmail, function (err, users) {
+                expect(users[0]).to.exist;
+                expect(users[0].ratingRank).to.be.eql(fakeUser.ratingRank);
+                expect(users[0].email).to.be.eql(fakeUser.email);
+                db.addUpdateUser(obj, function (err, data) {
+                    if (err) console.log(err);
+                    var userEmail = {email: obj.email};
+                    db.findUsers(userEmail, function (err, users) {
+                        expect(users[0]).to.exist;
+                        expect(users[0].ratingRank).to.be.eql(obj.ratingRank);
+                        expect(users[0].email).to.be.eql(obj.email);
+                        done();
+                    });
                 });
             });
         });
@@ -162,19 +179,6 @@ describe("Mongo Dao", function() {
                     expect(results).to.exist;
                     expect(results[0].displayName).to.be.eql(fakeSnippet2.displayName);
                     expect(results[1].displayName).to.be.eql(fakeSnippet.displayName);
-                    done();
-                });
-            });
-        });
-    });
-
-    //WARNING:  This will clear all snippets from the database
-    xit('should be able to remove all snippets in the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, msg){
-            expect(msg.result.ok).to.be.eql(1);
-            db.removeAllSnippets(function(err, result) {
-                db.getSnippet(fakeSnippet._id, function (err, result) {
-                    expect(err).to.be.eql("Snippet not found");
                     done();
                 });
             });

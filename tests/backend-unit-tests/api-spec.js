@@ -111,36 +111,6 @@ describe("REST API Tests", function () {
         cleanup(done);
     }, 5000);
 
-    it('should get a list of snippets by owner on /snippets?owner=fakeSnippetOwner GET', function (done) {
-        chai.request(app)
-        //create the initial snippet
-            .post('/api/snippet')
-            .send(fakeSnippet)
-            .end(function (err, res) {
-                chai.request(app)
-                    .post('/api/snippet')
-                    .send(fakeSnippet2)
-                    .end(function (err, res) {
-                        chai.request(app)
-                            .get('/api/snippets?owner=' + fakeSnippetOwner)
-                            .end(function (err, res) {
-                                expect(res.status).to.eql(200);
-                                res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
-                                res.body[0].should.have.property("displayName");
-                                // res.body[0].displayName.should.equal(fakeSnippet2.displayName); //Order could change so we need to see how to deal with that before enabling this.
-                                res.body[0].should.have.property("owner");
-                                // res.body[0].owner.should.equal(fakeSnippetOwner);
-                                res.body[1].should.have.property("displayName");
-                                // res.body[1].displayName.should.equal(fakeSnippet.displayName);
-                                res.body[1].should.have.property("owner");
-                                // res.body[1].owner.should.equal(fakeSnippetOwner);
-                                done();
-                            });
-                    });
-
-            });
-    });
-
     it('should get a list of snippets by latest on /snippets/latest GET', function (done) {
         chai.request(app)
         //create the initial snippet

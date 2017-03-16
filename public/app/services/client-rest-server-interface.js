@@ -12,7 +12,6 @@
             getUserRankings: getUserRankings,
             getSnippetRankings: getSnippetRankings,
             getSnippets: getSnippets,
-            getSnippetsByOwner: getSnippetsByOwner,
             getSnippetOverview: getSnippetOverview,
             getSnippetRating: getSnippetRating,
             getSnippetsRatingsByArray: getSnippetsRatingsByArray,
@@ -77,20 +76,6 @@
         // list all snippets
         function getSnippets() {
             return $http.get('/api/snippets')
-                .then(function(response) {
-                        return response.data;
-                    },
-                    function(reason) {
-                        $log.debug(JSON.stringify(reason));
-                    })
-                .catch(function(err) {
-                    $log.debug(JSON.stringify(err));
-                });
-        }
-
-        // get all snippets by owner
-        function getSnippetsByOwner(owner) {
-            return $http.get('/api/snippets?owner=' + owner)
                 .then(function(response) {
                         return response.data;
                     },

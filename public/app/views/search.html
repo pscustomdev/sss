@@ -19,7 +19,7 @@
         <div class="col-md-6">
             <div class="table-panel">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Best Contributors</div>
+                    <div class="panel-heading">Contributors</div>
                     <div class="panel-body"><p>These are contributors who have the highest rated snippets. Wouldn't you like to be one!</p></div>
                     <table class="table">
                         <thead>
@@ -31,7 +31,7 @@
                         <tbody>
                         <tr ng-repeat="user in userRankings | limitTo:5">
                             <th scope="row">{{$index + 1}}</th>
-                            <td>{{user.name}}</td>
+                            <td><a href ng-click="$searchService.submitSearch(user.username); $state.go('search.results');">{{user.name || user.namename}}</a></td>
                         </tr>
                         </tbody>
                     </table>

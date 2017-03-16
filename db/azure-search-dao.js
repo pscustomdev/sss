@@ -12,6 +12,7 @@ exports.searchSnippets = function (searchTerms, next) {
     searchTerms = generateSearchTerms(searchTerms);
     var highlightedFields = "readme,description,displayName";
     //Call to get snippets from mongo
+
     searchSnippets(snippetIndex, searchTerms, highlightedFields, function(err, snippetResults){
         if (err) {
             next(err, null);

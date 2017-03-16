@@ -172,19 +172,6 @@ describe("Mongo Dao", function() {
         });
     });
 
-    it('should be able to get snippets by owner from the database', function (done) {
-        db.addUpdateSnippet(fakeSnippet, function(err, result){
-            db.addUpdateSnippet(fakeSnippet2, function(err, result) {
-                db.getSnippetsByOwner(fakeSnippet.owner, function (err, results) {
-                    expect(results).to.exist;
-                    expect(results[0].displayName).to.be.eql(fakeSnippet2.displayName);
-                    expect(results[1].displayName).to.be.eql(fakeSnippet.displayName);
-                    done();
-                });
-            });
-        });
-    });
-
     it('should be able to remove a snippet in the database', function (done) {
         db.addUpdateSnippet(fakeSnippet, function(err, msg){
             expect(msg.result.ok).to.be.eql(1);

@@ -2,7 +2,7 @@
     'use strict';
 
     // Declare app level module which depends on views, and components
-    var app = angular.module('app', ['ui.router', 'ui.router.breadcrumbs', 'rateYo', 'app.$nodeServices','app.$searchService', 'app.search', 'app.results', 'app.overview', 'app.details', 'app.create','app.mySnippets','app.login', 'angularUtils.directives.dirDisqus', 'angular-growl'])
+    var app = angular.module('app', ['ui.router', 'ui.router.breadcrumbs', 'rateYo', 'app.$nodeServices','app.$searchService', 'app.search', 'app.results', 'app.overview', 'app.details', 'app.create','app.mySnippets','app.login', 'angularUtils.directives.dirDisqus', 'angular-growl','anguFixedHeaderTable'])
        .config(['$urlRouterProvider', URLRouteProvider])
         .directive('ngEnter', ngEnter)
         .run(main);

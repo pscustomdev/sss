@@ -64,21 +64,6 @@ module.exports = function(app) {
 
     var textParser = bodyParser.text();
 
-    //Get snippets by owner (we might want to make this more generic so they could get snippets by any attr)
-    api_routes.get('/snippets',
-        function (req, res) {
-            db.getSnippetsByOwner(req.query.owner, function(err, results){
-                if (err) {
-                    return res.status(500).json({error: 'Error retrieving database contents: ' + (err.message || err)});
-                }
-                if (!results || !results[0]) {
-                    return res.status(204).json({error: 'No snippets found for user'});
-                }
-                res.json(results);
-            })
-        }
-    );
-
     api_routes.get('/snippets/rating-rank',
         function (req, res) {
             db.getSnippetRankings(function(err, results){

@@ -48,12 +48,6 @@ describe('SSS Node Services', function() {
         $nodeServices.getCurrentUser();
     });
 
-    it('getSnippetsByOwner() should call api/snippets?owner=owner GET', function() {
-        var owner = "owner";
-        $httpBackend.expectGET('/api/snippets?owner=' + owner).respond();
-        $nodeServices.getSnippetsByOwner(owner);
-    });
-
     it('addSnippet() should call api/snippet POST', function() {
         var mockPayload = "snippet";
 

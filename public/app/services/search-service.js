@@ -44,7 +44,6 @@
         };
 
         vm.submitSearch = function (searchTerms) { // Search function
-
             vm.searchResults = {};
             vm.searchResults.total_count = 0;
             vm.searchResults.inProgress = true;

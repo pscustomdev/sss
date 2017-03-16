@@ -45,8 +45,8 @@ module.exports = function (app, passport) {
         });
     main_routes.get('/logout',
         function (req, res) {
-            req.logout();
             req.session.destroy(function() {
+                req.logout();
                 res.redirect('/');
             });
         });

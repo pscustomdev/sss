@@ -15,13 +15,13 @@ exports.searchSnippets = function (searchTerms, next) {
 
     searchSnippets(snippetIndex, searchTerms, highlightedFields, function(err, snippetResults){
         if (err) {
-            next(err, null);
+            return next(err, null);
         }
         highlightedFields = "content";
         //Call to get any matching files from the blob storage.
         searchSnippets(fileIndex, searchTerms, highlightedFields, function(err, filesResults){
             if (err) {
-                next(err, null);
+                return next(err, null);
             }
             //Combine snippet and file search results
             _.each(filesResults, function(fileResult){
@@ -111,6 +111,10 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
     };
 
     request.get(options, function(err, response, body){
+        if (err) {
+            console.warn(err.message);
+            return next(err, null);
+        }
         var results = "";
         var body = JSON.parse(body);
 

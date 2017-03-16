@@ -12,6 +12,7 @@
             getUserRankings: getUserRankings,
             getSnippetRankings: getSnippetRankings,
             getSnippets: getSnippets,
+            getSnippetsByLatest: getSnippetsByLatest,
             getSnippetOverview: getSnippetOverview,
             getSnippetRating: getSnippetRating,
             getSnippetsRatingsByArray: getSnippetsRatingsByArray,
@@ -87,6 +88,19 @@
                 });
         }
 
+        function getSnippetsByLatest() {
+            return $http.get('/api/snippets/latest')
+                .then(function(response) {
+                        return response.data;
+                    },
+                    function(reason) {
+                        $log.debug(JSON.stringify(reason));
+                    })
+                .catch(function(err) {
+                    $log.debug(JSON.stringify(err));
+                });
+        }
+        
         // get information about a snippet
         function getSnippet() {
             return $http.get('/api/snippet')

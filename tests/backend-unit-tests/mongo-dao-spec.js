@@ -172,6 +172,19 @@ describe("Mongo Dao", function() {
         });
     });
 
+    it('should be able to get snippets by newest date from the database', function (done) {
+        db.addUpdateSnippet(fakeSnippet, function(err, result){
+            db.addUpdateSnippet(fakeSnippet2, function(err, result) {
+                db.getSnippetsByLatestDate(function (err, results) {
+                    expect(results).to.exist;
+                    expect(results[0].snippetId).to.be.eql(fakeSnippet2._id);
+                    expect(results[1].snippetId).to.be.eql(fakeSnippet._id);
+                    done();
+                });
+            });
+        });
+    });
+
     it('should be able to remove a snippet in the database', function (done) {
         db.addUpdateSnippet(fakeSnippet, function(err, msg){
             expect(msg.result.ok).to.be.eql(1);

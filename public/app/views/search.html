@@ -16,7 +16,7 @@
 </div>
 <div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="table-panel">
                 <div class="panel panel-default">
                     <div class="panel-heading">Contributors</div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="table-panel">
                 <div class="panel panel-default">
                     <div class="panel-heading">Highest Ranked Snippets</div>
@@ -54,6 +54,28 @@
                         <tr ng-repeat="snippet in snippetRankings | limitTo:5">
                             <th scope="row">{{$index + 1}}</th>
                             <td><a href="./#!/search/results/snippet-overview/{{snippet.rankingSnippetId}}">{{snippet.displayName}}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="table-panel">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Latest Snippets</div>
+                    <div class="panel-body"><p>These are latest snippets to be added.</p></div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Posted On</th>
+                            <th>Snippet Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="snippet in latestSnippets | limitTo:100">
+                            <th scope="row">{{snippet.postedOn | date:'MM-dd-yyyy'}}</th>
+                            <td><a href="./#!/search/results/snippet-overview/{{snippet.snippetId}}">{{snippet.displayName}}</a></td>
                         </tr>
                         </tbody>
                     </table>

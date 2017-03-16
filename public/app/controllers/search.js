@@ -36,5 +36,13 @@
                 }
             }
         )
+
+        $nodeServices.getSnippetsByLatest().then(
+            function (result) {
+                if (result) {
+                    $scope.latestSnippets = result;
+                }
+            }
+        )
     }
 }());

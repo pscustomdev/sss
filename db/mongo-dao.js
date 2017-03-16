@@ -5,7 +5,7 @@ var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
 var userCollectionName = "sessions";
-var LIMIT_NUM = 5;
+var LIMIT_NUM = 100;
 
 exports.addUpdateUser = function (profile, next) {
     //We first check to see if the user exists before we Add it.
@@ -151,8 +151,18 @@ exports.getSnippet = function (id, next) {
 };
 
 exports.getSnippets = function (snippetIds, next) {
-    //TODO is what is snippetIds?  AN array or what does it need to pass in?
+    //SnippetIds is array
     db.collection('snippets').find({snippetId: {$in: snippetIds}}).toArray(function (err, results) {
+        if (err) {
+            console.warn(err.message);
+            next(err, null);
+        }
+        next(err, results);
+    });
+};
+
+exports.getSnippetsByLatestDate = function (next) {
+    db.collection('snippets').find().sort({postedOn: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);

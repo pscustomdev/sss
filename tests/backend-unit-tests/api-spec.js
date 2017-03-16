@@ -141,6 +141,36 @@ describe("REST API Tests", function () {
             });
     });
 
+    it('should get a list of snippets by latest on /snippets/latest GET', function (done) {
+        chai.request(app)
+        //create the initial snippet
+            .post('/api/snippet')
+            .send(fakeSnippet)
+            .end(function (err, res) {
+                chai.request(app)
+                    .post('/api/snippet')
+                    .send(fakeSnippet2)
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .get('/api/snippets/latest')
+                            .end(function (err, res) {
+                                expect(res.status).to.eql(200);
+                                res.body.should.be.a('array'); //shouldn't be an empty object if we are getting back snippets.
+                                res.body[0].should.have.property("displayName");
+                                res.body[0].displayName.should.equal(fakeSnippet2.displayName);
+                                res.body[0].should.have.property("owner");
+                                res.body[0].owner.should.equal(fakeSnippet2.owner);
+                                res.body[1].should.have.property("displayName");
+                                res.body[1].displayName.should.equal(fakeSnippet.displayName);
+                                res.body[1].should.have.property("owner");
+                                res.body[1].owner.should.equal(fakeSnippet.owner);
+                                done();
+                            });
+                    });
+
+            });
+    });
+
     it('should create a snippet on /snippet POST', function (done) {
         chai.request(app)
             .post('/api/snippet')
@@ -834,5 +864,4 @@ describe("REST API Tests", function () {
                 done();
             });
     });
-
 });

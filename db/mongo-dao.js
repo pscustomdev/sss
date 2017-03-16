@@ -5,6 +5,8 @@ var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var db = mongoskin.db(auth_conf.mongo.uri, { safe:true }); //we use auth_conf because there is a key in the URL for azure
 var userCollectionName = "sessions";
+var rankingsCollection = "sessions";
+var ratingsCollection = "sessions";
 var LIMIT_NUM = 100;
 
 exports.addUpdateUser = function (profile, next) {
@@ -69,7 +71,7 @@ exports.getUserRankings = function(next) {
 };
 
 exports.addUpdateSnippetRank = function (snippet, next) {
-    db.collection("snippets").update({rankingSnippetId: snippet.rankingSnippetId}, {
+    db.collection(rankingsCollection).update({rankingSnippetId: snippet.rankingSnippetId}, {
             rankingSnippetId: snippet.rankingSnippetId,
             ratingRank: snippet.ratingRank
         }, {upsert: true},
@@ -84,7 +86,7 @@ exports.addUpdateSnippetRank = function (snippet, next) {
 };
 
 exports.getSnippetRankings = function(next) {
-    db.collection("snippets").find().sort({ratingRank: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
+    db.collection(rankingsCollection).find().sort({ratingRank: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -94,7 +96,7 @@ exports.getSnippetRankings = function(next) {
 };
 
 exports.getSnippetRank = function (id, next) {
-    db.collection('snippets').findOne({rankingSnippetId: id},
+    db.collection(rankingsCollection).findOne({rankingSnippetId: id},
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -107,7 +109,7 @@ exports.getSnippetRank = function (id, next) {
 
 // Delete the snippet from the collection
 exports.removeSnippetRank = function (id, next) {
-    db.collection('snippets').remove({rankingSnippetId: id},
+    db.collection(rankingsCollection).remove({rankingSnippetId: id},
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -236,7 +238,7 @@ exports.cleanupSnippets = function (next) {
 };
 
 exports.addUpdateSnippetRating = function (rating, next) {
-    db.collection("snippets").update({
+    db.collection(ratingsCollection).update({
             ratingSnippetId: rating.snippetId,
             rater: rating.rater
         }, {ratingSnippetId: rating.snippetId, rater: rating.rater, rating: rating.rating}, {upsert: true},
@@ -251,7 +253,7 @@ exports.addUpdateSnippetRating = function (rating, next) {
 };
 
 exports.getSnippetRatings = function (id, next) {
-    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, results) {
+    db.collection(ratingsCollection).find({ratingSnippetId: id}).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -266,7 +268,7 @@ exports.getSnippetRatings = function (id, next) {
 };
 
 exports.removeSnippetRating = function (id, next) {
-    db.collection('snippets').remove({ratingSnippetId: id},
+    db.collection(ratingsCollection).remove({ratingSnippetId: id},
         function (err, result) {
             if (err) {
                 console.warn(err.message);
@@ -278,7 +280,7 @@ exports.removeSnippetRating = function (id, next) {
 };
 
 exports.getSnippetRatingsAvg = function (id, next) {
-    db.collection('snippets').find({ratingSnippetId: id}).toArray(function (err, ratings) {
+    db.collection(ratingsCollection).find({ratingSnippetId: id}).toArray(function (err, ratings) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -289,7 +291,7 @@ exports.getSnippetRatingsAvg = function (id, next) {
 
 exports.getSnippetsRatingsAvg = function (snippetIds, next) {
     var returnedRatings = [];
-    db.collection('snippets').find({ratingSnippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
+    db.collection(ratingsCollection).find({ratingSnippetId: {$in: snippetIds}}).toArray(function (err, ratings) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -313,7 +315,7 @@ exports.getSnippetRatingByUser = function (userRating, next) {
     //We do this because we combined the ratings and snippets collection
     userRating.ratingSnippetId = userRating.snippetId;
     delete userRating.snippetId;
-    db.collection('snippets').findOne(userRating,
+    db.collection(ratingsCollection).findOne(userRating,
         function (err, result) {
             if (err) {
                 console.warn(err.message);

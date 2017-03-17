@@ -12,7 +12,7 @@ describe("Mongo Dao", function() {
         lastName: "fakeLast",
         email: "fake@email.com",
         password: "fakePassword",
-        ratingRank:20
+        userRatingRank:20
     };
     var fakeUser2 = {
         id:1232,
@@ -20,7 +20,7 @@ describe("Mongo Dao", function() {
         lastName: "fakeLast2",
         email: "fake2@email.com",
         password: "fake2Password",
-        ratingRank:30
+        userRatingRank:30
     };
 
     var fakeSnippet = {_id: "MochaTestRepo", owner:"testOwner", displayName:"testDisplayName", description:"fakeDescription"};
@@ -28,8 +28,8 @@ describe("Mongo Dao", function() {
     var fakeSnippetRating = {snippetId: "MochaTestRepo", rater:"testOwner", rating:5};
     var fakeSnippetRating2 = {snippetId: "MochaTestRepo", rater:"testOwner2", rating:1.5};
     var fakeSnippetRating3 = {snippetId: "MochaTestRepo2", rater:"whoever", rating:1.5};
-    var fakeSnippetRank = {rankingSnippetId: "MochaTestRepo", ratingRank:10};
-    var fakeSnippetRank2 = {rankingSnippetId: "MochaTestRepo2", ratingRank:25};
+    var fakeSnippetRank = {rankingSnippetId: "MochaTestRepo", snippetRatingRank:10};
+    var fakeSnippetRank2 = {rankingSnippetId: "MochaTestRepo2", snippetRatingRank:25};
 
     beforeEach(function(done) {
         done()
@@ -86,19 +86,19 @@ describe("Mongo Dao", function() {
                 firstName: "fakeFirst",
                 lastName: "fakeLast",
                 email: "fakeUpdated@email.com",
-                ratingRank:201
+                userRatingRank:201
             };
             var userEmail = {email: fakeUser.email};
             db.findUsers(userEmail, function (err, users) {
                 expect(users[0]).to.exist;
-                expect(users[0].ratingRank).to.be.eql(fakeUser.ratingRank);
+                expect(users[0].userRatingRank).to.be.eql(fakeUser.userRatingRank);
                 expect(users[0].email).to.be.eql(fakeUser.email);
                 db.addUpdateUser(obj, function (err, data) {
                     if (err) console.log(err);
                     var userEmail = {email: obj.email};
                     db.findUsers(userEmail, function (err, users) {
                         expect(users[0]).to.exist;
-                        expect(users[0].ratingRank).to.be.eql(obj.ratingRank);
+                        expect(users[0].userRatingRank).to.be.eql(obj.userRatingRank);
                         expect(users[0].email).to.be.eql(obj.email);
                         done();
                     });
@@ -343,7 +343,7 @@ describe("Mongo Dao", function() {
             expect(msg.result.ok).to.be.eql(1);
             db.getSnippetRank(fakeSnippetRank.rankingSnippetId, function(err, result) {
                 expect(result.rankingSnippetId).to.be.eql(fakeSnippetRank.rankingSnippetId);
-                expect(result.ratingRank).to.be.eql(fakeSnippetRank.ratingRank);
+                expect(result.snippetRatingRank).to.be.eql(fakeSnippetRank.snippetRatingRank);
                 done();
             })
         });

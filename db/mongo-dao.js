@@ -61,7 +61,7 @@ exports.findUser = function (id, next) {
 };
 
 exports.getUserRankings = function(next) {
-    db.collection(userCollectionName).find().sort({ratingRank: -1}).toArray(function (err, results) {
+    db.collection(userCollectionName).find().sort({userRatingRank: -1}).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);
@@ -73,7 +73,7 @@ exports.getUserRankings = function(next) {
 exports.addUpdateSnippetRank = function (snippet, next) {
     db.collection(rankingsCollection).update({rankingSnippetId: snippet.rankingSnippetId}, {
             rankingSnippetId: snippet.rankingSnippetId,
-            ratingRank: snippet.ratingRank
+            snippetRatingRank: snippet.snippetRatingRank
         }, {upsert: true},
         function (err, object) {
             if (err) {
@@ -86,7 +86,7 @@ exports.addUpdateSnippetRank = function (snippet, next) {
 };
 
 exports.getSnippetRankings = function(next) {
-    db.collection(rankingsCollection).find().sort({ratingRank: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
+    db.collection(rankingsCollection).find().sort({snippetRatingRank: -1}).limit(LIMIT_NUM).toArray(function (err, results) {
         if (err) {
             console.warn(err.message);
             next(err, null);

@@ -48,31 +48,31 @@ describe("REST API Tests", function () {
 
     var fakeSnippetRanking = {
         rankingSnippetId:fakeSnippetId,
-        ratingRank :1
+        snippetRatingRank :1
     };
 
     var fakeSnippetRanking2 = {
         rankingSnippetId:fakeSnippet2._id,
-        ratingRank :25
+        snippetRatingRank :25
     };
 
     var fakeUser = {
         id:123,
         username:fakeSnippetOwner,
         email: "fake@email.com",
-        ratingRank:20
+        userRatingRank:20
     };
     var fakeUser2 = {
         id:1232,
         username:"fakeOwner2",
         email: "fake2@email.com",
-        ratingRank:30
+        userRatingRank:30
     };
     var fakeUser3 = {
         id:1233,
         username:"fakeOwner3",
         email: "fake3@email.com" ,
-        ratingRank:45
+        userRatingRank:45
     };
 
     passportStub.login({username: fakeSnippetOwner});   //login a fake user via passport since the api is protected.
@@ -195,13 +195,13 @@ describe("REST API Tests", function () {
                                 res.should.have.status(200);
                                 var obj = {
                                     rankingSnippetId : fakeSnippetRanking.rankingSnippetId,
-                                    ratingRank: 1,
+                                    snippetRatingRank: 1,
                                     displayName : fakeSnippet.displayName
                                 };
                                 res.body.should.contain(obj);
                                 var obj = {
                                     rankingSnippetId : fakeSnippetRanking2.rankingSnippetId,
-                                    ratingRank: 25,
+                                    snippetRatingRank: 25,
                                     displayName : fakeSnippet2.displayName
                                 };
                                 res.body.should.contain(obj);
@@ -373,13 +373,13 @@ describe("REST API Tests", function () {
                         .end(function (err, res) {
                             expect(res).to.exist;
                             db.findUsers({username: fakeUser.username}, function (err, users) {
-                                expect(users[0].ratingRank).equal(30);  //This is the first ranking
+                                expect(users[0].userRatingRank).equal(30);  //This is the first ranking
                                 chai.request(app)
                                     .post('/api/rating/' + fakeSnippetRating2.snippetId) //add a second ranking
                                     .send(fakeSnippetRating2)
                                     .end(function (err, res) {
                                         db.findUsers({username: fakeUser.username}, function (err, users) {
-                                            expect(users[0].ratingRank).equal(32);
+                                            expect(users[0].userRatingRank).equal(32);
                                             fakeSnippetRating.rating = 1;
                                             chai.request(app)
                                                 .post('/api/rating/' + fakeSnippetRating.snippetId) //This change the rating
@@ -387,7 +387,7 @@ describe("REST API Tests", function () {
                                                 .end(function (err, res) {
                                                     db.findUsers({username: fakeUser.username}, function (err, users) {
                                                         expect(users).to.exist;
-                                                        expect(users[0].ratingRank).equal(22);
+                                                        expect(users[0].userRatingRank).equal(22);
                                                         fakeSnippetRating.rating = 5;
                                                         done();
                                                     });

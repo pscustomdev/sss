@@ -390,12 +390,12 @@ module.exports = function(app) {
         var newRating = req.body.rating;
         var newRatingWeight = stats.weights.snippet[Math.trunc(newRating)];
         var rankingDelta = newRatingWeight - oldRatingWeight;
-        var ratingRank = snippet.ratingRank ? snippet.ratingRank + rankingDelta : rankingDelta;
-        var ratingRankObj = {
+        var snippetRatingRank = snippet.snippetRatingRank ? snippet.snippetRatingRank + rankingDelta : rankingDelta;
+        var snippetRatingRankObj = {
             rankingSnippetId: snippet.snippetId,
-            ratingRank: ratingRank
+            snippetRatingRank: snippetRatingRank
         };
-        db.addUpdateSnippetRank(ratingRankObj, function (err, result) {
+        db.addUpdateSnippetRank(snippetRatingRankObj, function (err, result) {
             if (err) {
                 return res.status(500).json({error: 'Error adding ranking to snippet: ' + (err.message || err)});
             }
@@ -426,7 +426,7 @@ module.exports = function(app) {
                 return res.status(500).json({error: 'Error adding ranking to user because user was not found!'});
             }
             var rankingDelta = newRatingWeight - oldRatingWeight;
-            users[0].ratingRank = users[0].ratingRank ? users[0].ratingRank + rankingDelta : rankingDelta;
+            users[0].userRatingRank = users[0].userRatingRank ? users[0].userRatingRank + rankingDelta : rankingDelta;
             //write the new ranking to the user.
             db.addUpdateUser(users[0], function (err, result) {
                 if (err) {

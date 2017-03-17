@@ -115,6 +115,10 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
             console.warn(err.message);
             return next(err, null);
         }
+
+        if(!body){
+            return next(err, null);
+        }
         var results = "";
         var body = JSON.parse(body);
 

@@ -253,7 +253,7 @@
                 var endIdx = content.indexOf(">", idx);
                 var endIdx2 = content.indexOf("/>", idx);
                 if (endIdx == -1) break;
-                if (endIdx2 < endIdx) endIdx = endIdx2;
+                if (endIdx2 > -1 && endIdx2 < endIdx ) endIdx = endIdx2;
                 var imgElement = content.substring(idx, endIdx);
                 if (!imgElement.includes("width")) {
                     imgElement += " width='100%' ";

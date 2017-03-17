@@ -31,7 +31,7 @@
                         <tbody>
                         <tr ng-repeat="user in userRankings | limitTo:100">
                             <th scope="row">{{$index + 1}}</th>
-                            <td><a href ng-click="$searchService.submitSearch(user.username); $state.go('search.results');">{{user.name || user.namename}}</a></td>
+                            <td><a href ng-click="$searchService.submitSearch(user.username); $state.go('search.results');">{{user.name || user.username}}</a></td>
                         </tr>
                         </tbody>
                     </table>

@@ -2,14 +2,17 @@ Setting up indexes in Azure
 ===========================
 
 1) Create at least one Snippet and one File before creating indexes.
-2) Use the Import data wizard in portal.azure.com
+2) Add new (+ icon) Azure Search.  Name it: sss-search-test
+3) Resource Group: NCCD
+4) After creation, click on sss-search-test 
+5) Click Import data
 
 sssdb
 ---------------------------
 Data Source:
 	Type:DocumentDB
 	Name: sssdb
-	DocumentDB accunt: sssdb
+	DocumentDB account: sssdb-test
 	Database: sssdb
 	Collection: snippets
 	
@@ -26,12 +29,14 @@ Indexer:
 	Soft delete column: deleted
 	Delete marker value: true
 
+6) Click Import data
+
 sssblob
 ---------------------------
 Data Source:
 	Type: Azure Blob Storage
 	Name: sssblob
-	Storage account: sssblob
+	Storage account: sssblobtest
 	Container: sss-snippet-files
 	
 Index:
@@ -47,7 +52,6 @@ Indexer:
 	Soft delete column: deleted
 	Delete marker value: true
 	Advanced options: 
-		Excluded extensions: 
-			Max failed items: 999
-			Max failed items per batch: 999
-			Excluded extensions: .jpg,.jpeg,.png,.gif,.bmp,.zip,.gz,.tar 
+		Max failed items: 999
+		Max failed items per batch: 999
+		Excluded extensions: .jpg,.jpeg,.png,.gif,.bmp,.zip,.gz,.tar 

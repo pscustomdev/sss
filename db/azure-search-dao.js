@@ -130,7 +130,7 @@ function searchSnippets(index, searchTerms, highlightedFields, next) {
         //TODO Now we need to search the files and see what we get back.
         next(err, results);
     });
-};
+}
 
 //since we are treating a snippet as a collection of database data and files, we must force an OR relationship
 //with the search terms otherwise results may be erroneously eliminated

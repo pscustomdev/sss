@@ -13,7 +13,7 @@ describe("Azure Search Dao", function() {
 
 
     it('should be able to search for snippet in the mongoDB', function (done) {
-        var searchTerms = "taco";
+        var searchTerms = "*";
         azureSearch.searchSnippets(searchTerms, function(err, results) {
             // results.should.contain("mocha");
             results.should.be.a('array');

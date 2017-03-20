@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/sss.iml" filepath="$PROJECT_DIR$/sss.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sss_azure/sss_azure.iml" filepath="$PROJECT_DIR$/sss_azure/sss_azure.iml" />
-    </modules>
-  </component>
-</project>

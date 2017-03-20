@@ -95,7 +95,7 @@
                         <!--<div>Last updated (last commit date)</div>-->
                         <!--<div>nnnn views (track in Mongo)</div>-->
                         <div>Posted on: {{item.postedOn | date:'short'}}</div>
-                        <div>Posted by: {{item.postedBy}}</div>
+                        <div>Posted by: <a href ng-click="$searchService.submitSearch(item.postedBy); $state.go('search.results');">{{item.postedBy}}</a></div>
                         <br/><br/><br/>
                     </article>
                 </div>

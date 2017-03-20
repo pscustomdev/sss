@@ -1,17 +1,32 @@
+<div>
+    <div class="form-group">
+        <button class="btn btn-info pull-right" data-toggle="modal" data-target="#searchHelpModal" title="Display search help">?</button>
+    </div>
+    <div class="input-group">
+        <div class="input-group-btn">
+            <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch($searchService.searchTerms)" type="button"
+                    class="btn btn-default sss-button">Search  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+        </div>
+        <input type="text" ng-model="$searchService.searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch($searchService.searchTerms);" placeholder="Search for...">
+    </div>
+</div>
+
 <div class="row">
     <section class="col-md-8 affix">
 
-        <div class="input-group">
-            <div class="input-group-btn">
-                <button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch($searchService.searchTerms)" type="button"
-                        class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                </button>
-            </div>
-            <input type="text" ng-model="$searchService.searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch($searchService.searchTerms);" placeholder="Search for...">
-            <div class="input-group-btn">
-                <button class="btn btn-info pull-right" data-toggle="modal" data-target="#searchHelpModal" title="Display search help">?</button>
-            </div>
-        </div>
+        <!--<div class="input-group">-->
+            <!--<div class="input-group-btn">-->
+                <!--<button ng-disabled="search.$invalid" ng-click="$searchService.submitSearch($searchService.searchTerms)" type="button"-->
+                        <!--class="btn btn-default">Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<input type="text" ng-model="$searchService.searchTerms" name="q" required class="form-control" autofocus ng-enter="$searchService.submitSearch($searchService.searchTerms);" placeholder="Search for...">-->
+            <!--<div class="input-group-btn">-->
+                <!--<button class="btn btn-info pull-right" data-toggle="modal" data-target="#searchHelpModal" title="Display search help">?</button>-->
+            <!--</div>-->
+
+        <!--</div>-->
 
         <script type="text/ng-template" id="results_filter.html">
             <div class="row">
@@ -47,7 +62,7 @@
         </script>
     </section>
 </div>
-<br/><br/><br/>
+<br/>
 <div class="row">
     <section class="col-md-8">
         <span ng-show="!($searchService.searchResults.inProgress)">{{$searchService.searchResults.total_count}} result(s) found</span>
@@ -96,7 +111,6 @@
                         <!--<div>nnnn views (track in Mongo)</div>-->
                         <div>Posted on: {{item.postedOn | date:'short'}}</div>
                         <div>Posted by: <a href ng-click="$searchService.submitSearch(item.postedBy); $state.go('search.results');">{{item.postedBy}}</a></div>
-                        <br/><br/><br/>
                     </article>
                 </div>
             </div>
@@ -112,7 +126,6 @@
         </span>
     </section>
 </div>
-<br/><br/><br/><br/>
 <div class="row">
     <section class="col-md-12">
         <nav class="text-center">

@@ -28,8 +28,7 @@
     <script src="/bower/angular-animate/angular-animate.js"></script>
     <script src="/bower/jquery/dist/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.2.0/jquery.rateyo.min.js"></script>
-    <script src="/bower/bootstrap/js/modal.js"></script>
-    <script src="/bower/bootstrap/js/tab.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/bower/angular-xeditable/dist/js/xeditable.min.js"></script>
     <script src="/bower/angular-file-upload/dist/angular-file-upload.js"></script>
     <script src="/bower/angular-growl-v2/build/angular-growl.min.js"></script>
@@ -64,29 +63,37 @@
 <header>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="nav navbar-left">
-                        {{#if title}}<a class="navbar-text" href="/">{{title}}</a>{{/if}}
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="nav navbar-right">
-                        {{#if isAuthenticated}}
-                            <p class="navbar-text"><a class="navbar-link" ui-sref="search.mySnippets" title="My Snippets">My Snippets <span class="glyphicon glyphicon-user"></span></a></p>
-                            <p class="navbar-text"><a class="navbar-link" ui-sref="search.create" title="Create Snippet">Add New Snippet <span class="glyphicon glyphicon-plus-sign"></span></a></p>
-                            <p class="navbar-text">Signed in as
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {{#if title}}<a class="navbar-brand" href="/">{{title}}</a>{{/if}}
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <!--<li class="active"><a href="#">Home</a></li>-->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {{#if isAuthenticated}}
+                        <li><a class="navbar-link" ui-sref="search.mySnippets" title="My Snippets">My Snippets <span class="glyphicon glyphicon-user"></span></a></li>
+                        <li><a class="navbar-link" ui-sref="search.create" title="Create Snippet">Add New Snippet <span class="glyphicon glyphicon-plus-sign"></span></a></li>
+                        <li>
+                            <a class="navbar-link" href="/logout" title="Logout">Signed in as
                                 {{#if user.name}}
                                     {{user.name}}
                                 {{else}}
                                     {{user.username}}
                                 {{/if}}
-                                    &nbsp;<a class="navbar-link" href="/logout" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></p>
-                                {{else}}
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </a>
+                    {{else}}
                             <p class="navbar-text"><a class="navbar-link" href="/#!/login" title="Login">Login <span class="glyphicon glyphicon-log-in"></span></a></p>
-                        {{/if}}
-                    </div>
-                </div>
+
+                    {{/if}}
+                </ul>
             </div>
         </div>
         <div class="container">

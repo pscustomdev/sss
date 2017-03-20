@@ -105,6 +105,9 @@
         var count = 0;
 
         function getOverview(snippetId) {
+            $nodeServices.getCurrentUser().then( function(result){
+                $scope.isLoggedIn = result ? true : false;
+            });
             $nodeServices.getSnippetOverview(snippetId).then(
                 function (overview) {
                     if (!overview) {

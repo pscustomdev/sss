@@ -71,7 +71,9 @@
         $nodeServices.getSnippetRating($scope.snippetId).then(
             function(result) {
                 if(result){
-                    $scope.avgRating = result;
+                    $scope.avgRating = result.rating;
+                    $scope.avgRatingCount = result.count;
+                    console.log(JSON.stringify(result));
                 }
             }
         );

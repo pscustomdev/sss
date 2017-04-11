@@ -9,7 +9,7 @@
                 </div>
                 <div ng-if="!snippetOverview.isOwner && isLoggedIn"><small>Your Rating:</small></div>
                 <rate-yo ng-if="!snippetOverview.isOwner && isLoggedIn" on-set="setRating" ng-model="userRating" options="ratingOptions"></rate-yo>
-                <small>Avg Rating:</small>
+                <small>Avg Rating ({{avgRatingCount}}):</small>
                 <rate-yo ng-model="avgRating" options="avgRatingOptions"></rate-yo>
                 <div class="padding-right"><small>Posted on: {{snippetOverview.postedOn | date:'shortDate'}}</small></div>
                 <div class="padding-right"><small>Posted by: {{snippetOverview.owner}}</small></div>

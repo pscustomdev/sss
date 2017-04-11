@@ -316,7 +316,8 @@ describe("Mongo Dao", function() {
         db.addUpdateSnippetRating(fakeSnippetRating, function (err, result) {
             db.addUpdateSnippetRating(fakeSnippetRating2, function (err, result) {
                 db.getSnippetRatingsAvg(fakeSnippetRating.snippetId, function (err, result) {
-                    expect(result).to.be.eql(3.25);
+                    expect(result.rating).to.be.eql(3.25);
+                    expect(result.count).to.be.eql(2);
                     done();
                 })
             });

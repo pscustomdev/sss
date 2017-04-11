@@ -285,7 +285,10 @@ exports.getSnippetRatingsAvg = function (id, next) {
             console.warn(err.message);
             next(err, null);
         }
-        next(err, calcAvgRatingForSnippet(ratings));
+        var obj = {};
+        obj.rating = calcAvgRatingForSnippet(ratings);
+        obj.count = ratings.length;
+        next(err, obj);
     });
 };
 

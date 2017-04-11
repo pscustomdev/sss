@@ -337,7 +337,7 @@ describe("REST API Tests", function () {
                     .get('/api/rating/' + fakeSnippetRating.snippetId)
                     .end(function (err, res) {
                         res.should.have.status(200);
-                        res.body.should.equal(5);
+                        res.body.rating.should.equal(5);
                         done();
                     })
             });
@@ -438,7 +438,7 @@ describe("REST API Tests", function () {
                             .get('/api/rating/' + fakeSnippetRating.snippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
-                                res.body.should.equal(4);
+                                res.body.rating.should.equal(4);
                                 done();
                             })
                     });
@@ -458,7 +458,7 @@ describe("REST API Tests", function () {
                             .get('/api/rating/' + fakeSnippetRating.snippetId)
                             .end(function (err, res) {
                                 res.should.have.status(200);
-                                res.body.should.equal(4);
+                                res.body.rating.should.equal(4);
                                 done();
                             });
                     });
@@ -527,7 +527,7 @@ describe("REST API Tests", function () {
             .get('/api/rating/fakesnippet')
             .end(function (err, res) {
                 res.should.have.status(200);
-                res.body.should.equal(0); //Since we don't have a rating set yet it will be 0.
+                res.body.rating.should.equal(0); //Since we don't have a rating set yet it will be 0.
                 done();
             })
     });

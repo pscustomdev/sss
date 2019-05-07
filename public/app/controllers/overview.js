@@ -45,7 +45,7 @@
             halfStar: true,
             starWidth: "20px"
         };
-        var disqusUrl = 'http://www.softwaresnippetsearch.com/#!/search/results/snippet-overview/' + $scope.snippetId;
+        var disqusUrl = 'http://softwaresnippetsearch.azurewebsites.net/#!/search/results/snippet-overview/' + $scope.snippetId;
         $scope.disqusConfig = {
             disqus_shortname: 'softwaresnippetsearch',
             disqus_identifier: $scope.snippetId,

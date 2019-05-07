@@ -34,8 +34,8 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
 }
 
 if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'testing') {
-    githubCallbackUrl = "http://www.softwaresnippetsearch.com/auth/github/callback";
-    googleCallbackUrl = "http://www.softwaresnippetsearch.com/auth/google/callback";   // If this Url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
+    githubCallbackUrl = "http://softwaresnippetsearch.azurewebsites.net/auth/github/callback";
+    googleCallbackUrl = "http://softwaresnippetsearch.azurewebsites.net/auth/google/callback";   // If this Url ever changes in ANY way (eg http -> https), sss-storage's configured application must be updated
 } else {
     githubCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/github/callback';
     googleCallbackUrl = "http://localhost:" + cfg.serverPort + '/auth/google/callback';
